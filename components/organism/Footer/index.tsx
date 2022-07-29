@@ -1,11 +1,20 @@
-import React from 'react';
+import styled from '@emotion/styled';
 
 const Footer = () => {
   return (
-    <footer>
+    <StyledFooter>
       <h1>푸터</h1>
-    </footer>
+    </StyledFooter>
   );
 };
+
+const StyledFooter = styled.footer`
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #808080;
+`;
 
 export default Footer;
