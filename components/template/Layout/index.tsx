@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import PageWrapper from './PageWrapper';
+import { Header, Footer } from '../../organism';
+import { PageWrapper } from '../../atom';
 
 interface LayoutProps {
   children: ReactElement;
