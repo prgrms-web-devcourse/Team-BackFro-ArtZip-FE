@@ -1,16 +1,14 @@
-import Head from 'next/head'
+import Head from 'next/head';
 
-const ReviewDetailPage = () => {
+const ReviewCreatePage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ReviewDetailPage</title>
+        <title>ArtZip | ReviewCreatePage</title>
       </Head>
-      <div>
-        ReviewDetailPage
-      </div>
+      <div>ReviewCreatePage</div>
     </>
-  )
-}
+  );
+};
 
-export default ReviewDetailPage
+export default ReviewCreatePage;

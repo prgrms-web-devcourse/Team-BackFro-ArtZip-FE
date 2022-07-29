@@ -1,16 +1,14 @@
-import Head from 'next/head'
+import Head from 'next/head';
 
-const SignUp = () => {
+const SignUpPage = () => {
   return (
     <>
       <Head>
         <title>ArtZip | SignUp</title>
       </Head>
-      <div>
-         SignUp
-      </div>
+      <div>SignUp</div>
     </>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUpPage;

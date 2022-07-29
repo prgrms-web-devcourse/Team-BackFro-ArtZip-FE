@@ -1,16 +1,18 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 const ReviewDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <>
       <Head>
         <title>ArtZip | ReviewDetailPage</title>
       </Head>
-      <div>
-        ReviewDetailPage
-      </div>
+      <div>ReviewDetailPage : {id}</div>
     </>
-  )
-}
+  );
+};
 
-export default ReviewDetailPage
+export default ReviewDetailPage;

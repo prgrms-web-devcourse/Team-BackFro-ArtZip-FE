@@ -1,16 +1,18 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-const ExhibitionDetail = () => {
+const ExhibitionDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <>
       <Head>
         <title>ArtZip | ExhibitionDetail</title>
       </Head>
-      <div>
-      ExhibitionDetail
-      </div>
+      <div>ExhibitionDetail : {id}</div>
     </>
-  )
-}
+  );
+};
 
-export default ExhibitionDetail
+export default ExhibitionDetailPage;

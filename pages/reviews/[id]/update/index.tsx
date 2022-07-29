@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Head from 'next/head';
 
 const ReviewEditPage = () => {
   return (
@@ -6,11 +6,9 @@ const ReviewEditPage = () => {
       <Head>
         <title>ArtZip | ReviewEditPage</title>
       </Head>
-      <div>
-        ReviewEditPage
-      </div>
+      <div>ReviewEditPage</div>
     </>
-  )
-}
+  );
+};
 
-export default ReviewEditPage
+export default ReviewEditPage;

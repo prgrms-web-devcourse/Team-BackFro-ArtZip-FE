@@ -1,16 +1,18 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-const SearchResult = () => {
+const SearchResultPage = () => {
+  const router = useRouter();
+  const { exhibition } = router.query;
+
   return (
     <>
       <Head>
         <title>ArtZip | SearchResult</title>
       </Head>
-      <div>
-        SearchResult
-      </div>
+      <div>SearchResult: {exhibition}</div>
     </>
-  )
-}
+  );
+};
 
-export default SearchResult
+export default SearchResultPage;

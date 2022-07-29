@@ -1,16 +1,18 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-const Community = () => {
+const CommunityExhibitionPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <>
       <Head>
         <title>ArtZip | COMMUNITY</title>
       </Head>
-      <div>
-            COMMUNITY
-      </div>
+      <div>COMMUNITY {id}</div>
     </>
-  )
-}
+  );
+};
 
-export default Community
+export default CommunityExhibitionPage;

@@ -1,18 +1,18 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-const UserPage = () => {
+const ReviewEditPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
   return (
     <>
       <Head>
-        <title>ArtZip | User</title>
+        <title>ArtZip | ReviewEditPage</title>
       </Head>
-      <div>User: {id}</div>
+      <div>ReviewEditPage : {id}</div>
     </>
   );
 };
 
-export default UserPage;
+export default ReviewEditPage;
