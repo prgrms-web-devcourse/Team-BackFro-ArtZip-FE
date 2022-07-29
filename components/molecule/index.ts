@@ -1,1 +1,3 @@
-// TODO: molecules에 속한 각 컴포넌트를 export 한다.
+export { default as UserInfo } from './UserInfo';
+export { default as LikeInfo } from './LikeInfo';
+export { default as CommentInfo } from './CommentInfo';
