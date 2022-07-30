@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { CommentOutlined } from '@ant-design/icons';
+import { MessageOutlined } from '@ant-design/icons';
 
 interface CommentInfoProps {
   commentCount: number;
@@ -8,7 +8,7 @@ interface CommentInfoProps {
 const CommentInfo = ({ commentCount }: CommentInfoProps) => {
   return (
     <CommentWrapper>
-      <CommentOutlined />
+      <MessageOutlined />
       <CommentInfoCount>{commentCount}</CommentInfoCount>
     </CommentWrapper>
   );
