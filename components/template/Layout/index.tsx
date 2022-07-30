@@ -16,7 +16,7 @@ const Layout = ({ children }: LayoutProps) => {
   );
 };
 
-const PageWrapper = styled.section`
+const PageWrapper = styled.div`
   width: 80%;
   max-width: 1400px;
   padding-top: 200px;
