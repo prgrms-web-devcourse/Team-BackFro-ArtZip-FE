@@ -1,7 +1,7 @@
 import { Avatar } from 'antd';
 import styled from '@emotion/styled';
 import Link from 'next/link';
-
+import { displayDate } from 'utils';
 interface UserInfoProps {
   image: string;
   userName: string;
@@ -19,7 +19,7 @@ const UserInfo = ({ image, userName, createdDate, userId }: UserInfoProps) => {
         <Link href={`/user/${userId}`}>
           <UserInfoName>{userName}</UserInfoName>
         </Link>
-        <UserInfoDate>{createdDate.toLocaleDateString()}</UserInfoDate>
+        <UserInfoDate>{displayDate(createdDate)}</UserInfoDate>
       </UserInfoTextWrapper>
     </UserInfoContainer>
   );
