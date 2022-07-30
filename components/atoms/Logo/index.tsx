@@ -1,7 +1,22 @@
+import Link from 'next/link';
 import Image from 'next/image';
+import { CSSProperties } from 'react';
 
-const Logo = () => {
-  return <Image src="/logo.png" alt="로고" width={252} height={92} />;
+interface LogoProps {
+  href?: string;
+  width: number;
+  height: number;
+  imageStyle?: CSSProperties;
+}
+
+const Logo = ({ href = '/', width, height, imageStyle }: LogoProps) => {
+  return (
+    <Link href={href}>
+      <a>
+        <Image src="/logo.png" alt="logo" width={width} height={height} style={imageStyle} />
+      </a>
+    </Link>
+  );
 };
 
 export default Logo;
