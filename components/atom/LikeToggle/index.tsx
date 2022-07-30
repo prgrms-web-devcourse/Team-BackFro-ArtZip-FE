@@ -6,7 +6,7 @@ interface LikeToggleProps {
   onClick: () => void;
 }
 
-const LikeInfo = ({ isLiked, onClick }: LikeToggleProps) => {
+const LikeToggle = ({ isLiked, onClick }: LikeToggleProps) => {
   return (
     <LikeWrapper onClick={onClick}>{isLiked ? <HeartFilled /> : <HeartOutlined />}</LikeWrapper>
   );
@@ -26,4 +26,4 @@ const LikeWrapper = styled.div`
   }
 `;
 
-export default LikeInfo;
+export default LikeToggle;

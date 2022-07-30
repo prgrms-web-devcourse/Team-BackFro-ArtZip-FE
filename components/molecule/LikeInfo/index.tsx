@@ -10,7 +10,7 @@ const LikeInfo = ({ isLiked, likeCount, onClick }: LikeInfoProps) => {
   return (
     <LikeInfoWrapper>
       <LikeToggle isLiked={isLiked} onClick={onClick} />
-      <LikeInfoCount>{likeCount}</LikeInfoCount>
+      <LikeCount>{likeCount}</LikeCount>
     </LikeInfoWrapper>
   );
 };
@@ -26,6 +26,6 @@ const LikeInfoWrapper = styled.div`
   }
 `;
 
-const LikeInfoCount = styled.span``;
+const LikeCount = styled.span``;
 
 export default LikeInfo;
