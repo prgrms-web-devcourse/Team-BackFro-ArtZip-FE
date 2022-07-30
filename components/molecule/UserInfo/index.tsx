@@ -13,11 +13,15 @@ const UserInfo = ({ image, userName, createdDate, userId }: UserInfoProps) => {
   return (
     <UserInfoContainer>
       <Link href={`/user/${userId}`}>
-        <UserInfoAvatar src={image} size={48} />
+        <a>
+          <UserInfoAvatar src={image} size={48} />
+        </a>
       </Link>
       <UserInfoTextWrapper>
         <Link href={`/user/${userId}`}>
-          <UserInfoName>{userName}</UserInfoName>
+          <a>
+            <UserInfoName>{userName}</UserInfoName>
+          </a>
         </Link>
         <UserInfoDate>{displayDate(createdDate)}</UserInfoDate>
       </UserInfoTextWrapper>
