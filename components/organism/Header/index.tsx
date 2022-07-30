@@ -14,7 +14,7 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #80808026;
+  background-color: ${({ theme }) => theme.color.blue.main};
 `;
 
 export default Header;
