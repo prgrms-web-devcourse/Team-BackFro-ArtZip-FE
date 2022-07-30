@@ -3,3 +3,4 @@
 
 yarn lint-staged
 yarn tsc --noEmit && yarn eslnt . && yarn prettier --write .
+yarn tsc --noEmit && yarn eslint . && yarn prettier --write .
