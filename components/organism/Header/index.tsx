@@ -1,37 +1,23 @@
 import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
 import { Input } from 'antd';
-import Link from 'next/link';
+import LinkText from 'components/atoms/LinkText';
 
 const Header = () => {
   return (
     <StyledHeader>
       <Container>
-        <Link href="/">
-          <a>
-            <Logo />
-          </a>
-        </Link>
+        <Logo width={252} height={92} />
         <Utility>
-          <Link href="/signin" passHref>
-            <StyledA>로그인</StyledA>
-          </Link>
-          <Link href="/signup" passHref>
-            <StyledA>회원가입</StyledA>
-          </Link>
+          <LinkText href="/signin" text="로그인" />
+          <LinkText href="/signup" text="회원가입" />
         </Utility>
       </Container>
       <Container>
         <Navigation>
-          <Link href="/search-result" passHref>
-            <StyledA>맞춤 전시회</StyledA>
-          </Link>
-          <Link href="/reviews/create" passHref>
-            <StyledA>감상평 쓰기</StyledA>
-          </Link>
-          <Link href="/community" passHref>
-            <StyledA>커뮤니티</StyledA>
-          </Link>
+          <LinkText href="/search-result" text="맞춤 전시회" />
+          <LinkText href="/reviews/create" text="감상평 쓰기" />
+          <LinkText href="/community" text="커뮤니티" />
         </Navigation>
         <SearchBar placeholder="전시회를 검색해주세요." allowClear />
       </Container>
@@ -102,11 +88,8 @@ const Navigation = styled.nav`
   }
 `;
 
-const StyledA = styled.a`
-  font-size: 2.6rem;
-`;
-
 const SearchBar = styled(Input.Search)`
+  // TODO: 스타일 초기화 - 재사용
   * {
     border: 0;
     outline: none;
