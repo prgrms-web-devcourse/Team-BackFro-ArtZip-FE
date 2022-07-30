@@ -2,8 +2,11 @@ import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
 import { Input } from 'antd';
 import LinkText from 'components/atoms/LinkText';
+import { useRouter } from 'next/router';
 
 const Header = () => {
+  const { pathname } = useRouter();
+
   return (
     <StyledHeader>
       <Container>
@@ -15,9 +18,17 @@ const Header = () => {
       </Container>
       <Container>
         <Navigation>
-          <LinkText href="/search-result" text="맞춤 전시회" />
-          <LinkText href="/reviews/create" text="감상평 쓰기" />
-          <LinkText href="/community" text="커뮤니티" />
+          <LinkText
+            href="/search-result"
+            text="맞춤 전시회"
+            isCurrentPage={pathname === '/search-result'}
+          />
+          <LinkText
+            href="/reviews/create"
+            text="감상평 쓰기"
+            isCurrentPage={pathname === '/reviews/create'}
+          />
+          <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
         </Navigation>
         <SearchBar placeholder="전시회를 검색해주세요." allowClear />
       </Container>
@@ -66,7 +77,6 @@ const Navigation = styled.nav`
   & > a {
     margin-right: 80px;
     padding-bottom: 20px;
-    border-bottom: 4px solid transparent;
     margin-bottom: -3px;
 
     &:last-of-type {
