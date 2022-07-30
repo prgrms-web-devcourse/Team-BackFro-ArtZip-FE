@@ -2,9 +2,6 @@ import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
 import { Input } from 'antd';
 import Link from 'next/link';
-import { css } from '@emotion/css';
-
-const { Search } = Input;
 
 const Header = () => {
   return (
@@ -36,27 +33,11 @@ const Header = () => {
             <StyledA>커뮤니티</StyledA>
           </Link>
         </Navigation>
-        <Search
-          placeholder="전시회를 검색해주세요."
-          allowClear
-          style={{
-            width: 200,
-          }}
-        />
+        <SearchBar placeholder="전시회를 검색해주세요." allowClear />
       </Container>
     </StyledHeader>
   );
 };
-
-const dynamicWidth = () => css`
-  width: 80%;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  @media (max-width: 767px) {
-    width: 90%;
-  }
-`;
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -102,19 +83,76 @@ const Navigation = styled.nav`
     border-bottom: 4px solid transparent;
     margin-bottom: -3px;
 
+    &:last-of-type {
+      margin-right: 0;
+    }
+
     &:hover {
       font-weight: 500;
       border-bottom: 4px solid #242f9b;
     }
+
+    @media (max-width: 767px) {
+      margin-right: auto;
+    }
   }
 
-  & > a:last-of-type {
-    margin-right: 0;
+  @media (max-width: 767px) {
+    width: 100%;
   }
 `;
 
 const StyledA = styled.a`
   font-size: 2.6rem;
+`;
+
+const SearchBar = styled(Input.Search)`
+  * {
+    border: 0;
+    outline: none;
+    background: none;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-within {
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      background: none;
+      --antd-wave-shadow-color: none;
+    }
+  }
+
+  width: 400px;
+  margin-bottom: 20px;
+  border: 2px solid #242f9b;
+  border-radius: 18px;
+  overflow: hidden;
+
+  .ant-input-affix-wrapper {
+    padding: 8px 16px;
+  }
+
+  .ant-input {
+    font-size: 1.8rem;
+  }
+
+  .ant-input-clear-icon {
+    font-size: 1.8rem;
+  }
+
+  .ant-input-search-button {
+    margin-right: 10px;
+  }
+
+  .anticon-search {
+    font-size: 2.4rem;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 export default Header;
