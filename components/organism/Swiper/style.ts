@@ -24,10 +24,3 @@ export const SwiperContainer = styled.div`
   .swiper-button-prev {
     color: ${({ theme }) => theme.color.blue.main};
   }
-
-  // .swiper-button-next::after,
-  // .swiper-button-prev::after {
-  //   display: none;
-  // }
-
-`
