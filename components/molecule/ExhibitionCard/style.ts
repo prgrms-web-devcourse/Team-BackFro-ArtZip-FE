@@ -30,8 +30,7 @@ export const Description = styled.div`
         gap: 10px;
 
         h3{
-            //TODO: theme gray 로 변경
-            color: gray;
+            color:  ${({ theme }) => theme.color.font.dark};
         }
     }
 
