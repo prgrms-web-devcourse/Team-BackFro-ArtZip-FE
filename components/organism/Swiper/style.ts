@@ -24,3 +24,4 @@ export const SwiperContainer = styled.div`
   .swiper-button-prev {
     color: ${({ theme }) => theme.color.blue.main};
   }
+`
