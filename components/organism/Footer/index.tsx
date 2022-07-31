@@ -1,20 +1,17 @@
-import styled from '@emotion/styled';
+import * as S from './style';
 
 const Footer = () => {
   return (
-    <StyledFooter>
-      <h1>푸터</h1>
-    </StyledFooter>
+    <S.Footer>
+      <S.Wrapper>
+        <S.Title>Art.zip</S.Title>
+        <S.Description>미술 전시회를 조회하고 감상평을 공유할 수 있는 서비스입니다. </S.Description>
+        <S.DeveloperFE>FE | 권기홍 김다은 마혜경 조윤정</S.DeveloperFE>
+        <S.DeveloperBE>BE | 정현서 김승은 박상혁 홍유석</S.DeveloperBE>
+        <S.Copyright>© 2022. BackFro | AllRights Reserved.</S.Copyright>
+      </S.Wrapper>
+    </S.Footer>
   );
 };
-
-const StyledFooter = styled.footer`
-  width: 100%;
-  height: 200px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background-color: #808080;
-`;
 
 export default Footer;
