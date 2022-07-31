@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import styled from '@emotion/styled';
 import { Header, Footer } from '../../organism';
-import { breakPoint } from 'constants/styles/breakPoint';
 
 interface LayoutProps {
   children: ReactElement;
@@ -24,7 +23,7 @@ const PageWrapper = styled.section`
   padding-bottom: 200px;
   margin: 0 auto;
 
-  @media (max-width: ${breakPoint.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 90%;
   }
 `;
