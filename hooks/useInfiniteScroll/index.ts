@@ -8,7 +8,9 @@ const useInfiniteScroll = (fetchCallback: () => void) => {
     const scrollHeight = document.documentElement.scrollHeight;
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
+
+    const isEndOfScroll = scrollTop + clientHeight >= scrollHeight;
+    if (isEndOfScroll && !fetching) {
       setFetching(true);
     }
   });
