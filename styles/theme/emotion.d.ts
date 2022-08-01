@@ -8,6 +8,7 @@ declare module '@emotion/react' {
         main: string;
         dark: string;
         light: string;
+        white: string;
       };
       black: string;
       font: {
@@ -16,8 +17,9 @@ declare module '@emotion/react' {
         light: string;
       };
       border: {
-        normal: string;
+        main: string;
         light: string;
+        white: string;
       };
       background: string;
       white: string;
