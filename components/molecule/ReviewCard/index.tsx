@@ -35,7 +35,7 @@ const ReviewCard = ({
   const mouseHover = () => setIsHover((isHover) => !isHover);
   return (
     <>
-      <Link href={`reviews/detail/${reviewId}`}>
+      <Link href={`/reviews/detail/${reviewId}`}>
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
             <S.Photo
