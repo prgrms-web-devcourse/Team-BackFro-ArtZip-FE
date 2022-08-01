@@ -2,7 +2,7 @@ import { ExhibitionCardProps, ReviewProps, UserProps } from "types/model";
 import { BaseProps } from "../base";
 
 export interface UserRegisterProps {
-    data:{
+    data?:{
         userId: number;
         nickname: string;
         email: string;
@@ -10,13 +10,13 @@ export interface UserRegisterProps {
 }
 
 export interface UserInfoReviewLikeProps{
-    data: {
+    data?: {
         content: ReviewProps[];
     }
 }
 
 export interface UserInfoExhibitionLikeProps{
-    data:{
+    data?:{
         content: ExhibitionCardProps[];
     }
 }
@@ -30,7 +30,7 @@ export interface UserInfoExhibitionLikeProps{
 // }
 
 export interface UserInfoProps extends BaseProps{
-    data:{
+    data?:{
         userId: number;
         profileImage: string;
         email: string;
@@ -42,7 +42,7 @@ export interface UserInfoProps extends BaseProps{
 }
 
 export interface UserTokenProps {
-    data:{
+    data?:{
         accessToken: string;
     }
 }
