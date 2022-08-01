@@ -15,7 +15,7 @@ interface ReviewCardProps {
   nickname: string;
   likeCount: number;
   commentCount: number;
-  photo: string | null;
+  photo?: string;
 }
 
 const ReviewCard = ({
