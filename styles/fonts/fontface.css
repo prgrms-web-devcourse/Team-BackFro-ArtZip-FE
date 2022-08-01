@@ -1,5 +1,12 @@
 @font-face {
   font-family: 'Noto Sans KR';
+  font-weight: 100;
+  src: url('./NotoSansKR-Thin.otf') format('woff2'), url('./NotoSansKR-Thin.otf') format('woff'),
+    url('./NotoSansKR-Thin.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
   font-weight: 300;
   src: url('./NotoSansKR-Light.otf') format('woff2'), url('./NotoSansKR-Light.otf') format('woff'),
     url('./NotoSansKR-Light.otf') format('truetype');
