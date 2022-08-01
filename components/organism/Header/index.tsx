@@ -44,6 +44,7 @@ const StyledHeader = styled.header`
   padding-top: 10px;
   border-bottom: 1px solid #dddddd;
   background-color: #fafafa;
+  z-index: 999;
 `;
 
 const Container = styled.div`
