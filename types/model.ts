@@ -34,7 +34,7 @@ export interface ReviewFeedProps {
     likeCount: number;
     isPublic: boolean;
     commentCount: number;
-    isLiked: number;
+    isLiked: boolean;
   }
 
   export interface CommentProps{
