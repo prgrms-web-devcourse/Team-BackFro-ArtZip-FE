@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 
-export const SwiperContainer = styled.div`
+export const SwiperWrapper = styled.div`
     padding: 10px;
     position: relative;
     margin-bottom: 30px;

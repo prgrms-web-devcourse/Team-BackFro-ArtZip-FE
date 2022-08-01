@@ -10,9 +10,9 @@ interface SwiperProps{
     // items: SVGRectElement[]
 }
 
-const SwiperContainer = ({items} : SwiperProps) => {
+const SwiperWrapper = ({items} : SwiperProps) => {
     return(
-        <S.SwiperContainer>
+        <S.SwiperWrapper>
             <div className="parent">
                     <Swiper className="swiper-container"
                         modules={[Autoplay]}
@@ -35,7 +35,7 @@ const SwiperContainer = ({items} : SwiperProps) => {
             <div className="swiper-button-prev"></div>
             <div className="swiper-button-next"></div>
         </div>
-    </S.SwiperContainer>
+    </S.SwiperWrapper>
     )
 }
-export default SwiperContainer;
+export default SwiperWrapper;
