@@ -4,16 +4,7 @@ import { Card } from 'antd';
 import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style'
 import Link from 'next/link'
-
-interface ExhibitionCardProps{
-    exhibitionId: number;
-    name: string;
-    thumbnail: string;
-    startDate: string;
-    endDate: string;
-    likeCount: number;
-    reviewCount: number;
-}
+import { ExhibitionCardProps } from 'types/model';
 
 const { Meta } = Card;
 
