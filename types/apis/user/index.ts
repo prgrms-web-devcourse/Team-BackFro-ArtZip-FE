@@ -1,4 +1,5 @@
 import { ExhibitionCardProps, ReviewProps, UserProps } from "types/model";
+import { BaseProps } from "../base";
 
 export interface UserRegisterProps {
     userId: number;
@@ -22,7 +23,7 @@ export interface UserInfoExhibitionLikeProps{
 //     message: string;
 // }
 
-export interface UserInfoProps{
+export interface UserInfoProps extends BaseProps{
     userId: number;
     profileImage: string;
     email: string;
