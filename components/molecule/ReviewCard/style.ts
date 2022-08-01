@@ -62,7 +62,7 @@ export const UserInfoName = styled.span`
 
 export const UserInfoDate = styled.span`
   font-weight: 300;
-  color: #a3a3a3;
+  color: ${({ theme }) => theme.color.font.light};
 `;
 
 export const PhotoWrapper = styled.div``;
