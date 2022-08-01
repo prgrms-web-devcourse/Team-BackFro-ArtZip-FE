@@ -39,8 +39,9 @@ const ReviewCard = ({
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
             <S.Photo
+              preview={false}
               src={'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg'}
-            ></S.Photo>
+            />
             {isHover ? (
               <S.HoverContent>
                 <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
