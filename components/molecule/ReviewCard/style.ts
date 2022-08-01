@@ -47,7 +47,7 @@ export const UserInfoContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-export const UserInfoTextWrapper = styled.div`
+export const UserInfoTextContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
