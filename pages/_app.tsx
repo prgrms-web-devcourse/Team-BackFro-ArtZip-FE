@@ -5,6 +5,10 @@ import { Layout } from 'components/template';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/theme';
 
+if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
+  import('../mocks');
+}
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
