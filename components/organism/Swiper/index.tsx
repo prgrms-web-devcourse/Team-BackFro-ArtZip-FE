@@ -1,11 +1,13 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
-import * as S from './style'
+import * as S from './style';
+import React,{ReactElement} from 'react';
 
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps{
-    items: any[]
+    items: ReactElement[]
+    // items: SVGRectElement[]
 }
 
 const SwiperContainer = ({items} : SwiperProps) => {
@@ -24,9 +26,9 @@ const SwiperContainer = ({items} : SwiperProps) => {
                             prevEl: '.swiper-button-prev',
                             nextEl: '.swiper-button-next',
                         }}>
-                    {items.map((it)=>(
-                        <SwiperSlide key={it.exhibitionId} className="MyBanner__slideItem">
-                            {it}
+                    {items.map((item)=>(
+                        <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
+                            {item}
                         </SwiperSlide>
                         ))}
                     </Swiper>

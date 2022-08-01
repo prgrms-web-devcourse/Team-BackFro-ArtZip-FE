@@ -2,7 +2,6 @@ import styled from "@emotion/styled"
 
 export const SwiperContainer = styled.div`
     padding: 10px;
-    box-sizing: border-box;
     position: relative;
     margin-bottom: 30px;
   
