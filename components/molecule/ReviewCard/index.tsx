@@ -34,35 +34,33 @@ const ReviewCard = ({
   const [isHover, setIsHover] = useState(false);
   const mouseHover = () => setIsHover((isHover) => !isHover);
   return (
-    <>
-      <Link href={`/reviews/detail/${reviewId}`}>
-        <S.ReviewCard>
-          <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-            <S.Photo
-              src={'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg'}
-            ></S.Photo>
-            {isHover ? (
-              <S.HoverContent>
-                <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
-              </S.HoverContent>
-            ) : null}
-          </S.PhotoWrapper>
-          <S.UserInfoContainer>
+    <Link href={`/reviews/detail/${reviewId}`}>
+      <S.ReviewCard>
+        <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
+          <S.Photo
+            src={'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg'}
+          ></S.Photo>
+          {isHover ? (
+            <S.HoverContent>
+              <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
+            </S.HoverContent>
+          ) : null}
+        </S.PhotoWrapper>
+        <S.UserInfoContainer>
+          <Link href={`/user/${userId}`}>
+            <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
+          </Link>
+          <S.UserInfoTextWrapper>
             <Link href={`/user/${userId}`}>
-              <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
+              <S.UserInfoName>{nickname}</S.UserInfoName>
             </Link>
-            <S.UserInfoTextWrapper>
-              <Link href={`/user/${userId}`}>
-                <S.UserInfoName>{nickname}</S.UserInfoName>
-              </Link>
-              <S.UserInfoDate>{displayDate(new Date(createdAt))}</S.UserInfoDate>
-            </S.UserInfoTextWrapper>
-          </S.UserInfoContainer>
-          <S.Title>{title}</S.Title>
-          <S.Content>{content}</S.Content>
-        </S.ReviewCard>
-      </Link>
-    </>
+            <S.UserInfoDate>{displayDate(new Date(createdAt))}</S.UserInfoDate>
+          </S.UserInfoTextWrapper>
+        </S.UserInfoContainer>
+        <S.Title>{title}</S.Title>
+        <S.Content>{content}</S.Content>
+      </S.ReviewCard>
+    </Link>
   );
 };
 
