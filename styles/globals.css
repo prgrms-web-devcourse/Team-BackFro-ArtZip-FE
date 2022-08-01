@@ -11,11 +11,12 @@
 html {
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 62.5%;
+  color: #3c3c3c;
 }
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  background-color: #f8f8f8;
+  background-color: #fafafa;
 }
 
 #__next {
@@ -101,6 +102,6 @@ button {
 
 @media screen and (max-width: 767px) {
   html {
-    font-size: 50%;
+    font-size: 46%;
   }
 }

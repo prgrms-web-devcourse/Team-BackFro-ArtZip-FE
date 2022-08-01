@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import styled from '@emotion/styled';
 import { Header, Footer } from '../../organism';
-import { breakPoint } from 'constants/styles/breakPoint';
 
 interface LayoutProps {
   children: ReactElement;
@@ -17,14 +16,14 @@ const Layout = ({ children }: LayoutProps) => {
   );
 };
 
-const PageWrapper = styled.section`
+const PageWrapper = styled.div`
   width: 80%;
   max-width: 1400px;
   padding-top: 200px;
   padding-bottom: 200px;
   margin: 0 auto;
 
-  @media (max-width: ${breakPoint.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 90%;
   }
 `;
