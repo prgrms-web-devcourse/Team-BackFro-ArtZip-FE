@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Avatar, Card } from 'antd';
+import { Avatar, Card, Image } from 'antd';
 
 export const ReviewCard = styled(Card)`
   width: 600px;
@@ -7,6 +7,7 @@ export const ReviewCard = styled(Card)`
   border: none;
   border-radius: 30px;
   padding: 10px 5px 10px 5px;
+  cursor: default;
 `;
 
 export const Title = styled.div`
@@ -18,11 +19,11 @@ export const Title = styled.div`
 
 export const Content = styled.div`
   width: 500px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
   font-weight: 400;
   font-size: 18px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   cursor: pointer;
@@ -58,15 +59,16 @@ export const UserInfoDate = styled.span`
   color: ${({ theme }) => theme.color.font.light};
 `;
 
-export const PhotoWrapper = styled.div``;
-
-export const Photo = styled.img`
-  width: 110px;
-  height: 110px;
-  border-radius: 20px;
+export const PhotoWrapper = styled.div`
   position: absolute;
   top: 25px;
   right: 25px;
+`;
+
+export const Photo = styled(Image)`
+  width: 110px;
+  height: 110px;
+  border-radius: 20px;
 `;
 
 export const HoverContent = styled.div`
@@ -79,8 +81,7 @@ export const HoverContent = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
   gap: 5px;
   color: white;
-  position: absolute;
-  top: 25px;
-  right: 25px;
   cursor: pointer;
+  position: relative;
+  top: -110px;
 `;
