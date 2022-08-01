@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { Avatar } from 'antd';
-import { Card } from 'antd';
+import { Avatar, Card } from 'antd';
 
 export const ReviewCard = styled(Card)`
   width: 600px;
@@ -14,9 +13,7 @@ export const Title = styled.div`
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 5px;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 export const Content = styled.div`
@@ -28,15 +25,13 @@ export const Content = styled.div`
   font-size: 18px;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 export const UserInfoAvatar = styled(Avatar)`
   margin-right: 10px;
+  cursor: pointer;
   &:hover {
-    cursor: pointer;
     filter: brightness(70%);
   }
 `;
@@ -55,9 +50,7 @@ export const UserInfoTextContainer = styled.div`
 export const UserInfoName = styled.span`
   font-size: 22px;
   font-weight: 700;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 export const UserInfoDate = styled.span`
@@ -89,7 +82,5 @@ export const HoverContent = styled.div`
   position: absolute;
   top: 25px;
   right: 25px;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
