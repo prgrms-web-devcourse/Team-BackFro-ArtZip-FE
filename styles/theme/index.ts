@@ -2,6 +2,7 @@ import { Theme } from '@emotion/react';
 
 const color = {
   red: '#FC3B41',
+  pink: '#FFC0CB',
   blue: {
     main: '#242F9B',
     dark: '#646FD4',

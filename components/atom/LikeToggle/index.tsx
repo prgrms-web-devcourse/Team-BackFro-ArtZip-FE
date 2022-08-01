@@ -21,8 +21,7 @@ const LikeWrapper = styled.div`
 
   &:hover {
     cursor: pointer;
-    // TODO: 이후에 테마색으로 변경
-    background-color: pink;
+    background-color: ${({ theme }) => theme.color.pink};
   }
 `;
 

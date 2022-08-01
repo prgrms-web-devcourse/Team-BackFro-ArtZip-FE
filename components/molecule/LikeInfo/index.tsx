@@ -21,8 +21,7 @@ const LikeInfoWrapper = styled.div`
 
   &:hover {
     cursor: pointer;
-    // TODO: 이후에 테마색으로 변경
-    color: red;
+    color: ${({ theme }) => theme.color.red};
   }
 `;
 
