@@ -14,7 +14,6 @@ const SwiperWrapper = ({items} : SwiperProps) => {
         <S.SwiperWrapper>
             <div className="parent">
                     <Swiper className="swiper-container"
-                        modules={[Autoplay]}
                         spaceBetween={20}
                         slidesPerView={3}
                         autoplay={{
