@@ -45,7 +45,7 @@ export const Description = styled.h4`
   margin-bottom: 25px;
 `;
 
-export const DeveloperFE = styled.h5`
+export const Developers = styled.h5`
   color: ${({ theme }) => theme.color.border.light};
   font-weight: 100;
   font-size: 1.3rem;
