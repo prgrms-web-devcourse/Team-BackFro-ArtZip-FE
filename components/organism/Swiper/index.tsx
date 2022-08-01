@@ -1,13 +1,12 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import * as S from './style';
-import React,{ReactElement} from 'react';
+import React, {ReactElement} from 'react';
 
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps{
     items: ReactElement[]
-    // items: SVGRectElement[]
 }
 
 const SwiperWrapper = ({items} : SwiperProps) => {

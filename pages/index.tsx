@@ -1,5 +1,6 @@
 import ExhibitionCard from 'components/molecule/ExhibitionCard';
 import SwiperWrapper from 'components/organism/Swiper';
+import SwiperContainer from 'components/organism/SwiperContainer';
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
@@ -98,18 +99,19 @@ const ret = {
       }
   return (
 	<div>
-    <h3>다가오는 전시회</h3>
-		<SwiperWrapper items={[
-			  <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+		<SwiperContainer title="다가오는 전시회" >
+			<SwiperWrapper items={[
 				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>
-		]} />
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
+					<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>
+			]} />
+		</SwiperContainer>
     <h3>인기 많은 전시회</h3>
 	<SwiperWrapper items={[
 			  <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
