@@ -29,7 +29,7 @@ export interface UserInfoExhibitionLikeResponse extends BaseResponse {
 //     message: string;
 // }
 
-export interface UserInfoProps extends BaseResponse {
+export interface UserInfoResponse extends BaseResponse {
   data?: {
     nickname: string;
     userId: number;
@@ -42,17 +42,17 @@ export interface UserInfoProps extends BaseResponse {
   };
 }
 
-export interface UserTokenProps extends BaseResponse {
+export interface UserTokenResponse extends BaseResponse {
   data?: {
     accessToken: string;
   };
 }
 
-export type UserOauthLoginProps = UserProps;
+export type UserOauthLoginResponse = UserProps;
 
-export type UserLocalLoginProps = UserProps;
+export type UserLocalLoginResponse = UserProps;
 
-export interface UserCheckProps extends BaseResponse {
+export interface UserCheckResponse extends BaseResponse {
   isUnique: boolean;
 }
 
