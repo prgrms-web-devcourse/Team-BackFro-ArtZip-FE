@@ -1,4 +1,4 @@
-export default function displayDate(createdAt: Date) {
+export const displayDate = (createdAt: string) => {
   const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
   const seconds = milliSeconds / 1000;
   if (seconds < 60) {
@@ -26,4 +26,18 @@ export default function displayDate(createdAt: Date) {
   }
   const years = days / 365;
   return `${Math.floor(years)}년 전`;
-}
+};
+
+export const displayDday = (startDate: string) => {
+  const milliSeconds = new Date(startDate).getTime() - new Date().getTime();
+  const seconds = milliSeconds / 1000;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+
+  return Math.ceil(days);
+};
+
+export const displayFormattedDate = (startDate: string) => {
+  return startDate.slice(5).replace('-', '/');
+};

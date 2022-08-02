@@ -66,6 +66,36 @@ const REVIEWS = {
           path: 'https://source.unsplash.com/random',
         },
       ],
+      comments: [
+        {
+          commentId: 0,
+          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공',
+            profileImage: 'https://i.pravatar.cc/300​',
+          },
+          children: [
+            {
+              commentId: 1,
+              content: '같이 가용~',
+              createdAt: '2022-07-26T11:26:24',
+              updatedAt: null,
+              isEdited: false,
+              isDeleted: false,
+              user: {
+                userId: 1,
+                nickname: '그린',
+                profileImage: 'https://i.pravatar.cc/300​',
+              },
+            },
+          ],
+        },
+      ],
     },
   ],
   numberOfElements: 2,
