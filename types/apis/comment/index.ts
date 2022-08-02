@@ -3,7 +3,7 @@ import { UserProps } from 'types/model';
 import { BaseResponse } from '../base';
 
 //댓글 조회
-export interface CommentReviewResponse extends BaseResponse {
+export interface CommentReadResponse extends BaseResponse {
   data?: {
     content: CommentProps[];
     numberOfElements: number;
