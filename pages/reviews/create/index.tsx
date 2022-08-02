@@ -3,10 +3,17 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
+import { useState } from 'react';
 
 const ReviewCreatePage = () => {
+  const [isPublic, setIsPublic] = useState(true);
+
   const handleSearch = (value: string) => {
     console.log(value);
+  };
+
+  const handleSwitchChange = (checked: boolean) => {
+    setIsPublic(checked);
   };
 
   return (
@@ -40,6 +47,9 @@ const ReviewCreatePage = () => {
                   <ResultItem>서울 핸디아티코리아 2022</ResultItem>
                   <ResultItem>서울 핸디아티코리아 2022</ResultItem>
                   <ResultItem>서울 핸디아티코리아 2022</ResultItem>
+                  <ResultItem>서울 핸디아티코리아 2022</ResultItem>
+                  <ResultItem>서울 핸디아티코리아 2022</ResultItem>
+                  <ResultItem>서울 핸디아티코리아 2022</ResultItem>
                 </ResultList>
               </InnerContainer>
               <ImageWrapper>
@@ -60,8 +70,8 @@ const ReviewCreatePage = () => {
           <Label>사진</Label>
           <ImageUpload />
           <Label>공개 여부</Label>
-          <ToggleSwitch />
-
+          <ToggleSwitch defaultChecked onChange={handleSwitchChange} />
+          {isPublic ? '전체 공개' : '비공개'}
           <Button type="submit">작성완료</Button>
         </Form>
       </Section>
@@ -95,24 +105,26 @@ const SearchContainer = styled.div`
 
 const InnerContainer = styled.div`
   width: 100%;
-  height: 240px;
+  height: 200px;
   margin-right: 20px;
 `;
 
 const SearchBar = styled(Input.Search)`
   font-size: 1.6rem;
   height: 40px;
+  position: relative;
+  z-index: 1;
 `;
 
 const ResultList = styled.ul`
   width: 100%;
-  max-height: 206px;
+  max-height: 168px;
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.color.border.light};
-  border-top: 0;
   position: relative;
-  top: -6px;
+  top: -9px;
   overflow-y: auto;
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 const ResultItem = styled.li`
@@ -121,8 +133,7 @@ const ResultItem = styled.li`
 `;
 
 const ImageWrapper = styled.div`
-  height: 240px;
-  background-color: purple;
+  height: 200px;
   flex-shrink: 0;
 `;
 
@@ -148,7 +159,10 @@ const ToggleSwitch = styled(Switch)`
 `;
 
 const Button = styled.button`
-  display: inline;
+  width: 200px;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 30px auto 0;
   color: ${({ theme }) => theme.color.white};
   background-color: ${({ theme }) => theme.color.blue.dark};
 `;
