@@ -30,7 +30,7 @@ const Header = () => {
           />
           <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
         </Navigation>
-        <SearchBar placeholder="전시회를 검색해주세요." allowClear />
+        <SearchBar placeholder="전시회 제목을 검색해주세요." allowClear />
       </Container>
     </StyledHeader>
   );
@@ -42,8 +42,8 @@ const StyledHeader = styled.header`
   left: 0;
   width: 100%;
   padding-top: 10px;
-  border-bottom: 1px solid #dddddd;
-  background-color: #fafafa;
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.light};
+  background-color: ${({ theme }) => theme.color.background};
   z-index: 999;
 `;
 
@@ -86,7 +86,7 @@ const Navigation = styled.nav`
 
     &:hover {
       font-weight: 500;
-      border-bottom: 4px solid #242f9b;
+      border-bottom: 4px solid ${({ theme }) => theme.color.blue.main};
     }
 
     @media (max-width: 767px) {
@@ -120,7 +120,7 @@ const SearchBar = styled(Input.Search)`
 
   width: 400px;
   margin-bottom: 20px;
-  border: 2px solid #242f9b;
+  border: 2px solid ${({ theme }) => theme.color.blue.main};
   border-radius: 18px;
   overflow: hidden;
 
