@@ -1,4 +1,4 @@
-import { ExhibitionCardProps, ReviewProps, UserProps } from 'types/model';
+import { ExhibitionProps, ReviewProps, UserProps } from 'types/model';
 import { BaseResponse } from '../base';
 
 export interface UserRegisterResponse extends BaseResponse {
@@ -17,7 +17,7 @@ export interface UserInfoReviewLikeResponse extends BaseResponse {
 
 export interface UserInfoExhibitionLikeResponse extends BaseResponse {
   data?: {
-    content: ExhibitionCardProps[];
+    content: ExhibitionProps[];
   };
 }
 
