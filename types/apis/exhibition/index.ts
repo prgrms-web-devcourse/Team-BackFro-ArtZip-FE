@@ -1,8 +1,8 @@
 import { ExhibitionProps, ReviewProps } from 'types/model';
 import { BaseResponse } from '../base';
 
-//다가오는 전시회 조회
-export interface ExhibitionUpcomingResponse extends BaseResponse {
+//다가오는 전시회, 인기 많은 전시회 조회
+export interface ExhibitionReadResponse extends BaseResponse {
   data?: {
     content: ExhibitionProps[];
     numberOfElements: number; //content의 요소가 몇개인지
