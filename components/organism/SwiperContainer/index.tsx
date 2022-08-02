@@ -5,7 +5,7 @@ import Link from 'next/link';
 interface SwiperContainerProps {
   title: string;
   children: ReactElement;
-  type: string;
+  type: 'upcoming' | 'popular';
 }
 
 const SwiperContainer = ({ title, children, type }: SwiperContainerProps) => {
