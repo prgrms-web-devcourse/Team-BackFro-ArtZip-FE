@@ -10,3 +10,9 @@ export const SearchResultContainer = styled.div`
     margin-top: 20px;
   }
 `;
+
+export const SearchResultContents = styled.main`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
