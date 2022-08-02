@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
 import { LinkButton } from 'components/atom';
-import { UserInfo, ExhibitionCard } from 'components/molecule';
+import { UserInfo, ExhibitionCard, ImageGroup } from 'components/molecule';
 import { InfoGroup } from 'components/organism';
+import { PhotoProps } from 'types/model';
 
 interface ReviewDetailProps {
   reviewId: number;
@@ -21,6 +22,7 @@ interface ReviewDetailProps {
   thumbnail: string;
   startDate: string;
   endDate: string;
+  photos: PhotoProps[];
   onDeleteButtonClick: () => void;
 }
 
@@ -41,6 +43,7 @@ const ReviewDetail = ({
   thumbnail,
   startDate,
   endDate,
+  photos,
   onDeleteButtonClick,
 }: ReviewDetailProps) => {
   return (
@@ -61,6 +64,8 @@ const ReviewDetail = ({
       <ReviewDetailSection>
         <ReviewDetailContent>
           <ReviewDetailContentText> {content} </ReviewDetailContentText>
+
+          <ImageGroup imageSources={photos} />
           <ReviewDetailContentUtils>
             <InfoGroup
               isLiked={isLiked}

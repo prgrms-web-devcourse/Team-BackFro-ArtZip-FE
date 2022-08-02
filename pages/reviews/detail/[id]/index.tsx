@@ -12,7 +12,7 @@ const ReviewDetailPage = ({ review }: any) => {
     isEdited,
     isLiked,
     likeCount,
-    // photos,
+    photos,
     title,
     content,
     createdAt,
@@ -42,6 +42,7 @@ const ReviewDetailPage = ({ review }: any) => {
         likeCount={likeCount}
         commentCount={commentCount}
         exhibitionId={exhibitionId}
+        photos={photos}
         name={name}
         thumbnail={thumbnail}
         startDate={startDate}

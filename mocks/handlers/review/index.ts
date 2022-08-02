@@ -27,11 +27,23 @@ const REVIEWS = {
       photos: [
         {
           photoId: 35,
-          path: 'https://source.unsplash.com/random',
+          path: 'https://source.unsplash.com/random?1',
         },
         {
           photoId: 36,
-          path: 'https://source.unsplash.com/random',
+          path: 'https://source.unsplash.com/random?2',
+        },
+        {
+          photoId: 37,
+          path: 'https://source.unsplash.com/random?3',
+        },
+        {
+          photoId: 38,
+          path: 'https://source.unsplash.com/random?4',
+        },
+        {
+          photoId: 39,
+          path: 'https://source.unsplash.com/random?5',
         },
       ],
     },
