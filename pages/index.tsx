@@ -86,17 +86,91 @@ const Home: NextPage = () => {
   };
   return (
     <h2>
-		<SwiperContainer items={[
-			  <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-			    <ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>,
-				<ExhibitionCard exhibitionId={ret.exhibitionId} name={ret.name} thumbnail={ret.thumbnail} startDate={ret.startDate} endDate={ret.endDate} likeCount={ret.likeCount} reviewCount={ret.reviews.length}/>
-		]} />
+      <SwiperContainer
+        items={[
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+          <ExhibitionCard
+            exhibitionId={ret.exhibitionId}
+            name={ret.name}
+            thumbnail={ret.thumbnail}
+            startDate={ret.startDate}
+            endDate={ret.endDate}
+            likeCount={ret.likeCount}
+            reviewCount={ret.reviews.length}
+          />,
+        ]}
+      />
       로렘 입숨은 출판이나 그래픽 디자인 분야에서 폰트, 타이포그래피, 레이아웃 같은 그래픽 요소나
     </h2>
   );
