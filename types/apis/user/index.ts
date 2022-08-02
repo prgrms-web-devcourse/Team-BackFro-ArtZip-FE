@@ -1,24 +1,24 @@
-import { ExhibitionCardProps, ReviewProps, UserProps } from "types/model";
-import { BaseProps } from "../base";
+import { ExhibitionCardProps, ReviewProps, UserProps } from 'types/model';
+import { BaseResponse } from '../base';
 
-export interface UserRegisterProps {
-    data?:{
-        userId: number;
-        nickname: string;
-        email: string;
-    }
+export interface UserRegisterResponse extends BaseResponse {
+  data?: {
+    userId: number;
+    nickname: string;
+    email: string;
+  };
 }
 
-export interface UserInfoReviewLikeProps{
-    data?: {
-        content: ReviewProps[];
-    }
+export interface UserInfoReviewLikeResponse extends BaseResponse {
+  data?: {
+    content: ReviewProps[];
+  };
 }
 
-export interface UserInfoExhibitionLikeProps{
-    data?:{
-        content: ExhibitionCardProps[];
-    }
+export interface UserInfoExhibitionLikeResponse extends BaseResponse {
+  data?: {
+    content: ExhibitionCardProps[];
+  };
 }
 
 // export interface UserMePasswordProps{
@@ -29,34 +29,33 @@ export interface UserInfoExhibitionLikeProps{
 //     message: string;
 // }
 
-export interface UserInfoProps extends BaseProps{
-    data?:{
-        userId: number;
-        profileImage: string;
-        email: string;
-        reviewCount: number;
-        likeCount: number;
-        commentCount: number;
-        reviews: ReviewProps[];
-    }
+export interface UserInfoProps extends BaseResponse {
+  data?: {
+    userId: number;
+    profileImage: string;
+    email: string;
+    reviewCount: number;
+    likeCount: number;
+    commentCount: number;
+    reviews: ReviewProps[];
+  };
 }
 
-export interface UserTokenProps {
-    data?:{
-        accessToken: string;
-    }
+export interface UserTokenProps extends BaseResponse {
+  data?: {
+    accessToken: string;
+  };
 }
 
-export type UserOauthLoginProps = UserProps
+export type UserOauthLoginProps = UserProps;
 
-export type UserLocalLoginProps = UserProps
+export type UserLocalLoginProps = UserProps;
 
-export interface UserCheckProps {
-    isUnique: boolean;
+export interface UserCheckProps extends BaseResponse {
+  isUnique: boolean;
 }
 
-
-// TODO 
+// TODO
 // users/me/info
 // users/me/info/exhibitions/like?
 // users/me/info/reviews/like?

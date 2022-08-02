@@ -1,5 +1,5 @@
-export interface BaseProps{
-    message?: string;
-    status?: number;
-    code?: string;
+export interface BaseResponse {
+  message?: string;
+  status?: number;
+  code?: string;
 }
