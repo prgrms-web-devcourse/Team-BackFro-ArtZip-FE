@@ -1,10 +1,10 @@
-import { ExhibitionCardProps, ReviewProps } from 'types/model';
+import { ExhibitionProps, ReviewProps } from 'types/model';
 import { BaseResponse } from '../base';
 
 //다가오는 전시회 조회
 export interface ExhibitionUpcomingResponse extends BaseResponse {
   data?: {
-    content: ExhibitionCardProps[];
+    content: ExhibitionProps[];
     numberOfElements: number; //content의 요소가 몇개인지
     offset: number; // 현재 페이지에서 시작하는 요소의 index 번호
     pageNumber: number; //페이지 넘버

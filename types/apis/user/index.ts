@@ -31,6 +31,7 @@ export interface UserInfoExhibitionLikeResponse extends BaseResponse {
 
 export interface UserInfoProps extends BaseResponse {
   data?: {
+    nickname: string;
     userId: number;
     profileImage: string;
     email: string;
