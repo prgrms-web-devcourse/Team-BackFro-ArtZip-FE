@@ -5,6 +5,7 @@ import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
+import { displayDday, displayFormattedDate } from 'utils';
 
 const { Meta } = Card;
 
@@ -46,8 +47,10 @@ const ExhibitionCard = ({
         <S.Description>
           <h3>{name}</h3>
           <div>
-            <h3>07/28 - 07/31</h3>
-            <S.Dday>D-4</S.Dday>
+            <h3>
+              {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
+            </h3>
+            <S.Dday>D-{displayDday(startDate)}</S.Dday>
           </div>
         </S.Description>
       </S.ExhibitionCard>

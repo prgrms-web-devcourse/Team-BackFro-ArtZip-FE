@@ -2,10 +2,12 @@ import React, { ReactElement } from 'react';
 import * as S from './style';
 import Link from 'next/link';
 
+export type ExhibitionType = 'upcoming' | 'popular';
+
 interface SwiperContainerProps {
   title: string;
   children: ReactElement;
-  type: string;
+  type: ExhibitionType;
 }
 
 const SwiperContainer = ({ title, children, type }: SwiperContainerProps) => {
