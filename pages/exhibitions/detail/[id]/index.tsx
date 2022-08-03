@@ -95,6 +95,53 @@ const ExhibitionDetailPage = () => {
         <title>ArtZip | ExhibitionDetail</title>
       </Head>
       <S.ExhibitionPageContainer>
+        <S.ExhibitionContainer>
+          <S.Thumbnail src={ret.thumbnail} preview={false}></S.Thumbnail>
+          <S.InfoContainer>
+            <S.Title>{ret.name}</S.Title>
+            <S.Line></S.Line>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>전시기간</S.InfoTextBold>
+              <S.InfoText>
+                {' '}
+                | {ret.startDate} ~{ret.endDate}
+              </S.InfoText>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>홈페이지</S.InfoTextBold>
+              <a href={ret.url}>
+                <S.InfoText> | {ret.url}</S.InfoText>
+              </a>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>지역</S.InfoTextBold>
+              <S.InfoText> | {ret.area}</S.InfoText>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>장소</S.InfoTextBold>
+              <a href={ret.placeUrl}>
+                <S.InfoText> | {ret.placeAddr}</S.InfoText>
+              </a>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>입장료</S.InfoTextBold>
+              <S.InfoText> | {ret.fee}</S.InfoText>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>문의처</S.InfoTextBold>
+              <S.InfoText> | {ret.inquiry}</S.InfoText>
+            </S.InfoTextContainer>
+            <S.InfoTextContainer>
+              <S.InfoTextBold>장르</S.InfoTextBold>
+              <S.InfoText> | {ret.genre}</S.InfoText>
+            </S.InfoTextContainer>
+          </S.InfoContainer>
+          <S.IconContainer>
+            {ret.isLiked ? <HeartFilled></HeartFilled> : <HeartOutlined></HeartOutlined>}
+            {'    '}
+            <ShareAltOutlined></ShareAltOutlined>
+          </S.IconContainer>
+        </S.ExhibitionContainer>
         <h3>전시 소개</h3>
         <S.DescriptionWrapper>{ret.description}</S.DescriptionWrapper>
         <h3>위치 안내</h3>
