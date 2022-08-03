@@ -165,6 +165,14 @@ const ExhibitionDetailPage = () => {
             ></ReviewCard>
           ))}
         </S.ReviewContainer>
+        <S.ButtonContainer>
+          <Link href={`/community/${ret.exhibitionId}`}>
+            <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
+          </Link>
+          <Link href={`/reviews/create`}>
+            <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
+          </Link>
+        </S.ButtonContainer>
       </S.ExhibitionPageContainer>
     </>
   );
