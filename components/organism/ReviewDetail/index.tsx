@@ -1,57 +1,37 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
 import { LinkButton } from 'components/atom';
-import { UserInfo, ExhibitionCard, ImageGroup } from 'components/molecule';
+import { UserInfo, ImageGroup } from 'components/molecule';
 import { InfoGroup } from 'components/organism';
-import { PhotoProps } from 'types/model';
+import { ReviewSingleReadData } from 'types/apis/review';
 
-interface ReviewDetailProps {
-  reviewId: number;
-  profileImage: string;
-  nickname: string;
-  createdAt: Date;
-  userId: number;
-  title: string;
-  isEdited: boolean;
-  content: string;
-  isLiked: boolean;
-  likeCount: number;
-  commentCount: number;
-  exhibitionId: number;
-  name: string;
-  thumbnail: string;
-  startDate: string;
-  endDate: string;
-  photos: PhotoProps[];
+interface ReviewDetailProps extends ReviewSingleReadData {
   onDeleteButtonClick: () => void;
 }
 
 const ReviewDetail = ({
-  reviewId,
-  profileImage,
-  nickname,
+  id,
   createdAt,
-  userId,
+  user,
+  exhibition,
   title,
   isEdited,
   content,
   isLiked,
   likeCount,
   commentCount,
-  exhibitionId,
-  name,
-  thumbnail,
-  startDate,
-  endDate,
   photos,
   onDeleteButtonClick,
 }: ReviewDetailProps) => {
+  const { userId, nickname, profileImage } = user;
+  // const { exhibitionId, name, startDate, endDate, thumbnail } = exhibition;
+
   return (
     <ReviewDetailContainer>
       <ReviewDetailHeader>
         <UserInfo
-          image={profileImage}
-          userName={nickname}
+          profileImage={profileImage}
+          nickname={nickname}
           createdDate={createdAt}
           userId={userId}
         />
@@ -78,23 +58,13 @@ const ReviewDetail = ({
 
             {/* TODO: 전역 유저 로그인 상태에 따라서, 수정 / 삭제 버튼 렌더링 */}
             <ButtonGroup>
-              <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
+              <LinkButton href={`/reviews/${id}/edit`}>수정</LinkButton>
               <Button type="text" onClick={onDeleteButtonClick}>
                 삭제
               </Button>
             </ButtonGroup>
           </ReviewDetailContentUtils>
         </ReviewDetailContent>
-
-        <ExhibitionCard
-          exhibitionId={exhibitionId}
-          name={name}
-          thumbnail={thumbnail}
-          startDate={startDate}
-          endDate={endDate}
-          likeCount={1}
-          reviewCount={30}
-        />
       </ReviewDetailSection>
     </ReviewDetailContainer>
   );

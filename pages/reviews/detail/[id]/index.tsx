@@ -2,12 +2,12 @@ import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
 import axios from 'axios';
 import { ReviewDetail } from 'components/organism';
+import { ReviewSingleReadResponse } from 'types/apis/review';
 
-// TODO: 분리해둔 interface 사용
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ReviewDetailPage = ({ review }: any) => {
+const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
     exhibition,
+    user,
     id,
     isEdited,
     isLiked,
@@ -16,37 +16,28 @@ const ReviewDetailPage = ({ review }: any) => {
     title,
     content,
     createdAt,
-    // updatedAt,
+    updatedAt,
     commentCount,
-    user,
-  } = review;
-  const { nickname, profileImage, userId } = user;
-  const { exhibitionId, name, startDate, endDate, thumbnail } = exhibition;
+  } = data;
 
   return (
     <>
       <Head>
         <title>ArtZip | ReviewDetailPage</title>
       </Head>
-
       <ReviewDetail
-        reviewId={id}
-        profileImage={profileImage}
-        nickname={nickname}
+        id={id}
+        likeCount={likeCount}
+        commentCount={commentCount}
+        isLiked={isLiked}
         createdAt={createdAt}
-        userId={userId}
         title={title}
         isEdited={isEdited}
         content={content}
-        isLiked={isLiked}
-        likeCount={likeCount}
-        commentCount={commentCount}
-        exhibitionId={exhibitionId}
         photos={photos}
-        name={name}
-        thumbnail={thumbnail}
-        startDate={startDate}
-        endDate={endDate}
+        updatedAt={updatedAt}
+        exhibition={exhibition}
+        user={user}
         onDeleteButtonClick={() => {
           console.log('삭제!');
         }}
@@ -60,12 +51,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return;
   }
 
+  // TODO: 실패했을 때, 성공했을 때 나눠서 응답값을 받아야 함
   const { id } = context.params;
   const { data } = await axios.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews/${id}`);
 
   return {
     props: {
-      review: data.data[0],
+      data: data.data[0],
     },
   };
 };

@@ -2,25 +2,24 @@ import { Avatar } from 'antd';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { displayDate } from 'utils';
-interface UserInfoProps {
-  image: string;
-  userName: string;
-  createdDate: Date;
-  userId: number;
+import { UserProps } from 'types/model';
+
+interface UserInfoProps extends UserProps {
+  createdDate: string;
 }
 
-const UserInfo = ({ image, userName, createdDate, userId }: UserInfoProps) => {
+const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps) => {
   return (
     <UserInfoContainer>
       <Link href={`/user/${userId}`}>
         <a>
-          <UserInfoAvatar src={image} size={48} />
+          <UserInfoAvatar src={profileImage} size={48} />
         </a>
       </Link>
       <UserInfoTextWrapper>
         <Link href={`/user/${userId}`}>
           <a>
-            <UserInfoName>{userName}</UserInfoName>
+            <UserInfoName>{nickname}</UserInfoName>
           </a>
         </Link>
         <UserInfoDate>{displayDate(createdDate)}</UserInfoDate>
