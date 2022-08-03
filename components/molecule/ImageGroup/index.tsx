@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 import { Image } from 'antd';
 import { PhotoProps } from 'types/model';
-interface ImageGroupProps {
-  imageSources: PhotoProps[];
-}
-const ImageGroup = ({ imageSources }: ImageGroupProps) => {
+
+const ImageGroup = ({ imageSources }: { imageSources: PhotoProps[] }) => {
   return (
     <ImageGroupContainer>
       {imageSources.map((imageSource) => (

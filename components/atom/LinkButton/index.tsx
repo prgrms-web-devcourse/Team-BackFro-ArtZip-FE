@@ -1,11 +1,10 @@
 import { Button } from 'antd';
 import Link from 'next/link';
-import * as React from 'react';
-
+import { ReactNode } from 'react';
 interface LinkButtonProps {
   href: string;
   onClick?: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const LinkButton = ({ href, onClick, children }: LinkButtonProps) => {
