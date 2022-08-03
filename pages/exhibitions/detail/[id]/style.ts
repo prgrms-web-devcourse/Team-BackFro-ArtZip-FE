@@ -22,16 +22,33 @@ export const ExhibitionContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 80%;
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    width: 90%;
+  }
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 100%;
+  }
 `;
 export const Thumbnail = styled(Image)`
   margin-top: 10px;
   width: 320px;
   height: 450px;
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    width: 240px;
+    height: 350px;
+  }
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 200px;
+    height: 280px;
+  }
 `;
 
 export const InfoContainer = styled.div`
   margin-left: 40px;
   width: 55%;
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    margin-left: 20px;
+  }
 `;
 
 export const Line = styled.hr`
@@ -58,6 +75,9 @@ export const InfoTextBold = styled.p`
   font-size: 1.8rem;
   font-weight: 700;
   color: ${({ theme }) => theme.color.font.main};
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    min-width: 55px;
+  }
 `;
 export const InfoText = styled.p`
   font-size: 1.8rem;
@@ -94,6 +114,10 @@ export const ReviewContainer = styled.div`
   grid-template-rows: 1fr 1fr;
   gap: 30px;
   margin-bottom: 70px;
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -113,6 +137,9 @@ export const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 100px;
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 70%;
+  }
 `;
 
 export const StyledButton = styled(Button)`
