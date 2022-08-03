@@ -14,7 +14,7 @@ const REVIEWS = {
         exhibitionId: 24,
         name: '전시회 이름',
         startDate: '2022-10-11',
-        thumbnail: 'https://source.unsplash.com/random',
+        thumbnail: 'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
       },
       title: '리뷰 제목 (핸드아트)',
       content: '오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~',
@@ -27,11 +27,23 @@ const REVIEWS = {
       photos: [
         {
           photoId: 35,
-          path: 'https://source.unsplash.com/random',
+          path: 'https://source.unsplash.com/random?1',
         },
         {
           photoId: 36,
-          path: 'https://source.unsplash.com/random',
+          path: 'https://source.unsplash.com/random?2',
+        },
+        {
+          photoId: 37,
+          path: 'https://source.unsplash.com/random?3',
+        },
+        {
+          photoId: 38,
+          path: 'https://source.unsplash.com/random?4',
+        },
+        {
+          photoId: 39,
+          path: 'https://source.unsplash.com/random?5',
         },
       ],
     },
