@@ -41,6 +41,7 @@ export const Thumbnail = styled(Image)`
     width: 200px;
     height: 280px;
   }
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
 `;
 
 export const InfoContainer = styled.div`
@@ -96,6 +97,7 @@ export const DescriptionWrapper = styled.div`
   border-radius: 40px;
   font-size: 1.8rem;
   line-height: 200%;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
 `;
 
 export const PlaceInfo = styled.div`
@@ -150,6 +152,7 @@ export const StyledButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
   border: none;
   border-radius: 40px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
   &:hover {
     background-color: ${({ theme }) => theme.color.blue.dark};
   }
