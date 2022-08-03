@@ -37,6 +37,7 @@ export interface ReviewProps {
   isLiked: boolean;
 }
 
+// TODO: 명세서 올라오면 수정하기
 export interface CommentProps {
   commentId: number;
   content: string;
@@ -45,11 +46,16 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  children: CommentProps[];
+  childrenCount: number;
 }
 
 export interface UserProps {
   userId: number;
   nickname: string;
   profileImage: string;
+}
+
+export interface PhotoProps {
+  photoId: number;
+  path: string;
 }

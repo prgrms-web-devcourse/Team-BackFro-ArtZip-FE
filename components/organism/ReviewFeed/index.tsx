@@ -1,10 +1,12 @@
-import { UserInfo, LikeInfo, CommentInfo } from 'components/molecule';
+import { UserInfo } from 'components/molecule';
 import styled from '@emotion/styled';
 import { Card, Button } from 'antd';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ReviewFeedProps } from 'types/model';
+import { InfoGroup } from 'components/organism';
+import { LinkButton } from 'components/atom';
 
 const ReviewFeed = ({
   userProfileImage,
@@ -52,18 +54,16 @@ const ReviewFeed = ({
           </ReviewFeedMain>
 
           <ReviewFeedBottom>
-            <InfoGroup>
-              <LikeInfo isLiked={isLiked} likeCount={likeCount} onClick={onLikeClick} />
-              <CommentInfo commentCount={commentCount} />
-            </InfoGroup>
+            <InfoGroup
+              isLiked={isLiked}
+              likeCount={likeCount}
+              commentCount={commentCount}
+              onLikeClick={onLikeClick}
+            />
 
             {isMyFeed && (
               <FeedButtonGroup>
-                <Button type="text">
-                  <Link href={`/reviews/${reviewId}/edit`}>
-                    <a>수정</a>
-                  </Link>
-                </Button>
+                <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
                 <Button type="text" onClick={onDeleteButtonClick}>
                   삭제
                 </Button>
@@ -132,12 +132,6 @@ const ReviewContent = styled.p``;
 const ReviewFeedBottom = styled.div`
   display: flex;
   justify-content: space-between;
-  align-content: center;
-`;
-
-const InfoGroup = styled.div`
-  display: flex;
-  gap: 5px;
   align-content: center;
 `;
 
