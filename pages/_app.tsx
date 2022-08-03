@@ -4,6 +4,9 @@ import { RecoilRoot } from 'recoil';
 import { Layout } from 'components/template';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/theme';
+import "swiper/scss";
+import "swiper/scss/navigation";
+import "swiper/scss/pagination";
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
   import('../mocks');

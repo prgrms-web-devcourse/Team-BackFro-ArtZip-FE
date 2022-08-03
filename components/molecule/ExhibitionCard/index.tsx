@@ -1,52 +1,61 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card } from 'antd';
 import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
-import * as S from './style'
-import Link from 'next/link'
-
-interface ExhibitionCardProps{
-    exhibitionId: number;
-    name: string;
-    thumbnail: string;
-    startDate: string;
-    endDate: string;
-    likeCount: number;
-    reviewCount: number;
-}
+import * as S from './style';
+import Link from 'next/link';
+import { ExhibitionProps } from 'types/model';
+import { displayDday, displayFormattedDate } from 'utils';
 
 const { Meta } = Card;
 
-const ExhibitionCard = ({exhibitionId, name, thumbnail, startDate, endDate, likeCount, reviewCount }: ExhibitionCardProps) => {
-    const [isHover, setIsHover] = useState(false);
-    const mouseHover = () => setIsHover(isHover => !isHover);
+const ExhibitionCard = ({
+  exhibitionId,
+  name,
+  thumbnail,
+  startDate,
+  endDate,
+  likeCount,
+  reviewCount,
+}: ExhibitionProps) => {
+  const [isHover, setIsHover] = useState(false);
+  const mouseHover = () => setIsHover((isHover) => !isHover);
 
-    return(
-        <Link href={`exhibitions/detail/${exhibitionId}`}>
-            <S.ExhibitionCard>
-            <Card
-                hoverable
-                extra={isHover ? <S.HoverContent> <HeartOutlined />{likeCount} <MessageOutlined/> {reviewCount} </S.HoverContent> : null}
-                onMouseEnter={mouseHover}
-                onMouseLeave={mouseHover}
-                style={{
-                    width: 270,
-                    height: 330,
-                    position: 'relative'
-                }}  
-                cover={<Image alt="card image" src={thumbnail} layout='fill'/>}
-            />
-                <S.Description>
-                    <h3>{name}</h3>
-                    <div>
-                        <h3>07/28 - 07/31</h3>
-                        <S.Dday>D-4</S.Dday>
-                    </div>
-                
-                </S.Description>
-            </S.ExhibitionCard>
-        </Link>
-    )
-}
+  return (
+    <Link href={`exhibitions/detail/${exhibitionId}`}>
+      <S.ExhibitionCard>
+        <Card
+          hoverable
+          extra={
+            isHover ? (
+              <S.HoverContent>
+                {' '}
+                <HeartOutlined />
+                {likeCount} <MessageOutlined /> {reviewCount}{' '}
+              </S.HoverContent>
+            ) : null
+          }
+          onMouseEnter={mouseHover}
+          onMouseLeave={mouseHover}
+          style={{
+            width: 270,
+            height: 330,
+            position: 'relative',
+          }}
+          cover={<Image alt="card image" src={thumbnail} layout="fill" />}
+        />
+        <S.Description>
+          <h3>{name}</h3>
+          <div>
+            <h3>
+              {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
+            </h3>
+            <S.Dday>D-{displayDday(startDate)}</S.Dday>
+          </div>
+        </S.Description>
+      </S.ExhibitionCard>
+    </Link>
+  );
+};
 
 export default ExhibitionCard;
