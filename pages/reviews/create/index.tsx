@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styled from '@emotion/styled';
-import { Input, DatePicker, Switch, Image } from 'antd';
+import { Input, DatePicker, Switch, Image, Button } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
 import { useState } from 'react';
@@ -26,7 +26,7 @@ const ReviewCreatePage = () => {
           title="후기 쓰기"
           content="전시회를 다녀오셨나요? \n 소중한 경험을 후기로 작성하고 공유해보세요:)"
         />
-        <Form>
+        <ReviewEditForm>
           <Fieldset>
             <Legend>전시회 이름</Legend>
             <SearchContainer>
@@ -61,6 +61,7 @@ const ReviewCreatePage = () => {
               </ImageWrapper>
             </SearchContainer>
           </Fieldset>
+
           <Label>다녀 온 날짜</Label>
           <DateInput />
           <Label>제목</Label>
@@ -72,8 +73,9 @@ const ReviewCreatePage = () => {
           <Label>공개 여부</Label>
           <ToggleSwitch defaultChecked onChange={handleSwitchChange} />
           {isPublic ? '전체 공개' : '비공개'}
-          <Button type="submit">작성완료</Button>
-        </Form>
+
+          <SubmitButton type="primary">작성완료</SubmitButton>
+        </ReviewEditForm>
       </Section>
     </>
   );
@@ -85,7 +87,7 @@ const Section = styled.section`
   font-size: 1.8rem;
 `;
 
-const Form = styled.form`
+const ReviewEditForm = styled.form`
   display: flex;
   flex-direction: column;
   margin: 50px 0;
@@ -158,13 +160,12 @@ const ToggleSwitch = styled(Switch)`
   width: 54px;
 `;
 
-const Button = styled.button`
+const SubmitButton = styled(Button)`
   width: 200px;
-  padding: 10px;
-  border-radius: 12px;
+  height: 40px;
+  border-radius: 6px;
   margin: 30px auto 0;
-  color: ${({ theme }) => theme.color.white};
-  background-color: ${({ theme }) => theme.color.blue.dark};
+  font-size: 1.8rem;
 `;
 
 export default ReviewCreatePage;
