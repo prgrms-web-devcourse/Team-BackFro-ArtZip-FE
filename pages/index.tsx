@@ -3,6 +3,7 @@ import SearchToolbar from 'components/organism/SearchToolbar';
 import SwiperWrapper from 'components/organism/Swiper';
 import SwiperContainer from 'components/organism/SwiperContainer';
 import type { NextPage } from 'next';
+import React, { useState } from 'react';
 
 const Home: NextPage = () => {
   const ret = {
@@ -86,6 +87,9 @@ const Home: NextPage = () => {
       },
     ],
   };
+
+  //TODO : 맞춤전시회로 이동해야함
+  const [selectedArea, setSelectedArea] = useState([]);
   return (
     <div>
       <SwiperContainer title="다가오는 전시회" type="upcoming">
@@ -264,7 +268,11 @@ const Home: NextPage = () => {
         />
       </SwiperContainer>
 
-      <SearchToolbar type="place" />
+      <SearchToolbar
+        type="place"
+        selectedValues={selectedArea}
+        setSelectedValues={setSelectedArea}
+      />
     </div>
   );
 };

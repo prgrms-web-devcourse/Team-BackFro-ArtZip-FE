@@ -3,13 +3,13 @@ import styled from '@emotion/styled';
 export const SearchToolbar = styled.div`
   display: flex;
   gap: 1rem;
+  margin-bottom: 300px;
 `;
 
 export const IconBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
   background-color: #ececec;
   width: 50px;
   border-radius: 50%;
@@ -23,7 +23,6 @@ export const ContentBox = styled.div`
   flex-direction: column;
   flex-grow: 3;
   .content-box-title {
-    cursor: pointer;
     font-weight: 700;
     white-space: no-wrap;
   }
@@ -32,5 +31,6 @@ export const ContentBox = styled.div`
     flex-wrap: nowrap;
     gap: 1rem;
     white-space: nowrap;
+    cursor: pointer;
   }
 `;
