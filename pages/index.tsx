@@ -1,4 +1,5 @@
 import ExhibitionCard from 'components/molecule/ExhibitionCard';
+import SearchToolbar from 'components/organism/SearchToolbar';
 import SwiperWrapper from 'components/organism/Swiper';
 import SwiperContainer from 'components/organism/SwiperContainer';
 import type { NextPage } from 'next';
@@ -262,6 +263,8 @@ const Home: NextPage = () => {
           ]}
         />
       </SwiperContainer>
+
+      <SearchToolbar type="place" />
     </div>
   );
 };
