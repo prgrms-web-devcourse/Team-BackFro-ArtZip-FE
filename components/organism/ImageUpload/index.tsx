@@ -57,7 +57,7 @@ const ImageUpload = () => {
         {fileList.length >= 5 ? null : uploadButton}
       </Upload>
       <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <Image alt="example" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   );
