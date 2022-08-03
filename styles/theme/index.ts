@@ -7,6 +7,7 @@ const color = {
     main: '#242F9B',
     dark: '#646FD4',
     light: '#9BA3EB',
+    white: '#DEDEFF',
   },
   black: '#000000',
   font: {
@@ -15,8 +16,9 @@ const color = {
     light: '#A3A3A3',
   },
   border: {
-    normal: '#CCCCCC',
-    light: '#F1F1F1',
+    main: '#CCCCCC',
+    light: '#DDDDDD',
+    white: '#F1F1F1',
   },
   background: '#FAFAFA',
   white: '#FFFFFF',

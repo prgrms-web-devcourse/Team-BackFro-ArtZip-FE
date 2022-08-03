@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload } from 'antd';
+import { Modal, Upload, Image } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
@@ -57,7 +57,7 @@ const ImageUpload = () => {
         {fileList.length >= 5 ? null : uploadButton}
       </Upload>
       <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   );

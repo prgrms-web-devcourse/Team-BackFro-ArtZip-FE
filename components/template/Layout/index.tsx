@@ -20,11 +20,16 @@ const PageWrapper = styled.div`
   width: 80%;
   max-width: 1400px;
   padding-top: 200px;
-  padding-bottom: 200px;
+  padding-bottom: 230px;
   margin: 0 auto;
 
-  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    padding-bottom: 220px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 90%;
+    padding-bottom: 200px;
   }
 `;
 
