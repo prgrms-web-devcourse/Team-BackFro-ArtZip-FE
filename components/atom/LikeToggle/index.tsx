@@ -18,9 +18,9 @@ const LikeWrapper = styled.div`
   align-content: center;
   padding: 5px;
   border-radius: 50%;
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
     background-color: ${({ theme }) => theme.color.pink};
   }
 `;

@@ -18,9 +18,9 @@ const LikeInfo = ({ isLiked, likeCount, onClick }: LikeInfoProps) => {
 const LikeInfoWrapper = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
     color: ${({ theme }) => theme.color.red};
   }
 `;
