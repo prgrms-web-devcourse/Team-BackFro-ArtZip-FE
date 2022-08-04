@@ -114,7 +114,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
                 checked={selectedValues.includes(it) ? true : false}
                 onChange={(e) => handleCheckedValue(it, e.target.checked)}
               />
-              <label style={{ color: selectedValues.includes(it) ? 'red' : undefined }}>
+              <label style={{ fontWeight: selectedValues.includes(it) ? '600' : undefined }}>
                 {it.name}
               </label>
             </>

@@ -26,6 +26,7 @@ export const ContentBox = styled.div`
   .content-box-title {
     font-weight: 700;
     white-space: no-wrap;
+    font-size: 1.9rem;
   }
   .content-box-sub {
     margin-top: 1rem;
