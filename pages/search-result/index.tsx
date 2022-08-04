@@ -113,7 +113,7 @@ const SearchResultPage: NextPage = () => {
         </div>
       )}
       {exhibition && <div>SearchResult: {exhibition}</div>}
-
+      {/* 
       <S.SearchResultContents>
         <ExhibitionCard
           exhibitionId={ret.exhibitionId}
@@ -187,7 +187,7 @@ const SearchResultPage: NextPage = () => {
           likeCount={ret.likeCount}
           reviewCount={ret.reviews.length}
         />
-      </S.SearchResultContents>
+      </S.SearchResultContents> */}
       <Pagination
         className="pagination"
         defaultCurrent={1}
