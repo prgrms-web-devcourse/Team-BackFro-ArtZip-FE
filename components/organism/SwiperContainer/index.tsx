@@ -17,7 +17,7 @@ const SwiperContainer = ({ title, children, type }: SwiperContainerProps) => {
         <h3>{title}</h3>
         <Link
           href={{
-            pathname: '/search-result',
+            pathname: '/exhibitions/more',
             query: { type },
           }}
         >
