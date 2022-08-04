@@ -27,7 +27,7 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
           }}
         >
           {items.map((item) => (
-            <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
+            <SwiperSlide key={item.props.exhibitionId} className="MyBanner__slideItem">
               {item}
             </SwiperSlide>
           ))}
