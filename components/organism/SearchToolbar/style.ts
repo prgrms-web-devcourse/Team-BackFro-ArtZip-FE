@@ -1,16 +1,17 @@
 import styled from '@emotion/styled';
+import theme from 'styles/theme';
 
 export const SearchToolbar = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 300px;
+  margin-bottom: 30px;
 `;
 
 export const IconBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ececec;
+  background-color: ${({ theme }) => theme.color.font.light};
   width: 50px;
   border-radius: 50%;
 `;
@@ -27,8 +28,10 @@ export const ContentBox = styled.div`
     white-space: no-wrap;
   }
   .content-box-sub {
+    margin-top: 1rem;
+    font-size: 2rem;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 1rem;
     white-space: nowrap;
     cursor: pointer;

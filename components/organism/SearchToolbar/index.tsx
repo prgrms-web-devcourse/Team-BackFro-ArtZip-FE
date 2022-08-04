@@ -35,19 +35,19 @@ const placeArr = [
 ];
 
 const periodArr = [
-  '모든 날짜',
-  '1월',
-  '2월',
-  '3월',
-  '4월',
-  '5월',
-  '6월',
-  '7월',
-  '8월',
-  '9월',
-  '10월',
-  '11월',
-  '12월',
+  { id: 0, name: '모든 날짜', value: 'all' },
+  { id: 1, name: '1월', value: 'SEOUL' },
+  { id: 2, name: '2월', value: 'GYEONGGI' },
+  { id: 3, name: '3월', value: 'INCHEON' },
+  { id: 4, name: '4월', value: 'GANGWON' },
+  { id: 5, name: '5월', value: 'BUSAN' },
+  { id: 6, name: '6월', value: 'DAEGU' },
+  { id: 7, name: '7월', value: 'DAEJEON' },
+  { id: 8, name: '8월', value: 'GWANGJU' },
+  { id: 9, name: '9월', value: 'ULSAN' },
+  { id: 10, name: '10월', value: 'SEJONG' },
+  { id: 11, name: '11월', value: 'CHUNGBUK' },
+  { id: 12, name: '12월', value: 'CHUNGNAM' },
 ];
 
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
@@ -55,7 +55,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
   const onCheckedAll = useCallback(
     (checked: boolean) => {
       if (checked) {
-        const checkedListArray = [];
+        const checkedListArray: CheckBoxType[] = [];
 
         placeArr.forEach((it) => checkedListArray.push(it));
 
@@ -111,7 +111,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
               />
               <label
                 htmlFor="place"
-                // style={{ color: checked ? 'red' : undefined }}
+                style={{ color: selectedValues.includes(it) ? 'red' : undefined }}
               >
                 {it.name}
               </label>
