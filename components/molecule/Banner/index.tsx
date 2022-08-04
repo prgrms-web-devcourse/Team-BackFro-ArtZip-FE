@@ -33,19 +33,19 @@ const Section = styled.section<{ backgroundColor: string }>`
   margin-left: -50vw;
   margin-right: -50vw;
   width: 100vw;
-  padding: 100px 0;
+  padding: 50px 0;
   text-align: center;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `;
 
 const Title = styled.h1`
   margin-bottom: 14px;
-  font-size: 5.6rem;
+  font-size: 4.6rem;
   color: ${({ theme }) => theme.color.black};
 `;
 
 const Content = styled.p`
-  font-size: 3.2rem;
+  font-size: 2.6rem;
   color: ${({ theme }) => theme.color.font.main};
 `;
 

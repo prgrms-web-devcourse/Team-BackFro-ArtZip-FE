@@ -23,6 +23,7 @@ const StyledA = styled.a<{
   isCurrentPage?: boolean;
 }>`
   font-size: 2.6rem;
+  white-space: nowrap;
 
   ${({ isCurrentPage }) =>
     isCurrentPage &&

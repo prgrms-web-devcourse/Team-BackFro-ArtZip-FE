@@ -1,4 +1,3 @@
-import { Content } from './../../../components/molecule/ReviewCard/style';
 import { rest } from 'msw';
 
 //  기준 데이터 : 43번 리뷰 (코멘트 갯수가 안맞을 지도)
@@ -44,7 +43,7 @@ const COMMENTS = {
   },
 };
 
-const ReviewHandlers = [
+const CommentHandlers = [
   // 후기의 댓글 조회
   rest.get(
     `${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId/comments`,
@@ -167,4 +166,4 @@ const ReviewHandlers = [
   ),
 ];
 
-export default ReviewHandlers;
+export default CommentHandlers;

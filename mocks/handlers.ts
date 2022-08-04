@@ -1,4 +1,5 @@
 import ReviewHandlers from './handlers/review';
-const handlers = [...ReviewHandlers];
+import ExhibitionHandlers from './handlers/exhibition';
+const handlers = [...ReviewHandlers, ...ExhibitionHandlers];
 
 export default handlers;
