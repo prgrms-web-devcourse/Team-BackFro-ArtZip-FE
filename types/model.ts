@@ -12,7 +12,7 @@ export interface ReviewFeedProps {
   userProfileImage: string;
   userName: string;
   userId: number;
-  feedCreateDate: Date;
+  feedCreateDate: string;
   exhibitionName: string;
   exhibitionId: number;
   feedTitle: string;

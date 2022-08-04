@@ -39,10 +39,16 @@ export interface ReviewSingleReadResponse extends BaseResponse {
 // 후기 다건 조회
 export interface ReviewMultiReadData {
   content: ReviewSingleReadData[];
+  numberOfElements: 2; //content의 요소가 몇개인지
+  offset: 0; // 현재 페이지에서 시작하는 요소의 index 번호
+  pageNumber: 0; //페이지 넘버
+  pageSize: 20; //페이지 사이즈
+  totalElements: 2; // 전체 요소 수
+  totalPages: 1; //전체 페이지 수
 }
 
 export interface ReviewMultiReadResponse extends BaseResponse {
-  data?: ReviewMultiReadData;
+  data: ReviewMultiReadData;
 }
 
 // 후기 좋아요 등록 / 해제
