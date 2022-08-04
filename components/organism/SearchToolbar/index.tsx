@@ -14,7 +14,7 @@ interface SearchToolbarProps {
 }
 
 const placeArr = [
-  { id: 0, name: '모든 지역', value: 'all' },
+  { id: 0, name: '모든 지역', value: 'ALL' },
   { id: 1, name: '서울', value: 'SEOUL' },
   { id: 2, name: '경기', value: 'GYEONGGI' },
   { id: 3, name: '인천', value: 'INCHEON' },
@@ -35,19 +35,19 @@ const placeArr = [
 ];
 
 const periodArr = [
-  { id: 0, name: '모든 날짜', value: 'all' },
-  { id: 1, name: '1월', value: 'SEOUL' },
-  { id: 2, name: '2월', value: 'GYEONGGI' },
-  { id: 3, name: '3월', value: 'INCHEON' },
-  { id: 4, name: '4월', value: 'GANGWON' },
-  { id: 5, name: '5월', value: 'BUSAN' },
-  { id: 6, name: '6월', value: 'DAEGU' },
-  { id: 7, name: '7월', value: 'DAEJEON' },
-  { id: 8, name: '8월', value: 'GWANGJU' },
-  { id: 9, name: '9월', value: 'ULSAN' },
-  { id: 10, name: '10월', value: 'SEJONG' },
-  { id: 11, name: '11월', value: 'CHUNGBUK' },
-  { id: 12, name: '12월', value: 'CHUNGNAM' },
+  { id: 0, name: '모든 날짜', value: 'ALL' },
+  { id: 1, name: '1월', value: 'JAN' },
+  { id: 2, name: '2월', value: 'FEB' },
+  { id: 3, name: '3월', value: 'MAR' },
+  { id: 4, name: '4월', value: 'APR' },
+  { id: 5, name: '5월', value: 'MAY' },
+  { id: 6, name: '6월', value: 'JUN' },
+  { id: 7, name: '7월', value: 'JUL' },
+  { id: 8, name: '8월', value: 'AUG' },
+  { id: 9, name: '9월', value: 'SEP' },
+  { id: 10, name: '10월', value: 'OCT' },
+  { id: 11, name: '11월', value: 'NOV' },
+  { id: 12, name: '12월', value: 'DEC' },
 ];
 
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
