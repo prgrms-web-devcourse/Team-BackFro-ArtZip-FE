@@ -61,7 +61,7 @@ const REVIEWS = {
         thumbnail: 'https://source.unsplash.com/random',
       },
       title: '핸드아트코리아 전시회 다녀옴~',
-      content: '오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~',
+      content: '이건아주긴글입니다'.repeat(100),
       createdAt: '2022-03-22T22:33:11',
       updatedAt: '2022-03-23T13:03:51',
       isEdited: true,
@@ -115,7 +115,7 @@ const REVIEWS = {
   pageNumber: 0,
   pageSize: 20,
   totalElements: 2,
-  totalPages: 1,
+  totalPages: 5,
 };
 
 const ReviewHandlers = [
@@ -156,11 +156,33 @@ const ReviewHandlers = [
   // 리뷰 다건 조회
   rest.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`, (req, res, ctx) => {
     // const exhibitionId = req.url.searchParams.get('exhibitionId');
-    // const page = req.url.searchParams.get('page');
+    const page = req.url.searchParams.get('page');
     // const size = req.url.searchParams.get('size');
     // const sort = req.url.searchParams.get('sort');
 
     // TODO: 각 경우별 응답을 구현해야 함. 우선은 전체 데이터를 return
+
+    if (page) {
+      const new_review_data = REVIEWS.content.map((review) => {
+        review.id += Math.random() * 1000;
+        review.title = '새로운 데이터다 야호'.concat(page);
+
+        return review;
+      });
+
+      console.log('new_review_data', new_review_data);
+
+      const new_multi_review_success = {
+        message: '후기 다건 조회 성공',
+        code: 200,
+        data: {
+          ...new_review_data,
+        },
+      };
+
+      // console.log('newnewnew', new_multi_review_success);
+      return res(ctx.json(new_multi_review_success));
+    }
 
     const multi_review_success = {
       message: '후기 다건 조회 성공',
