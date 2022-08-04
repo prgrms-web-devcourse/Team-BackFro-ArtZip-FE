@@ -94,15 +94,6 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <ExhibitionCard
-        exhibitionId={ret.exhibitionId}
-        name={ret.name}
-        thumbnail={ret.thumbnail}
-        startDate={ret.startDate}
-        endDate={ret.endDate}
-        likeCount={ret.likeCount}
-        reviewCount={ret.reviews.length}
-      />
       <SwiperContainer title="다가오는 전시회" type="upcoming">
         <SwiperWrapper
           items={[
