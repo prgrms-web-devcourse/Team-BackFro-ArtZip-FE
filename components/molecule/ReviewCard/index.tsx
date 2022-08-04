@@ -56,7 +56,7 @@ const ReviewCard = ({
               <Link href={`/user/${userId}`}>
                 <S.UserInfoName>{nickname}</S.UserInfoName>
               </Link>
-              <S.UserInfoDate>{displayDate(new Date(createdAt))}</S.UserInfoDate>
+              <S.UserInfoDate>{displayDate(createdAt)}</S.UserInfoDate>
             </S.UserInfoTextContainer>
           </S.UserInfoContainer>
           <S.Title>{title}</S.Title>
