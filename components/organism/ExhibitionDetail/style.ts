@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Image, Button } from 'antd';
+import { Image } from 'antd';
 
 export const ExhibitionContainer = styled.div`
   display: flex;

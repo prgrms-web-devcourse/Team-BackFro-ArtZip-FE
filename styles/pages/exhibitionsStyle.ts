@@ -19,7 +19,7 @@ export const ExhibitionPageContainer = styled.div`
 `;
 
 export const DescriptionWrapper = styled.div`
-  background-color: ${({ theme }) => theme.color.border.light};
+  background-color: ${({ theme }) => theme.color.border.white};
   width: 80%;
   margin: 0px 40px;
   padding: 30px;
