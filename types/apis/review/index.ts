@@ -1,4 +1,4 @@
-import { ExhibitionProps, ReviewProps, UserProps, PhotoProps, CommentProps } from 'types/model';
+import { ExhibitionProps, UserProps, PhotoProps, CommentProps } from 'types/model';
 import { BaseResponse } from '../base';
 
 // 후기 생성
@@ -39,12 +39,12 @@ export interface ReviewSingleReadResponse extends BaseResponse {
 // 후기 다건 조회
 export interface ReviewMultiReadData {
   content: ReviewSingleReadData[];
-  numberOfElements: 2; //content의 요소가 몇개인지
-  offset: 0; // 현재 페이지에서 시작하는 요소의 index 번호
-  pageNumber: 0; //페이지 넘버
-  pageSize: 20; //페이지 사이즈
-  totalElements: 2; // 전체 요소 수
-  totalPages: 1; //전체 페이지 수
+  numberOfElements: number; //content의 요소가 몇개인지
+  offset: number; // 현재 페이지에서 시작하는 요소의 index 번호
+  pageNumber: number; //페이지 넘버
+  pageSize: number; //페이지 사이즈
+  totalElements: number; // 전체 요소 수
+  totalPages: number; //전체 페이지 수
 }
 
 export interface ReviewMultiReadResponse extends BaseResponse {
