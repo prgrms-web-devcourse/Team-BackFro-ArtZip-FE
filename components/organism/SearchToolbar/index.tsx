@@ -11,6 +11,7 @@ type CheckBoxType = {
 interface SearchToolbarProps {
   type: 'place' | 'period';
   selectedValues: CheckBoxType[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSelectedValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -70,7 +71,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
         <div className="content-box-title">{type === 'place' ? '개최장소' : '개최시기'}</div>
         <div className="content-box-sub">
           {array.map((it) => (
-            <div className="content-box-input">
+            <div className="content-box-input" key={it.id}>
               <input
                 type="checkbox"
                 key={it.id}

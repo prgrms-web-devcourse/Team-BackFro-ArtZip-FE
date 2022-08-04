@@ -90,13 +90,14 @@ const Home: NextPage = () => {
   //TODO : 맞춤전시회로 이동해야함
   const [selectedArea, setSelectedArea] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState([]);
-  
+
   return (
     <div>
       <SwiperContainer title="다가오는 전시회" type="upcoming">
         <SwiperWrapper
           items={[
             <ExhibitionCard
+              key={1}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -106,6 +107,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={2}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -115,6 +117,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={3}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -124,6 +127,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={4}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -133,6 +137,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={5}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -142,6 +147,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={6}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -151,6 +157,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={7}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -160,6 +167,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={8}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -169,6 +177,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={9}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -185,6 +194,7 @@ const Home: NextPage = () => {
         <SwiperWrapper
           items={[
             <ExhibitionCard
+              key={10}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -194,6 +204,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={11}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -203,6 +214,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={12}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -212,6 +224,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={13}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -221,6 +234,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={14}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -230,6 +244,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={15}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -239,6 +254,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={16}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -248,6 +264,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={17}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -257,6 +274,7 @@ const Home: NextPage = () => {
               reviewCount={ret.reviews.length}
             />,
             <ExhibitionCard
+              key={18}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
