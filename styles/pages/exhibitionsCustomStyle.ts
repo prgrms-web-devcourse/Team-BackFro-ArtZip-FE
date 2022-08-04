@@ -59,7 +59,7 @@ export const Line = styled.hr`
   border: 0;
 `;
 
-export const Title = styled.p`
+export const Title = styled.h2`
   font-weight: 700;
   font-size: 3rem;
   margin-bottom: 10px;
