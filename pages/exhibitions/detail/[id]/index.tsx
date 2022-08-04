@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
 import ReviewCard from 'components/molecule/ReviewCard';
-import * as S from './style';
+import { exhibitionCustomStyle as S } from '../../../../styles/pages';
 import Link from 'next/link';
 
 const ExhibitionDetailPage = () => {

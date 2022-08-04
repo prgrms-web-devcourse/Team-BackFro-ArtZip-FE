@@ -34,8 +34,8 @@ const ReviewFeed = ({
         <ReviewFeedContent>
           <ReviewFeedHeader>
             <UserInfo
-              image={userProfileImage}
-              userName={userName}
+              profileImage={userProfileImage}
+              nickname={userName}
               createdDate={feedCreateDate}
               userId={userId}
             ></UserInfo>

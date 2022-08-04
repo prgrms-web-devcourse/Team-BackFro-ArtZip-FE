@@ -23,4 +23,4 @@ const CommentInfoCount = styled.span`
   padding: 5px;
 `;
 
-CommentInfo;
+export default CommentInfo;
