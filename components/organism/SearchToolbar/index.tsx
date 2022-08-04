@@ -57,18 +57,22 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
       if (checked) {
         const checkedListArray: CheckBoxType[] = [];
 
-        placeArr.forEach((it) => checkedListArray.push(it));
+        if (type === 'place') {
+          placeArr.forEach((it) => checkedListArray.push(it));
+        } else {
+          periodArr.forEach((it) => checkedListArray.push(it));
+        }
 
         setSelectedValues(checkedListArray);
       } else {
         setSelectedValues([]);
       }
     },
-    [placeArr],
+    [arr],
   );
 
   const handleCheckedValue = (it: CheckBoxType, checked: boolean) => {
-    if (it.value === 'all') {
+    if (it.value === 'ALL') {
       onCheckedAll(checked);
     } else {
       if (checked) {
@@ -82,6 +86,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
   useEffect(() => {
     console.log('change', selectedValues);
   }, [selectedValues, setSelectedValues]);
+
   return (
     <S.SearchToolbar>
       {type === 'place' ? (
@@ -109,10 +114,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
                 checked={selectedValues.includes(it) ? true : false}
                 onChange={(e) => handleCheckedValue(it, e.target.checked)}
               />
-              <label
-                htmlFor="place"
-                style={{ color: selectedValues.includes(it) ? 'red' : undefined }}
-              >
+              <label style={{ color: selectedValues.includes(it) ? 'red' : undefined }}>
                 {it.name}
               </label>
             </>

@@ -90,6 +90,8 @@ const Home: NextPage = () => {
 
   //TODO : 맞춤전시회로 이동해야함
   const [selectedArea, setSelectedArea] = useState([]);
+  const [selectedPeriod, setSelectedPeriod] = useState([]);
+
   return (
     <div>
       <SwiperContainer title="다가오는 전시회" type="upcoming">
@@ -275,8 +277,8 @@ const Home: NextPage = () => {
       />
       <SearchToolbar
         type="period"
-        selectedValues={selectedArea}
-        setSelectedValues={setSelectedArea}
+        selectedValues={selectedPeriod}
+        setSelectedValues={setSelectedPeriod}
       />
     </div>
   );
