@@ -50,15 +50,11 @@ const ReviewCard = ({
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/user/${userId}`}>
-              <a>
-                <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
-              </a>
+              <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/user/${userId}`}>
-                <a>
-                  <S.UserInfoName>{nickname}</S.UserInfoName>
-                </a>
+                <S.UserInfoName>{nickname}</S.UserInfoName>
               </Link>
               <S.UserInfoDate>{displayDate(new Date(createdAt))}</S.UserInfoDate>
             </S.UserInfoTextContainer>
