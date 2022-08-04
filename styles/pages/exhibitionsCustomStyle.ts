@@ -19,7 +19,6 @@ export const ExhibitionPageContainer = styled.div`
 `;
 export const ExhibitionContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   width: 80%;
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
