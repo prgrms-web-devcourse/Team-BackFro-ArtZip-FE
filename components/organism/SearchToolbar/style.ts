@@ -14,6 +14,7 @@ export const IconBox = styled.div`
   background-color: ${({ theme }) => theme.color.font.light};
   width: 50px;
   border-radius: 50%;
+  flex-shrink: 0;
 `;
 export const Icon = styled.span`
   font-size: 30px;

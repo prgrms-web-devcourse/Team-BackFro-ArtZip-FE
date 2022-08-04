@@ -51,7 +51,7 @@ const periodArr = [
 ];
 
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
-  const [arr, setArr] = useState(type === 'place' ? placeArr : periodArr);
+  const [array, setArray] = useState(type === 'place' ? placeArr : periodArr);
   const onCheckedAll = useCallback(
     (checked: boolean) => {
       if (checked) {
@@ -68,7 +68,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
         setSelectedValues([]);
       }
     },
-    [arr],
+    [array],
   );
 
   const handleCheckedValue = (it: CheckBoxType, checked: boolean) => {
@@ -105,7 +105,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
       <S.ContentBox>
         <div className="content-box-title">{type === 'place' ? '개최장소' : '개최시기'}</div>
         <div className="content-box-sub">
-          {arr.map((it) => (
+          {array.map((it) => (
             <>
               <input
                 type="checkbox"
