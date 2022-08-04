@@ -1,6 +1,8 @@
 import * as S from './style';
 import { HomeOutlined, CalendarOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
+import { exhibitionPlace } from 'constants/exhibitionPlace';
+import { exhibitionPeriod } from 'constants/exhibitionPeriod';
 
 type CheckBoxType = {
   id: number;
@@ -13,54 +15,17 @@ interface SearchToolbarProps {
   setSelectedValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const placeArr = [
-  { id: 0, name: '모든 지역', value: 'ALL' },
-  { id: 1, name: '서울', value: 'SEOUL' },
-  { id: 2, name: '경기', value: 'GYEONGGI' },
-  { id: 3, name: '인천', value: 'INCHEON' },
-  { id: 4, name: '강원', value: 'GANGWON' },
-  { id: 5, name: '부산', value: 'BUSAN' },
-  { id: 6, name: '대구', value: 'DAEGU' },
-  { id: 7, name: '대전', value: 'DAEJEON' },
-  { id: 8, name: '광주', value: 'GWANGJU' },
-  { id: 9, name: '울산', value: 'ULSAN' },
-  { id: 10, name: '세종', value: 'SEJONG' },
-  { id: 11, name: '충북', value: 'CHUNGBUK' },
-  { id: 12, name: '충남', value: 'CHUNGNAM' },
-  { id: 13, name: '전북', value: 'JEONBUK' },
-  { id: 14, name: '전남', value: 'JEONNAM' },
-  { id: 15, name: '경북', value: 'GYEONGBUK' },
-  { id: 16, name: '경남', value: 'GYEONGNAM' },
-  { id: 17, name: '제주', value: 'JEJU' },
-];
-
-const periodArr = [
-  { id: 0, name: '모든 날짜', value: 'ALL' },
-  { id: 1, name: '1월', value: 'JAN' },
-  { id: 2, name: '2월', value: 'FEB' },
-  { id: 3, name: '3월', value: 'MAR' },
-  { id: 4, name: '4월', value: 'APR' },
-  { id: 5, name: '5월', value: 'MAY' },
-  { id: 6, name: '6월', value: 'JUN' },
-  { id: 7, name: '7월', value: 'JUL' },
-  { id: 8, name: '8월', value: 'AUG' },
-  { id: 9, name: '9월', value: 'SEP' },
-  { id: 10, name: '10월', value: 'OCT' },
-  { id: 11, name: '11월', value: 'NOV' },
-  { id: 12, name: '12월', value: 'DEC' },
-];
-
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
-  const [array, setArray] = useState(type === 'place' ? placeArr : periodArr);
+  const [array, setArray] = useState(type === 'place' ? exhibitionPlace : exhibitionPeriod);
   const onCheckedAll = useCallback(
     (checked: boolean) => {
       if (checked) {
         const checkedListArray: CheckBoxType[] = [];
 
         if (type === 'place') {
-          placeArr.forEach((it) => checkedListArray.push(it));
+          exhibitionPlace.forEach((it) => checkedListArray.push(it));
         } else {
-          periodArr.forEach((it) => checkedListArray.push(it));
+          exhibitionPeriod.forEach((it) => checkedListArray.push(it));
         }
 
         setSelectedValues(checkedListArray);
