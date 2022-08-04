@@ -20,6 +20,7 @@ const InfoGroup = ({ isLiked, likeCount, commentCount, onLikeClick }: InfoGroupP
 const InfoGroupContainer = styled.div`
   display: flex;
   gap: 5px;
+  font-size: 16px;
   align-content: center;
 `;
 
