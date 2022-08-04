@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
 import ReviewCard from 'components/molecule/ReviewCard';
 import { exhibitionCustomStyle as S } from '../../../../styles/pages';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 const ret = {
   exhibitionId: 1,
@@ -88,6 +89,9 @@ const ret = {
 };
 
 const ExhibitionDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <>
       <Head>
@@ -165,7 +169,7 @@ const ExhibitionDetailPage = () => {
           ))}
         </S.ReviewContainer>
         <S.ButtonContainer>
-          <Link href={`/community/${ret.exhibitionId}`}>
+          <Link href={`/community/${id}`}>
             <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
           </Link>
           <Link href={`/reviews/create`}>
