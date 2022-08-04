@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
 import ReviewCard from 'components/molecule/ReviewCard';
-import { exhibitionCustomStyle as S } from '../../../../styles/pages';
+import { exhibitionsStyle as S } from '../../../../styles/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { ExhibitionDetail } from 'components/organism';
+import { ExhibitionInfo } from 'components/molecule';
 const ret = {
   exhibitionId: 1,
   name: '번아웃증후군',
@@ -91,6 +93,20 @@ const ret = {
 const ExhibitionDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const {
+    name,
+    thumbnail,
+    startDate,
+    endDate,
+    url,
+    placeAddr,
+    placeUrl,
+    area,
+    fee,
+    inquiry,
+    genre,
+    isLiked,
+  } = ret;
 
   return (
     <>
@@ -98,53 +114,20 @@ const ExhibitionDetailPage = () => {
         <title>ArtZip | ExhibitionDetail</title>
       </Head>
       <S.ExhibitionPageContainer>
-        <S.ExhibitionContainer>
-          <S.Thumbnail src={ret.thumbnail} preview={false}></S.Thumbnail>
-          <S.InfoContainer>
-            <S.Title>{ret.name}</S.Title>
-            <S.Line></S.Line>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>전시기간</S.InfoTextBold>
-              <S.InfoText>
-                {' '}
-                | {ret.startDate} ~{ret.endDate}
-              </S.InfoText>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>홈페이지</S.InfoTextBold>
-              <a href={ret.url}>
-                <S.InfoText> | {ret.url}</S.InfoText>
-              </a>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>지역</S.InfoTextBold>
-              <S.InfoText> | {ret.area}</S.InfoText>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>장소</S.InfoTextBold>
-              <a href={ret.placeUrl}>
-                <S.InfoText> | {ret.placeAddr}</S.InfoText>
-              </a>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>입장료</S.InfoTextBold>
-              <S.InfoText> | {ret.fee}</S.InfoText>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>문의처</S.InfoTextBold>
-              <S.InfoText> | {ret.inquiry}</S.InfoText>
-            </S.InfoTextContainer>
-            <S.InfoTextContainer>
-              <S.InfoTextBold>장르</S.InfoTextBold>
-              <S.InfoText> | {ret.genre}</S.InfoText>
-            </S.InfoTextContainer>
-          </S.InfoContainer>
-          <S.IconContainer>
-            {ret.isLiked ? <HeartFilled /> : <HeartOutlined />}
-            {'    '}
-            <ShareAltOutlined />
-          </S.IconContainer>
-        </S.ExhibitionContainer>
+        <ExhibitionDetail
+          name={name}
+          thumbnail={thumbnail}
+          startDate={startDate}
+          endDate={endDate}
+          url={url}
+          placeAddr={placeAddr}
+          placeUrl={placeUrl}
+          area={area}
+          fee={fee}
+          inquiry={inquiry}
+          genre={genre}
+          isLiked={isLiked}
+        ></ExhibitionDetail>
         <h3>전시 소개</h3>
         <S.DescriptionWrapper>{ret.description}</S.DescriptionWrapper>
         <h3>위치 안내</h3>
