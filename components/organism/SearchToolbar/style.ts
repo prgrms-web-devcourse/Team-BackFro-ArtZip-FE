@@ -38,4 +38,10 @@ export const ContentBox = styled.div`
     white-space: nowrap;
     cursor: pointer;
   }
+
+  .content-box-input {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
 `;

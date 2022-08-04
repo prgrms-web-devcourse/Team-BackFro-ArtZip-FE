@@ -1,8 +1,7 @@
 import * as S from './style';
 import { HomeOutlined, CalendarOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { exhibitionPlace } from 'constants/exhibitionPlace';
-import { exhibitionPeriod } from 'constants/exhibitionPeriod';
+import { exhibitionPeriod, exhibitionPlace } from '../../../constants';
 
 type CheckBoxType = {
   id: number;
@@ -71,7 +70,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
         <div className="content-box-title">{type === 'place' ? '개최장소' : '개최시기'}</div>
         <div className="content-box-sub">
           {array.map((it) => (
-            <>
+            <div className="content-box-input">
               <input
                 type="checkbox"
                 key={it.id}
@@ -82,7 +81,7 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
               <label style={{ fontWeight: selectedValues.includes(it) ? '600' : undefined }}>
                 {it.name}
               </label>
-            </>
+            </div>
           ))}
         </div>
       </S.ContentBox>
