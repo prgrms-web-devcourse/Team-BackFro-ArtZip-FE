@@ -18,11 +18,10 @@ const LikeWrapper = styled.div`
   align-content: center;
   padding: 5px;
   border-radius: 50%;
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
-    // TODO: 이후에 테마색으로 변경
-    background-color: pink;
+    background-color: ${({ theme }) => theme.color.pink};
   }
 `;
 

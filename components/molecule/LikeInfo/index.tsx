@@ -18,11 +18,10 @@ const LikeInfo = ({ isLiked, likeCount, onClick }: LikeInfoProps) => {
 const LikeInfoWrapper = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
-    // TODO: 이후에 테마색으로 변경
-    color: red;
+    color: ${({ theme }) => theme.color.red};
   }
 `;
 
