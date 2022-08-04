@@ -43,7 +43,7 @@ const ExhibitionCard = ({
             height: 330,
             position: 'relative',
           }}
-          cover={<Image alt="card image" src={thumbnail} layout="fill" />}
+          cover={<Image alt="card image" src={thumbnail} layout="fill" className="card-image" />}
         />
         <S.Description>
           <h3>{name}</h3>
