@@ -22,6 +22,9 @@ export const HoverContent = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  .heart-icon {
+    color: ${({ theme }) => theme.color.red};
+  }
 `;
 
 export const Description = styled.div`

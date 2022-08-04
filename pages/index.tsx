@@ -105,6 +105,17 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={true}
+            />,
+            <ExhibitionCard
+              exhibitionId={ret.exhibitionId}
+              name={ret.name}
+              thumbnail={ret.thumbnail}
+              startDate={ret.startDate}
+              endDate={ret.endDate}
+              likeCount={ret.likeCount}
+              reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -123,15 +134,7 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
-            />,
-            <ExhibitionCard
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
+              isLiked={false}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}

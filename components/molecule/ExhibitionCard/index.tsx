@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card } from 'antd';
-import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
@@ -31,7 +31,7 @@ const ExhibitionCard = ({
             isHover ? (
               <S.HoverContent>
                 {' '}
-                <HeartOutlined />
+                {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
                 {likeCount} <MessageOutlined /> {reviewCount}{' '}
               </S.HoverContent>
             ) : null
