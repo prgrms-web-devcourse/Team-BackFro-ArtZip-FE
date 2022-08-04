@@ -273,6 +273,11 @@ const Home: NextPage = () => {
         selectedValues={selectedArea}
         setSelectedValues={setSelectedArea}
       />
+      <SearchToolbar
+        type="period"
+        selectedValues={selectedArea}
+        setSelectedValues={setSelectedArea}
+      />
     </div>
   );
 };
