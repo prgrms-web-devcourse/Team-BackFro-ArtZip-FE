@@ -106,6 +106,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={true}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -116,6 +117,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -125,6 +127,7 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -135,6 +138,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={false}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -144,6 +148,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -153,6 +159,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -162,6 +170,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -171,6 +181,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -180,6 +192,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
           ]}
         />
@@ -196,6 +210,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -205,6 +221,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -214,6 +232,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -223,6 +243,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -232,6 +254,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -241,6 +265,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -250,6 +276,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -259,6 +287,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -268,6 +298,8 @@ const Home: NextPage = () => {
               endDate={ret.endDate}
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
+              isLiked={ret.isLiked}
+              key={ret.exhibitionId}
             />,
           ]}
         />
