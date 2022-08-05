@@ -97,7 +97,6 @@ const Home: NextPage = () => {
         <SwiperWrapper
           items={[
             <ExhibitionCard
-              key={1}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -109,7 +108,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={2}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -121,18 +119,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={3}
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
-              key={ret.exhibitionId}
-            />,
-            <ExhibitionCard
-              key={4}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -144,7 +130,17 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={5}
+              exhibitionId={ret.exhibitionId}
+              name={ret.name}
+              thumbnail={ret.thumbnail}
+              startDate={ret.startDate}
+              endDate={ret.endDate}
+              likeCount={ret.likeCount}
+              reviewCount={ret.reviews.length}
+              isLiked={false}
+              key={ret.exhibitionId}
+            />,
+            <ExhibitionCard
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -156,7 +152,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={6}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -168,7 +163,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={7}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -180,7 +174,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={8}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -192,7 +185,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={9}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -211,7 +203,6 @@ const Home: NextPage = () => {
         <SwiperWrapper
           items={[
             <ExhibitionCard
-              key={10}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -223,7 +214,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={11}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -235,7 +225,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={12}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -247,7 +236,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={13}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -259,7 +247,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={14}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -271,7 +258,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={15}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -283,7 +269,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={16}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -295,7 +280,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={17}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
@@ -307,7 +291,6 @@ const Home: NextPage = () => {
               key={ret.exhibitionId}
             />,
             <ExhibitionCard
-              key={18}
               exhibitionId={ret.exhibitionId}
               name={ret.name}
               thumbnail={ret.thumbnail}
