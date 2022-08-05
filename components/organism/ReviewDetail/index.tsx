@@ -15,6 +15,7 @@ const ReviewDetail = ({
   user,
   exhibition,
   title,
+  isPublic,
   isEdited,
   content,
   isLiked,
@@ -37,6 +38,11 @@ const ReviewDetail = ({
         <ReviewDetailTitle>
           <h1>{title}</h1>
           {isEdited && <ReviewDetailEdited>수정됨</ReviewDetailEdited>}
+          {isPublic ? (
+            <ReviewDetailPublic>전체 공개</ReviewDetailPublic>
+          ) : (
+            <ReviewDetailPublic>비공개</ReviewDetailPublic>
+          )}
         </ReviewDetailTitle>
       </ReviewDetailHeader>
 
@@ -77,6 +83,15 @@ const ReviewDetailHeader = styled.div``;
 
 const ReviewDetailEdited = styled.span`
   color: ${({ theme }) => theme.color.font.light};
+  font-size: 1.5rem;
+`;
+
+const ReviewDetailPublic = styled.span`
+  color: ${({ theme }) => theme.color.font.light};
+  border: 1px solid ${({ theme }) => theme.color.font.light};
+  padding: 2px 6px;
+  border-radius: 20px;
+  font-size: 1.5rem;
 `;
 
 const ReviewDetailSection = styled.section`
@@ -97,7 +112,9 @@ const ReviewDetailContent = styled.div`
   justify-content: space-between;
 `;
 
-const ReviewDetailContentText = styled.p``;
+const ReviewDetailContentText = styled.p`
+  font-size: 2rem;
+`;
 
 const ReviewDetailContentUtils = styled.div`
   display: flex;
