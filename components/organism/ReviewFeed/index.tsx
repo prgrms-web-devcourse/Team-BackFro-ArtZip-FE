@@ -52,9 +52,7 @@ const ReviewFeed = ({
               }}
             >
               <ReviewTitle>{feedTitle}</ReviewTitle>
-              <ReviewContent>
-                {feedContent.length < 50 ? feedContent : feedContent.slice(0, 50).concat('...')}
-              </ReviewContent>
+              <ReviewContent>{feedContent}</ReviewContent>
             </ReviewFeedMain>
 
             <ReviewFeedBottom>
@@ -153,7 +151,13 @@ const ReviewTitle = styled.p`
   font-weight: bold;
 `;
 
-const ReviewContent = styled.p``;
+const ReviewContent = styled.p`
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+`;
 
 const ReviewFeedBottom = styled.div`
   display: flex;

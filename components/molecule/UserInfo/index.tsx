@@ -48,8 +48,9 @@ const UserInfoTextWrapper = styled.div`
 `;
 
 const UserInfoName = styled.span`
+  cursor: pointer;
+
   &:hover {
-    cursor: pointer;
     text-decoration: underline;
   }
 `;
