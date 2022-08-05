@@ -22,6 +22,7 @@ const REVIEWS = {
       updatedAt: '2022-03-23T13:03:51',
       isEdited: true,
       isLiked: false,
+      isPublic: true,
       likeCount: 32,
       commentCount: 2,
       photos: [
@@ -46,38 +47,6 @@ const REVIEWS = {
           path: 'https://source.unsplash.com/random?5',
         },
       ],
-    },
-    {
-      reviewId: 41,
-      user: {
-        userId: 11,
-        profileImage: 'https://joeschmoe.io/api/v1/random',
-        nickname: 'Emily',
-      },
-      exhibition: {
-        exhibitionId: 24,
-        name: '전시회 이름',
-        startDate: '2022-10-11',
-        thumbnail: 'https://source.unsplash.com/random',
-      },
-      title: '핸드아트코리아 전시회 다녀옴~',
-      content: '이건아주긴글입니다'.repeat(100),
-      createdAt: '2022-03-22T22:33:11',
-      updatedAt: '2022-03-23T13:03:51',
-      isEdited: true,
-      isLiked: false,
-      likeCount: 32,
-      commentCount: 2,
-      photos: [
-        {
-          photoId: 35,
-          path: 'https://source.unsplash.com/random',
-        },
-        {
-          photoId: 36,
-          path: 'https://source.unsplash.com/random',
-        },
-      ],
       comments: [
         {
           commentId: 0,
@@ -88,26 +57,88 @@ const REVIEWS = {
           isDeleted: false,
           user: {
             userId: 0,
-            nickname: '미스터공공',
-            profileImage: 'https://i.pravatar.cc/300​',
+            nickname: '미스터공공1',
+            profileImage: 'https://joeschmoe.io/api/v1/random?5',
           },
-          children: [
-            {
-              commentId: 1,
-              content: '같이 가용~',
-              createdAt: '2022-07-26T11:26:24',
-              updatedAt: null,
-              isEdited: false,
-              isDeleted: false,
-              user: {
-                userId: 1,
-                nickname: '그린',
-                profileImage: 'https://i.pravatar.cc/300​',
-              },
-            },
-          ],
+          childrenCount: 1,
+        },
+        {
+          commentId: 1,
+          content: '대댓글 기준 데이터',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공2',
+            profileImage: 'https://joeschmoe.io/api/v1/random?6',
+          },
+          childrenCount: 3,
+        },
+        {
+          commentId: 2,
+          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공3',
+            profileImage: 'https://joeschmoe.io/api/v1/random?7',
+          },
+          childrenCount: 1,
+        },
+        {
+          commentId: 3,
+          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공4',
+            profileImage: 'https://joeschmoe.io/api/v1/random?8',
+          },
+          childrenCount: 1,
         },
       ],
+    },
+    {
+      reviewId: 41,
+      user: {
+        userId: 11,
+        profileImage: 'https://joeschmoe.io/api/v1/random?1',
+        nickname: 'Emily',
+      },
+      exhibition: {
+        exhibitionId: 24,
+        name: '전시회 이름',
+        startDate: '2022-10-11',
+        thumbnail: 'https://joeschmoe.io/api/v1/random?2',
+      },
+      title: '핸드아트코리아 전시회 다녀옴~',
+      content: '이건아주긴글입니다'.repeat(100),
+      createdAt: '2022-03-22T22:33:11',
+      updatedAt: '2022-03-23T13:03:51',
+      isEdited: true,
+      isLiked: false,
+      isPublic: true,
+      likeCount: 32,
+      commentCount: 2,
+      photos: [
+        {
+          photoId: 35,
+          path: 'https://joeschmoe.io/api/v1/random?3',
+        },
+        {
+          photoId: 36,
+          path: 'https://joeschmoe.io/api/v1/random?4',
+        },
+      ],
+      comments: [],
     },
   ],
   numberOfElements: 2,
@@ -164,8 +195,8 @@ const ReviewHandlers = [
 
     if (page) {
       const new_review_data = REVIEWS.content.map((review) => {
-        review.reviewId += Math.random() * 1000;
-        review.title = '새로운 데이터다 야호'.concat(page);
+        review.reviewId += Math.floor(Math.random() * 1000);
+        review.title = '무한스크롤 더미'.concat(page);
 
         return review;
       });

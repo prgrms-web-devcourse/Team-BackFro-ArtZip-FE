@@ -9,6 +9,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     exhibition,
     user,
     reviewId,
+    isPublic,
     isEdited,
     isLiked,
     likeCount,
@@ -32,6 +33,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         isLiked={isLiked}
         createdAt={createdAt}
         title={title}
+        isPublic={isPublic}
         isEdited={isEdited}
         content={content}
         photos={photos}
