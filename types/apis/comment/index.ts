@@ -37,7 +37,15 @@ export interface CommentEditExhibitionResponse extends BaseResponse {
   };
 }
 
+export interface CommentUpdateRequest {
+  content: string;
+}
+
 //댓글 생성
+export interface CommentCreateRequest {
+  content: string;
+  parentId?: number;
+}
 
 export interface CommentCreateExhibitionProps extends BaseResponse {
   data?: {
