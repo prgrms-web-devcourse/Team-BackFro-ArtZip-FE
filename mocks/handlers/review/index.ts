@@ -4,7 +4,7 @@ import { rest } from 'msw';
 const REVIEWS = {
   content: [
     {
-      id: 43,
+      reviewId: 43,
       user: {
         userId: 11,
         profileImage: 'https://joeschmoe.io/api/v1/random',
@@ -48,7 +48,7 @@ const REVIEWS = {
       ],
     },
     {
-      id: 41,
+      reviewId: 41,
       user: {
         userId: 11,
         profileImage: 'https://joeschmoe.io/api/v1/random',
@@ -142,7 +142,7 @@ const ReviewHandlers = [
   // 리뷰 단건 조회
   rest.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId`, (req, res, ctx) => {
     const { reviewId } = req.params;
-    const review = REVIEWS.content.filter((review) => review.id.toString() === reviewId);
+    const review = REVIEWS.content.filter((review) => review.reviewId.toString() === reviewId);
     const single_review_success = {
       message: '후기 단건 성공',
       code: 200,
@@ -164,7 +164,7 @@ const ReviewHandlers = [
 
     if (page) {
       const new_review_data = REVIEWS.content.map((review) => {
-        review.id += Math.random() * 1000;
+        review.reviewId += Math.random() * 1000;
         review.title = '새로운 데이터다 야호'.concat(page);
 
         return review;
@@ -199,7 +199,9 @@ const ReviewHandlers = [
     `${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId/like`,
     (req, res, ctx) => {
       const { reviewId } = req.params;
-      const reviewIndex = REVIEWS.content.findIndex((review) => review.id.toString() === reviewId);
+      const reviewIndex = REVIEWS.content.findIndex(
+        (review) => review.reviewId.toString() === reviewId,
+      );
       REVIEWS.content[reviewIndex].isLiked
         ? (REVIEWS.content[reviewIndex].likeCount -= 1)
         : (REVIEWS.content[reviewIndex].likeCount += 1);
@@ -210,7 +212,7 @@ const ReviewHandlers = [
         message: '후기 좋아요 등록/해제 성공',
         code: 200,
         data: {
-          reviewId: REVIEWS.content[reviewIndex].id,
+          reviewId: REVIEWS.content[reviewIndex].reviewId,
           likeCount: REVIEWS.content[reviewIndex].likeCount,
           isLiked: REVIEWS.content[reviewIndex].isLiked,
         },

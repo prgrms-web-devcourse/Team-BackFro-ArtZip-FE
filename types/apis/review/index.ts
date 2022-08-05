@@ -17,7 +17,7 @@ export interface ReviewUpdateResponse extends BaseResponse {
 
 // 후기 단건 조회
 export interface ReviewSingleReadData {
-  id: number;
+  reviewId: number;
   user: UserProps;
   exhibition: ExhibitionProps;
   title: string;
