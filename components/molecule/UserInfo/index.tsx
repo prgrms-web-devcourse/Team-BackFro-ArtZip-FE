@@ -29,6 +29,7 @@ const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps
 };
 
 const UserInfoAvatar = styled(Avatar)`
+  margin-right: 10px;
   &:hover {
     cursor: pointer;
     filter: brightness(70%);
@@ -37,6 +38,7 @@ const UserInfoAvatar = styled(Avatar)`
 
 const UserInfoContainer = styled.div`
   display: flex;
+  align-items: center;
   width: fit-content;
 `;
 
@@ -46,8 +48,9 @@ const UserInfoTextWrapper = styled.div`
 `;
 
 const UserInfoName = styled.span`
+  cursor: pointer;
+
   &:hover {
-    cursor: pointer;
     text-decoration: underline;
   }
 `;
