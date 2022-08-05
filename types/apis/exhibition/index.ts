@@ -1,17 +1,11 @@
 import { ExhibitionProps, ReviewProps } from 'types/model';
-import { BaseResponse } from '../base';
+import { BaseResponse, PaginationResponse } from '../base';
 
 //다가오는 전시회, 인기 많은 전시회 조회
+
+// ExhibitionProps
 export interface ExhibitionReadResponse extends BaseResponse {
-  data?: {
-    content: ExhibitionProps[];
-    numberOfElements: number; //content의 요소가 몇개인지
-    offset: number; // 현재 페이지에서 시작하는 요소의 index 번호
-    pageNumber: number; //페이지 넘버
-    pageSize: number; //페이지 사이즈
-    totalElements: number; // 전체 요소 수
-    totalPages: number;
-  };
+  data?: PaginationResponse<ExhibitionProps>;
 }
 
 //전시회 좋아요 토글
@@ -49,13 +43,5 @@ export interface ExhibitionDetailResponse extends BaseResponse {
 
 // 전시회검색
 export interface ExhibitionSearchResponse extends BaseResponse {
-  data?: {
-    content: ReviewProps[];
-    numberOfElements: number; //content의 요소가 몇개인지
-    offset: number; // 현재 페이지에서 시작하는 요소의 index 번호
-    pageNumber: number; //페이지 넘버
-    pageSize: number; //페이지 사이즈
-    totalElements: number; // 전체 요소 수
-    totalPages: number;
-  };
+  data?: PaginationResponse<ReviewProps>;
 }

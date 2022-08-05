@@ -47,7 +47,7 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  childrenCount: number;
+  childrenCount?: number;
 }
 
 export interface UserProps {
