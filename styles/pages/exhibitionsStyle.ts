@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Image, Button } from 'antd';
+import { Button } from 'antd';
 
 export const ExhibitionPageContainer = styled.div`
   margin-top: 70px;
@@ -33,7 +33,6 @@ export const PlaceInfo = styled.div`
   margin: 5px 0px 15px 0px;
   width: 80%;
   display: flex;
-  justify-content: flex-start;
   font-size: 1.7rem;
   font-weight: 500;
   color: ${({ theme }) => theme.color.font.main};
