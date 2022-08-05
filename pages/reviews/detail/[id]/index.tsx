@@ -8,7 +8,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
     exhibition,
     user,
-    id,
+    reviewId,
     isEdited,
     isLiked,
     likeCount,
@@ -26,7 +26,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         <title>ArtZip | ReviewDetailPage</title>
       </Head>
       <ReviewDetail
-        id={id}
+        reviewId={reviewId}
         likeCount={likeCount}
         commentCount={commentCount}
         isLiked={isLiked}

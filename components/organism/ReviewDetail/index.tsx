@@ -10,7 +10,7 @@ interface ReviewDetailProps extends ReviewSingleReadData {
 }
 
 const ReviewDetail = ({
-  id,
+  reviewId,
   createdAt,
   user,
   exhibition,
@@ -57,7 +57,7 @@ const ReviewDetail = ({
 
             {/* TODO: 전역 유저 로그인 상태에 따라서, 수정 / 삭제 버튼 렌더링 */}
             <ButtonGroup>
-              <LinkButton href={`/reviews/${id}/edit`}>수정</LinkButton>
+              <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
               <Button type="text" onClick={onDeleteButtonClick}>
                 삭제
               </Button>
