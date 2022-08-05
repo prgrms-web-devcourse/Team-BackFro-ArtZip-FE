@@ -10,7 +10,7 @@ export const ExhibitionCard = styled.div`
   padding-bottom: 20px;
   &:hover {
     .card-image {
-      opacity: 0.7;
+      filter: brightness(70%);
     }
   }
 `;
