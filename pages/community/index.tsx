@@ -15,11 +15,11 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
     if (totalPages <= currentPage) {
       return;
     }
-    const res = await fetch(
+    const { data } = await axios.get(
       `${process.env.MOCKING_API_END_POINT}api/v1/reviews?page=${currentPage + 1}`,
     );
-    const { data } = await res.json();
-    const newFeeds: ReviewSingleReadData[] = Object.values(data);
+
+    const newFeeds: ReviewSingleReadData[] = Object.values(data.data);
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
   };
@@ -35,12 +35,10 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
 
       <CommunityPageWrapper>
         <Banner title="커뮤니티" content={'Art.zip에서 다양한 전시회 후기를 만나보세요'} />
-
-        {/* TODO: 무한 스크롤으로 피드 렌더링 */}
         {feeds.map((feed) => {
           const {
             exhibition,
-            id,
+            reviewId,
             isLiked,
             likeCount,
             title,
@@ -52,7 +50,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
           } = feed;
           return (
             <ReviewFeed
-              key={id}
+              key={reviewId}
               userProfileImage={user.profileImage}
               userName={user.nickname}
               userId={user.userId}
@@ -69,7 +67,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
               commentCount={commentCount}
               // 전역 상태로 관리, 우선은 true로 표시
               isMyFeed={true}
-              reviewId={id}
+              reviewId={reviewId}
               onDeleteButtonClick={() => {
                 console.log('delete click!');
               }}
