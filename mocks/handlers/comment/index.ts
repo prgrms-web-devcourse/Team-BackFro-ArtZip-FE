@@ -16,7 +16,7 @@ const COMMENTS = {
           nickname: '미스터공공',
           profileImage: 'https://joeschmoe.io/api/v1/random',
         },
-        childrenCount: 1,
+        childrenCount: 3,
       },
     ],
     numberOfElements: 1, //content의 요소가 몇개인지

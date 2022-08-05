@@ -26,6 +26,7 @@ export interface ReviewSingleReadData {
   updatedAt: number;
   isEdited: boolean;
   isLiked: boolean;
+  isPublic: boolean;
   likeCount: number;
   commentCount: number;
   photos: PhotoProps[];
