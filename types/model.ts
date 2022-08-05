@@ -6,6 +6,7 @@ export interface ExhibitionProps {
   endDate: string;
   likeCount: number;
   reviewCount: number;
+  isLiked: boolean;
 }
 
 export interface ReviewFeedProps {
