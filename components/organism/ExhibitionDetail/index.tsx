@@ -34,32 +34,33 @@ const ExhibitionDetail = ({
   return (
     <S.ExhibitionContainer>
       <S.Thumbnail src={thumbnail} preview={false}></S.Thumbnail>
-      <S.InfoContainer>
-        <S.Title>{name}</S.Title>
-        <S.Line></S.Line>
-        <ExhibitionInfo
-          isDate={true}
-          startDate={startDate}
-          endDate={endDate}
-          title={'전시기간'}
-        ></ExhibitionInfo>
-        <ExhibitionInfo isLink={true} href={url} info={url} title={'홈페이지'}></ExhibitionInfo>
-        <ExhibitionInfo title={'지역'} info={area}></ExhibitionInfo>
-        <ExhibitionInfo
-          title={'장소'}
-          isLink={true}
-          href={placeUrl}
-          info={placeAddr}
-        ></ExhibitionInfo>
-        <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
-        <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>
-        <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
-      </S.InfoContainer>
-      <S.IconContainer>
-        {isLiked ? <HeartFilled /> : <HeartOutlined />}
-        {'    '}
-        <ShareAltOutlined />
-      </S.IconContainer>
+      <S.Container>
+        <S.InfoContainer>
+          <S.Title>{name}</S.Title>
+          <ExhibitionInfo
+            isDate={true}
+            startDate={startDate}
+            endDate={endDate}
+            title={'전시기간'}
+          ></ExhibitionInfo>
+          <ExhibitionInfo isLink={true} href={url} info={url} title={'홈페이지'}></ExhibitionInfo>
+          <ExhibitionInfo title={'지역'} info={area}></ExhibitionInfo>
+          <ExhibitionInfo
+            title={'장소'}
+            isLink={true}
+            href={placeUrl}
+            info={placeAddr}
+          ></ExhibitionInfo>
+          <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
+          <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>
+          <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
+        </S.InfoContainer>
+        <S.IconContainer>
+          {isLiked ? <HeartFilled /> : <HeartOutlined />}
+          {'    '}
+          <ShareAltOutlined />
+        </S.IconContainer>
+      </S.Container>
     </S.ExhibitionContainer>
   );
 };
