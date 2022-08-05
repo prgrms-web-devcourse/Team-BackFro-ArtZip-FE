@@ -1,11 +1,10 @@
 import Head from 'next/head';
-import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
 import ReviewCard from 'components/molecule/ReviewCard';
 import { exhibitionsStyle as S } from '../../../../styles/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ExhibitionDetail } from 'components/organism';
-import { ExhibitionInfo } from 'components/molecule';
+
 const ret = {
   exhibitionId: 1,
   name: '번아웃증후군',
@@ -106,6 +105,7 @@ const ExhibitionDetailPage = () => {
     inquiry,
     genre,
     isLiked,
+    description,
   } = ret;
 
   return (
@@ -129,16 +129,16 @@ const ExhibitionDetailPage = () => {
           isLiked={isLiked}
         ></ExhibitionDetail>
         <h3>전시 소개</h3>
-        <S.DescriptionWrapper>{ret.description}</S.DescriptionWrapper>
+        <S.DescriptionWrapper>{description}</S.DescriptionWrapper>
         <h3>위치 안내</h3>
-        <S.PlaceInfo>장소 | {ret.placeAddr}</S.PlaceInfo>
+        <S.PlaceInfo>장소 | {placeAddr}</S.PlaceInfo>
         <h3>후기({ret.reviews.length}개)</h3>
         <S.ReviewContainer>
           {ret.reviews.map((review) => (
             <ReviewCard
               key={review.reviewId}
               reviewId={review.reviewId}
-              thumbnail={ret.thumbnail}
+              thumbnail={thumbnail}
               title={review.title}
               content={review.content}
               createdAt={review.createdAt}
@@ -155,7 +155,12 @@ const ExhibitionDetailPage = () => {
           <Link href={`/community/${id}`}>
             <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
           </Link>
-          <Link href={`/reviews/create`}>
+          <Link
+            href={{
+              pathname: `/reviews/create`,
+              query: { exhibitionId: id },
+            }}
+          >
             <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
           </Link>
         </S.ButtonContainer>
