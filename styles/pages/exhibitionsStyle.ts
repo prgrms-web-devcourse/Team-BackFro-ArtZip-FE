@@ -56,7 +56,7 @@ export const ButtonContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 100px;
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    width: 70%;
+    max-width: 320px;
   }
 `;
 

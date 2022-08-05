@@ -52,7 +52,7 @@ const InfoTextBold = styled.p`
   color: ${({ theme }) => theme.color.font.main};
   border-right: solid 1px ${({ theme }) => theme.color.font.light};
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    min-width: 55px;
+    min-width: 60px;
   }
 `;
 const InfoText = styled.p`
