@@ -24,15 +24,14 @@ const ExhibitionInfo = ({
       <InfoTextBold>{title}</InfoTextBold>
       {isLink ? (
         <a href={`${href}`}>
-          <InfoText> | {info}</InfoText>
+          <InfoText> {info}</InfoText>
         </a>
       ) : isDate ? (
         <InfoText>
-          {' '}
-          | {startDate} ~{endDate}
+          {startDate} ~ {endDate}
         </InfoText>
       ) : (
-        <InfoText> | {info}</InfoText>
+        <InfoText> {info}</InfoText>
       )}
     </InfoTextContainer>
   );
@@ -42,20 +41,22 @@ export default ExhibitionInfo;
 
 const InfoTextContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  margin-bottom: 15px;
+  margin-bottom: 17px;
 `;
 
 const InfoTextBold = styled.p`
-  min-width: 80px;
-  font-size: 1.8rem;
+  min-width: 90px;
+  font-size: 1.9rem;
+  height: 100%;
   font-weight: 700;
   color: ${({ theme }) => theme.color.font.main};
+  border-right: solid 1px ${({ theme }) => theme.color.font.light};
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     min-width: 55px;
   }
 `;
 const InfoText = styled.p`
+  padding-left: 15px;
   font-size: 1.8rem;
   display: -webkit-box;
   overflow: hidden;
