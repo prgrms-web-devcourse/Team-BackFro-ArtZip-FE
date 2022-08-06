@@ -47,64 +47,58 @@ const REVIEWS = {
           path: 'https://source.unsplash.com/random?5',
         },
       ],
-      comments: [
-        {
-          commentId: 0,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공1',
-            profileImage: 'https://joeschmoe.io/api/v1/random?5',
+      comments: {
+        content: [
+          {
+            commentId: 1,
+            content: '대댓글 기준 데이터 입니다.',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 0,
+              nickname: '테스트용1',
+              profileImage: 'https://joeschmoe.io/api/v1/random?1',
+            },
+            childrenCount: 3,
           },
-          childrenCount: 1,
-        },
-        {
-          commentId: 1,
-          content: '대댓글 기준 데이터',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공2',
-            profileImage: 'https://joeschmoe.io/api/v1/random?6',
+          {
+            commentId: 2,
+            content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 98,
+              nickname: '유저더미1',
+              profileImage: 'https://joeschmoe.io/api/v1/random?2',
+            },
+            childrenCount: 0,
           },
-          childrenCount: 3,
-        },
-        {
-          commentId: 2,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공3',
-            profileImage: 'https://joeschmoe.io/api/v1/random?7',
+          {
+            commentId: 3,
+            content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 99,
+              nickname: '유저더미2',
+              profileImage: 'https://joeschmoe.io/api/v1/random?3',
+            },
+            childrenCount: 0,
           },
-          childrenCount: 1,
-        },
-        {
-          commentId: 3,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공4',
-            profileImage: 'https://joeschmoe.io/api/v1/random?8',
-          },
-          childrenCount: 1,
-        },
-      ],
+        ],
+        numberOfElements: 1, //content의 요소가 몇개인지
+        offset: 0, // 현재 페이지에서 시작하는 요소의 index 번호
+        pageNumber: 0, //페이지 넘버
+        pageSize: 20, //페이지 사이즈
+        totalElements: 1, // 전체 요소 수
+        totalPages: 5, //전체 페이지 수
+      },
     },
     {
       reviewId: 41,
@@ -201,7 +195,7 @@ const ReviewHandlers = [
         return review;
       });
 
-      console.log('new_review_data', new_review_data);
+      // console.log('new_review_data', new_review_data);
 
       const new_multi_review_success = {
         message: '후기 다건 조회 성공',
