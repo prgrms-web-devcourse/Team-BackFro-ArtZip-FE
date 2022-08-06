@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Tabs, Image } from 'antd';
+import { Tabs, Image, Input, Upload } from 'antd';
 
 const UserPage = () => {
   return (
@@ -28,7 +28,18 @@ const UserPage = () => {
           </TabCardContainer>
         </Tab>
         <Tab tab="정보 수정" key="2">
-          계정 관리 계정 관리 계정 관리 계정 관리 계정 관리 계정 관리 계정 관리 계정 관리 계정 관리
+          <ProfileEditForm>
+            <fieldset>
+              <legend>계정 관리</legend>
+              <label htmlFor="">이메일</label>
+              <Input type="email" defaultValue="gitul0515@gmail.com" disabled />
+
+              <label htmlFor="">닉네임</label>
+              <Input type="text" defaultValue="미스터공공" />
+
+              <Upload name="avatar" />
+            </fieldset>
+          </ProfileEditForm>
         </Tab>
         <Tab tab="비밀번호 변경" key="3">
           비밀번호 변경
@@ -80,5 +91,9 @@ const UserEmail = styled.span`
 const TabCardContainer = styled(Tabs)`
   margin-top: 30px;
 `;
+
+const ProfileEditForm = styled.form``;
+
+const PasswordEditForm = styled.form``;
 
 export default UserPage;
