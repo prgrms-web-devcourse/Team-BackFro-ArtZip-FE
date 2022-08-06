@@ -30,7 +30,7 @@ export interface ReviewSingleReadData {
   likeCount: number;
   commentCount: number;
   photos: PhotoProps[];
-  comments?: CommentProps;
+  comments: CommentProps[];
 }
 
 export interface ReviewSingleReadResponse extends BaseResponse {
