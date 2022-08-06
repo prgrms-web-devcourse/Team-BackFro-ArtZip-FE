@@ -1,61 +1,52 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Input, Upload } from 'antd';
+import { Tabs, Image, Input, Upload, Form, Button } from 'antd';
+import Link from 'next/link';
 
 const UserPage = () => {
   return (
     <PageContainer>
-      <TabContainer tabPosition="left" size="large" tabBarStyle={{ fontWeight: 'bold' }} centered>
-        <Tab tab="프로필" key="1">
-          <ProfileContainer>
-            <ProfileImage
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              alt="profile image"
-              preview={false}
-            />
-            <UserName>비긴어게인</UserName>
-            <UserEmail>gitul0515@gmail.com</UserEmail>
-          </ProfileContainer>
-          <TabCardContainer type="card" tabPosition="top" centered>
-            <Tab tab="작성한 글 (12)" key={1}>
-              작성한 글
-            </Tab>
-            <Tab tab="좋아하는 전시회 (6)" key={2}>
-              좋아하는 전시회
-            </Tab>
-            <Tab tab="좋아하는 후기 (17)" key={3}>
-              좋아하는 후기
-            </Tab>
-          </TabCardContainer>
-        </Tab>
-        <Tab tab="정보 수정" key="2">
-          <ProfileEditForm>
-            <fieldset>
-              <legend>계정 관리</legend>
-              <label htmlFor="">이메일</label>
-              <Input type="email" defaultValue="gitul0515@gmail.com" disabled />
+      <NavigationButtons>
+        <Link href="/users/1/edit">
+          <a>
+            <NavigationButton type="primary">유저 정보</NavigationButton>
+          </a>
+        </Link>
+        <Link href="/users/1/edit-password">
+          <a>
+            <NavigationButton type="default">계정 관리</NavigationButton>
+          </a>
+        </Link>
+      </NavigationButtons>
 
-              <label htmlFor="">닉네임</label>
-              <Input type="text" defaultValue="미스터공공" />
-
-              <Upload name="avatar" />
-            </fieldset>
-          </ProfileEditForm>
+      <ProfileContainer>
+        <ProfileImage
+          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          alt="profile image"
+          preview={false}
+        />
+        <UserName>비긴어게인</UserName>
+        <UserEmail>gitul0515@gmail.com</UserEmail>
+      </ProfileContainer>
+      <TabCardContainer type="card" tabPosition="top" centered>
+        <Tab tab="작성한 글 (12)" key={1}>
+          작성한 글
         </Tab>
-        <Tab tab="비밀번호 변경" key="3">
-          비밀번호 변경
+        <Tab tab="좋아하는 전시회 (6)" key={2}>
+          좋아하는 전시회
         </Tab>
-      </TabContainer>
+        <Tab tab="좋아하는 후기 (17)" key={3}>
+          좋아하는 후기
+        </Tab>
+      </TabCardContainer>
     </PageContainer>
   );
 };
 
 const PageContainer = styled.div`
-  margin-left: 100px;
-  margin-right: 240px;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    margin: 0 auto;
-  }
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
 `;
 
 const TabContainer = styled(Tabs)`
@@ -92,8 +83,25 @@ const TabCardContainer = styled(Tabs)`
   margin-top: 30px;
 `;
 
+const NavigationButtons = styled.nav`
+  position: absolute;
+  top: 20px;
+  left: 0;
+`;
+
+const NavigationButton = styled(Button)`
+  display: block;
+  margin-bottom: 2px;
+  padding-right: 24px;
+  padding-left: 24px;
+`;
+
 const ProfileEditForm = styled.form``;
 
 const PasswordEditForm = styled.form``;
+
+const FieldSet = styled.fieldset``;
+
+const Legend = styled.legend``;
 
 export default UserPage;
