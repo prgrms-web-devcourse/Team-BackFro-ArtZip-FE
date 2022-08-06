@@ -4,7 +4,7 @@ import React from 'react';
 
 interface BannerProps {
   title: string;
-  content: string;
+  content?: string;
   backgroundColor?: string;
 }
 
@@ -15,12 +15,13 @@ const Banner = ({ title, content, backgroundColor }: BannerProps) => {
     <Section backgroundColor={backgroundColor ? backgroundColor : color.blue.white}>
       <Title>{title}</Title>
       <Content>
-        {content.split('\\n').map((sentence, i) => (
-          <React.Fragment key={i}>
-            {sentence}
-            <br />
-          </React.Fragment>
-        ))}
+        {content &&
+          content.split('\\n').map((sentence, i) => (
+            <React.Fragment key={i}>
+              {sentence}
+              <br />
+            </React.Fragment>
+          ))}
       </Content>
     </Section>
   );
