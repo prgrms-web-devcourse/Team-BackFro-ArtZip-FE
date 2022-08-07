@@ -2,25 +2,30 @@ import styled from '@emotion/styled';
 import { Avatar, Card, Image } from 'antd';
 
 export const ReviewCard = styled(Card)`
-  width: 600px;
-  height: 270px;
+  width: 450px;
+  height: 250px;
   border: none;
   border-radius: 30px;
+  margin: 10px;
   padding: 10px 5px 10px 5px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-out;
   cursor: default;
+  &:hover {
+    transform: translateY(-10px);
+  }
 `;
 
 export const Title = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 5px;
   cursor: pointer;
 `;
 
 export const Content = styled.div`
-  width: 500px;
-  font-weight: 400;
-  font-size: 18px;
+  width: 100%;
+  font-size: 16px;
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;

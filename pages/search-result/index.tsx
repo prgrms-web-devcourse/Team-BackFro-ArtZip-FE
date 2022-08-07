@@ -2,8 +2,7 @@ import Head from 'next/head';
 import { Pagination } from 'antd';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { ExhibitionCard } from 'components/molecule';
-import * as S from './style';
+import { searchResultPageStyle as S } from '../../styles/pages';
 import { NextPage } from 'next';
 
 const SearchResultPage: NextPage = () => {
@@ -113,7 +112,7 @@ const SearchResultPage: NextPage = () => {
         </div>
       )}
       {exhibition && <div>SearchResult: {exhibition}</div>}
-
+      {/* 
       <S.SearchResultContents>
         <ExhibitionCard
           exhibitionId={ret.exhibitionId}
@@ -187,7 +186,7 @@ const SearchResultPage: NextPage = () => {
           likeCount={ret.likeCount}
           reviewCount={ret.reviews.length}
         />
-      </S.SearchResultContents>
+      </S.SearchResultContents> */}
       <Pagination
         className="pagination"
         defaultCurrent={1}

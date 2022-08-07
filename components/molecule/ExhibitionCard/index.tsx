@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card } from 'antd';
-import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
@@ -17,6 +17,7 @@ const ExhibitionCard = ({
   endDate,
   likeCount,
   reviewCount,
+  isLiked,
 }: ExhibitionProps) => {
   const [isHover, setIsHover] = useState(false);
   const mouseHover = () => setIsHover((isHover) => !isHover);
@@ -30,7 +31,7 @@ const ExhibitionCard = ({
             isHover ? (
               <S.HoverContent>
                 {' '}
-                <HeartOutlined />
+                {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
                 {likeCount} <MessageOutlined /> {reviewCount}{' '}
               </S.HoverContent>
             ) : null
@@ -42,7 +43,7 @@ const ExhibitionCard = ({
             height: 330,
             position: 'relative',
           }}
-          cover={<Image alt="card image" src={thumbnail} layout="fill" />}
+          cover={<Image alt="card image" src={thumbnail} layout="fill" className="card-image" />}
         />
         <S.Description>
           <h3>{name}</h3>

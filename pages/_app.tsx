@@ -1,12 +1,12 @@
-import '../styles/globals.css';
+import '../styles/global/globals.css';
 import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import { Layout } from 'components/template';
 import { ThemeProvider } from '@emotion/react';
-import theme from 'styles/theme';
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
+import theme from 'styles/global/theme';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
   import('../mocks');

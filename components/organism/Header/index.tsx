@@ -19,7 +19,7 @@ const Header = () => {
       <Container>
         <Navigation>
           <LinkText
-            href="/search-result"
+            href="/exhibitions/custom"
             text="맞춤 전시회"
             isCurrentPage={pathname === '/search-result'}
           />
