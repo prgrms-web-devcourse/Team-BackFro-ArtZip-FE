@@ -50,7 +50,7 @@ const SignUpPage = () => {
             </StyledButton>
           </Form.Item>
         </Form>
-        <Link href={`/signup`}>
+        <Link href={`/signin`}>
           <StyledTextLink>이미 계정이 있으신가요? 로그인</StyledTextLink>
         </Link>
       </FormWrapper>
