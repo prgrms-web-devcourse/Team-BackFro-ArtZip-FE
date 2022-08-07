@@ -69,6 +69,7 @@ const StyledInput = styled(Input)`
   width: 300px;
   padding: 10px;
   border: none;
+  background-color: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.color.blue.light};
   font-size: 18px;
   &:hover {
