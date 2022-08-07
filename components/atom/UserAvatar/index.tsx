@@ -13,7 +13,6 @@ const UserAvatar = ({ userId, profileImage }: { userId: number; profileImage: st
 };
 
 const StyledAvatar = styled(Avatar)`
-  margin-right: 10px;
   &:hover {
     cursor: pointer;
     filter: brightness(70%);
