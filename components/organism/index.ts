@@ -5,3 +5,4 @@ export { default as ImageUpload } from './ImageUpload';
 export { default as InfoGroup } from './InfoGroup';
 export { default as ReviewDetail } from './ReviewDetail';
 export { default as CommentWrite } from './CommentWrite';
+export { default as CommentList } from './CommentList';

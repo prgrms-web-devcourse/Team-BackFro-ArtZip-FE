@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
 import axios from 'axios';
-import { ReviewDetail } from 'components/organism';
+import { ReviewDetail, CommentWrite, CommentList } from 'components/organism';
 import { ReviewSingleReadResponse } from 'types/apis/review';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
@@ -19,6 +19,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     createdAt,
     updatedAt,
     commentCount,
+    comments,
   } = data;
 
   return (
@@ -44,6 +45,13 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
           console.log('삭제!');
         }}
       />
+
+      {/* 코멘트 영역 */}
+      {/* TODO: 무한 스크롤로 코멘트 렌더링 -> 이건 역시 컴포넌트로 빼둔다.
+      TODO: 답글 달기 로직 구현
+      TODO: 답글 보기 로직 구현 */}
+      <CommentWrite user={null} />
+      <CommentList comments={comments} reviewId={reviewId} />
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { ExhibitionProps, UserProps, PhotoProps, CommentProps } from 'types/model';
-import { BaseResponse } from '../base';
+import { BaseResponse, PaginationResponse } from '../base';
+import { CommentReadResponse } from '../comment';
 
 // 후기 생성
 export interface ReviewIdData {
@@ -30,7 +31,7 @@ export interface ReviewSingleReadData {
   likeCount: number;
   commentCount: number;
   photos: PhotoProps[];
-  comments: CommentProps[];
+  comments: PaginationResponse<CommentProps>;
 }
 
 export interface ReviewSingleReadResponse extends BaseResponse {
