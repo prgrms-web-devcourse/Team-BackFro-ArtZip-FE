@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const SearchResultContainer = styled.div`
+export const ExhibitionsMore = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,11 +8,11 @@ export const SearchResultContainer = styled.div`
 
   .pagination {
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 `;
 
-export const SearchResultContents = styled.main`
+export const ExhibitionsMoreContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
