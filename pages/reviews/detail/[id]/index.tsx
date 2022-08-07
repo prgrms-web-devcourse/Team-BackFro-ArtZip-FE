@@ -46,11 +46,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         }}
       />
 
-      {/* 코멘트 영역 */}
-      {/* TODO: 무한 스크롤로 코멘트 렌더링 -> 이건 역시 컴포넌트로 빼둔다.
-      TODO: 답글 달기 로직 구현
-      TODO: 답글 보기 로직 구현 */}
-      <CommentWrite user={null} />
+      <CommentWrite user={undefined} />
       <CommentList comments={comments} reviewId={reviewId} />
     </>
   );
