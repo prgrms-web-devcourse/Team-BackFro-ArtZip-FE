@@ -6,6 +6,7 @@ export interface ExhibitionProps {
   endDate: string;
   likeCount: number;
   reviewCount: number;
+  isLiked: boolean;
 }
 
 export interface ReviewFeedProps {
@@ -46,7 +47,7 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  childrenCount: number;
+  childrenCount?: number;
 }
 
 export interface UserProps {

@@ -1,8 +1,7 @@
 import { UserInfo } from 'components/molecule';
 import styled from '@emotion/styled';
-import { Card, Button } from 'antd';
+import { Card, Button, Image } from 'antd';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ReviewFeedProps } from 'types/model';
 import { InfoGroup } from 'components/organism';
@@ -29,7 +28,7 @@ const ReviewFeed = ({
   const router = useRouter();
 
   return (
-    <Card>
+    <ReviewFeedCard>
       <ReviewFeedWrapper>
         <ReviewFeedContent>
           <ReviewFeedHeader>
@@ -39,37 +38,41 @@ const ReviewFeed = ({
               createdDate={feedCreateDate}
               userId={userId}
             ></UserInfo>
-            <ReviewDetailLink href={`/exhibitions/detail/${exhibitionId}`}>
-              <a># {exhibitionName}</a>
-            </ReviewDetailLink>
+            <Link href={`/exhibitions/detail/${exhibitionId}`}>
+              <a>
+                <ReviewTagText># {exhibitionName}</ReviewTagText>
+              </a>
+            </Link>
           </ReviewFeedHeader>
 
-          <ReviewFeedMain
-            onClick={() => {
-              router.push(`/reviews/detail/${reviewId}`);
-            }}
-          >
-            <ReviewTitle>{feedTitle}</ReviewTitle>
-            <ReviewContent>{feedContent}</ReviewContent>
-          </ReviewFeedMain>
+          <ReviewFeedMainWrapper>
+            <ReviewFeedMain
+              onClick={() => {
+                router.push(`/reviews/detail/${reviewId}`);
+              }}
+            >
+              <ReviewTitle>{feedTitle}</ReviewTitle>
+              <ReviewContent>{feedContent}</ReviewContent>
+            </ReviewFeedMain>
 
-          <ReviewFeedBottom>
-            <InfoGroup
-              isLiked={isLiked}
-              likeCount={likeCount}
-              commentCount={commentCount}
-              onLikeClick={onLikeClick}
-            />
+            <ReviewFeedBottom>
+              <InfoGroup
+                isLiked={isLiked}
+                likeCount={likeCount}
+                commentCount={commentCount}
+                onLikeClick={onLikeClick}
+              />
 
-            {isMyFeed && (
-              <FeedButtonGroup>
-                <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
-                <Button type="text" onClick={onDeleteButtonClick}>
-                  삭제
-                </Button>
-              </FeedButtonGroup>
-            )}
-          </ReviewFeedBottom>
+              {isMyFeed && (
+                <FeedButtonGroup>
+                  <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
+                  <Button type="text" onClick={onDeleteButtonClick}>
+                    삭제
+                  </Button>
+                </FeedButtonGroup>
+              )}
+            </ReviewFeedBottom>
+          </ReviewFeedMainWrapper>
         </ReviewFeedContent>
 
         <ReviewFeedThumbnail
@@ -77,17 +80,26 @@ const ReviewFeed = ({
             router.push(`/reviews/detail/${reviewId}`);
           }}
         >
-          <Image src={reviewThumbnailImage} width="200" height="200" alt="Review Thumbnail" />
+          <Image
+            src={reviewThumbnailImage}
+            width={150}
+            height={150}
+            preview={false}
+            alt="Review Thumbnail"
+          />
         </ReviewFeedThumbnail>
       </ReviewFeedWrapper>
-    </Card>
+    </ReviewFeedCard>
   );
 };
+
+const ReviewFeedCard = styled(Card)`
+  margin: 30px 0;
+`;
 
 const ReviewFeedWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-
   &:hover {
     cursor: pointer;
   }
@@ -109,11 +121,19 @@ const ReviewFeedHeader = styled.div`
   justify-content: space-between;
 `;
 
-const ReviewDetailLink = styled(Link)`
-  // TODO: 테마 색 지정
+const ReviewTagText = styled.p`
+  font-size: 24px;
+  color: ${({ theme }) => theme.color.blue.main};
+
   &:hover {
-    // TODO: 호버 시 강조색 지정
+    color: ${({ theme }) => theme.color.blue.dark};
   }
+`;
+
+const ReviewFeedMainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ReviewFeedMain = styled.div`
@@ -125,9 +145,19 @@ const ReviewFeedMain = styled.div`
   }
 `;
 
-const ReviewTitle = styled.h2``;
+const ReviewTitle = styled.p`
+  font-size: 2.2rem;
+  margin-top: 10px;
+  font-weight: bold;
+`;
 
-const ReviewContent = styled.p``;
+const ReviewContent = styled.p`
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+`;
 
 const ReviewFeedBottom = styled.div`
   display: flex;

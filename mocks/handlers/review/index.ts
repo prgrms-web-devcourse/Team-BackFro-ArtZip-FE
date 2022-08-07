@@ -4,7 +4,7 @@ import { rest } from 'msw';
 const REVIEWS = {
   content: [
     {
-      id: 43,
+      reviewId: 43,
       user: {
         userId: 11,
         profileImage: 'https://joeschmoe.io/api/v1/random',
@@ -22,6 +22,7 @@ const REVIEWS = {
       updatedAt: '2022-03-23T13:03:51',
       isEdited: true,
       isLiked: false,
+      isPublic: true,
       likeCount: 32,
       commentCount: 2,
       photos: [
@@ -46,38 +47,6 @@ const REVIEWS = {
           path: 'https://source.unsplash.com/random?5',
         },
       ],
-    },
-    {
-      id: 41,
-      user: {
-        userId: 11,
-        profileImage: 'https://joeschmoe.io/api/v1/random',
-        nickname: 'Emily',
-      },
-      exhibition: {
-        exhibitionId: 24,
-        name: '전시회 이름',
-        startDate: '2022-10-11',
-        thumbnail: 'https://source.unsplash.com/random',
-      },
-      title: '핸드아트코리아 전시회 다녀옴~',
-      content: '오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~',
-      createdAt: '2022-03-22T22:33:11',
-      updatedAt: '2022-03-23T13:03:51',
-      isEdited: true,
-      isLiked: false,
-      likeCount: 32,
-      commentCount: 2,
-      photos: [
-        {
-          photoId: 35,
-          path: 'https://source.unsplash.com/random',
-        },
-        {
-          photoId: 36,
-          path: 'https://source.unsplash.com/random',
-        },
-      ],
       comments: [
         {
           commentId: 0,
@@ -88,26 +57,88 @@ const REVIEWS = {
           isDeleted: false,
           user: {
             userId: 0,
-            nickname: '미스터공공',
-            profileImage: 'https://i.pravatar.cc/300​',
+            nickname: '미스터공공1',
+            profileImage: 'https://joeschmoe.io/api/v1/random?5',
           },
-          children: [
-            {
-              commentId: 1,
-              content: '같이 가용~',
-              createdAt: '2022-07-26T11:26:24',
-              updatedAt: null,
-              isEdited: false,
-              isDeleted: false,
-              user: {
-                userId: 1,
-                nickname: '그린',
-                profileImage: 'https://i.pravatar.cc/300​',
-              },
-            },
-          ],
+          childrenCount: 1,
+        },
+        {
+          commentId: 1,
+          content: '대댓글 기준 데이터',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공2',
+            profileImage: 'https://joeschmoe.io/api/v1/random?6',
+          },
+          childrenCount: 3,
+        },
+        {
+          commentId: 2,
+          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공3',
+            profileImage: 'https://joeschmoe.io/api/v1/random?7',
+          },
+          childrenCount: 1,
+        },
+        {
+          commentId: 3,
+          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+          createdAt: '2022-07-26T11:26:24',
+          updatedAt: '2022-07-26T11:28:49',
+          isEdited: true,
+          isDeleted: false,
+          user: {
+            userId: 0,
+            nickname: '미스터공공4',
+            profileImage: 'https://joeschmoe.io/api/v1/random?8',
+          },
+          childrenCount: 1,
         },
       ],
+    },
+    {
+      reviewId: 41,
+      user: {
+        userId: 11,
+        profileImage: 'https://joeschmoe.io/api/v1/random?1',
+        nickname: 'Emily',
+      },
+      exhibition: {
+        exhibitionId: 24,
+        name: '전시회 이름',
+        startDate: '2022-10-11',
+        thumbnail: 'https://joeschmoe.io/api/v1/random?2',
+      },
+      title: '핸드아트코리아 전시회 다녀옴~',
+      content: '이건아주긴글입니다'.repeat(100),
+      createdAt: '2022-03-22T22:33:11',
+      updatedAt: '2022-03-23T13:03:51',
+      isEdited: true,
+      isLiked: false,
+      isPublic: true,
+      likeCount: 32,
+      commentCount: 2,
+      photos: [
+        {
+          photoId: 35,
+          path: 'https://joeschmoe.io/api/v1/random?3',
+        },
+        {
+          photoId: 36,
+          path: 'https://joeschmoe.io/api/v1/random?4',
+        },
+      ],
+      comments: [],
     },
   ],
   numberOfElements: 2,
@@ -115,7 +146,7 @@ const REVIEWS = {
   pageNumber: 0,
   pageSize: 20,
   totalElements: 2,
-  totalPages: 1,
+  totalPages: 5,
 };
 
 const ReviewHandlers = [
@@ -142,7 +173,7 @@ const ReviewHandlers = [
   // 리뷰 단건 조회
   rest.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId`, (req, res, ctx) => {
     const { reviewId } = req.params;
-    const review = REVIEWS.content.filter((review) => review.id.toString() === reviewId);
+    const review = REVIEWS.content.filter((review) => review.reviewId.toString() === reviewId);
     const single_review_success = {
       message: '후기 단건 성공',
       code: 200,
@@ -156,11 +187,33 @@ const ReviewHandlers = [
   // 리뷰 다건 조회
   rest.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`, (req, res, ctx) => {
     // const exhibitionId = req.url.searchParams.get('exhibitionId');
-    // const page = req.url.searchParams.get('page');
+    const page = req.url.searchParams.get('page');
     // const size = req.url.searchParams.get('size');
     // const sort = req.url.searchParams.get('sort');
 
     // TODO: 각 경우별 응답을 구현해야 함. 우선은 전체 데이터를 return
+
+    if (page) {
+      const new_review_data = REVIEWS.content.map((review) => {
+        review.reviewId += Math.floor(Math.random() * 1000);
+        review.title = '무한스크롤 더미'.concat(page);
+
+        return review;
+      });
+
+      console.log('new_review_data', new_review_data);
+
+      const new_multi_review_success = {
+        message: '후기 다건 조회 성공',
+        code: 200,
+        data: {
+          ...new_review_data,
+        },
+      };
+
+      // console.log('newnewnew', new_multi_review_success);
+      return res(ctx.json(new_multi_review_success));
+    }
 
     const multi_review_success = {
       message: '후기 다건 조회 성공',
@@ -177,7 +230,9 @@ const ReviewHandlers = [
     `${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId/like`,
     (req, res, ctx) => {
       const { reviewId } = req.params;
-      const reviewIndex = REVIEWS.content.findIndex((review) => review.id.toString() === reviewId);
+      const reviewIndex = REVIEWS.content.findIndex(
+        (review) => review.reviewId.toString() === reviewId,
+      );
       REVIEWS.content[reviewIndex].isLiked
         ? (REVIEWS.content[reviewIndex].likeCount -= 1)
         : (REVIEWS.content[reviewIndex].likeCount += 1);
@@ -188,7 +243,7 @@ const ReviewHandlers = [
         message: '후기 좋아요 등록/해제 성공',
         code: 200,
         data: {
-          reviewId: REVIEWS.content[reviewIndex].id,
+          reviewId: REVIEWS.content[reviewIndex].reviewId,
           likeCount: REVIEWS.content[reviewIndex].likeCount,
           isLiked: REVIEWS.content[reviewIndex].isLiked,
         },
