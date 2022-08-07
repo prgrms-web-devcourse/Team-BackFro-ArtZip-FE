@@ -190,7 +190,6 @@ const CommentHandlers = [
     },
   ),
   // 댓글 생성
-
   rest.post(
     `${process.env.MOCKING_API_END_POINT}api/v1/reviews/:reviewId/comments`,
     async (req, res, ctx) => {
@@ -268,18 +267,41 @@ const CommentHandlers = [
     },
   ),
 
-  // 대댓글 조회 (TODO: 미구현, 우선은 댓글을 그대로 리턴하도록)
+  // 대댓글 조회
   rest.get(
     `${process.env.MOCKING_API_END_POINT}api/v1/comments/:commentId/children`,
     (req, res, ctx) => {
       const { commentId } = req.params;
 
+      // 페이지가 존재하는 경우
+      const page = req.url.searchParams.get('page');
+
+      console.log('page', page);
+
+      if (page) {
+        const new_comment_data = REPLYS.content.map((comment) => {
+          comment.commentId += Math.floor(Math.random() * 1000 + parseInt(page));
+          comment.content = '페이지네이션 더미'.concat(page);
+
+          return comment;
+        });
+
+        const new_page_comment_success = {
+          message: '대댓글 조회 성공',
+          code: 200,
+          data: {
+            ...REPLYS,
+            content: new_comment_data,
+          },
+        };
+
+        return res(ctx.json(new_page_comment_success));
+      }
+
       const reply_success = {
         message: '대댓글 조회 성공',
         code: 200,
-        data: {
-          ...REPLYS.content,
-        },
+        data: REPLYS,
       };
       return res(ctx.json(reply_success));
     },
