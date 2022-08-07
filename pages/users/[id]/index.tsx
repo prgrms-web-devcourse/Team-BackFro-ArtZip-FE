@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Button } from 'antd';
-import Link from 'next/link';
-import { ReviewCard, ExhibitionCard } from 'components/molecule';
+import { Tabs, Image } from 'antd';
+import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecule';
 
 const UserPage = () => {
   return (
@@ -137,26 +136,6 @@ const UserPage = () => {
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
             />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
           </ExhibitionContainer>
         </Tab>
         <Tab tab="좋아하는 후기 (17)" key={3}>
@@ -200,78 +179,32 @@ const UserPage = () => {
               nickname={reviewDummy.user.nickname}
               profileImage={reviewDummy.user.profileImage}
             />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
           </ReviewContainer>
         </Tab>
       </TabCardContainer>
-
-      <NavigationButtons>
-        <Link href="/users/1">
-          <a>
-            <NavigationButton type="primary" size="large">
-              사용자 정보
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit">
-          <a>
-            <NavigationButton type="default" size="large">
-              프로필 수정
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit-password">
-          <a>
-            <NavigationButton type="default" size="large">
-              비밀번호 변경
-            </NavigationButton>
-          </a>
-        </Link>
-      </NavigationButtons>
+      <SideNavigation
+        paths={[
+          {
+            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            pageName: '사용자 정보',
+          },
+          {
+            href: '/users/1/edit',
+            pageName: '프로필 수정',
+          },
+          {
+            href: '/users/1/edit-password',
+            pageName: '비밀번호 변경',
+          },
+        ]}
+      />
     </PageContainer>
   );
 };
 
-const NavigationButtons = styled.nav`
-  position: absolute;
-  top: 20px;
-  left: 0;
-`;
-
-const NavigationButton = styled(Button)`
-  display: block;
-  width: 130px;
-  margin-bottom: 2px;
-`;
-
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 `;
@@ -312,13 +245,7 @@ const ReviewContainer = styled.div`
   justify-content: center;
   justify-items: center;
   gap: 10px;
-
-  /* flex-wrap: wrap;
-  justify-content: center; */
-
-  padding-left: 70px;
-  padding-right: 70px;
-  padding-bottom: 30px;
+  padding: 0 70px 30px 70px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     grid-template-columns: 1fr;

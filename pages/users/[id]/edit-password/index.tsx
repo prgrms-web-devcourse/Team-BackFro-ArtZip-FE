@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import styled from '@emotion/styled';
 import { Form, Input, Button } from 'antd';
+import { SideNavigation } from 'components/molecule';
 
 const UserEditPasswordPage = () => {
   return (
@@ -19,29 +19,22 @@ const UserEditPasswordPage = () => {
         <SubmitButton type="primary">변경</SubmitButton>
       </PasswordEditForm>
 
-      <NavigationButtons>
-        <Link href="/users/1">
-          <a>
-            <NavigationButton type="default" size="large">
-              사용자 정보
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit">
-          <a>
-            <NavigationButton type="default" size="large">
-              프로필 수정
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit-password">
-          <a>
-            <NavigationButton type="primary" size="large">
-              비밀번호 변경
-            </NavigationButton>
-          </a>
-        </Link>
-      </NavigationButtons>
+      <SideNavigation
+        paths={[
+          {
+            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            pageName: '사용자 정보',
+          },
+          {
+            href: '/users/1/edit',
+            pageName: '프로필 수정',
+          },
+          {
+            href: '/users/1/edit-password',
+            pageName: '비밀번호 변경',
+          },
+        ]}
+      />
     </PageContainer>
   );
 };
@@ -51,18 +44,6 @@ const PageContainer = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   padding-left: 200px;
-`;
-
-const NavigationButtons = styled.nav`
-  position: absolute;
-  top: 20px;
-  left: -50px;
-`;
-
-const NavigationButton = styled(Button)`
-  display: block;
-  width: 130px;
-  margin-bottom: 2px;
 `;
 
 const PasswordEditForm = styled(Form)`

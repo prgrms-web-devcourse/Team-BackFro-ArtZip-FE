@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
-import Link from 'next/link';
 import { Button, Form, Input, Image } from 'antd';
 import { useState, useRef, ChangeEvent } from 'react';
+import { SideNavigation } from 'components/molecule';
 
 const UserEditPage = () => {
   const [image, setImage] = useState<string>(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
   );
-  const [file, setFile] = useState<FileList>();
+  const [file, setFile] = useState<FileList>(); // TODO: 업로드한 파일 저장 미구현 상태. 추후 구현 필요
   const fileInput = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
@@ -41,35 +41,30 @@ const UserEditPage = () => {
             ref={fileInput}
           />
         </FormItem>
-        <FormItem label="닉네임" style={{ fontSize: '1.8rem' }}>
+        <FormItem label="닉네임">
           <Input type="text" defaultValue="미스터공공" />
         </FormItem>
-        <SubmitButton type="primary">저장</SubmitButton>
+        <SubmitButton type="primary" htmlType="submit">
+          저장
+        </SubmitButton>
       </ProfileEditForm>
 
-      <NavigationButtons>
-        <Link href="/users/1">
-          <a>
-            <NavigationButton type="default" size="large">
-              사용자 정보
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit">
-          <a>
-            <NavigationButton type="primary" size="large">
-              프로필 수정
-            </NavigationButton>
-          </a>
-        </Link>
-        <Link href="/users/1/edit-password">
-          <a>
-            <NavigationButton type="default" size="large">
-              비밀번호 변경
-            </NavigationButton>
-          </a>
-        </Link>
-      </NavigationButtons>
+      <SideNavigation
+        paths={[
+          {
+            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            pageName: '사용자 정보',
+          },
+          {
+            href: '/users/1/edit',
+            pageName: '프로필 수정',
+          },
+          {
+            href: '/users/1/edit-password',
+            pageName: '비밀번호 변경',
+          },
+        ]}
+      />
     </PageContainer>
   );
 };
@@ -81,16 +76,8 @@ const PageContainer = styled.div`
   padding-left: 200px;
 `;
 
-const NavigationButtons = styled.nav`
-  position: absolute;
-  top: 20px;
-  left: -50px;
-`;
-
-const NavigationButton = styled(Button)`
-  display: block;
-  width: 130px;
-  margin-bottom: 2px;
+const Title = styled.h1`
+  margin-bottom: 10px;
 `;
 
 const ProfileEditForm = styled(Form)`
@@ -109,10 +96,6 @@ const ProfileImage = styled(Image)`
   width: 100px;
   height: 100px;
   cursor: pointer;
-`;
-
-const Title = styled.h1`
-  margin-bottom: 10px;
 `;
 
 const SubmitButton = styled(Button)`
