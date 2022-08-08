@@ -15,9 +15,11 @@ const SignInPage = () => {
       console.log(accessToken, refreshToken);
       storage.setItem<string>('ACCESS_TOKEN', accessToken);
       cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
+      alert(res.data.message);
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
+      alert(e.response.data.message);
       throw e;
     }
   };
