@@ -16,6 +16,7 @@ const SignInPage = () => {
       storage.setItem<string>('ACCESS_TOKEN', accessToken);
       cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
       alert(res.data.message);
+      Router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
