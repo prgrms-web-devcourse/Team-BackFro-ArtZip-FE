@@ -15,7 +15,7 @@ const cookie = {
     }
   },
   removeItem: (key: string) => {
-    document.cookie = encodeURIComponent(key);
+    document.cookie = encodeURIComponent(key) + '=; expires=Thu, 01 JAN 1999 00:00:10 GMT';
   },
 };
 
