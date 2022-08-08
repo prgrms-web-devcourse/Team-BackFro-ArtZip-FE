@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
+import { CSSProperties } from 'react';
 
-export const ExhibitionCard = styled.div`
+export const ExhibitionCard = styled.div<{ cardStyle?: CSSProperties }>`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  width: 270px;
-  height: 400px;
+  width: 250px;
+  height: 350px;
   margin-top: 20px;
   padding-bottom: 20px;
   &:hover {
