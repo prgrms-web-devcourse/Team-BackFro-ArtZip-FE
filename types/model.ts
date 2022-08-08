@@ -3,11 +3,11 @@ export interface ExhibitionProps {
   exhibitionId: number;
   name: string;
   thumbnail: string;
-  startDate: string;
-  endDate: string;
-  likeCount: number;
-  reviewCount: number;
-  isLiked: boolean;
+  startDate?: string;
+  endDate?: string;
+  likeCount?: number;
+  reviewCount?: number;
+  isLiked?: boolean;
   style?: CSSProperties;
 }
 
@@ -49,7 +49,7 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  childrenCount: number;
+  childrenCount?: number;
 }
 
 export interface UserProps {

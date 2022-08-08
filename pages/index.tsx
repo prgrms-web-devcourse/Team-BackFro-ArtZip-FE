@@ -5,6 +5,10 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 
 const Home: NextPage = () => {
+  //TODO : 맞춤전시회로 이동해야함
+  const [selectedArea, setSelectedArea] = useState([]);
+  const [selectedPeriod, setSelectedPeriod] = useState([]);
+
   const ret = {
     exhibitionId: 1,
     name: '번아웃증후군',
@@ -87,10 +91,6 @@ const Home: NextPage = () => {
     ],
   };
 
-  //TODO : 맞춤전시회로 이동해야함
-  const [selectedArea, setSelectedArea] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState([]);
-
   return (
     <div>
       <SwiperContainer title="다가오는 전시회" type="upcoming">
@@ -105,7 +105,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={true}
-              key={ret.exhibitionId}
+              key={1}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -116,7 +116,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={2}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -127,7 +127,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={false}
-              key={ret.exhibitionId}
+              key={3}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -138,7 +138,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={false}
-              key={ret.exhibitionId}
+              key={4}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -149,7 +149,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={5}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -160,7 +160,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={6}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -171,7 +171,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key="7"
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -182,7 +182,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={8}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -193,7 +193,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={9}
             />,
           ]}
         />
@@ -211,7 +211,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={1}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -222,7 +222,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={2}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -233,7 +233,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={3}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -244,7 +244,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={4}
             />,
             <ExhibitionCard
               exhibitionId={ret.exhibitionId}
@@ -255,51 +255,7 @@ const Home: NextPage = () => {
               likeCount={ret.likeCount}
               reviewCount={ret.reviews.length}
               isLiked={ret.isLiked}
-              key={ret.exhibitionId}
-            />,
-            <ExhibitionCard
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
-              isLiked={ret.isLiked}
-              key={ret.exhibitionId}
-            />,
-            <ExhibitionCard
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
-              isLiked={ret.isLiked}
-              key={ret.exhibitionId}
-            />,
-            <ExhibitionCard
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
-              isLiked={ret.isLiked}
-              key={ret.exhibitionId}
-            />,
-            <ExhibitionCard
-              exhibitionId={ret.exhibitionId}
-              name={ret.name}
-              thumbnail={ret.thumbnail}
-              startDate={ret.startDate}
-              endDate={ret.endDate}
-              likeCount={ret.likeCount}
-              reviewCount={ret.reviews.length}
-              isLiked={ret.isLiked}
-              key={ret.exhibitionId}
+              key={5}
             />,
           ]}
         />

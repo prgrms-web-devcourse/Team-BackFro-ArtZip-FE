@@ -1,5 +1,5 @@
 import { ExhibitionProps, UserProps, PhotoProps, CommentProps } from 'types/model';
-import { BaseResponse } from '../base';
+import { BaseResponse, PaginationResponse } from '../base';
 
 // 후기 생성
 export interface ReviewIdData {
@@ -20,16 +20,18 @@ export interface ReviewSingleReadData {
   reviewId: number;
   user: UserProps;
   exhibition: ExhibitionProps;
+  date: string;
   title: string;
   content: string;
   createdAt: string;
   updatedAt: number;
   isEdited: boolean;
   isLiked: boolean;
+  isPublic: boolean;
   likeCount: number;
   commentCount: number;
   photos: PhotoProps[];
-  comments?: CommentProps;
+  comments: PaginationResponse<CommentProps>;
 }
 
 export interface ReviewSingleReadResponse extends BaseResponse {
@@ -38,7 +40,7 @@ export interface ReviewSingleReadResponse extends BaseResponse {
 
 // 후기 다건 조회
 export interface ReviewMultiReadData {
-  content: ReviewSingleReadData[];
+  content: Omit<ReviewSingleReadData, 'comment'>[];
   numberOfElements: number; //content의 요소가 몇개인지
   offset: number; // 현재 페이지에서 시작하는 요소의 index 번호
   pageNumber: number; //페이지 넘버

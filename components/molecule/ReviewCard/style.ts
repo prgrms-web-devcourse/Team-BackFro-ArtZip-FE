@@ -25,7 +25,6 @@ export const Title = styled.div`
 
 export const Content = styled.div`
   width: 100%;
-  font-weight: 400;
   font-size: 16px;
   display: -webkit-box;
   overflow: hidden;

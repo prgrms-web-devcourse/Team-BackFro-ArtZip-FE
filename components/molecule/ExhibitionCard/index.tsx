@@ -18,8 +18,7 @@ const ExhibitionCard = ({
   likeCount,
   reviewCount,
   isLiked,
-  style,
-}: ExhibitionProps) => {
+}: Required<ExhibitionProps>) => {
   const [isHover, setIsHover] = useState(false);
   const mouseHover = () => setIsHover((isHover) => !isHover);
 

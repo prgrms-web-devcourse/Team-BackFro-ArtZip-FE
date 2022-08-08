@@ -5,6 +5,7 @@ export { default as ExhibitionCard } from './ExhibitionCard';
 export { default as ImageGroup } from './ImageGroup';
 export { default as ReviewCard } from './ReviewCard';
 export { default as Banner } from './Banner';
+export { default as ExhibitionInfo } from './ExhibitionInfo';
 export { default as ReviewExhibitionInfo } from './ReviewExhibitionInfo';
 export { default as ScrollButton } from './ScrollButton';
 export { default as SideNavigation } from './SideNavigation';
