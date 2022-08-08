@@ -120,10 +120,8 @@ const ReviewCreatePage = () => {
   const toFormData = async () => {
     const formData = new FormData();
 
-    if (test) {
-      for (let i = 0; i < test.length; i++) {
-        formData.append('files', test[i]);
-      }
+    for (let i = 0; i < fileList.length; i++) {
+      formData.append('files', fileList[i].originFileObj as File);
     }
 
     formData.append(
