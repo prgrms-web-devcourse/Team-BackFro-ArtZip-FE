@@ -9,11 +9,13 @@ import {
   InputRef,
   Form,
   DatePickerProps,
+  UploadFile,
 } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
-import { useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { reviewAPI } from 'apis';
+import axios from 'axios';
 
 interface ResultItem {
   exhibitionId: number;
@@ -44,6 +46,8 @@ const ReviewCreatePage = () => {
   const [url, setUrl] = useState(
     'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
   );
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [test, setTest] = useState<FileList>();
 
   const searchBarRef = useRef<InputRef>(null);
 
@@ -86,6 +90,61 @@ const ReviewCreatePage = () => {
     dataToSubmit.current.exhibitionId = id;
     console.log(dataToSubmit.current);
   };
+
+  useEffect(() => {
+    console.log('hello', fileList);
+  }, [fileList]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const formData = await toFormData();
+
+    for (const key of formData.keys()) {
+      console.log(key);
+    }
+
+    for (const value of formData.values()) {
+      console.log(value);
+    }
+
+    const result = await axios.post('https://server.artzip.shop/api/v1/reviews', formData, {
+      headers: {
+        accessToken: '',
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(result);
+  };
+
+  const toFormData = async () => {
+    const formData = new FormData();
+
+    if (test) {
+      for (let i = 0; i < test.length; i++) {
+        formData.append('files', test[i]);
+      }
+    }
+
+    formData.append(
+      'data',
+      new Blob([JSON.stringify({ ...dataToSubmit.current })], { type: 'application/json' }),
+    );
+
+    return formData;
+  };
+
+  const handleTest = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files);
+
+    if (e.target.files) {
+      setTest(e.target.files);
+    }
+  };
+
+  useEffect(() => {
+    console.log('test', test);
+  }, [test]);
 
   return (
     <>
@@ -137,22 +196,18 @@ const ReviewCreatePage = () => {
             <TextArea placeholder="내용을 입력해주세요." autoSize onChange={handleContentChange} />
           </Form.Item>
 
+          <Form.Item name="files" label="사진">
+            <ImageUpload fileList={fileList} setFileList={setFileList} />
+          </Form.Item>
+
           <Form.Item name="isPublic" label="공개 여부">
             <ToggleSwitch defaultChecked onChange={handleSwitchChange} />
             {isPublic ? '전체 공개' : '비공개'}
           </Form.Item>
 
-          {/* <Label>제목</Label>
-          <Input placeholder="제목을 입력해주세요." showCount maxLength={30} />
-          <Label>내용</Label>
-          <TextArea placeholder="내용을 입력해주세요." autoSize />
-          <Label>사진</Label>
-          <ImageUpload />
-          <Label>공개 여부</Label>
-          <ToggleSwitch defaultChecked onChange={handleSwitchChange} />
-          {isPublic ? '전체 공개' : '비공개'} */}
+          <input type="file" onChange={handleTest} />
 
-          <SubmitButton type="primary" htmlType="submit">
+          <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>

@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, Image } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
+
+interface ImageUploadProps {
+  fileList: UploadFile[];
+  setFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+}
 
 const getBase64 = (file: RcFile): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -13,11 +18,10 @@ const getBase64 = (file: RcFile): Promise<string> => {
   });
 };
 
-const ImageUpload = () => {
+const ImageUpload = ({ fileList, setFileList }: ImageUploadProps) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handleCancel = () => setPreviewVisible(false);
 
@@ -32,6 +36,7 @@ const ImageUpload = () => {
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    console.log(newFileList);
     return setFileList(newFileList);
   };
 
@@ -41,10 +46,6 @@ const ImageUpload = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-
-  useEffect(() => {
-    console.log(fileList);
-  }, [fileList]);
 
   return (
     <>
