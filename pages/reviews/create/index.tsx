@@ -13,28 +13,78 @@ import {
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
 import { useRef, useState } from 'react';
+import { reviewAPI } from 'apis';
+
+interface ResultItem {
+  exhibitionId: number;
+  name: string;
+  thumbnail: string;
+}
+
+interface DataToSubmit {
+  exhibitionId: number;
+  date: string;
+  title: string;
+  content: string;
+  isPublic: boolean;
+}
+
+const initialData: DataToSubmit = {
+  exhibitionId: 1,
+  date: '',
+  title: '',
+  content: '',
+  isPublic: true,
+};
 
 const ReviewCreatePage = () => {
-  const searchBarRef = useRef<InputRef>(null);
+  const dataToSubmit = useRef<DataToSubmit>(initialData);
+  const [resultList, setResultList] = useState<ResultItem[]>();
   const [isPublic, setIsPublic] = useState(true);
+  const [url, setUrl] = useState(
+    'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
+  );
 
-  const handleSearch = (searchWord: string) => {
-    if (!/\S/.test(searchWord)) {
+  const searchBarRef = useRef<InputRef>(null);
+
+  const handleSearch = async (value: string) => {
+    if (!/\S/.test(value)) {
       message.warning('한 글자 이상 입력해주세요.');
-
-      if (searchBarRef.current) {
-        searchBarRef.current.input!.value = '';
-      }
+      setResultList([]);
     }
-    console.log(searchWord);
-  };
-
-  const handleSwitchChange = (checked: boolean) => {
-    setIsPublic(checked);
+    const {
+      data: { exhibitions },
+      status,
+    } = await reviewAPI.searchExhibition(value).then((res) => res.data);
+    console.log(exhibitions, status);
+    setResultList([...exhibitions]);
   };
 
   const handleDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
+    dataToSubmit.current.date = dateString;
+    console.log(dataToSubmit.current);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dataToSubmit.current.title = e.target.value;
+    console.log(dataToSubmit.current);
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    dataToSubmit.current.content = e.target.value;
+    console.log(dataToSubmit.current);
+  };
+
+  const handleSwitchChange = (checked: boolean) => {
+    dataToSubmit.current.isPublic = checked;
+    console.log(dataToSubmit.current);
+    setIsPublic(checked);
+  };
+
+  const handleExhibitionClick = (id: number, thumbnail: string) => {
+    setUrl(thumbnail);
+    dataToSubmit.current.exhibitionId = id;
+    console.log(dataToSubmit.current);
   };
 
   return (
@@ -55,14 +105,18 @@ const ReviewCreatePage = () => {
                   ref={searchBarRef}
                 />
                 <ResultList>
-                  <ResultItem>서울 핸디아티코리아 2022</ResultItem>
-                  <ResultItem>서울 핸디아티코리아 2022</ResultItem>
+                  {resultList &&
+                    resultList.map(({ exhibitionId, name, thumbnail }) => (
+                      <ResultItem
+                        key={exhibitionId}
+                        onClick={() => handleExhibitionClick(exhibitionId, thumbnail)}
+                      >
+                        {name}
+                      </ResultItem>
+                    ))}
                 </ResultList>
               </InnerContainer>
-              <Poster
-                src="https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg"
-                alt="전시회 포스터 이미지"
-              />
+              <Poster src={url} alt="전시회 포스터 이미지" />
             </OuterContainer>
           </Form.Item>
 
@@ -71,11 +125,16 @@ const ReviewCreatePage = () => {
           </Form.Item>
 
           <Form.Item name="title" label="제목">
-            <Input placeholder="제목을 입력해주세요." showCount maxLength={30} />
+            <Input
+              placeholder="제목을 입력해주세요."
+              showCount
+              maxLength={30}
+              onChange={handleTitleChange}
+            />
           </Form.Item>
 
           <Form.Item name="content" label="내용">
-            <TextArea placeholder="내용을 입력해주세요." autoSize />
+            <TextArea placeholder="내용을 입력해주세요." autoSize onChange={handleContentChange} />
           </Form.Item>
 
           <Form.Item name="isPublic" label="공개 여부">
@@ -112,6 +171,11 @@ const ReviewEditForm = styled(Form)`
   display: flex;
   flex-direction: column;
   margin: 50px 0;
+
+  label {
+    font-size: 2rem;
+    font-weight: bold;
+  }
 `;
 
 const Fieldset = styled.fieldset``;
@@ -142,7 +206,6 @@ const SearchBar = styled(Input.Search)`
 const ResultList = styled.ul`
   width: 100%;
   max-height: 168px;
-  padding: 10px;
   border: 1px solid ${({ theme }) => theme.color.border.light};
   position: relative;
   top: -9px;
@@ -153,10 +216,12 @@ const ResultList = styled.ul`
 const ResultItem = styled.li`
   font-size: 1.6rem;
   cursor: pointer;
+  margin: 8px;
 `;
 
 const Poster = styled(Image)`
   width: 150px;
+  height: 200px;
   flex-shrink: 0;
 `;
 
