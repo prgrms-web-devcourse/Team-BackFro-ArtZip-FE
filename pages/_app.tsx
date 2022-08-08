@@ -8,9 +8,9 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
-  import('../mocks');
-}
+// if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
+//   import('../mocks');
+// }
 
 function App({ Component, pageProps }: AppProps) {
   return (
