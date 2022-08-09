@@ -14,6 +14,7 @@ const ReviewDetail = ({
   createdAt,
   user,
   exhibition,
+  date,
   title,
   isPublic,
   isEdited,

@@ -1,7 +1,18 @@
-import { ExhibitionProps, ReviewProps, UserProps } from 'types/model';
+import { ExhibitionProps, ReviewProps } from 'types/model';
 import { BaseResponse } from '../base';
 
-export interface UserRegisterResponse extends BaseResponse {
+export interface UserLocalLoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface UserSignupRequest {
+  email: string;
+  nickname: string;
+  password: string;
+}
+
+export interface UserSignupResponse extends BaseResponse {
   data?: {
     userId: number;
     nickname: string;
@@ -47,10 +58,6 @@ export interface UserTokenResponse extends BaseResponse {
     accessToken: string;
   };
 }
-
-export type UserOauthLoginResponse = UserProps;
-
-export type UserLocalLoginResponse = UserProps;
 
 export interface UserCheckResponse extends BaseResponse {
   isUnique: boolean;

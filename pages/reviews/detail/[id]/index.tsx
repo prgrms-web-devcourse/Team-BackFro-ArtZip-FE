@@ -20,6 +20,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     updatedAt,
     commentCount,
     comments,
+    date,
   } = data;
 
   return (
@@ -40,6 +41,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         photos={photos}
         updatedAt={updatedAt}
         exhibition={exhibition}
+        date={date}
         user={user}
         onDeleteButtonClick={() => {
           console.log('삭제!');

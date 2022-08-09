@@ -20,7 +20,15 @@ export interface CommentEditExhibitionResponse extends BaseResponse {
   data?: CommentProps;
 }
 
+export interface CommentUpdateRequest {
+  content: string;
+}
+
 //댓글 생성
+export interface CommentCreateRequest {
+  content: string;
+  parentId?: number;
+}
 
 export interface CommentCreateExhibitionProps extends BaseResponse {
   data?: CommentProps;
