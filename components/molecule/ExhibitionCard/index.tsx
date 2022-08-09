@@ -24,7 +24,7 @@ const ExhibitionCard = ({
 
   return (
     <Link href={`exhibitions/detail/${exhibitionId}`}>
-      <S.ExhibitionCard>
+      <S.ExhibitionCard style={style}>
         <Card
           hoverable
           extra={
@@ -39,8 +39,8 @@ const ExhibitionCard = ({
           onMouseEnter={mouseHover}
           onMouseLeave={mouseHover}
           style={{
-            width: 270,
-            height: 330,
+            width: '100%',
+            height: '85%',
             position: 'relative',
           }}
           cover={<Image alt="card image" src={thumbnail} layout="fill" className="card-image" />}

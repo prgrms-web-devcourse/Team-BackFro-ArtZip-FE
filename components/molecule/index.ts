@@ -8,3 +8,4 @@ export { default as Banner } from './Banner';
 export { default as ExhibitionInfo } from './ExhibitionInfo';
 export { default as ReviewExhibitionInfo } from './ReviewExhibitionInfo';
 export { default as ScrollButton } from './ScrollButton';
+export { default as SideNavigation } from './SideNavigation';

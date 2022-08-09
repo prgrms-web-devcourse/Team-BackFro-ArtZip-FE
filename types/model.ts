@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 export interface ExhibitionProps {
   exhibitionId: number;
   name: string;
@@ -7,6 +8,7 @@ export interface ExhibitionProps {
   likeCount?: number;
   reviewCount?: number;
   isLiked?: boolean;
+  style?: CSSProperties;
 }
 
 export interface ReviewFeedProps {
