@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import theme from 'styles/global/theme';
 
 export const SearchToolbar = styled.div`
   display: flex;

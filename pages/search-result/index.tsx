@@ -8,7 +8,6 @@ import { NextPage } from 'next';
 const SearchResultPage: NextPage = () => {
   const router = useRouter();
   const { exhibition } = router.query;
-  const { type } = router.query;
 
   const [currentPage, setCurrentPage] = useState(1);
 
