@@ -49,7 +49,7 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  childrenCount?: number;
+  childrenCount?: number; // 대 댓글이 아닐때만
 }
 
 export interface UserProps {

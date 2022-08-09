@@ -105,6 +105,10 @@ button {
   font-size: 1.6rem;
 }
 
+.ant-comment-actions > li {
+  display: block;
+}
+
 @media screen and (max-width: 1023px) {
   html {
     font-size: 60%;
