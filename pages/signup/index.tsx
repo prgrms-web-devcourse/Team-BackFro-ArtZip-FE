@@ -1,9 +1,51 @@
 import styled from '@emotion/styled';
-import { Button, Checkbox, Form, Image, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
+import { userAPI } from 'apis';
+import Router from 'next/router';
+import React, { useState } from 'react';
+import { storage, cookie } from 'utils';
 
 const SignUpPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
+
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUnique(false);
+    setNickname(e.target.value);
+  };
+
+  const onFinish = async () => {
+    const values = { email: email, nickname: nickname, password: password };
+    try {
+        const resSignup = await userAPI.signUp(values);
+        alert(resSignup.data.message);
+        const resSignin = await userAPI.localLogin(values);
+        const { accessToken, refreshToken } = resSignin.data.data;
+        storage.setItem<string>('ACCESS_TOKEN', accessToken);
+        cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
+        Router.push('/');
+
+      // eslint-disable-next-line
+    } catch (e: any) {
+      e.message = 'SignupError';
+      console.log(e);
+      alert(e.response.data.message);
+      throw e;
+    }
+  };
+
+
   return (
     <>
       <Head>
@@ -15,33 +57,75 @@ const SignUpPage = () => {
           <Logo>Art.zip</Logo>
         </Link>
         <Title>회원가입</Title>
-        <Form name="basic" initialValues={{ remember: true }} autoComplete="off">
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          autoComplete="off"
+          onFinish={onFinish}
+        >
           <Form.Item
-            name="username"
-            rules={[{ required: true, message: '!이메일을 입력해 주세요' }]}
+            name="email"
+            rules={[
+              {
+                type: 'email',
+                message: '이메일 형식이 아닙니다',
+              },
+              { required: true, message: '이메일을 입력해 주세요' },
+            ]}
           >
-            <StyledInput placeholder="이메일을 입력해 주세요" />
+            <StyledInput
+              placeholder="이메일을 입력해 주세요"
+              onChange={onChangeEmail}
+              bordered={false}
+            />
           </Form.Item>
-
-          <Form.Item
-            name="nickname"
-            rules={[{ required: true, message: '!비밀번호를 입력해 주세요' }]}
-          >
-            <StyledInput type="basic" placeholder="닉네임을 입력해 주세요" />
-          </Form.Item>
-
+          <NicknameContainer>
+            <Form.Item
+              name="nickname"
+              rules={[{ required: true, message: '닉네임을 입력해 주세요' }]}
+            >
+              <StyledInputNickname
+                type="basic"
+                placeholder="닉네임을 입력해 주세요"
+                onChange={onChangeNickname}
+                bordered={false}
+              />
+            </Form.Item>
+          </NicknameContainer>
           <Form.Item
             name="password"
-            rules={[{ required: true, message: '!비밀번호를 입력해 주세요' }]}
+            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
           >
-            <StyledInput type="password" placeholder="비밀번호를 입력해 주세요" />
+            <StyledInput
+              type="password"
+              placeholder="비밀번호를 입력해 주세요"
+              onChange={onChangePassword}
+              bordered={false}
+            />
           </Form.Item>
-
           <Form.Item
-            name="password"
-            rules={[{ required: true, message: '!비밀번호를 입력해 주세요' }]}
+            name="confirm"
+            dependencies={['password']}
+            rules={[
+              {
+                required: true,
+                message: '비밀번호를 입력해 주세요',
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('비밀번호와 일치하지 않습니다'));
+                },
+              }),
+            ]}
           >
-            <StyledInput type="password" placeholder="비밀번호를 한 번 더 입력해 주세요" />
+            <StyledInput
+              type="password"
+              placeholder="비밀번호를 한 번 더 입력해 주세요"
+              bordered={false}
+            />
           </Form.Item>
 
           <Form.Item>
@@ -83,6 +167,7 @@ const StyledInput = styled(Input)`
   padding: 10px;
   background-color: transparent;
   border: none;
+
   border-bottom: 1px solid ${({ theme }) => theme.color.blue.light};
   font-size: 18px;
   &:hover {
