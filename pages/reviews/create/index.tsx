@@ -1,3 +1,6 @@
+import { useRef, useState, FormEvent } from 'react';
+import axios from 'axios';
+import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import {
   Input,
@@ -8,105 +11,65 @@ import {
   message,
   InputRef,
   Form,
-  DatePickerProps,
   UploadFile,
 } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import { reviewAPI } from 'apis';
-import axios from 'axios';
+import { ValueOf } from 'types/utility';
+import { objectToFormData, filesToFormData } from 'utils';
 
-interface ResultItem {
-  exhibitionId: number;
-  name: string;
-  thumbnail: string;
+interface SubmitData {
+  [key: string]: number | string | boolean;
 }
 
-interface DataToSubmit {
-  exhibitionId: number;
-  date: string;
-  title: string;
-  content: string;
-  isPublic: boolean;
-}
-
-const initialData: DataToSubmit = {
-  exhibitionId: 1,
+const initialData: SubmitData = {
+  exhibitionId: 0,
   date: '',
   title: '',
   content: '',
   isPublic: true,
 };
 
-const ReviewCreatePage = () => {
-  const dataToSubmit = useRef<DataToSubmit>(initialData);
-  const [resultList, setResultList] = useState<ResultItem[]>();
-  const [isPublic, setIsPublic] = useState(true);
-  const [url, setUrl] = useState(
-    'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
-  );
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [test, setTest] = useState<FileList>();
+interface SearchResult {
+  exhibitionId: number;
+  name: string;
+  thumbnail: string;
+}
 
+const ReviewCreatePage = () => {
+  const submitData = useRef<SubmitData>(initialData);
+  const [files, setFiles] = useState<UploadFile[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>();
+  const [posterImage, setPosterImage] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
   const searchBarRef = useRef<InputRef>(null);
 
+  const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
+    submitData.current[key] = newValue;
+  };
+
   const handleSearch = async (value: string) => {
-    if (!/\S/.test(value)) {
+    const isEmpty = !/\S/.test(value);
+    if (isEmpty) {
       message.warning('한 글자 이상 입력해주세요.');
-      setResultList([]);
+      setSearchResults([]);
+      return;
     }
-    const {
-      data: { exhibitions },
-      status,
-    } = await reviewAPI.searchExhibition(value).then((res) => res.data);
-    console.log(exhibitions, status);
-    setResultList([...exhibitions]);
-  };
 
-  const handleDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    dataToSubmit.current.date = dateString;
-    console.log(dataToSubmit.current);
+    try {
+      const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data);
+      exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
+      setSearchResults([...exhibitions]);
+    } catch (error) {
+      console.error('전시회 검색 에러');
+    }
   };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dataToSubmit.current.title = e.target.value;
-    console.log(dataToSubmit.current);
-  };
-
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dataToSubmit.current.content = e.target.value;
-    console.log(dataToSubmit.current);
-  };
-
-  const handleSwitchChange = (checked: boolean) => {
-    dataToSubmit.current.isPublic = checked;
-    console.log(dataToSubmit.current);
-    setIsPublic(checked);
-  };
-
-  const handleExhibitionClick = (id: number, thumbnail: string) => {
-    setUrl(thumbnail);
-    dataToSubmit.current.exhibitionId = id;
-    console.log(dataToSubmit.current);
-  };
-
-  useEffect(() => {
-    console.log('hello', fileList);
-  }, [fileList]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const formData = await toFormData();
-
-    for (const key of formData.keys()) {
-      console.log(key);
-    }
-
-    for (const value of formData.values()) {
-      console.log(value);
-    }
+    let formData = objectToFormData(submitData.current);
+    formData = filesToFormData(files, formData);
 
     const result = await axios.post('https://server.artzip.shop/api/v1/reviews', formData, {
       headers: {
@@ -116,33 +79,6 @@ const ReviewCreatePage = () => {
     });
     console.log(result);
   };
-
-  const toFormData = async () => {
-    const formData = new FormData();
-
-    for (let i = 0; i < fileList.length; i++) {
-      formData.append('files', fileList[i].originFileObj as File);
-    }
-
-    formData.append(
-      'data',
-      new Blob([JSON.stringify({ ...dataToSubmit.current })], { type: 'application/json' }),
-    );
-
-    return formData;
-  };
-
-  const handleTest = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
-
-    if (e.target.files) {
-      setTest(e.target.files);
-    }
-  };
-
-  useEffect(() => {
-    console.log('test', test);
-  }, [test]);
 
   return (
     <>
@@ -162,48 +98,58 @@ const ReviewCreatePage = () => {
                   ref={searchBarRef}
                 />
                 <ResultList>
-                  {resultList &&
-                    resultList.map(({ exhibitionId, name, thumbnail }) => (
+                  {searchResults &&
+                    searchResults.map(({ exhibitionId, name, thumbnail }) => (
                       <ResultItem
                         key={exhibitionId}
-                        onClick={() => handleExhibitionClick(exhibitionId, thumbnail)}
+                        onClick={() => {
+                          handleChange('exhibitionId', exhibitionId);
+                          setPosterImage(thumbnail);
+                        }}
                       >
                         {name}
                       </ResultItem>
                     ))}
                 </ResultList>
               </InnerContainer>
-              <Poster src={url} alt="전시회 포스터 이미지" />
+              <Poster src={posterImage} alt="전시회 포스터 이미지" />
             </OuterContainer>
           </Form.Item>
-
           <Form.Item name="date" label="다녀 온 날짜">
-            <DateInput onChange={handleDateChange} />
+            <DateInput
+              onChange={(value) => {
+                value && handleChange('date', value.format('YYYY-MM-DD'));
+              }}
+            />
           </Form.Item>
-
           <Form.Item name="title" label="제목">
             <Input
               placeholder="제목을 입력해주세요."
               showCount
               maxLength={30}
-              onChange={handleTitleChange}
+              onChange={(e) => handleChange('title', e.target.value)}
             />
           </Form.Item>
-
           <Form.Item name="content" label="내용">
-            <TextArea placeholder="내용을 입력해주세요." autoSize onChange={handleContentChange} />
+            <TextArea
+              placeholder="내용을 입력해주세요."
+              autoSize
+              onChange={(e) => handleChange('content', e.target.value)}
+            />
           </Form.Item>
-
           <Form.Item name="files" label="사진">
-            <ImageUpload fileList={fileList} setFileList={setFileList} />
+            <ImageUpload fileList={files} setFileList={setFiles} />
           </Form.Item>
-
           <Form.Item name="isPublic" label="공개 여부">
-            <ToggleSwitch defaultChecked onChange={handleSwitchChange} />
+            <ToggleSwitch
+              defaultChecked
+              onChange={(checked) => {
+                handleChange('isPublic', checked);
+                setIsPublic(checked);
+              }}
+            />
             {isPublic ? '전체 공개' : '비공개'}
           </Form.Item>
-
-          <input type="file" onChange={handleTest} />
 
           <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
             작성완료
@@ -229,13 +175,6 @@ const ReviewEditForm = styled(Form)`
     font-size: 2rem;
     font-weight: bold;
   }
-`;
-
-const Fieldset = styled.fieldset``;
-
-const Legend = styled.legend`
-  font-size: 2.8rem;
-  font-weight: bold;
 `;
 
 const OuterContainer = styled.div`
@@ -276,18 +215,7 @@ const Poster = styled(Image)`
   width: 150px;
   height: 200px;
   flex-shrink: 0;
-`;
-
-const ImageWrapper = styled.div`
-  height: 200px;
-  flex-shrink: 0;
-`;
-
-const Label = styled.label`
-  font-size: 2.8rem;
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 6px;
+  background-color: red;
 `;
 
 const DateInput = styled(DatePicker)`
