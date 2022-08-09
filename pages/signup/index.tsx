@@ -11,6 +11,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [isUnique, setIsUnique] = useState(false);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -28,6 +29,7 @@ const SignUpPage = () => {
   const onFinish = async () => {
     const values = { email: email, nickname: nickname, password: password };
     try {
+      if (isUnique) {
         const resSignup = await userAPI.signUp(values);
         alert(resSignup.data.message);
         const resSignin = await userAPI.localLogin(values);
@@ -35,6 +37,9 @@ const SignUpPage = () => {
         storage.setItem<string>('ACCESS_TOKEN', accessToken);
         cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
         Router.push('/');
+      } else {
+        alert('닉네임 중복 확인을 진행해 주세요');
+      }
 
       // eslint-disable-next-line
     } catch (e: any) {
@@ -45,6 +50,13 @@ const SignUpPage = () => {
     }
   };
 
+  const onClick = async () => {
+    const res = await userAPI.nicknameCheck(nickname);
+    console.log(res);
+    console.log(res.data.data.isUnique);
+    setIsUnique(res.data.data.isUnique);
+    alert(res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다');
+  };
 
   return (
     <>
@@ -91,6 +103,9 @@ const SignUpPage = () => {
                 bordered={false}
               />
             </Form.Item>
+            <StyledCheckButton type="button" onClick={onClick}>
+              {isUnique ? '✔' : '중복 확인'}
+            </StyledCheckButton>
           </NicknameContainer>
           <Form.Item
             name="password"
