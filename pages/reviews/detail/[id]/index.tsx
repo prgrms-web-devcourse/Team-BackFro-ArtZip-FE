@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
 import axios from 'axios';
-import { ReviewDetail } from 'components/organism';
+import { ReviewDetail, CommentWrite, CommentList } from 'components/organism';
 import { ReviewSingleReadResponse } from 'types/apis/review';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
@@ -41,13 +41,15 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         photos={photos}
         updatedAt={updatedAt}
         exhibition={exhibition}
-        comments={comments}
         date={date}
         user={user}
         onDeleteButtonClick={() => {
           console.log('삭제!');
         }}
       />
+
+      <CommentWrite user={undefined} />
+      <CommentList comments={comments} reviewId={reviewId} />
     </>
   );
 };
