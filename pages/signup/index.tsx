@@ -28,11 +28,12 @@ const SignUpPage = () => {
 
   const onFinish = async () => {
     const values = { email: email, nickname: nickname, password: password };
+    const valuesSignin = { email: email, password: password };
     try {
       if (isUnique) {
         const resSignup = await userAPI.signUp(values);
         alert(resSignup.data.message);
-        const resSignin = await userAPI.localLogin(values);
+        const resSignin = await userAPI.localLogin(valuesSignin);
         const { accessToken, refreshToken } = resSignin.data.data;
         storage.setItem<string>('ACCESS_TOKEN', accessToken);
         cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
@@ -52,8 +53,6 @@ const SignUpPage = () => {
 
   const onClick = async () => {
     const res = await userAPI.nicknameCheck(nickname);
-    console.log(res);
-    console.log(res.data.data.isUnique);
     setIsUnique(res.data.data.isUnique);
     alert(res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다');
   };
