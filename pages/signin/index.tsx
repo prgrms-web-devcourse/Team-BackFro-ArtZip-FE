@@ -2,8 +2,28 @@ import styled from '@emotion/styled';
 import { Button, Checkbox, Form, Image, Input } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
+import { UserLocalLoginRequest } from 'types/apis/user';
+import { userAPI } from 'apis';
+import { storage, cookie } from 'utils';
+import Router from 'next/router';
 
 const SignInPage = () => {
+  const onFinish = async (values: UserLocalLoginRequest) => {
+    try {
+      const res = await userAPI.localLogin(values);
+      const { accessToken, refreshToken } = res.data.data;
+      console.log(accessToken, refreshToken);
+      storage.setItem<string>('ACCESS_TOKEN', accessToken);
+      cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
+      alert(res.data.message);
+      Router.push('/');
+      // eslint-disable-next-line
+    } catch (e: any) {
+      e.message = 'SigninError';
+      alert(e.response.data.message);
+      throw e;
+    }
+  };
   return (
     <>
       <Head>
@@ -15,11 +35,13 @@ const SignInPage = () => {
           <Logo>Art.zip</Logo>
         </Link>
         <Title>로그인</Title>
-        <Form name="basic" initialValues={{ remember: true }} autoComplete="off">
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: '!이메일을 입력해 주세요' }]}
-          >
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          autoComplete="off"
+          onFinish={onFinish}
+        >
+          <Form.Item name="email" rules={[{ required: true, message: '!이메일을 입력해 주세요' }]}>
             <StyledInput placeholder="이메일을 입력해 주세요" />
           </Form.Item>
 
