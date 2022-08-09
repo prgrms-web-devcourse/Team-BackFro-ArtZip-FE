@@ -2,8 +2,7 @@ import type { NextPage } from 'next';
 import { Pagination } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { Banner } from 'components/molecule';
-import { ExhibitionCard } from 'components/molecule';
+import { Banner, ExhibitionCard } from 'components/molecule';
 import * as S from '../../../styles/pages/exhibitionsMore';
 
 //exhibitions/more
