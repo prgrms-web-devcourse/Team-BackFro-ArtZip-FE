@@ -226,4 +226,29 @@ const StyledTextLink = styled.p`
   }
 `;
 
+const StyledCheckButton = styled.button`
+  font-size: 18px;
+  width: 100px;
+  height: 52px;
+  color: ${({ theme }) => theme.color.white};
+  border: none;
+  background-color: ${({ theme }) => theme.color.blue.light};
+  border: 1px solid ${({ theme }) => theme.color.blue.light};
+  border-radius: 15px;
+  &:hover {
+    border: none;
+    background-color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
+
+const NicknameContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const StyledInputNickname = styled(StyledInput)`
+  width: 220px;
+`;
+
 export default SignUpPage;
