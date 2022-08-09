@@ -14,6 +14,7 @@ if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
 
 declare global {
   interface Window {
+    // eslint-disable-next-line
     kakao: any;
   }
 }

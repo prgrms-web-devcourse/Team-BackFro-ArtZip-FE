@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import * as S from './style';
 interface MapProps {
   lat: number;
   lng: number;
@@ -29,7 +30,7 @@ const Map = ({ lat, lng, width, height, title, address }: MapProps) => {
         });
         marker.setMap(map);
 
-        const iwContent = `<div style="display:flex; flex-direction:column;"><div><strong>${title}</strong></div> ${address} <div><a href="https://map.kakao.com/link/map/${title},${lat},${lng}" style="color:blue; text-decoration:none;" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/${title},${lat},${lng}" style="color:blue; text-decoration:none;" target="_blank">길찾기</a></div></div>`,
+        const iwContent = `<div class="map-info-text"><div class="title"><strong>${title}</strong></div> <div>${address}</div> <div class="more-info"><a href="https://map.kakao.com/link/map/${title},${lat},${lng}" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/${title},${lat},${lng}" target="_blank">길찾기</a></div></div>`,
           iwPosition = new window.kakao.maps.LatLng(lat, lng); //인포윈도우 표시 위치입니다
 
         const infowindow = new window.kakao.maps.InfoWindow({
@@ -44,17 +45,9 @@ const Map = ({ lat, lng, width, height, title, address }: MapProps) => {
     return () => mapScript.removeEventListener('load', onLoadKakaoMap);
   }, [lat, lng]);
   return (
-    <div
-      id="map"
-      style={{
-        aspectRatio: '320/220',
-        width,
-        height,
-        boxShadow: '0px 3px 22px rgba(112, 0, 0, 0.08)',
-        borderRadius: '10px',
-        marginLeft: '15px',
-      }}
-    ></div>
+    <S.Map width={width} height={height}>
+      <div id="map" />
+    </S.Map>
   );
 };
 
