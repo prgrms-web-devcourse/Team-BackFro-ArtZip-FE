@@ -14,6 +14,9 @@ const userAPI = {
   logout: () => {
     return unAuthRequest.patch('/api/v1/users/logout');
   },
+  nicknameCheck: (nickname: string) => {
+    return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
+  },
 };
 
 export default userAPI;
