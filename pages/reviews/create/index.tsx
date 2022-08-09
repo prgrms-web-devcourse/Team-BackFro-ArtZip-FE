@@ -1,5 +1,4 @@
 import { useRef, useState, FormEvent } from 'react';
-import axios from 'axios';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import {
@@ -18,6 +17,7 @@ import { ImageUpload } from 'components/organism';
 import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
+import { useRouter } from 'next/router';
 
 interface SubmitData {
   [key: string]: number | string | boolean;
@@ -43,7 +43,7 @@ const ReviewCreatePage = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
   const [isPublic, setIsPublic] = useState(true);
-  const searchBarRef = useRef<InputRef>(null);
+  const router = useRouter();
 
   const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
     submitData.current[key] = newValue;
@@ -62,23 +62,25 @@ const ReviewCreatePage = () => {
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
     } catch (error) {
-      console.error('전시회 검색 에러');
+      console.error('전시회 검색 에러'); // TODO: 에러 처리 로직 추가
     }
-  };
+  }; // TODO: useClickAway 적용하여 searchResults 초기화
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    // TODO: 제출 전, validation 검사 추가
+
     let formData = objectToFormData(submitData.current);
     formData = filesToFormData(files, formData);
 
-    const result = await axios.post('https://server.artzip.shop/api/v1/reviews', formData, {
-      headers: {
-        accessToken: '',
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    console.log(result);
+    try {
+      await reviewAPI.createReview(formData);
+      message.success('후기 작성이 완료되었습니다.');
+      router.replace('/community');
+    } catch (error) {
+      console.error('후기 생성 실패');
+    }
   };
 
   return (
@@ -96,7 +98,6 @@ const ReviewCreatePage = () => {
                   placeholder="전시회 제목을 검색해 주세요."
                   enterButton
                   onSearch={handleSearch}
-                  ref={searchBarRef}
                 />
                 <ResultList>
                   {searchResults &&
@@ -230,6 +231,7 @@ const TextArea = styled(Input.TextArea)``;
 
 const ToggleSwitch = styled(Switch)`
   width: 54px;
+  margin-right: 14px;
 `;
 
 const SubmitButton = styled(Button)`

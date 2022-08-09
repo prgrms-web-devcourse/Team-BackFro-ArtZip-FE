@@ -10,6 +10,13 @@ const reviewAPI = {
   searchExhibition: (query: string) => {
     return unAuthRequest.get(`/api/v1/reviews/search/exhibitions?query=${query}`);
   },
+  createReview: (formData: FormData) => {
+    return authRequest.post('/api/v1/reviews', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 };
 
 export default reviewAPI;
