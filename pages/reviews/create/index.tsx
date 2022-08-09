@@ -17,6 +17,7 @@ import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
 import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
+import imageUrl from 'constants/imageUrl';
 
 interface SubmitData {
   [key: string]: number | string | boolean;
@@ -40,7 +41,7 @@ const ReviewCreatePage = () => {
   const submitData = useRef<SubmitData>(initialData);
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
-  const [posterImage, setPosterImage] = useState('');
+  const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
   const [isPublic, setIsPublic] = useState(true);
   const searchBarRef = useRef<InputRef>(null);
 
