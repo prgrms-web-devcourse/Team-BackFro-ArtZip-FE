@@ -89,7 +89,7 @@ const ReviewCreatePage = () => {
           content="전시회를 다녀오셨나요? \n 소중한 경험을 후기로 작성하고 공유해보세요:)"
         />
         <ReviewEditForm layout="vertical">
-          <Form.Item name="exhibitionId" label="다녀 온 전시회">
+          <Form.Item label="다녀 온 전시회">
             <OuterContainer>
               <InnerContainer>
                 <SearchBar
@@ -116,14 +116,14 @@ const ReviewCreatePage = () => {
               <Poster src={posterImage} alt="전시회 포스터 이미지" />
             </OuterContainer>
           </Form.Item>
-          <Form.Item name="date" label="다녀 온 날짜">
+          <Form.Item label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
                 value && handleChange('date', value.format('YYYY-MM-DD'));
               }}
             />
           </Form.Item>
-          <Form.Item name="title" label="제목">
+          <Form.Item label="제목">
             <Input
               placeholder="제목을 입력해주세요."
               showCount
@@ -131,17 +131,17 @@ const ReviewCreatePage = () => {
               onChange={(e) => handleChange('title', e.target.value)}
             />
           </Form.Item>
-          <Form.Item name="content" label="내용">
+          <Form.Item label="내용">
             <TextArea
               placeholder="내용을 입력해주세요."
               autoSize
               onChange={(e) => handleChange('content', e.target.value)}
             />
           </Form.Item>
-          <Form.Item name="files" label="사진">
+          <Form.Item label="사진">
             <ImageUpload fileList={files} setFileList={setFiles} />
           </Form.Item>
-          <Form.Item name="isPublic" label="공개 여부">
+          <Form.Item label="공개 여부">
             <ToggleSwitch
               defaultChecked
               onChange={(checked) => {
@@ -152,7 +152,7 @@ const ReviewCreatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </Form.Item>
 
-          <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
+          <SubmitButton type="primary" onClick={handleSubmit}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
@@ -216,7 +216,6 @@ const Poster = styled(Image)`
   width: 150px;
   height: 200px;
   flex-shrink: 0;
-  background-color: red;
 `;
 
 const DateInput = styled(DatePicker)`
