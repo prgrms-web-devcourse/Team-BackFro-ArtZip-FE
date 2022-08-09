@@ -12,6 +12,12 @@ if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
   import('../mocks');
 }
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
