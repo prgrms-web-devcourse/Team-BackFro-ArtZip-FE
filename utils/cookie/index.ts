@@ -4,12 +4,16 @@ const cookie = {
     return value ? value[2] : initialValue;
   },
   setItem: <T>(key: string, value: T) => {
+    const expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() + 14);
     try {
       document.cookie =
         encodeURIComponent(key) +
         '=' +
         // eslint-disable-next-line
-        encodeURIComponent(JSON.stringify(value).replace(/\"/gi, ''));
+        encodeURIComponent(JSON.stringify(value).replace(/\"/gi, '')) +
+        ';expires=' +
+        expireDate.toUTCString();
     } catch (error) {
       console.error(error);
     }

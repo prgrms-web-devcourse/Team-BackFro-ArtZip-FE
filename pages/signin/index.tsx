@@ -12,7 +12,6 @@ const SignInPage = () => {
     try {
       const res = await userAPI.localLogin(values);
       const { accessToken, refreshToken } = res.data.data;
-      console.log(accessToken, refreshToken);
       storage.setItem<string>('ACCESS_TOKEN', accessToken);
       cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
       alert(res.data.message);
