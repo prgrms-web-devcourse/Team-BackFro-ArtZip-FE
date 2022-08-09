@@ -13,7 +13,7 @@ const unAuthRequest = axios.create({
 
 authRequest.interceptors.request.use((config) => {
   if (config.headers) {
-    config.headers.authorization = 'Bearer ' + storage.getItem('TOKEN', '');
+    config.headers.accessToken = storage.getItem('ACCESS_TOKEN', '');
     return config;
   }
 });
