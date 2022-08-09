@@ -6,7 +6,6 @@ import { useUserAuthActions } from 'hooks';
 
 const SignInPage = () => {
   const { localLogin } = useUserAuthActions();
-
   return (
     <>
       <Head>
