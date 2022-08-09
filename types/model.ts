@@ -2,11 +2,11 @@ export interface ExhibitionProps {
   exhibitionId: number;
   name: string;
   thumbnail: string;
-  startDate: string;
-  endDate: string;
-  likeCount: number;
-  reviewCount: number;
-  isLiked: boolean;
+  startDate?: string;
+  endDate?: string;
+  likeCount?: number;
+  reviewCount?: number;
+  isLiked?: boolean;
 }
 
 export interface ReviewFeedProps {
@@ -47,7 +47,7 @@ export interface CommentProps {
   isEdited: boolean;
   isDeleted: boolean;
   user: UserProps;
-  childrenCount?: number;
+  childrenCount?: number; // 대 댓글이 아닐때만
 }
 
 export interface UserProps {

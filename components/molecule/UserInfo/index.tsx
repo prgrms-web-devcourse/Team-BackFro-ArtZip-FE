@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { displayDate } from 'utils';
 import { UserProps } from 'types/model';
-
+import { UserAvatar } from 'components/atom';
 interface UserInfoProps extends UserProps {
   createdDate: string;
 }
@@ -11,11 +11,7 @@ interface UserInfoProps extends UserProps {
 const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps) => {
   return (
     <UserInfoContainer>
-      <Link href={`/user/${userId}`}>
-        <a>
-          <UserInfoAvatar src={profileImage} size={48} />
-        </a>
-      </Link>
+      <UserAvatar profileImage={profileImage} userId={userId}></UserAvatar>
       <UserInfoTextWrapper>
         <Link href={`/user/${userId}`}>
           <a>
@@ -27,14 +23,6 @@ const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps
     </UserInfoContainer>
   );
 };
-
-const UserInfoAvatar = styled(Avatar)`
-  margin-right: 10px;
-  &:hover {
-    cursor: pointer;
-    filter: brightness(70%);
-  }
-`;
 
 const UserInfoContainer = styled.div`
   display: flex;

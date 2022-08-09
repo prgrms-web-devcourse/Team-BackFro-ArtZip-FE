@@ -5,7 +5,7 @@ import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecule'
 import { InfoGroup } from 'components/organism';
 import { ReviewSingleReadData } from 'types/apis/review';
 
-interface ReviewDetailProps extends ReviewSingleReadData {
+interface ReviewDetailProps extends Omit<ReviewSingleReadData, 'comments'> {
   onDeleteButtonClick: () => void;
 }
 
@@ -14,6 +14,7 @@ const ReviewDetail = ({
   createdAt,
   user,
   exhibition,
+  date,
   title,
   isPublic,
   isEdited,

@@ -8,7 +8,7 @@ import { ReviewMultiReadResponse, ReviewSingleReadData } from 'types/apis/review
 import { ReviewFeed } from 'components/organism';
 
 const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
-  const { totalPages } = data;
+  const { totalPages, content } = data;
   const [currentPage, setCurrentPage] = useState(0);
 
   const getMoreFeed = async () => {
@@ -25,7 +25,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
   };
 
   const [fetching, setFetching] = useInfiniteScroll(getMoreFeed);
-  const [feeds, setFeeds] = useState([...data.content]);
+  const [feeds, setFeeds] = useState([...content]);
 
   return (
     <>

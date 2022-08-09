@@ -13,8 +13,12 @@ const REVIEWS = {
       exhibition: {
         exhibitionId: 24,
         name: '전시회 이름',
-        startDate: '2022-10-11',
         thumbnail: 'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
+        startDate: '2022-08-04',
+        endDate: '2022-08-10',
+        isLiked: false,
+        likeCount: 5,
+        reviewCount: 3,
       },
       title: '리뷰 제목 (핸드아트)',
       content: '오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~',
@@ -47,64 +51,72 @@ const REVIEWS = {
           path: 'https://source.unsplash.com/random?5',
         },
       ],
-      comments: [
-        {
-          commentId: 0,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공1',
-            profileImage: 'https://joeschmoe.io/api/v1/random?5',
+      comments: {
+        content: [
+          {
+            commentId: 0,
+            content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 0,
+              nickname: '미스터공공1',
+              profileImage: 'https://joeschmoe.io/api/v1/random?5',
+            },
+            childrenCount: 1,
           },
-          childrenCount: 1,
-        },
-        {
-          commentId: 1,
-          content: '대댓글 기준 데이터',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공2',
-            profileImage: 'https://joeschmoe.io/api/v1/random?6',
+          {
+            commentId: 1,
+            content: '대댓글 기준 데이터',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 0,
+              nickname: '미스터공공2',
+              profileImage: 'https://joeschmoe.io/api/v1/random?6',
+            },
+            childrenCount: 3,
           },
-          childrenCount: 3,
-        },
-        {
-          commentId: 2,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공3',
-            profileImage: 'https://joeschmoe.io/api/v1/random?7',
+          {
+            commentId: 2,
+            content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 0,
+              nickname: '미스터공공3',
+              profileImage: 'https://joeschmoe.io/api/v1/random?7',
+            },
+            childrenCount: 1,
           },
-          childrenCount: 1,
-        },
-        {
-          commentId: 3,
-          content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
-          createdAt: '2022-07-26T11:26:24',
-          updatedAt: '2022-07-26T11:28:49',
-          isEdited: true,
-          isDeleted: false,
-          user: {
-            userId: 0,
-            nickname: '미스터공공4',
-            profileImage: 'https://joeschmoe.io/api/v1/random?8',
+          {
+            commentId: 3,
+            content: '꼭 가고 싶네요. 근데 시간이 될지ㅠㅠ',
+            createdAt: '2022-07-26T11:26:24',
+            updatedAt: '2022-07-26T11:28:49',
+            isEdited: true,
+            isDeleted: false,
+            user: {
+              userId: 0,
+              nickname: '미스터공공4',
+              profileImage: 'https://joeschmoe.io/api/v1/random?8',
+            },
+            childrenCount: 1,
           },
-          childrenCount: 1,
-        },
-      ],
+        ],
+      },
+      numberOfElements: 1,
+      offset: 0,
+      pageNumber: 0,
+      pageSize: 20,
+      totalElements: 1,
+      totalPages: 1,
     },
     {
       reviewId: 41,
@@ -197,16 +209,15 @@ const ReviewHandlers = [
       const new_review_data = REVIEWS.content.map((review) => {
         review.reviewId += Math.floor(Math.random() * 1000);
         review.title = '무한스크롤 더미'.concat(page);
-
+        // delete review.comments; 실제로는 빠져서 내려옴.
         return review;
       });
-
-      console.log('new_review_data', new_review_data);
 
       const new_multi_review_success = {
         message: '후기 다건 조회 성공',
         code: 200,
         data: {
+          // 빠지는 데이타
           ...new_review_data,
         },
       };

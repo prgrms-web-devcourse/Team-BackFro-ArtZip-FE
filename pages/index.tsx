@@ -5,10 +5,6 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 
 const Home: NextPage = () => {
-  //TODO : 맞춤전시회로 이동해야함
-  const [selectedArea, setSelectedArea] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState([]);
-
   const ret = {
     exhibitionId: 1,
     name: '번아웃증후군',
