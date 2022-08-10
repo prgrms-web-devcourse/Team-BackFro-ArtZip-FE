@@ -14,7 +14,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     exhibitionAPI.getUpcoming(0, 8).then((res) => {
-      console.log(res.data.data.content);
       setUpcomingExhibitions(res.data.data.content);
     });
 
