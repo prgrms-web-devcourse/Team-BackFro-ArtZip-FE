@@ -20,6 +20,12 @@ export interface UserSignupResponse extends BaseResponse {
   };
 }
 
+export interface UserReissueTokenRequest {
+  userId: number;
+  accessToken: string; // 만료된 accessToken
+  refreshToken: string; // 만료되지 않은 refreshToken
+}
+
 export interface UserInfoReviewLikeResponse extends BaseResponse {
   data?: {
     content: ReviewProps[];
