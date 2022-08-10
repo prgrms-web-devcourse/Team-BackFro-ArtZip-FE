@@ -21,7 +21,7 @@ const CommentList = ({
     if (totalPage <= currentPage) {
       return;
     }
-    const { data } = await reviewAPI.getComments(reviewId, currentPage + 1);
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
     const newComments: CommentProps[] = Object.values(data.data);
     setCurrentComments([...currentComments, ...newComments]);
     setCurrentPage(currentPage + 1);
