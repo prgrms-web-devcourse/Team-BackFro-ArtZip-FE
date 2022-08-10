@@ -10,7 +10,18 @@ const reviewAPI = {
   searchExhibition: (query: string) => {
     return unAuthRequest.get(`/api/v1/reviews/search/exhibitions?query=${query}`);
   },
-  getReviewMulti: (exhibitionId?: number, page?: number, size?: number, sort?: string) => {
+
+  getReviewMulti: ({
+    exhibitionId,
+    page,
+    size,
+    sort,
+  }: {
+    exhibitionId?: number;
+    page?: number;
+    size?: number;
+    sort?: string;
+  }) => {
     return unAuthRequest.get(`/api/v1/reviews`, {
       params: {
         ...(exhibitionId ? { exhibitionId: exhibitionId } : {}),
