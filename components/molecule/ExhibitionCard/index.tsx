@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Image } from 'antd';
 import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
@@ -19,13 +19,22 @@ const ExhibitionCard = ({
   isLiked,
 }: Required<ExhibitionProps>) => {
   const [isHover, setIsHover] = useState(false);
+  const [isOverDDay, setIsOverDDay] = useState(false);
+  const [dDay, setDDay] = useState(0);
   const mouseHover = () => setIsHover((isHover) => !isHover);
 
+  useEffect(() => {
+    setDDay(displayDday(startDate));
+    if (dDay < 0) {
+      setIsOverDDay(true);
+      setDDay(dDay * -1);
+    }
+  }, []);
   return (
     <Link href={`exhibitions/detail/${exhibitionId}`}>
       <S.ExhibitionCard>
         <Card
-          hoverable
+          className="exhibition-card"
           extra={
             isHover ? (
               <S.HoverContent>
@@ -37,12 +46,7 @@ const ExhibitionCard = ({
           }
           onMouseEnter={mouseHover}
           onMouseLeave={mouseHover}
-          style={{
-            width: '100%',
-            height: '85%',
-            position: 'relative',
-          }}
-          cover={<Image alt="card image" src={thumbnail} className="card-image" />}
+          cover={<Image alt="card image" src={thumbnail} className="card-image" preview={false} />}
         />
         <S.Description>
           <h3>{name}</h3>
@@ -50,7 +54,10 @@ const ExhibitionCard = ({
             <h3>
               {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
             </h3>
-            <S.Dday>D-{displayDday(startDate)}</S.Dday>
+            <S.Dday>
+              D{isOverDDay ? '+' : '-'}
+              {dDay}
+            </S.Dday>
           </div>
         </S.Description>
       </S.ExhibitionCard>

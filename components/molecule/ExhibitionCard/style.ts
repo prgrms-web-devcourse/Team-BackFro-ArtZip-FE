@@ -5,13 +5,22 @@ export const ExhibitionCard = styled.div`
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   width: 250px;
-  height: 350px;
+  height: 400px;
   margin-top: 20px;
   padding-bottom: 20px;
   &:hover {
-    .card-image {
+    .exhibition-card {
       filter: brightness(70%);
     }
+  }
+
+  .card-image {
+    max-height: 300px;
+    min-height: 300px;
+  }
+
+  .ant-card-body {
+    padding: 0px;
   }
 `;
 
