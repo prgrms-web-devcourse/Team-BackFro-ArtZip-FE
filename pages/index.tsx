@@ -1,7 +1,9 @@
+import Map from 'components/atoms/Map';
 import ExhibitionCard from 'components/molecule/ExhibitionCard';
 import SwiperWrapper from 'components/organism/Swiper';
 import SwiperContainer from 'components/organism/SwiperContainer';
 import type { NextPage } from 'next';
+import { homeStyle as S } from '../styles/pages';
 import React, { useState } from 'react';
 
 const Home: NextPage = () => {
@@ -256,6 +258,17 @@ const Home: NextPage = () => {
           ]}
         />
       </SwiperContainer>
+
+      <S.MapContainer>
+        <Map
+          title={'프로그래머스'}
+          lat={37.491806}
+          lng={127.029933}
+          width={800}
+          height={500}
+          address={'서울특별시 서초구 서초동 강남대로 327'}
+        />
+      </S.MapContainer>
     </div>
   );
 };
