@@ -49,7 +49,7 @@ const ExhibitionCard = ({
           cover={<Image alt="card image" src={thumbnail} className="card-image" preview={false} />}
         />
         <S.Description>
-          <h3>{name}</h3>
+          <h3 className="title">{name}</h3>
           <div>
             <h3>
               {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}

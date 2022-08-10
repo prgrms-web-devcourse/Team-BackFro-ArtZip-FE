@@ -47,6 +47,11 @@ export const Description = styled.div`
   padding-top: 5px;
   padding-left: 10px;
   padding-bottom: 5px;
+
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+  }
   div {
     display: flex;
     align-items: center;
