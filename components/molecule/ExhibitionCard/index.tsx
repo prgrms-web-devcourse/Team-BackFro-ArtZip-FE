@@ -27,7 +27,7 @@ const ExhibitionCard = ({
     setDDay(displayDday(startDate));
     if (dDay < 0) {
       setIsOverDDay(true);
-      setDDay(dDay * -1);
+      setDDay(Math.abs(dDay));
     }
   }, []);
   return (
