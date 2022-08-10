@@ -9,7 +9,7 @@ const userAPI = {
     return unAuthRequest.post(`api/v1/users/oauth/login?code=${code}`);
   },
   signUp: (payload: UserSignupRequest) => {
-    return unAuthRequest.post('api/v1/users/signup', payload);
+    return unAuthRequest.post('api/v1/users/register', payload);
   },
   logout: () => {
     return unAuthRequest.patch('/api/v1/users/logout');
@@ -17,11 +17,22 @@ const userAPI = {
   nicknameCheck: (nickname: string) => {
     return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
   },
-  getUserInfo: (userId: number) => {
-    return unAuthRequest.get(`api/v1/users/${userId}/info`);
-  },
   reissueToken: (payload: UserReissueTokenRequest) => {
     return authRequest.post(`api/v1/users/token/reissue`, payload);
+  },
+  getInformation: (userId: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info`);
+  },
+  getMyReview: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info/my/reviews?page=${page}&size=${size}`);
+  },
+  getLikeReview: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info/reviews/like?page=${page}&size=${size}`);
+  },
+  getLikeExhibition: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(
+      `/api/v1/users/${userId}/info/exhibitions/like?page=${page}&size=${size}`,
+    );
   },
 };
 
