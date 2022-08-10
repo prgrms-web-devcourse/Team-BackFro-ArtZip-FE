@@ -13,7 +13,6 @@ const ExhibitionsMore: NextPage = () => {
   const { type } = router.query;
   const [currentPage, setCurrentPage] = useState(0);
   const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
-  //TODO : 서버애서 받은 total 값 넣을 예정
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -68,7 +67,6 @@ const ExhibitionsMore: NextPage = () => {
         pageSize={10}
         onChange={(page) => {
           setCurrentPage(page - 1);
-          console.log(page - 1);
         }}
       />
     </S.ExhibitionsMore>
