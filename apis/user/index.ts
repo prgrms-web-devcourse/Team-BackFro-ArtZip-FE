@@ -1,5 +1,5 @@
-import { unAuthRequest } from 'apis/common';
-import { UserLocalLoginRequest, UserSignupRequest } from 'types/apis/user';
+import { unAuthRequest, authRequest } from 'apis/common';
+import { UserLocalLoginRequest, UserReissueTokenRequest, UserSignupRequest } from 'types/apis/user';
 
 const userAPI = {
   localLogin: (payload: UserLocalLoginRequest) => {
@@ -13,6 +13,12 @@ const userAPI = {
   },
   logout: () => {
     return unAuthRequest.patch('/api/v1/users/logout');
+  },
+  getUserInfo: (userId: number) => {
+    return unAuthRequest.get(`api/v1/users/${userId}/info`);
+  },
+  reissueToken: (payload: UserReissueTokenRequest) => {
+    return authRequest.post(`api/v1/users/token/reissue`, payload);
   },
 };
 
