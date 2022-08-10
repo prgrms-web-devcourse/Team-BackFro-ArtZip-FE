@@ -22,6 +22,10 @@ export const ExhibitionCard = styled.div`
   .ant-card-body {
     padding: 0px;
   }
+
+  .ant-card-head {
+    display: none;
+  }
 `;
 
 export const HoverContent = styled.div`
