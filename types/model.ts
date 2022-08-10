@@ -1,3 +1,4 @@
+import { ReviewSingleReadData } from './apis/review/index';
 export interface ExhibitionProps {
   exhibitionId: number;
   name: string;
@@ -10,22 +11,10 @@ export interface ExhibitionProps {
 }
 
 export interface ReviewFeedProps {
-  userProfileImage: string;
-  userName: string;
-  userId: number;
-  feedCreateDate: string;
-  exhibitionName: string;
-  exhibitionId: number;
-  feedTitle: string;
-  feedContent: string;
-  isLiked: boolean;
-  likeCount: number;
-  onLikeClick: () => void;
-  commentCount: number;
+  feed: ReviewSingleReadData;
   isMyFeed: boolean;
-  reviewId: number;
+  onLikeClick: () => void;
   onDeleteButtonClick: () => void;
-  reviewThumbnailImage: string;
 }
 
 export interface ReviewProps {

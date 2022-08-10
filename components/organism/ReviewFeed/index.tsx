@@ -1,5 +1,6 @@
 import { UserInfo } from 'components/molecule';
 import styled from '@emotion/styled';
+import * as S from './style';
 import { Card, Button, Image } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,55 +8,51 @@ import { ReviewFeedProps } from 'types/model';
 import { InfoGroup } from 'components/organism';
 import { LinkButton } from 'components/atom';
 
-const ReviewFeed = ({
-  userProfileImage,
-  userName,
-  userId,
-  feedCreateDate,
-  exhibitionName,
-  exhibitionId,
-  feedTitle,
-  feedContent,
-  isLiked,
-  likeCount,
-  onLikeClick,
-  commentCount,
-  isMyFeed,
-  reviewId,
-  onDeleteButtonClick,
-  reviewThumbnailImage,
-}: ReviewFeedProps) => {
+const ReviewFeed = ({ feed, isMyFeed, onLikeClick, onDeleteButtonClick }: ReviewFeedProps) => {
   const router = useRouter();
 
+  const {
+    exhibition,
+    reviewId,
+    isLiked,
+    likeCount,
+    title,
+    content,
+    createdAt,
+    user,
+    commentCount,
+    photos,
+  } = feed;
+
   return (
-    <ReviewFeedCard>
-      <ReviewFeedWrapper>
-        <ReviewFeedContent>
-          <ReviewFeedHeader>
+    <S.ReviewFeedCard>
+      <S.ReviewFeedWrapper>
+        <S.ReviewFeedContent>
+          <S.ReviewFeedHeader>
             <UserInfo
-              profileImage={userProfileImage}
-              nickname={userName}
-              createdDate={feedCreateDate}
-              userId={userId}
+              profileImage={user.profileImage}
+              nickname={user.nickname}
+              createdDate={createdAt}
+              userId={user.userId}
             ></UserInfo>
-            <Link href={`/exhibitions/detail/${exhibitionId}`}>
+            <Link href={`/exhibitions/detail/${exhibition.exhibitionId}`}>
               <a>
-                <ReviewTagText># {exhibitionName}</ReviewTagText>
+                <S.ReviewTagText># {exhibition.name}</S.ReviewTagText>
               </a>
             </Link>
-          </ReviewFeedHeader>
+          </S.ReviewFeedHeader>
 
-          <ReviewFeedMainWrapper>
-            <ReviewFeedMain
+          <S.ReviewFeedMainWrapper>
+            <S.ReviewFeedMain
               onClick={() => {
                 router.push(`/reviews/detail/${reviewId}`);
               }}
             >
-              <ReviewTitle>{feedTitle}</ReviewTitle>
-              <ReviewContent>{feedContent}</ReviewContent>
-            </ReviewFeedMain>
+              <S.ReviewTitle>{title}</S.ReviewTitle>
+              <S.ReviewContent>{content}</S.ReviewContent>
+            </S.ReviewFeedMain>
 
-            <ReviewFeedBottom>
+            <S.ReviewFeedBottom>
               <InfoGroup
                 isLiked={isLiked}
                 likeCount={likeCount}
@@ -64,110 +61,33 @@ const ReviewFeed = ({
               />
 
               {isMyFeed && (
-                <FeedButtonGroup>
+                <S.FeedButtonGroup>
                   <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
                   <Button type="text" onClick={onDeleteButtonClick}>
                     삭제
                   </Button>
-                </FeedButtonGroup>
+                </S.FeedButtonGroup>
               )}
-            </ReviewFeedBottom>
-          </ReviewFeedMainWrapper>
-        </ReviewFeedContent>
+            </S.ReviewFeedBottom>
+          </S.ReviewFeedMainWrapper>
+        </S.ReviewFeedContent>
 
-        <ReviewFeedThumbnail
+        <S.ReviewFeedThumbnail
           onClick={() => {
             router.push(`/reviews/detail/${reviewId}`);
           }}
         >
           <Image
-            src={reviewThumbnailImage}
+            src={photos.length ? photos[0].path : exhibition.thumbnail}
             width={150}
             height={150}
             preview={false}
             alt="Review Thumbnail"
           />
-        </ReviewFeedThumbnail>
-      </ReviewFeedWrapper>
-    </ReviewFeedCard>
+        </S.ReviewFeedThumbnail>
+      </S.ReviewFeedWrapper>
+    </S.ReviewFeedCard>
   );
 };
-
-const ReviewFeedCard = styled(Card)`
-  margin: 30px 0;
-`;
-
-const ReviewFeedWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const ReviewFeedContent = styled.div`
-  flex-grow: 1;
-  margin-right: 10px;
-`;
-
-const ReviewFeedThumbnail = styled.div`
-  &:hover {
-    filter: brightness(80%);
-  }
-`;
-
-const ReviewFeedHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const ReviewTagText = styled.p`
-  font-size: 24px;
-  color: ${({ theme }) => theme.color.blue.main};
-
-  &:hover {
-    color: ${({ theme }) => theme.color.blue.dark};
-  }
-`;
-
-const ReviewFeedMainWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const ReviewFeedMain = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const ReviewTitle = styled.p`
-  font-size: 2.2rem;
-  margin-top: 10px;
-  font-weight: bold;
-`;
-
-const ReviewContent = styled.p`
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-`;
-
-const ReviewFeedBottom = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-`;
-
-const FeedButtonGroup = styled.div`
-  display: flex;
-  align-content: center;
-`;
 
 export default ReviewFeed;
