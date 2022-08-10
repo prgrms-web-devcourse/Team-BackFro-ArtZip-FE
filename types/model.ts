@@ -8,7 +8,6 @@ export interface ExhibitionProps {
   likeCount?: number;
   reviewCount?: number;
   isLiked?: boolean;
-  style?: CSSProperties;
 }
 
 export interface ReviewFeedProps {

@@ -24,7 +24,7 @@ const ExhibitionCard = ({
 
   return (
     <Link href={`exhibitions/detail/${exhibitionId}`}>
-      <S.ExhibitionCard style={style}>
+      <S.ExhibitionCard>
         <Card
           hoverable
           extra={

@@ -95,7 +95,6 @@ const UserPage = () => {
               likeCount={exhibitionDummy.likeCount}
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
-              style={exhibitionCardStyle}
             />
             <ExhibitionCard
               exhibitionId={exhibitionDummy.exhibitionId}
@@ -106,7 +105,6 @@ const UserPage = () => {
               likeCount={exhibitionDummy.likeCount}
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
-              style={exhibitionCardStyle}
             />
             <ExhibitionCard
               exhibitionId={exhibitionDummy.exhibitionId}
@@ -117,7 +115,6 @@ const UserPage = () => {
               likeCount={exhibitionDummy.likeCount}
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
-              style={exhibitionCardStyle}
             />
             <ExhibitionCard
               exhibitionId={exhibitionDummy.exhibitionId}
@@ -128,7 +125,6 @@ const UserPage = () => {
               likeCount={exhibitionDummy.likeCount}
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
-              style={exhibitionCardStyle}
             />
             <ExhibitionCard
               exhibitionId={exhibitionDummy.exhibitionId}
@@ -139,7 +135,6 @@ const UserPage = () => {
               likeCount={exhibitionDummy.likeCount}
               reviewCount={exhibitionDummy.reviewCount}
               isLiked={exhibitionDummy.isLiked}
-              style={exhibitionCardStyle}
             />
           </ExhibitionContainer>
         </Tab>
