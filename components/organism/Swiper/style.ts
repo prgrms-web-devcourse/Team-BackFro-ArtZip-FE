@@ -4,9 +4,11 @@ export const SwiperWrapper = styled.div`
   padding: 10px;
   position: relative;
   margin-bottom: 30px;
+  height: 500px;
 
   .swiper-container {
     width: 80%;
+    height: 500px;
     padding-left: 50px;
     padding-right: 50px;
   }

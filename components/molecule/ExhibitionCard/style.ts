@@ -8,10 +8,11 @@ export const ExhibitionCard = styled.div`
   height: 400px;
   margin-top: 20px;
   padding-bottom: 20px;
+
+  position: relative;
+
   &:hover {
-    .exhibition-card {
-      filter: brightness(70%);
-    }
+    filter: brightness(50%);
   }
 
   .card-image {
@@ -24,7 +25,7 @@ export const ExhibitionCard = styled.div`
   }
 
   .ant-card-head {
-    display: none;
+    height: 0px;
   }
 `;
 
@@ -42,6 +43,7 @@ export const HoverContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
+  font-weight: 700;
   .heart-icon {
     color: ${({ theme }) => theme.color.red};
   }

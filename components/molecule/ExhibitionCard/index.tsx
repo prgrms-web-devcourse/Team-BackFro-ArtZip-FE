@@ -19,35 +19,26 @@ const ExhibitionCard = ({
   isLiked,
 }: Required<ExhibitionProps>) => {
   const [isHover, setIsHover] = useState(false);
-  const [isOverDDay, setIsOverDDay] = useState(false);
-  const [dDay, setDDay] = useState(0);
+  const dDay = displayDday(startDate);
   const mouseHover = () => setIsHover((isHover) => !isHover);
 
-  useEffect(() => {
-    setDDay(displayDday(startDate));
-    if (dDay < 0) {
-      setIsOverDDay(true);
-      setDDay(Math.abs(dDay));
-    }
-  }, []);
   return (
     <Link href={`exhibitions/detail/${exhibitionId}`}>
       <S.ExhibitionCard>
         <Card
           className="exhibition-card"
-          extra={
-            isHover ? (
-              <S.HoverContent>
-                {' '}
-                {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
-                {likeCount} <MessageOutlined /> {reviewCount}{' '}
-              </S.HoverContent>
-            ) : null
-          }
           onMouseEnter={mouseHover}
           onMouseLeave={mouseHover}
           cover={<Image alt="card image" src={thumbnail} className="card-image" preview={false} />}
-        />
+        >
+          {isHover && (
+            <S.HoverContent>
+              {' '}
+              {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
+              {likeCount} <MessageOutlined /> {reviewCount}{' '}
+            </S.HoverContent>
+          )}
+        </Card>
         <S.Description>
           <h3 className="title">{name}</h3>
           <div>
@@ -55,8 +46,8 @@ const ExhibitionCard = ({
               {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
             </h3>
             <S.Dday>
-              D{isOverDDay ? '+' : '-'}
-              {dDay}
+              D{dDay < 0 ? '+' : '-'}
+              {Math.abs(dDay)}
             </S.Dday>
           </div>
         </S.Description>
