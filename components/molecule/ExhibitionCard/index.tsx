@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { Card } from 'antd';
+import { Card, Image } from 'antd';
 import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
@@ -43,7 +42,7 @@ const ExhibitionCard = ({
             height: '85%',
             position: 'relative',
           }}
-          cover={<Image alt="card image" src={thumbnail} layout="fill" className="card-image" />}
+          cover={<Image alt="card image" src={thumbnail} className="card-image" />}
         />
         <S.Description>
           <h3>{name}</h3>

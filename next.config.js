@@ -6,9 +6,6 @@ const nextConfig = {
     config.resolve.modules.push(__dirname);
     return config;
   },
-  images:{
-    domains:['www.culture.go.kr']
-  }
 };
 
 module.exports = nextConfig;

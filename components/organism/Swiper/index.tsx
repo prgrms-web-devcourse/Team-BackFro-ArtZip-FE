@@ -2,14 +2,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Navigation, Autoplay } from 'swiper';
 import * as S from './style';
 import React, { ReactElement } from 'react';
+import { ExhibitionProps } from 'types/model';
+import { ExhibitionCard } from 'components/molecule';
 
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
-  items: ReactElement[];
+  items: ExhibitionProps[];
 }
 
 const SwiperWrapper = ({ items }: SwiperProps) => {
+  console.log(items);
   return (
     <S.SwiperWrapper>
       <div className="parent">
@@ -27,8 +30,17 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
           }}
         >
           {items.map((item) => (
-            <SwiperSlide key={item.props.exhibitionId} className="MyBanner__slideItem">
-              {item}
+            <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
+              <ExhibitionCard
+                exhibitionId={item.exhibitionId}
+                name={item.name}
+                thumbnail={item.thumbnail}
+                startDate={item.startDate!}
+                endDate={item.endDate!}
+                likeCount={item.likeCount!}
+                reviewCount={item.reviewCount!}
+                isLiked={item.isLiked!}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
