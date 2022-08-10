@@ -6,7 +6,12 @@ const reviewAPI = {
   },
 
   getComments: ({ reviewId, page, size }: { reviewId: number; page?: number; size?: number }) => {
-    return unAuthRequest.get(`/api/v1/reviews/${reviewId}/comments?page=${page}&size=${size}`);
+    return unAuthRequest.get(`/api/v1/reviews/${reviewId}/comments`, {
+      params: {
+        ...(page ? { page: page } : {}),
+        ...(size ? { size: size } : {}),
+      },
+    });
   },
   searchExhibition: (query: string) => {
     return unAuthRequest.get(`/api/v1/reviews/search/exhibitions?query=${query}`);

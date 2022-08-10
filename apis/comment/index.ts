@@ -11,8 +11,22 @@ const commentAPI = {
   delete: (commentId: number) => {
     authRequest.delete(`/api/v1/comments/${commentId}`);
   },
-  getReplies: (commentId: number, pages?: number, size?: number) => {
-    return unAuthRequest.get(`/api/v1/comments/${commentId}/children?page=${pages}&size=${size}`);
+
+  getReplies: ({
+    commentId,
+    pages,
+    size,
+  }: {
+    commentId: number;
+    pages?: number;
+    size?: number;
+  }) => {
+    return unAuthRequest.get(`/api/v1/comments/${commentId}/children`, {
+      params: {
+        ...(pages ? { pages: pages } : {}),
+        ...(size ? { size: size } : {}),
+      },
+    });
   },
 };
 

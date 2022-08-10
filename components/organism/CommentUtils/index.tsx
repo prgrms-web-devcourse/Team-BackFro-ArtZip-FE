@@ -42,7 +42,7 @@ const CommentUtils = ({ comment }: { comment: CommentProps }) => {
   };
 
   const getReply = async () => {
-    const { data } = await commentAPI.getReplies(commentId);
+    const { data } = await commentAPI.getReplies({ commentId: commentId });
 
     const newReplies: CommentProps[] = Object.values(data.data.content);
     setReplyList([...replyList, ...newReplies]);
@@ -58,12 +58,7 @@ const CommentUtils = ({ comment }: { comment: CommentProps }) => {
     if (totalPage <= currentPage + 1) {
       setHasMoreReply(false);
     }
-
-    const { data } = await axios.get(
-      `${process.env.MOCKING_API_END_POINT}api/v1/comments/${commentId}/children?page=${
-        currentPage + 1
-      }`,
-    );
+    const { data } = await commentAPI.getReplies({ commentId: commentId, pages: currentPage + 1 });
 
     const newReplies: CommentProps[] = Object.values(data.data.content);
     setReplyList([...replyList, ...newReplies]);
