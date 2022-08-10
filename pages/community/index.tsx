@@ -6,6 +6,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { ReviewMultiReadResponse, ReviewSingleReadData } from 'types/apis/review';
 import { ReviewFeed } from 'components/organism';
+import { reviewAPI } from 'apis';
+import { GetServerSidePropsContext } from 'next';
 
 const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
   const { totalPages, content } = data;
@@ -15,8 +17,9 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
     if (totalPages <= currentPage) {
       return;
     }
+
     const { data } = await axios.get(
-      `${process.env.MOCKING_API_END_POINT}api/v1/reviews?page=${currentPage + 1}`,
+      `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/reviews?page=${currentPage + 1}`,
     );
 
     const newFeeds: ReviewSingleReadData[] = Object.values(data.data);
@@ -36,43 +39,19 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
       <CommunityPageWrapper>
         <Banner title="커뮤니티" content={'Art.zip에서 다양한 전시회 후기를 만나보세요'} />
         {feeds.map((feed) => {
-          const {
-            exhibition,
-            reviewId,
-            isLiked,
-            likeCount,
-            title,
-            content,
-            createdAt,
-            user,
-            commentCount,
-            photos,
-          } = feed;
+          const { reviewId } = feed;
           return (
             <ReviewFeed
               key={reviewId}
-              userProfileImage={user.profileImage}
-              userName={user.nickname}
-              userId={user.userId}
-              feedCreateDate={createdAt}
-              exhibitionName={exhibition.name}
-              exhibitionId={exhibition.exhibitionId}
-              feedTitle={title}
-              feedContent={content}
-              isLiked={isLiked}
-              likeCount={likeCount}
+              feed={feed}
+              // 전역 상태로 관리, 우선은 true
+              isMyFeed={true}
               onLikeClick={() => {
                 console.log('like click!');
               }}
-              commentCount={commentCount}
-              // 전역 상태로 관리, 우선은 true로 표시
-              isMyFeed={true}
-              reviewId={reviewId}
               onDeleteButtonClick={() => {
                 console.log('delete click!');
               }}
-              // 사진이 없는 경우에는 디폴트 이미지, 사진이 있는 경우에는 0번 이미지
-              reviewThumbnailImage={photos.length ? photos[0].path : exhibition.thumbnail}
             />
           );
         })}
@@ -81,8 +60,9 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
   );
 };
 
-export const getServerSideProps = async () => {
-  const { data } = await axios.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`);
+export const getServerSideProps = async ({ query }: GetServerSidePropsContext) => {
+  const exhibitionId = query.exhibitionId;
+  const { data } = await reviewAPI.getReviewMulti(Number(exhibitionId));
 
   return {
     props: {
