@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import { Banner } from 'components/molecule';
 import { useInfiniteScroll } from 'hooks';
 import { useState } from 'react';
-import axios from 'axios';
 import { ReviewMultiReadResponse, ReviewSingleReadData } from 'types/apis/review';
 import { ReviewFeed } from 'components/organism';
 import { reviewAPI } from 'apis';
@@ -17,12 +16,8 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
     if (totalPages <= currentPage) {
       return;
     }
-
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/reviews?page=${currentPage + 1}`,
-    );
-
-    const newFeeds: ReviewSingleReadData[] = Object.values(data.data);
+    const { data } = await reviewAPI.getReviewMulti({ page: currentPage + 1 });
+    const newFeeds: ReviewSingleReadData[] = Object.values(data.data.content);
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
   };
@@ -62,7 +57,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
 
 export const getServerSideProps = async ({ query }: GetServerSidePropsContext) => {
   const exhibitionId = query.exhibitionId;
-  const { data } = await reviewAPI.getReviewMulti(Number(exhibitionId));
+  const { data } = await reviewAPI.getReviewMulti({ exhibitionId: Number(exhibitionId) });
 
   return {
     props: {
