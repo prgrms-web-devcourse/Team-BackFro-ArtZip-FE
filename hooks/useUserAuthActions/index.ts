@@ -4,6 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
 import { cookie, storage } from 'utils';
+import { message } from 'antd';
 
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
@@ -18,12 +19,12 @@ function useUserAuthActions() {
 
       // TODO: 전역 상태 데이터가 변경되면 구현 변경 필요
       setUser(userId);
-      alert(res.data.message);
+      message.success(res.data.message);
       router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
-      alert(e.response.data.message);
+      message.error(e.response.data.message);
       throw e;
     }
   };
