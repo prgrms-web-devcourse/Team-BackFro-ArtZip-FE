@@ -23,6 +23,9 @@ const userAPI = {
   reissueToken: (payload: UserReissueTokenRequest) => {
     return authRequest.post(`api/v1/users/token/reissue`, payload);
   },
+  getMyInfo: () => {
+    return authRequest.get(`api/v1/users/me/info`);
+  },
 };
 
 export default userAPI;
