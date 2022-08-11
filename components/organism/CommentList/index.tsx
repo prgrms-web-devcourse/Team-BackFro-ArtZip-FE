@@ -2,13 +2,13 @@ import { CommentProps } from 'types/model';
 import { PaginationResponse } from 'types/apis/base';
 import { useInfiniteScroll } from 'hooks';
 import { useState } from 'react';
-import { Comment, Tooltip } from 'antd';
 import Link from 'next/link';
+import { Comment, Tooltip } from 'antd';
 import { UserAvatar } from 'components/atom';
 import { CommentUtils } from 'components/organism';
 import moment from 'moment';
 import { displayDate } from 'utils';
-import axios from 'axios';
+import reviewAPI from 'apis/review';
 
 const CommentList = ({
   comments,
@@ -18,16 +18,10 @@ const CommentList = ({
   reviewId: number;
 }) => {
   const getMoreComment = async () => {
-    if (totalPages <= currentPage) {
+    if (totalPage <= currentPage) {
       return;
     }
-
-    const { data } = await axios.get(
-      `${process.env.MOCKING_API_END_POINT}api/v1/reviews/${reviewId}/comments?page=${
-        currentPage + 1
-      }`,
-    );
-
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
     const newComments: CommentProps[] = Object.values(data.data);
     setCurrentComments([...currentComments, ...newComments]);
     setCurrentPage(currentPage + 1);
@@ -37,7 +31,7 @@ const CommentList = ({
   const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
   const [currentComments, setCurrentComments] = useState(comments.content);
 
-  const { totalPages } = comments;
+  const { totalPage } = comments;
 
   return (
     <>

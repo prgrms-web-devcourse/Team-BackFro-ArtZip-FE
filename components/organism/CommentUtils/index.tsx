@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { UserAvatar } from 'components/atom';
 import moment from 'moment';
 import { displayDate } from 'utils';
+import { commentAPI } from 'apis';
 
 const CommentUtils = ({ comment }: { comment: CommentProps }) => {
   // TODO: 로그인한 유저의 상태, 후에 전역 상태로 판단
@@ -41,9 +42,7 @@ const CommentUtils = ({ comment }: { comment: CommentProps }) => {
   };
 
   const getReply = async () => {
-    const { data } = await axios.get(
-      `${process.env.MOCKING_API_END_POINT}api/v1/comments/${commentId}/children`,
-    );
+    const { data } = await commentAPI.getReplies({ commentId: commentId });
 
     const newReplies: CommentProps[] = Object.values(data.data.content);
     setReplyList([...replyList, ...newReplies]);
@@ -59,12 +58,7 @@ const CommentUtils = ({ comment }: { comment: CommentProps }) => {
     if (totalPage <= currentPage + 1) {
       setHasMoreReply(false);
     }
-
-    const { data } = await axios.get(
-      `${process.env.MOCKING_API_END_POINT}api/v1/comments/${commentId}/children?page=${
-        currentPage + 1
-      }`,
-    );
+    const { data } = await commentAPI.getReplies({ commentId: commentId, pages: currentPage + 1 });
 
     const newReplies: CommentProps[] = Object.values(data.data.content);
     setReplyList([...replyList, ...newReplies]);
