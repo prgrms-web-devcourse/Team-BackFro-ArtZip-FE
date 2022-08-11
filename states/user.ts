@@ -24,7 +24,6 @@ const userAtom = atom({
       }
     },
   }),
-  // default: { userId: null },
 });
 
 export default userAtom;
