@@ -1,4 +1,4 @@
-import { unAuthRequest } from 'apis/common';
+import { unAuthRequest, authRequest } from 'apis/common';
 
 const exhibitionAPI = {
   getUpcoming: (page: number, size: number) => {
@@ -21,6 +21,9 @@ const exhibitionAPI = {
     return unAuthRequest.get(
       `/api/v1/exhibitions/custom?areas=${area}&months=${month}&page=${page}&size=${size}`,
     );
+  },
+  likeToggle: (exhibitionId: number) => {
+    return authRequest.patch(`/api/v1/exhibitions/${exhibitionId}/likes`);
   },
 };
 
