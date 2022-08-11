@@ -27,6 +27,11 @@ export interface ReviewProps {
   isPublic: boolean;
   commentCount: number;
   isLiked: boolean;
+  title: string;
+  content: string;
+  photos: PhotoProps[] | null;
+  createdAt: string;
+  user: UserProps;
 }
 
 // TODO: 명세서 올라오면 수정하기
