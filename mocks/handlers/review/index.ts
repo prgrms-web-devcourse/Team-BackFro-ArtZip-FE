@@ -163,20 +163,20 @@ const REVIEWS = {
 
 const ReviewHandlers = [
   // 후기 작성
-  rest.post(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`, async (req, res, ctx) => {
-    REVIEWS.content.push(await req.json());
-    return res(
-      ctx.delay(100),
-      ctx.status(200),
-      ctx.json({
-        message: '후기 생성 성공',
-        code: 200,
-        data: {
-          reviewId: Math.floor(Math.random() * 101),
-        },
-      }),
-    );
-  }),
+  // rest.post(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`, async (req, res, ctx) => {
+  //   REVIEWS.content.push(await req.json());
+  //   return res(
+  //     ctx.delay(100),
+  //     ctx.status(200),
+  //     ctx.json({
+  //       message: '후기 생성 성공',
+  //       code: 200,
+  //       data: {
+  //         reviewId: Math.floor(Math.random() * 101),
+  //       },
+  //     }),
+  //   );
+  // }),
   // 후기 수정
   // TODO: api 명세 확인 필요
   //   rest.patch(`${process.env.MOCKING_API_END_POINT}api/v1/reviews`, async (req, res, ctx) => {
