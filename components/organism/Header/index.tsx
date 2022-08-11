@@ -3,17 +3,29 @@ import Logo from 'components/atoms/Logo';
 import { Input } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 const Header = () => {
   const { pathname } = useRouter();
+  const userId = useRecoilValue(userAtom);
 
   return (
     <StyledHeader>
       <Container>
         <Logo width={252} height={92} />
         <Utility>
-          <LinkText href="/signin" text="로그인" />
-          <LinkText href="/signup" text="회원가입" />
+          {userId ? (
+            <>
+              <LinkText href={`/users/${userId}`} text="마이페이지" />
+              <LogoutButton>로그아웃</LogoutButton>
+            </>
+          ) : (
+            <>
+              <LinkText href="/signin" text="로그인" />
+              <LinkText href="/signup" text="회원가입" />
+            </>
+          )}
         </Utility>
       </Container>
       <Container>
@@ -21,7 +33,7 @@ const Header = () => {
           <LinkText
             href="/exhibitions/custom"
             text="맞춤 전시회"
-            isCurrentPage={pathname === '/search-result'}
+            isCurrentPage={pathname === '/exhibitions/custom'}
           />
           <LinkText
             href="/reviews/create"
@@ -77,8 +89,9 @@ const Navigation = styled.nav`
 
   & > a {
     margin-right: 80px;
-    padding-bottom: 20px;
+    padding-bottom: 14px;
     margin-bottom: -3px;
+    border-bottom: 3px solid transparent;
 
     &:last-of-type {
       margin-right: 0;
@@ -86,7 +99,7 @@ const Navigation = styled.nav`
 
     &:hover {
       font-weight: 500;
-      border-bottom: 4px solid ${({ theme }) => theme.color.blue.main};
+      border-bottom: 3px solid ${({ theme }) => theme.color.blue.main};
     }
 
     @media (max-width: 767px) {
@@ -100,53 +113,21 @@ const Navigation = styled.nav`
 `;
 
 const SearchBar = styled(Input.Search)`
-  // TODO: 스타일 초기화 - 재사용
-  * {
-    border: 0;
-    outline: none;
-    background: none;
-
-    &:hover,
-    &:active,
-    &:focus,
-    &:focus-within {
-      border: 0;
-      outline: none;
-      box-shadow: none;
-      background: none;
-      --antd-wave-shadow-color: none;
-    }
-  }
-
   width: 400px;
-  margin-bottom: 20px;
-  border: 2px solid ${({ theme }) => theme.color.blue.main};
-  border-radius: 18px;
-  overflow: hidden;
+  margin-bottom: 14px;
 
-  .ant-input-affix-wrapper {
-    padding: 8px 16px;
-  }
-
-  .ant-input {
-    font-size: 1.8rem;
-  }
-
-  .ant-input-clear-icon {
-    font-size: 1.8rem;
-  }
-
-  .ant-input-search-button {
-    margin-right: 10px;
-  }
-
-  .anticon-search {
-    font-size: 2.4rem;
+  .ant-btn {
+    height: 35px;
   }
 
   @media (max-width: 767px) {
     display: none;
   }
+`;
+
+const LogoutButton = styled.button`
+  font-size: 2.4rem;
+  white-space: nowrap;
 `;
 
 export default Header;
