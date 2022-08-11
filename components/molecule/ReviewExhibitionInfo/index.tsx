@@ -8,11 +8,9 @@ const ReviewExhibitionInfo = ({ exhibition }: { exhibition: ExhibitionProps }) =
   const { exhibitionId, name, thumbnail } = exhibition;
 
   return (
-    <Card>
+    <ExhibitionInfoCard>
       <ExhibitionInfoContainer>
         <ExhibitionInfoImage
-          width={200}
-          height={250}
           src={thumbnail}
           preview={false}
           alt={`exhibition(${name}) info Image`}
@@ -32,13 +30,18 @@ const ReviewExhibitionInfo = ({ exhibition }: { exhibition: ExhibitionProps }) =
           </ExhibitionLinkContainer>
         </ExhibitionDetailContainer>
       </ExhibitionInfoContainer>
-    </Card>
+    </ExhibitionInfoCard>
   );
 };
+
+const ExhibitionInfoCard = styled(Card)`
+  height: fit-content;
+`;
 
 const ExhibitionInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  height: fit-content;
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     flex-direction: column;
     justify-content: center;
@@ -49,10 +52,22 @@ const ExhibitionInfoContainer = styled.div`
 
 const ExhibitionInfoImage = styled(Image)`
   object-fit: cover;
+  width: 200px;
+  max-height: 250px;
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    width: 150px;
+    max-height: 150px;
+  }
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 150px;
+    height: 150px;
+  }
 `;
 
 const ExhibitionDetailContainer = styled.div`
   display: flex;
+  height: fit-content;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -63,9 +78,9 @@ const ExhibitionTextContainer = styled.div`
   color: ${({ theme }) => theme.color.font.main};
 `;
 
-const ExhibitionLinkTitle = styled.span`
+const ExhibitionLinkTitle = styled.p`
   text-align: center;
-  font-size: 4rem;
+  font-size: 3rem;
   color: ${({ theme }) => theme.color.blue.main};
   font-weight: bold;
 
@@ -74,9 +89,9 @@ const ExhibitionLinkTitle = styled.span`
   }
 `;
 
-const ExhibitionLinkPlainText = styled.span`
+const ExhibitionLinkPlainText = styled.p`
   text-align: center;
-  font-size: 4rem;
+  font-size: 3rem;
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     flex-direction: column;
@@ -92,7 +107,7 @@ const ExhibitionLinkButton = styled(Button)`
   margin-top: 30px;
   background-color: ${({ theme }) => theme.color.blue.dark};
   color: ${({ theme }) => theme.color.white};
-  font-size: 4rem;
+  font-size: 2rem;
   font-weight: bold;
   width: fit-content;
   height: fit-content;

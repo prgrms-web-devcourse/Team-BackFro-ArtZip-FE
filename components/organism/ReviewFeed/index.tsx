@@ -1,7 +1,6 @@
 import { UserInfo } from 'components/molecule';
-import styled from '@emotion/styled';
 import * as S from './style';
-import { Card, Button, Image } from 'antd';
+import { Button, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReviewFeedProps } from 'types/model';
@@ -36,9 +35,11 @@ const ReviewFeed = ({ feed, isMyFeed, onLikeClick, onDeleteButtonClick }: Review
               userId={user.userId}
             ></UserInfo>
             <Link href={`/exhibitions/detail/${exhibition.exhibitionId}`}>
-              <a>
-                <S.ReviewTagText># {exhibition.name}</S.ReviewTagText>
-              </a>
+              <Tooltip title={exhibition.name}>
+                <a>
+                  <S.ReviewTagText># {exhibition.name}</S.ReviewTagText>
+                </a>
+              </Tooltip>
             </Link>
           </S.ReviewFeedHeader>
 
@@ -77,10 +78,8 @@ const ReviewFeed = ({ feed, isMyFeed, onLikeClick, onDeleteButtonClick }: Review
             router.push(`/reviews/detail/${reviewId}`);
           }}
         >
-          <Image
+          <S.FeedImage
             src={photos.length ? photos[0].path : exhibition.thumbnail}
-            width={150}
-            height={150}
             preview={false}
             alt="Review Thumbnail"
           />

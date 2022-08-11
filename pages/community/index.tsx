@@ -31,26 +31,28 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
         <title>ArtZip | COMMUNITY</title>
       </Head>
 
-      <CommunityPageWrapper>
+      <>
         <Banner title="커뮤니티" content={'Art.zip에서 다양한 전시회 후기를 만나보세요'} />
-        {feeds.map((feed) => {
-          const { reviewId } = feed;
-          return (
-            <ReviewFeed
-              key={reviewId}
-              feed={feed}
-              // 전역 상태로 관리, 우선은 true
-              isMyFeed={true}
-              onLikeClick={() => {
-                console.log('like click!');
-              }}
-              onDeleteButtonClick={() => {
-                console.log('delete click!');
-              }}
-            />
-          );
-        })}
-      </CommunityPageWrapper>
+        <CommunityFeedWrapper>
+          {feeds.map((feed) => {
+            const { reviewId } = feed;
+            return (
+              <ReviewFeed
+                key={reviewId}
+                feed={feed}
+                // 전역 상태로 관리, 우선은 true
+                isMyFeed={true}
+                onLikeClick={() => {
+                  console.log('like click!');
+                }}
+                onDeleteButtonClick={() => {
+                  console.log('delete click!');
+                }}
+              />
+            );
+          })}
+        </CommunityFeedWrapper>
+      </>
     </>
   );
 };
@@ -66,6 +68,11 @@ export const getServerSideProps = async ({ query }: GetServerSidePropsContext) =
   };
 };
 
-const CommunityPageWrapper = styled.div``;
+const CommunityFeedWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default CommunityPage;

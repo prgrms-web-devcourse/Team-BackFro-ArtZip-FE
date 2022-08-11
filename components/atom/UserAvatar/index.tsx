@@ -6,13 +6,14 @@ const UserAvatar = ({ userId, profileImage }: { userId: number; profileImage: st
   return (
     <Link href={`/user/${userId}`}>
       <a>
-        <StyledAvatar src={profileImage} size={48} />
+        <StyledAvatar src={profileImage} />
       </a>
     </Link>
   );
 };
 
 const StyledAvatar = styled(Avatar)`
+  size: 10%;
   &:hover {
     cursor: pointer;
     filter: brightness(70%);
