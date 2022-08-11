@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 import { Tabs, Image } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecule';
 import { userAPI } from 'apis';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import { UserInfoResponse } from 'types/apis/user';
 import { useEffect, useState } from 'react';
 import { ExhibitionProps } from 'types/model';
+import imageUrl from 'constants/imageUrl';
 
 interface UserPageProps {
   userInfo: {
@@ -31,17 +32,35 @@ interface UserPageProps {
 }
 
 const UserPage = ({ userInfo, userExhibitions }: UserPageProps) => {
-  const [likeExhibitions, setLikeExhibitions] = useState(userExhibitions);
-
-  console.log(likeExhibitions);
-
-  useEffect(() => {
-    setLikeExhibitions(userExhibitions);
-    console.log(likeExhibitions);
-  }, [userExhibitions]);
+  const [myReviews, setMyReviews] = useState();
+  const [likeReviews, setLikeReviews] = useState();
 
   const handleTabClick = (key: string) => {
-    console.log(key);
+    switch (key) {
+      case 'myReview': {
+        fetchMyReviews();
+        return;
+      }
+      case 'likeReview': {
+        fetchLikeReviews();
+        return;
+      }
+      case 'likeExhibition': {
+        return;
+      }
+      default:
+        console.error('유효하지 않은 key입니다.');
+    }
+  };
+
+  const fetchMyReviews = async () => {
+    const result = await userAPI.getMyReview(userInfo.userId, 0, 10).then((res) => res.data);
+    console.log(result);
+  };
+
+  const fetchLikeReviews = async () => {
+    const result = await userAPI.getLikeReview(userInfo.userId, 0, 10).then((res) => res.data);
+    console.log(result);
   };
 
   return userInfo && userExhibitions ? (
@@ -91,15 +110,15 @@ const UserPage = ({ userInfo, userExhibitions }: UserPageProps) => {
       <SideNavigation
         paths={[
           {
-            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            href: `/users/${userInfo.userId}`, // TODO: `/users/${userId}`로 수정
             pageName: '사용자 정보',
           },
           {
-            href: '/users/1/edit',
+            href: `/users/${userInfo.userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: '/users/1/edit-password',
+            href: `/users/${userInfo.userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
@@ -110,7 +129,7 @@ const UserPage = ({ userInfo, userExhibitions }: UserPageProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params) {
     const userInfo = await userAPI.getInformation(Number(params.id)).then((res) => res.data.data);
 
@@ -132,13 +151,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   };
 };
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
 
 const PageContainer = styled.div`
   position: relative;
@@ -229,17 +241,6 @@ const reviewDummy = {
   likeCount: 32,
   commentCount: 2,
   photos: ['https~', 'https~'],
-};
-
-const exhibitionDummy = {
-  exhibitionId: 1,
-  name: '번아웃증후군',
-  thumbnail: 'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
-  startDate: '2022-08-04',
-  endDate: '2022-08-10',
-  isLiked: false,
-  likeCount: 5,
-  reviewCount: 3,
 };
 
 const exhibitionCardStyle = {
