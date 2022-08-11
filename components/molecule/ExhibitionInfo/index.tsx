@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { CopyOutlined } from '@ant-design/icons';
 
 interface ExhibitionInfoProps {
   title: string;
@@ -8,6 +9,7 @@ interface ExhibitionInfoProps {
   isDate?: boolean;
   startDate?: string;
   endDate?: string;
+  copy?: boolean;
 }
 
 const ExhibitionInfo = ({
@@ -18,14 +20,25 @@ const ExhibitionInfo = ({
   isDate,
   startDate,
   endDate,
+  copy,
 }: ExhibitionInfoProps) => {
+  const onClick = () => {
+    navigator.clipboard.writeText(info);
+  };
   return (
     <InfoTextContainer>
       <InfoTextBold>{title}</InfoTextBold>
       {isLink ? (
-        <a href={`${href}`}>
-          <InfoText> {info}</InfoText>
-        </a>
+        <CopyWrapper>
+          <StyledLink href={`${href}`}>
+            <InfoText> {info}</InfoText>
+          </StyledLink>
+          {copy && (
+            <StyledButton>
+              <Clipboard onClick={onClick}></Clipboard>
+            </StyledButton>
+          )}
+        </CopyWrapper>
       ) : isDate ? (
         <InfoText>
           {startDate} ~ {endDate}
@@ -38,6 +51,12 @@ const ExhibitionInfo = ({
 };
 
 export default ExhibitionInfo;
+
+const StyledLink = styled.a`
+  &:hover {
+    color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
 
 const InfoTextContainer = styled.div`
   display: flex;
@@ -63,4 +82,26 @@ const InfoText = styled.p`
   text-overflow: ellipsis;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+`;
+
+const StyledButton = styled.button`
+  margin-left: 10px;
+  position: relative;
+  top: 2px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
+
+const Clipboard = styled(CopyOutlined)`
+  font-size: 1.9rem;
+`;
+
+const CopyWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;

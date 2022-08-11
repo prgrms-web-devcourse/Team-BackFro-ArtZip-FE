@@ -59,6 +59,7 @@ const ExhibitionDetail = ({
             isLink={true}
             href={placeUrl}
             info={placeAddr}
+            copy
           ></ExhibitionInfo>
           <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
           <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>

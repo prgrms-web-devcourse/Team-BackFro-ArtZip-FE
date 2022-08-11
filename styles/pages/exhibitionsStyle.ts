@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 
 export const ExhibitionPageContainer = styled.div`
   margin-top: 70px;
@@ -83,4 +84,21 @@ export const MapWrapper = styled.div`
     width: 400px;
     height: 200px;
   }
+`;
+
+export const StyledCopyButton = styled.button`
+  margin-left: 10px;
+  position: relative;
+  top: 1px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
+
+export const Clipboard = styled(CopyOutlined)`
+  font-size: 1.9rem;
 `;
