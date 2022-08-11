@@ -53,9 +53,9 @@ export interface UserInfoResponse extends BaseResponse {
     profileImage: string;
     email: string;
     reviewCount: number;
-    likeCount: number;
+    reviewLikeCount: number;
+    exhibitionLikeCount: number;
     commentCount: number;
-    reviews: ReviewProps[];
   };
 }
 
