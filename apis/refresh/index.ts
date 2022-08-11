@@ -22,7 +22,8 @@ function parseJwt(token: string) {
 const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
   const currentRefreshToken = cookie.getItem('REFRESH_TOKEN', '');
   const { value: currentAccessToken, expire: expireAt } = storage.getItem('ACCESS_TOKEN', '');
-  const userId = parseJwt(currentAccessToken.userId);
+
+  const userId = parseJwt(currentAccessToken).userId;
 
   // 토큰이 만료되었고, refreshToken 이 저장되어 있을 때 + 유저가 로그인 했을 때
   if (userId && moment(expireAt).diff(moment()) < 0 && currentRefreshToken) {
