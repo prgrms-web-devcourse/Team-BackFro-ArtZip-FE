@@ -8,8 +8,15 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
-  import('../mocks');
+// if (process.env.NEXT_PUBLIC_API_MOCKING === 'ENABLED') {
+//   import('../mocks');
+// }
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line
+    kakao: any;
+  }
 }
 
 function App({ Component, pageProps }: AppProps) {

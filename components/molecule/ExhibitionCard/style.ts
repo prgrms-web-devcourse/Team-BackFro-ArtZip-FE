@@ -4,14 +4,28 @@ export const ExhibitionCard = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  width: 270px;
+  width: 250px;
   height: 400px;
   margin-top: 20px;
   padding-bottom: 20px;
+
+  position: relative;
+
   &:hover {
-    .card-image {
-      filter: brightness(70%);
-    }
+    filter: brightness(50%);
+  }
+
+  .card-image {
+    max-height: 300px;
+    min-height: 300px;
+  }
+
+  .ant-card-body {
+    padding: 0px;
+  }
+
+  .ant-card-head {
+    height: 0px;
   }
 `;
 
@@ -29,6 +43,7 @@ export const HoverContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
+  font-weight: 700;
   .heart-icon {
     color: ${({ theme }) => theme.color.red};
   }
@@ -38,6 +53,11 @@ export const Description = styled.div`
   padding-top: 5px;
   padding-left: 10px;
   padding-bottom: 5px;
+
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+  }
   div {
     display: flex;
     align-items: center;

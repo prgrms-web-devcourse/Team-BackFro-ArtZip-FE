@@ -9,3 +9,11 @@ export const ExhibitionsCustom = styled.div`
     margin-bottom: 20px;
   }
 `;
+
+export const ExhibitionsCustomContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;

@@ -1,4 +1,6 @@
 import { ReviewSingleReadData } from './apis/review/index';
+import { CSSProperties } from 'react';
+
 export interface ExhibitionProps {
   exhibitionId: number;
   name: string;
