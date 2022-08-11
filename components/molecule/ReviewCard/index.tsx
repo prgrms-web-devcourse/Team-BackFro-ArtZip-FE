@@ -49,11 +49,11 @@ const ReviewCard = ({
             ) : null}
           </S.PhotoWrapper>
           <S.UserInfoContainer>
-            <Link href={`/user/${userId}`}>
+            <Link href={`/users/${userId}`}>
               <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
             </Link>
             <S.UserInfoTextContainer>
-              <Link href={`/user/${userId}`}>
+              <Link href={`/users/${userId}`}>
                 <S.UserInfoName>{nickname}</S.UserInfoName>
               </Link>
               <S.UserInfoDate>{displayDate(createdAt)}</S.UserInfoDate>
