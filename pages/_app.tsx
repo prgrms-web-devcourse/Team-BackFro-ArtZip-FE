@@ -12,6 +12,13 @@ import 'swiper/scss/pagination';
 //   import('../mocks');
 // }
 
+declare global {
+  interface Window {
+    // eslint-disable-next-line
+    kakao: any;
+  }
+}
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
