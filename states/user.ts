@@ -8,15 +8,16 @@ const userAtom = atom({
     key: 'user/get',
     get: async () => {
       if (!cookie.load('ACCESS_TOKEN')) {
-        return null;
+        return { userId: null };
       }
       try {
         const { data } = await userAPI.getMyInfo();
         const userId = data.data.userId;
         return { userId };
       } catch (error: unknown) {
+        cookie.remove('ACCESS_TOKEN');
         console.error(error);
-        return null;
+        return { userId: null };
       }
     },
   }),

@@ -4,6 +4,8 @@ import { useSetRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
 import { setToken } from 'utils';
+import cookie from 'react-cookies';
+
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
 
@@ -28,8 +30,8 @@ function useUserAuthActions() {
 
   const logout = async () => {
     userAPI.logout();
-    // TODO: 쿠키 삭제
-    setUser(null);
+    setUser({ userId: null });
+    cookie.remove('userId', { path: '/' });
   };
 
   return {
