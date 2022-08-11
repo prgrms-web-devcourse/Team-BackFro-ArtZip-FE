@@ -51,7 +51,6 @@ const ExhibitionInfoContainer = styled.div`
 `;
 
 const ExhibitionInfoImage = styled(Image)`
-  object-fit: cover;
   width: 200px;
   max-height: 250px;
 
@@ -60,7 +59,6 @@ const ExhibitionInfoImage = styled(Image)`
     max-height: 150px;
   }
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    width: 150px;
     height: 150px;
   }
 `;
