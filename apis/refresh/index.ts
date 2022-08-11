@@ -7,10 +7,7 @@ import { cookie, storage } from 'utils';
 
 const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
   const currentRefreshToken = cookie.getItem('REFRESH_TOKEN', '');
-  const { value, expire } = storage.getItem('ACCESS_TOKEN', '');
-
-  const currentAccessToken = value;
-  const expireAt = expire;
+  const { value: currentAccessToken, expire: expireAt } = storage.getItem('ACCESS_TOKEN', '');
 
   // TODO: api 준비되면 구현이 살짝 바뀜
 
@@ -33,7 +30,7 @@ const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> 
     if (!config.headers) {
       config.headers = {};
     }
-    config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+    config.headers.accessToken = newAccessToken;
   }
 
   if (!config.headers) {
@@ -41,7 +38,7 @@ const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> 
   }
 
   // 토큰이 만료되지 않은 경우
-  config.headers['Authorization'] = `Bearer ${currentAccessToken}`;
+  config.headers.accessToken = currentAccessToken;
   return config;
 };
 
