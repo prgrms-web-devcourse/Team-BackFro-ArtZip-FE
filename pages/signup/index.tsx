@@ -5,13 +5,15 @@ import Link from 'next/link';
 import { userAPI } from 'apis';
 import Router from 'next/router';
 import React, { useState } from 'react';
-import { storage, cookie } from 'utils';
+import { setToken } from 'utils';
+import { useUserAuthActions } from 'hooks';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [isUnique, setIsUnique] = useState(false);
+  const { localLogin } = useUserAuthActions();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -33,10 +35,7 @@ const SignUpPage = () => {
       if (isUnique) {
         const resSignup = await userAPI.signUp(values);
         message.success(resSignup.data.message);
-        const resSignin = await userAPI.localLogin(valuesSignin);
-        const { accessToken, refreshToken } = resSignin.data.data;
-        storage.setItem<string>('ACCESS_TOKEN', accessToken);
-        cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
+        localLogin(valuesSignin);
         Router.push('/');
       } else {
         message.error('닉네임 중복 확인을 진행해 주세요');
