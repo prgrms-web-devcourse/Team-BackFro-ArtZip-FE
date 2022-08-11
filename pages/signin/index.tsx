@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Checkbox, Form, Image, Input } from 'antd';
+import { Button, Form, message, Input } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { UserLocalLoginRequest } from 'types/apis/user';
@@ -14,12 +14,13 @@ const SignInPage = () => {
       const { accessToken, refreshToken } = res.data.data;
       storage.setItem<string>('ACCESS_TOKEN', accessToken);
       cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
-      alert(res.data.message);
+
+      message.success(res.data.message);
       Router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
-      alert(e.response.data.message);
+      message.error(e.response.data.message);
       throw e;
     }
   };

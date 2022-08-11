@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message, Space } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { userAPI } from 'apis';
@@ -32,21 +32,21 @@ const SignUpPage = () => {
     try {
       if (isUnique) {
         const resSignup = await userAPI.signUp(values);
-        alert(resSignup.data.message);
+        message.success(resSignup.data.message);
         const resSignin = await userAPI.localLogin(valuesSignin);
         const { accessToken, refreshToken } = resSignin.data.data;
         storage.setItem<string>('ACCESS_TOKEN', accessToken);
         cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
         Router.push('/');
       } else {
-        alert('닉네임 중복 확인을 진행해 주세요');
+        message.error('닉네임 중복 확인을 진행해 주세요');
       }
 
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SignupError';
       console.log(e);
-      alert(e.response.data.message);
+      message.error(e.response.data.message);
       throw e;
     }
   };
@@ -54,7 +54,10 @@ const SignUpPage = () => {
   const onClick = async () => {
     const res = await userAPI.nicknameCheck(nickname);
     setIsUnique(res.data.data.isUnique);
-    alert(res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다');
+
+    message.info(
+      res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
+    );
   };
 
   return (
