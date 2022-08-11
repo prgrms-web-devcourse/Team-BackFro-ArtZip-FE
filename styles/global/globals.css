@@ -120,3 +120,7 @@ button {
     font-size: 46%;
   }
 }
+
+.ant-image-img {
+  object-fit: cover;
+}

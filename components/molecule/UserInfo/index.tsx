@@ -33,11 +33,13 @@ const UserInfoContainer = styled.div`
 const UserInfoTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 1.5rem;
+  margin-left: 10px;
 `;
 
 const UserInfoName = styled.span`
   cursor: pointer;
-
+  white-space: nowrap;
   &:hover {
     text-decoration: underline;
   }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { storage } from 'utils';
+import { refresh, refreshErrorHandle } from './refresh';
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_END_POINT}`;
 
@@ -11,11 +11,6 @@ const unAuthRequest = axios.create({
   baseURL,
 });
 
-authRequest.interceptors.request.use((config) => {
-  if (config.headers) {
-    config.headers.accessToken = storage.getItem('ACCESS_TOKEN', '');
-    return config;
-  }
-});
+authRequest.interceptors.request.use(refresh, refreshErrorHandle);
 
 export { authRequest, unAuthRequest };

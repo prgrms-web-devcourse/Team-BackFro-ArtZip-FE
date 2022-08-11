@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
-import axios from 'axios';
 import { ReviewDetail, CommentWrite, CommentList } from 'components/organism';
 import { ReviewSingleReadResponse } from 'types/apis/review';
+import { reviewAPI } from 'apis';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
@@ -48,6 +48,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         }}
       />
 
+      {/* 전역 상태 머지 되면 로직 구현 */}
       <CommentWrite user={undefined} />
       <CommentList comments={comments} reviewId={reviewId} />
     </>
@@ -59,13 +60,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return;
   }
 
-  // TODO: 실패했을 때, 성공했을 때 나눠서 응답값을 받아야 함
   const { id } = context.params;
-  const { data } = await axios.get(`${process.env.MOCKING_API_END_POINT}api/v1/reviews/${id}`);
+  const { data } = await reviewAPI.getReviewSingle(Number(id));
 
   return {
     props: {
-      data: data.data[0],
+      data: data.data,
     },
   };
 };
