@@ -30,7 +30,7 @@ export const DescriptionWrapper = styled.div`
 `;
 
 export const PlaceInfo = styled.div`
-  margin: 5px 0px 15px 0px;
+  margin: 5px 0px 30px 0px;
   width: 80%;
   display: flex;
   font-size: 1.7rem;
@@ -71,5 +71,16 @@ export const StyledButton = styled(Button)`
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
   &:hover {
     background-color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
+
+export const MapWrapper = styled.div`
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    width: 700px;
+    height: 250px;
+  }
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 400px;
+    height: 200px;
   }
 `;
