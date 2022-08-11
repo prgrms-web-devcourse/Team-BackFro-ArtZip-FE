@@ -7,9 +7,12 @@ const userAtom = atom({
   default: selector({
     key: 'user/get',
     get: async () => {
-      if (!cookie.load('ACCESS_TOKEN')) {
+      if (!cookie.load('ACCESS_TOKEN') || !cookie.load('REFRESH_TOKEN')) {
+        cookie.remove('ACCESS_TOKEN');
+        cookie.remove('REFRESH_TOKEN');
         return { userId: null };
       }
+
       try {
         const { data } = await userAPI.getMyInfo();
         const userId = data.data.userId;
@@ -21,6 +24,7 @@ const userAtom = atom({
       }
     },
   }),
+  // default: { userId: null },
 });
 
 export default userAtom;
