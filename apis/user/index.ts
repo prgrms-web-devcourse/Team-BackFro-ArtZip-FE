@@ -9,10 +9,13 @@ const userAPI = {
     return unAuthRequest.post(`api/v1/users/oauth/login?code=${code}`);
   },
   signUp: (payload: UserSignupRequest) => {
-    return unAuthRequest.post('api/v1/users/register', payload);
+    return unAuthRequest.post('api/v1/users/signup', payload);
   },
   logout: () => {
     return unAuthRequest.patch('/api/v1/users/logout');
+  },
+  nicknameCheck: (nickname: string) => {
+    return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
   },
   getUserInfo: (userId: number) => {
     return unAuthRequest.get(`api/v1/users/${userId}/info`);
