@@ -3,6 +3,7 @@ import { HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
 import { displayDate } from 'utils';
+import { PhotoProps } from 'types/model';
 
 interface ReviewCardProps {
   reviewId: number;
@@ -15,7 +16,7 @@ interface ReviewCardProps {
   nickname: string;
   likeCount: number;
   commentCount: number;
-  photo?: string;
+  photo?: PhotoProps;
 }
 
 const ReviewCard = ({
@@ -33,15 +34,13 @@ const ReviewCard = ({
 }: ReviewCardProps) => {
   const [isHover, setIsHover] = useState(false);
   const mouseHover = () => setIsHover((isHover) => !isHover);
+
   return (
     <Link href={`/reviews/detail/${reviewId}`}>
       <a>
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-            <S.Photo
-              preview={false}
-              src={'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg'}
-            />
+            <S.Photo preview={false} src={photo ? photo.path : thumbnail} />
             {isHover ? (
               <S.HoverContent>
                 <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
@@ -50,7 +49,7 @@ const ReviewCard = ({
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/user/${userId}`}>
-              <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
+              <S.UserInfoAvatar src={profileImage} />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/user/${userId}`}>
