@@ -2,6 +2,8 @@ import { Button } from 'antd';
 import { LinkButton } from 'components/atom';
 import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecule';
 import { InfoGroup } from 'components/organism';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
 import * as S from './style';
 
@@ -26,6 +28,7 @@ const ReviewDetail = ({
   onDeleteButtonClick,
 }: ReviewDetailProps) => {
   const { userId, nickname, profileImage } = user;
+  const isMyReview = useRecoilValue(userAtom).userId === userId;
 
   return (
     <S.ReviewDetailContainer>
@@ -67,12 +70,14 @@ const ReviewDetail = ({
           />
 
           {/* TODO: 전역 유저 로그인 상태에 따라서, 수정 / 삭제 버튼 렌더링 */}
-          <S.ButtonGroup>
-            <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
-            <Button type="text" onClick={onDeleteButtonClick}>
-              삭제
-            </Button>
-          </S.ButtonGroup>
+          {isMyReview && (
+            <S.ButtonGroup>
+              <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton>
+              <Button type="text" onClick={onDeleteButtonClick}>
+                삭제
+              </Button>
+            </S.ButtonGroup>
+          )}
         </S.ReviewDetailContentUtils>
       </S.ReviewDetailBottom>
     </S.ReviewDetailContainer>
