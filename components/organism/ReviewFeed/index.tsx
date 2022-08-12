@@ -29,7 +29,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
   } = feed;
   const [isLikeFeed, setIsLikedFeed] = useState(isLiked);
   const [feedLikeCount, setFeedLikeCount] = useState(likeCount);
-  const [likeLoading, setLikeloading] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -60,7 +60,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
       return;
     }
 
-    setLikeloading(true);
+    setLikeLoading(true);
     // 낙관적 업데이트
     setIsLikedFeed(!isLikeFeed);
     setFeedLikeCount(isLikeFeed ? feedLikeCount - 1 : feedLikeCount + 1);
@@ -70,7 +70,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
     setIsLikedFeed(isLiked);
     setFeedLikeCount(likeCount);
 
-    setLikeloading(false);
+    setLikeLoading(false);
   };
 
   return (

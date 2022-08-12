@@ -1,7 +1,9 @@
-import { Button } from 'antd';
+import { Button, message } from 'antd';
+import { reviewAPI } from 'apis';
 import { LinkButton } from 'components/atom';
 import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecule';
 import { InfoGroup } from 'components/organism';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
@@ -29,6 +31,32 @@ const ReviewDetail = ({
 }: ReviewDetailProps) => {
   const { userId, nickname, profileImage } = user;
   const isMyReview = useRecoilValue(userAtom).userId === userId;
+  const [detailLikeCount, setDetailLikeCount] = useState(likeCount);
+  const [isLikeDetail, setIsLikedFeed] = useState(isLiked);
+  const [likeLoading, setLikeLoading] = useState(false);
+
+  const handleLikeClick = async (reviewId: number) => {
+    if (!userId) {
+      message.warning('로그인 해주세요');
+      return;
+    }
+
+    if (likeLoading) {
+      return;
+    }
+
+    setLikeLoading(true);
+    // 낙관적 업데이트
+    setIsLikedFeed(!isLikeDetail);
+    setDetailLikeCount(isLikeDetail ? detailLikeCount - 1 : detailLikeCount + 1);
+
+    const { data } = await reviewAPI.likeToggle(reviewId);
+    const { likeCount, isLiked } = data.data;
+    setIsLikedFeed(isLiked);
+    setDetailLikeCount(likeCount);
+
+    setLikeLoading(false);
+  };
 
   return (
     <S.ReviewDetailContainer>
@@ -64,9 +92,7 @@ const ReviewDetail = ({
             isLiked={isLiked}
             likeCount={likeCount}
             commentCount={commentCount}
-            onLikeClick={() => {
-              console.log('like Click!');
-            }}
+            onLikeClick={() => handleLikeClick(reviewId)}
           />
 
           {/* TODO: 전역 유저 로그인 상태에 따라서, 수정 / 삭제 버튼 렌더링 */}
