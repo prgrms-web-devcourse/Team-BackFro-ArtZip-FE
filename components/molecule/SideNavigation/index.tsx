@@ -7,8 +7,12 @@ import { userAtom } from 'states';
 
 interface SideNavigationProps {
   paths: Array<{
-    href: string;
+    pathName: string;
     pageName: string;
+    query?: {
+      nickname: string;
+      profileImage: string;
+    };
   }>;
 }
 
@@ -27,10 +31,20 @@ const SideNavigation = ({ paths }: SideNavigationProps) => {
 
   return (
     <Navigation>
-      {paths.map(({ href, pageName }, i) => (
-        <Link href={href} key={i}>
+      {paths.map(({ pathName, pageName, query }, i) => (
+        <Link
+          href={{
+            pathname: pathName,
+            query: {
+              nickname: query?.nickname,
+              profileImage: query?.profileImage,
+            },
+          }}
+          as={pathName}
+          key={i}
+        >
           <a>
-            <NavigationButton type={asPath === href ? 'primary' : 'default'} size="large">
+            <NavigationButton type={asPath === pathName ? 'primary' : 'default'} size="large">
               {pageName}
             </NavigationButton>
           </a>
