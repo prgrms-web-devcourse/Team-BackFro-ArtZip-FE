@@ -89,8 +89,8 @@ const ReviewDetail = ({
         <ReviewExhibitionInfo exhibition={exhibition} />
         <S.ReviewDetailContentUtils>
           <InfoGroup
-            isLiked={isLiked}
-            likeCount={likeCount}
+            isLiked={isLikeDetail}
+            likeCount={detailLikeCount}
             commentCount={commentCount}
             onLikeClick={() => handleLikeClick(reviewId)}
           />
