@@ -14,17 +14,17 @@ const UserEditPasswordPage = () => {
   return (
     <PageContainer>
       <Title>비밀번호 변경</Title>
-      <PasswordEditForm layout="vertical" form={form}>
+      <PasswordEditForm layout="vertical">
         <FormItem label="현재 비밀번호" name="oldPassword">
-          <Input type="password" onChange={(e) => handleChange('oldPassword', e.target.value)} />
+          <Input type="password" />
         </FormItem>
         <FormItem label="비밀번호" name="newPassword">
-          <Input type="password" onChange={(e) => handleChange('newPassword', e.target.value)} />
+          <Input type="password" />
         </FormItem>
         <FormItem label="비밀번호 확인" name="passwordCheck">
           <Input type="password" />
         </FormItem>
-        <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
+        <SubmitButton type="primary" htmlType="submit">
           변경
         </SubmitButton>
       </PasswordEditForm>
