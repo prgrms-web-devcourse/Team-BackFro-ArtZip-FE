@@ -29,22 +29,19 @@ const reviewAPI = {
   }) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
 
+    const params = {
+      ...(exhibitionId ? { exhibitionId: exhibitionId } : {}),
+      ...(page ? { page: page } : {}),
+      ...(size ? { size: size } : {}),
+      ...(sort ? { sort: sort } : {}),
+    };
+
     return refreshToken
       ? authRequest.get(`/api/v1/reviews`, {
-          params: {
-            ...(exhibitionId ? { exhibitionId: exhibitionId } : {}),
-            ...(page ? { page: page } : {}),
-            ...(size ? { size: size } : {}),
-            ...(sort ? { sort: sort } : {}),
-          },
+          params,
         })
       : unAuthRequest.get(`/api/v1/reviews`, {
-          params: {
-            ...(exhibitionId ? { exhibitionId: exhibitionId } : {}),
-            ...(page ? { page: page } : {}),
-            ...(size ? { size: size } : {}),
-            ...(sort ? { sort: sort } : {}),
-          },
+          params,
         });
   },
   getReviewSingle: (reviewId: number) => {
