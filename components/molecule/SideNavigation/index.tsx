@@ -14,7 +14,7 @@ interface SideNavigationProps {
 
 const SideNavigation = ({ paths }: SideNavigationProps) => {
   // TODO: beforeRender라는 속성 추가. 콜백함수를 받아서 실행할 것
-  const userId = useRecoilValue(userAtom);
+  const { userId } = useRecoilValue(userAtom);
   const {
     query: { id },
     asPath,

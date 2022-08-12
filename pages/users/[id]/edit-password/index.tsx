@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 
 const UserEditPasswordPage = () => {
-  const userId = useRecoilValue(userAtom);
+  const { userId } = useRecoilValue(userAtom);
 
   return (
     <PageContainer>

@@ -5,6 +5,7 @@ import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
 import { setToken } from 'utils';
 import cookie from 'react-cookies';
+import { message } from 'antd';
 
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
@@ -27,10 +28,17 @@ function useUserAuthActions() {
   // TODO: 소셜 로그인 로직 여기에 구현
 
   const logout = async () => {
-    userAPI.logout();
-    setUser({ userId: null });
-    cookie.remove('REFRESH_TOKEN');
-    cookie.remove('ACCESS_TOKEN', { path: '/' });
+    try {
+      await userAPI.logout();
+      setUser({ userId: null });
+      cookie.remove('REFRESH_TOKEN');
+      cookie.remove('ACCESS_TOKEN');
+      message.success('로그아웃 되었습니다.');
+      router.push('/');
+    } catch (e) {
+      message.error('로그아웃 실패'); // TODO: 에러 처리 보강
+      throw e;
+    }
   };
 
   return {
