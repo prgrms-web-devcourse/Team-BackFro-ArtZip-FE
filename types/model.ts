@@ -15,7 +15,6 @@ export interface ExhibitionProps {
 export interface ReviewFeedProps {
   feed: ReviewSingleReadData;
   isMyFeed: boolean;
-  onLikeClick: () => void;
   onDeleteButtonClick: () => void;
 }
 
