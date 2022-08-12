@@ -1,8 +1,12 @@
 import styled from '@emotion/styled';
 import { Form, Input, Button } from 'antd';
 import { SideNavigation } from 'components/molecule';
+import { useRouter } from 'next/router';
+import { FormEvent, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
+import { UserChangePasswordRequest } from 'types/apis/user';
+import { ValueOf } from 'types/utility';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
@@ -10,31 +14,33 @@ const UserEditPasswordPage = () => {
   return (
     <PageContainer>
       <Title>비밀번호 변경</Title>
-      <PasswordEditForm layout="vertical">
-        <FormItem label="현재 비밀번호">
+      <PasswordEditForm layout="vertical" form={form}>
+        <FormItem label="현재 비밀번호" name="oldPassword">
+          <Input type="password" onChange={(e) => handleChange('oldPassword', e.target.value)} />
+        </FormItem>
+        <FormItem label="비밀번호" name="newPassword">
+          <Input type="password" onChange={(e) => handleChange('newPassword', e.target.value)} />
+        </FormItem>
+        <FormItem label="비밀번호 확인" name="passwordCheck">
           <Input type="password" />
         </FormItem>
-        <FormItem label="비밀번호">
-          <Input type="password" />
-        </FormItem>
-        <FormItem label="비밀번호 확인">
-          <Input type="password" />
-        </FormItem>
-        <SubmitButton type="primary">변경</SubmitButton>
+        <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
+          변경
+        </SubmitButton>
       </PasswordEditForm>
 
       <SideNavigation
         paths={[
           {
-            href: `/users/${userId}`,
+            pathName: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: `/users/${userId}/edit`,
+            pathName: `/users/${userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: `/users/${userId}/edit-password`,
+            pathName: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
