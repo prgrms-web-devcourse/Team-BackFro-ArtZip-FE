@@ -9,7 +9,6 @@ import { message } from 'antd';
 
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
-
   const localLogin = async (values: UserLocalLoginRequest) => {
     try {
       const res = await userAPI.localLogin(values);
@@ -26,7 +25,6 @@ function useUserAuthActions() {
       throw e;
     }
   };
-
   // TODO: 소셜 로그인 로직 여기에 구현
 
   const logout = async () => {
@@ -48,5 +46,4 @@ function useUserAuthActions() {
     logout,
   };
 }
-
 export default useUserAuthActions;

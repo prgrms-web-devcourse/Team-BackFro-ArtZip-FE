@@ -19,7 +19,7 @@ export interface ExhibitionLikeToggleResponse extends BaseResponse {
 
 //전시회 상세조회
 export interface ExhibitionDetailResponse extends BaseResponse {
-  data?: {
+  data: {
     exhibitionId: number;
     name: string;
     thumbnail: string;
@@ -29,15 +29,15 @@ export interface ExhibitionDetailResponse extends BaseResponse {
     url: string;
     placeUrl: string;
     inquiry: string;
-    fee: string;
+    // fee: string;
     genre: string | null;
     description: string | null;
     likeCount: number;
-    placeAddr: string;
+    placeAddress: string;
     lat: number;
     lng: number;
     isLiked: boolean;
-    reviews: ReviewProps[];
+    reviews: ReviewProps[] | null;
   };
 }
 
