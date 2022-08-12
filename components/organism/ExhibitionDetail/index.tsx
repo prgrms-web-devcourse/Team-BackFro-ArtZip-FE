@@ -20,7 +20,6 @@ interface ExhibitionDetailProps {
   genre: string | null;
   isLiked: boolean;
   likeCount: number;
-  onLikeClick: () => void;
 }
 
 const ExhibitionDetail = ({
@@ -38,8 +37,11 @@ const ExhibitionDetail = ({
   genre,
   isLiked,
   likeCount,
-  onLikeClick,
 }: ExhibitionDetailProps) => {
+  const handleLikeClick = async () => {
+    const res = await exhibitionAPI.likeToggle(exhibitionId);
+    console.log(res);
+  };
   return (
     <S.ExhibitionContainer>
       <S.Thumbnail src={thumbnail} preview={false}></S.Thumbnail>
@@ -66,7 +68,7 @@ const ExhibitionDetail = ({
           <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
         </S.InfoContainer>
         <S.IconContainer>
-          <LikeInfo isLiked={isLiked} likeCount={likeCount} onClick={onLikeClick} />
+          <LikeInfo isLiked={isLiked} likeCount={likeCount} onClick={handleLikeClick} />
           {'    '}
           <ShareAltOutlined style={{ padding: 5 }} />
         </S.IconContainer>

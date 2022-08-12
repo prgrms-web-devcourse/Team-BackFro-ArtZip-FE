@@ -33,11 +33,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
     reviews,
   } = data;
 
-  const onLikeClick = async () => {
-    await exhibitionAPI.likeToggle(exhibitionId);
-  };
-
-  const onCopyClick = () => {
+  const handleCopyClick = () => {
     navigator.clipboard.writeText(placeAddress);
   };
 
@@ -62,7 +58,6 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
           genre={genre}
           isLiked={isLiked}
           likeCount={likeCount}
-          onLikeClick={onLikeClick}
         ></ExhibitionDetail>
         <h3>전시 소개</h3>
         <S.DescriptionWrapper>{description}</S.DescriptionWrapper>
@@ -71,7 +66,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
           장소 | {placeAddress}{' '}
           {
             <S.StyledCopyButton>
-              <S.Clipboard onClick={onCopyClick}></S.Clipboard>
+              <S.Clipboard onClick={handleCopyClick}></S.Clipboard>
             </S.StyledCopyButton>
           }
         </S.PlaceInfo>
