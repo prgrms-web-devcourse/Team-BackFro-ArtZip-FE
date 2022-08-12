@@ -8,9 +8,8 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 import cookies from 'next-cookies';
-import { authRequest } from 'apis/common';
-import cookie from 'react-cookies';
 import App from 'next/app';
+import { setToken } from 'utils';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -35,15 +34,12 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
+  const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
-  if (!accessTokenByCookie) {
-    const refreshTokenByCookie = allCookies['REFRESH_TOKEN'] || '';
-    authRequest.interceptors.request.use(async (config) => {
-      if (config.headers) {
-        config.headers.accessToken = cookie.load('ACCESS_TOKEN');
-        return config;
-      }
-    });
+  // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
+  if (refreshTokenByCookie) {
+    accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
+    refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
   }
 
   return { ...appProps };
