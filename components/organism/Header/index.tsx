@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
@@ -9,6 +9,19 @@ import { userAtom } from 'states';
 const Header = () => {
   const { pathname } = useRouter();
   const userId = useRecoilValue(userAtom);
+  const router = useRouter();
+
+  const handleSearchExhibition = (value: string) => {
+    const isEmpty = !/\S/.test(value);
+    if (isEmpty || value.length < 2) {
+      message.warning('두 글자 이상 입력해주세요.');
+      return;
+    }
+    router.push({
+      pathname: '/search-result',
+      query: { exhibition: value },
+    });
+  };
 
   return (
     <StyledHeader>
@@ -42,7 +55,11 @@ const Header = () => {
           />
           <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
         </Navigation>
-        <SearchBar placeholder="전시회 제목을 검색해주세요." allowClear />
+        <SearchBar
+          placeholder="전시회 제목을 검색해주세요."
+          allowClear
+          onSearch={handleSearchExhibition}
+        />
       </Container>
     </StyledHeader>
   );
