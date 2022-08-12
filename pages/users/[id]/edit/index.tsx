@@ -1,15 +1,27 @@
 import styled from '@emotion/styled';
-import { Button, Form, Input, Image } from 'antd';
-import { useState, useRef, ChangeEvent } from 'react';
+import { Button, Form, Input, Image, message } from 'antd';
+import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { SideNavigation } from 'components/molecule';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
+import { useRouter } from 'next/router';
+import { objectToFormData, filesToFormData } from 'utils';
+import { userAPI } from 'apis';
+
+interface SubmitData {
+  nickname: string;
+  profileImage: string;
+}
 
 const UserEditPage = () => {
-  const [image, setImage] = useState<string>(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-  );
-  const [file, setFile] = useState<FileList>(); // TODO: 업로드한 파일 저장 미구현 상태. 추후 구현 필요
+  const route = useRouter();
+  const { nickname, profileImage } = route.query;
+  const submitData = useRef<SubmitData>({
+    nickname: nickname as string,
+    profileImage: profileImage as string,
+  });
+  const submitImageFile = useRef<FileList>();
+  const [previewImage, setPreviewImage] = useState(profileImage);
   const fileInput = useRef<HTMLInputElement>(null);
   const { userId } = useRecoilValue(userAtom);
 
@@ -19,9 +31,37 @@ const UserEditPage = () => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    console.log(files);
+    if (files) {
+      submitImageFile.current = files;
+
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        fileReader.result && setPreviewImage(fileReader.result as string);
+      };
+      fileReader.readAsDataURL(files[0]);
+    }
+  };
+
+  const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    submitData.current.nickname = e.target.value;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    let formData = objectToFormData('data', submitData.current);
+    if (submitImageFile.current) {
+      formData = filesToFormData('profileImage', submitImageFile.current, formData);
+    }
+
+    try {
+      await userAPI.changeMyInfo(formData);
+      message.success('나의 프로필 정보가 수정되었습니다.');
+    } catch (error) {
+      console.error('프로필 정보 실패'); // TODO: 에러 처리 보완
+    }
   };
 
   return (
@@ -30,7 +70,7 @@ const UserEditPage = () => {
       <ProfileEditForm layout="vertical">
         <FormItem label="프로필 이미지">
           <ProfileImage
-            src={image}
+            src={previewImage as string}
             alt="profile image"
             onClick={handleImageClick}
             preview={false}
@@ -40,14 +80,14 @@ const UserEditPage = () => {
             style={{ display: 'none' }}
             accept="image/jpg, image/png, image/jpeg"
             name="profile_img"
-            onChange={handleChange}
+            onChange={handleImageChange}
             ref={fileInput}
           />
         </FormItem>
         <FormItem label="닉네임">
-          <Input type="text" defaultValue="미스터공공" />
+          <Input type="text" defaultValue={nickname} onChange={handleNicknameChange} />
         </FormItem>
-        <SubmitButton type="primary" htmlType="submit">
+        <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
           저장
         </SubmitButton>
       </ProfileEditForm>
@@ -55,15 +95,15 @@ const UserEditPage = () => {
       <SideNavigation
         paths={[
           {
-            href: `/users/${userId}`,
+            pathName: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: `/users/${userId}/edit`,
+            pathName: `/users/${userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: `/users/${userId}/edit-password`,
+            pathName: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
