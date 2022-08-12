@@ -71,8 +71,8 @@ const ReviewCreatePage = () => {
 
     // TODO: 제출 전, validation 검사 추가
 
-    let formData = objectToFormData(submitData.current);
-    formData = filesToFormData(files, formData);
+    let formData = objectToFormData('data', submitData.current);
+    formData = filesToFormData('files', files, formData);
 
     try {
       await reviewAPI.createReview(formData);
