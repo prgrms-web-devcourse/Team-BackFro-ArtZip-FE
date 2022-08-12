@@ -47,7 +47,7 @@ export interface UserInfoExhibitionLikeResponse extends BaseResponse {
 // }
 
 export interface UserInfoResponse extends BaseResponse {
-  data?: {
+  data: {
     nickname: string;
     userId: number;
     profileImage: string;
@@ -73,3 +73,8 @@ export interface UserCheckResponse extends BaseResponse {
 // users/me/info
 // users/me/info/exhibitions/like?
 // users/me/info/reviews/like?
+
+export interface UserChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+}
