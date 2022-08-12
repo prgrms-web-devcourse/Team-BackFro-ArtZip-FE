@@ -17,10 +17,10 @@ interface ExhibitionDetailProps {
   area: string;
   fee: string;
   inquiry: string;
-  genre: string;
+  genre: string | null;
   isLiked: boolean;
   likeCount: number;
-  onLikeClick?: () => void;
+  onLikeClick: () => void;
 }
 
 const ExhibitionDetail = ({

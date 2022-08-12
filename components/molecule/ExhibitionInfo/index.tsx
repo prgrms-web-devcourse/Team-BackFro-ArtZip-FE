@@ -3,7 +3,7 @@ import { CopyOutlined } from '@ant-design/icons';
 
 interface ExhibitionInfoProps {
   title: string;
-  info?: string;
+  info?: string | null;
   href?: string;
   isLink?: boolean;
   isDate?: boolean;
@@ -23,7 +23,7 @@ const ExhibitionInfo = ({
   copy,
 }: ExhibitionInfoProps) => {
   const onClick = () => {
-    navigator.clipboard.writeText(info);
+    navigator.clipboard.writeText(info ? info : '');
   };
   return (
     <InfoTextContainer>
@@ -35,7 +35,7 @@ const ExhibitionInfo = ({
           </StyledLink>
           {copy && (
             <StyledButton>
-              <Clipboard onClick={onClick}></Clipboard>
+              <Clipboard onClick={onClick} />
             </StyledButton>
           )}
         </CopyWrapper>

@@ -48,7 +48,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
       </Head>
       <S.ExhibitionPageContainer>
         <ExhibitionDetail
-          exhibitionId={data.exhibitionId}
+          exhibitionId={exhibitionId}
           name={name}
           thumbnail={thumbnail}
           startDate={startDate}
@@ -76,25 +76,27 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
           }
         </S.PlaceInfo>
         <Map lat={lat} lng={lng} width={800} height={450} title={'지도'} address={placeAddress} />
-        <h3>후기({reviews.length}개)</h3>
-        <S.ReviewContainer>
-          {reviews.map((review) => (
-            <ReviewCard
-              key={review.reviewId}
-              reviewId={review.reviewId}
-              thumbnail={thumbnail}
-              title={review.title}
-              content={review.content}
-              createdAt={review.createdAt}
-              likeCount={review.likeCount}
-              commentCount={review.commentCount}
-              photo={review.photos[0]}
-              userId={review.user.userId}
-              nickname={review.user.nickname}
-              profileImage={review.user.profileImage}
-            ></ReviewCard>
-          ))}
-        </S.ReviewContainer>
+        <h3>후기({reviews && reviews.length}개)</h3>
+        {reviews && (
+          <S.ReviewContainer>
+            {reviews.map((review) => (
+              <ReviewCard
+                key={review.reviewId}
+                reviewId={review.reviewId}
+                thumbnail={thumbnail}
+                title={review.title}
+                content={review.content}
+                createdAt={review.createdAt}
+                likeCount={review.likeCount}
+                commentCount={review.commentCount}
+                photo={review.photos}
+                userId={review.user.userId}
+                nickname={review.user.nickname}
+                profileImage={review.user.profileImage}
+              ></ReviewCard>
+            ))}
+          </S.ReviewContainer>
+        )}
         <S.ButtonContainer>
           <Link href={`/community/${exhibitionId}`}>
             <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
