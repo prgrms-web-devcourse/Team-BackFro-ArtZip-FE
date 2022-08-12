@@ -11,6 +11,7 @@ import cookies from 'next-cookies';
 import { authRequest } from 'apis/common';
 import cookie from 'react-cookies';
 import App from 'next/app';
+import { setToken } from 'utils';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -35,15 +36,11 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
+  const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
-  if (!accessTokenByCookie) {
-    const refreshTokenByCookie = allCookies['REFRESH_TOKEN'] || '';
-    authRequest.interceptors.request.use(async (config) => {
-      if (config.headers) {
-        config.headers.accessToken = cookie.load('ACCESS_TOKEN');
-        return config;
-      }
-    });
+  if (refreshTokenByCookie) {
+    accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
+    refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
   }
 
   return { ...appProps };
