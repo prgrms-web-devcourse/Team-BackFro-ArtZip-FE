@@ -1,8 +1,12 @@
 import styled from '@emotion/styled';
 import { Form, Input, Button } from 'antd';
 import { SideNavigation } from 'components/molecule';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 const UserEditPasswordPage = () => {
+  const userId = useRecoilValue(userAtom);
+
   return (
     <PageContainer>
       <Title>비밀번호 변경</Title>
@@ -22,15 +26,15 @@ const UserEditPasswordPage = () => {
       <SideNavigation
         paths={[
           {
-            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: '/users/1/edit',
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: '/users/1/edit-password',
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
@@ -41,7 +45,7 @@ const UserEditPasswordPage = () => {
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding-left: 200px;
 `;
