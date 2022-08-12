@@ -3,14 +3,11 @@ import router from 'next/router';
 import { useSetRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
-import { cookie, storage } from 'utils';
-import { message } from 'antd';
 import { setToken } from 'utils';
 import cookie from 'react-cookies';
 
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
-
   const localLogin = async (values: UserLocalLoginRequest) => {
     try {
       const res = await userAPI.localLogin(values);
@@ -18,16 +15,15 @@ function useUserAuthActions() {
       setToken('ACCESS_TOKEN', accessToken);
       setToken('REFRESH_TOKEN', refreshToken);
       setUser({ userId: userId });
-      message.success(res.data.message);
+      alert(res.data.message);
       router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
-      message.error(e.response.data.message);
+      alert(e.response.data.message);
       throw e;
     }
   };
-
   // TODO: 소셜 로그인 로직 여기에 구현
 
   const logout = async () => {
@@ -42,5 +38,4 @@ function useUserAuthActions() {
     logout,
   };
 }
-
 export default useUserAuthActions;
