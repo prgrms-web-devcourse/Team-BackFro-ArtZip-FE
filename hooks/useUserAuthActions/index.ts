@@ -31,7 +31,8 @@ function useUserAuthActions() {
   const logout = async () => {
     userAPI.logout();
     setUser({ userId: null });
-    cookie.remove('userId', { path: '/' });
+    cookie.remove('REFRESH_TOKEN');
+    cookie.remove('ACCESS_TOKEN', { path: '/' });
   };
 
   return {
