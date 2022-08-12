@@ -1,10 +1,29 @@
-import { atom } from 'recoil';
+import { userAPI } from 'apis';
+import { atom, selector } from 'recoil';
+import cookie from 'react-cookies';
 
-// 유효한 유저인지 체크하는 로직 필요 (토큰 이용, selector 이용)
-// TODO: 후에 API 만들어지면 비동기 통신으로 바꾸기
 const userAtom = atom({
-  key: 'users',
-  default: null,
+  key: 'user',
+  default: selector({
+    key: 'user/get',
+    get: async () => {
+      if (!cookie.load('ACCESS_TOKEN') || !cookie.load('REFRESH_TOKEN')) {
+        cookie.remove('ACCESS_TOKEN');
+        cookie.remove('REFRESH_TOKEN');
+        return { userId: null };
+      }
+
+      try {
+        const { data } = await userAPI.getMyInfo();
+        const userId = data.data.userId;
+        return { userId };
+      } catch (error: unknown) {
+        cookie.remove('ACCESS_TOKEN');
+        console.error(error);
+        return { userId: null };
+      }
+    },
+  }),
 });
 
 export default userAtom;

@@ -21,7 +21,10 @@ const userAPI = {
     return unAuthRequest.get(`api/v1/users/${userId}/info`);
   },
   reissueToken: (payload: UserReissueTokenRequest) => {
-    return authRequest.post(`api/v1/users/token/reissue`, payload);
+    return unAuthRequest.post(`api/v1/users/token/reissue`, payload);
+  },
+  getMyInfo: () => {
+    return authRequest.get(`api/v1/users/me/info`);
   },
 };
 
