@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { Button, Form, Input, Image } from 'antd';
 import { useState, useRef, ChangeEvent } from 'react';
 import { SideNavigation } from 'components/molecule';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 const UserEditPage = () => {
   const [image, setImage] = useState<string>(
@@ -9,6 +11,7 @@ const UserEditPage = () => {
   );
   const [file, setFile] = useState<FileList>(); // TODO: 업로드한 파일 저장 미구현 상태. 추후 구현 필요
   const fileInput = useRef<HTMLInputElement>(null);
+  const userId = useRecoilValue(userAtom);
 
   const handleImageClick = () => {
     if (fileInput.current) {
@@ -52,15 +55,15 @@ const UserEditPage = () => {
       <SideNavigation
         paths={[
           {
-            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: '/users/1/edit',
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: '/users/1/edit-password',
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
@@ -71,7 +74,7 @@ const UserEditPage = () => {
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding-left: 200px;
 `;

@@ -34,6 +34,23 @@ export interface ReviewProps {
   user: UserProps;
 }
 
+export interface ReviewCardProps {
+  reviewId: number;
+  user: UserProps;
+  exhibition: ExhibitionProps;
+  date: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  isEdited: boolean;
+  isLiked: boolean;
+  isPublic: boolean;
+  likeCount: number;
+  commentCount: number;
+  photos: PhotoProps[];
+}
+
 // TODO: 명세서 올라오면 수정하기
 export interface CommentProps {
   commentId: number;

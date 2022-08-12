@@ -5,6 +5,8 @@ import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
 import { cookie, storage } from 'utils';
 import { message } from 'antd';
+import { setToken } from 'utils';
+import cookie from 'react-cookies';
 
 function useUserAuthActions() {
   const setUser = useSetRecoilState(userAtom);
@@ -13,12 +15,9 @@ function useUserAuthActions() {
     try {
       const res = await userAPI.localLogin(values);
       const { userId, accessToken, refreshToken } = res.data.data;
-
-      storage.setItem<string>('ACCESS_TOKEN', accessToken);
-      cookie.setItem<string>('REFRESH_TOKEN', refreshToken);
-
-      // TODO: 전역 상태 데이터가 변경되면 구현 변경 필요
-      setUser(userId);
+      setToken('ACCESS_TOKEN', accessToken);
+      setToken('REFRESH_TOKEN', refreshToken);
+      setUser({ userId: userId });
       message.success(res.data.message);
       router.push('/');
       // eslint-disable-next-line
@@ -33,7 +32,9 @@ function useUserAuthActions() {
 
   const logout = async () => {
     userAPI.logout();
-    setUser(null);
+    setUser({ userId: null });
+    cookie.remove('REFRESH_TOKEN');
+    cookie.remove('ACCESS_TOKEN', { path: '/' });
   };
 
   return {
