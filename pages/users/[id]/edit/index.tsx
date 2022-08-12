@@ -11,7 +11,7 @@ const UserEditPage = () => {
   );
   const [file, setFile] = useState<FileList>(); // TODO: 업로드한 파일 저장 미구현 상태. 추후 구현 필요
   const fileInput = useRef<HTMLInputElement>(null);
-  const userId = useRecoilValue(userAtom);
+  const { userId } = useRecoilValue(userAtom);
 
   const handleImageClick = () => {
     if (fileInput.current) {
