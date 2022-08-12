@@ -18,8 +18,8 @@ const userAtom = atom({
         const userId = data.data.userId;
         return { userId };
       } catch (error: unknown) {
+        cookie.remove('REFRESH_TOKEN');
         cookie.remove('ACCESS_TOKEN');
-        console.error(error);
         return { userId: null };
       }
     },
