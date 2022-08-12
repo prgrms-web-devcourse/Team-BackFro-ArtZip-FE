@@ -155,9 +155,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
 // TODO: 추후 getStaticProps로 변경 예정 (getStaticPaths도 추가)
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params) {
-    const userInfoResponse = await userAPI
-      .getInformation(Number(params.id))
-      .then((res) => res.data);
+    const userInfoResponse = await userAPI.getUserInfo(Number(params.id)).then((res) => res.data); // 추후 then을 await으로 변경
 
     const userReviewResponse = await userAPI
       .getMyReview(Number(params.id), 0, 10)

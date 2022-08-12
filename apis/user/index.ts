@@ -9,7 +9,7 @@ const userAPI = {
     return unAuthRequest.post(`api/v1/users/oauth/login?code=${code}`);
   },
   signUp: (payload: UserSignupRequest) => {
-    return unAuthRequest.post('api/v1/users/register', payload);
+    return unAuthRequest.post('api/v1/users/signup', payload);
   },
   logout: () => {
     return unAuthRequest.patch('/api/v1/users/logout');
@@ -20,7 +20,7 @@ const userAPI = {
   reissueToken: (payload: UserReissueTokenRequest) => {
     return authRequest.post(`api/v1/users/token/reissue`, payload);
   },
-  getInformation: (userId: number) => {
+  getUserInfo: (userId: number) => {
     return unAuthRequest.get(`/api/v1/users/${userId}/info`);
   },
   getMyReview: (userId: number, page: number, size: number) => {
