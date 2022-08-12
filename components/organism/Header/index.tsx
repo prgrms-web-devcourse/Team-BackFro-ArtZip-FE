@@ -5,11 +5,13 @@ import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
+import { useUserAuthActions } from 'hooks';
 
 const Header = () => {
   const { pathname } = useRouter();
-  const userId = useRecoilValue(userAtom);
+  const { userId } = useRecoilValue(userAtom);
   const router = useRouter();
+  const { logout } = useUserAuthActions();
 
   const handleSearchExhibition = (value: string) => {
     const isEmpty = !/\S/.test(value);
@@ -23,6 +25,8 @@ const Header = () => {
     });
   };
 
+  console.log(userId);
+
   return (
     <StyledHeader>
       <Container>
@@ -31,7 +35,7 @@ const Header = () => {
           {userId ? (
             <>
               <LinkText href={`/users/${userId}`} text="마이페이지" />
-              <LogoutButton>로그아웃</LogoutButton>
+              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
             </>
           ) : (
             <>

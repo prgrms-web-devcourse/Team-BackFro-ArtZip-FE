@@ -12,7 +12,7 @@ const userAPI = {
     return unAuthRequest.post('api/v1/users/signup', payload);
   },
   logout: () => {
-    return unAuthRequest.patch('/api/v1/users/logout');
+    return authRequest.patch('/api/v1/users/logout');
   },
   nicknameCheck: (nickname: string) => {
     return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
