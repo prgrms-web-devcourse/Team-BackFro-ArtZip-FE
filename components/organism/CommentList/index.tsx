@@ -13,9 +13,13 @@ import reviewAPI from 'apis/review';
 const CommentList = ({
   comments,
   reviewId,
+  onDeleteButtonClick,
+  onEditButtonClick,
 }: {
   comments: PaginationResponse<CommentProps>;
   reviewId: number;
+  onDeleteButtonClick: () => void;
+  onEditButtonClick: () => void;
 }) => {
   const getMoreComment = async () => {
     if (totalPage <= currentPage) {
@@ -29,17 +33,27 @@ const CommentList = ({
 
   const [currentPage, setCurrentPage] = useState(0);
   const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
-  const [currentComments, setCurrentComments] = useState(comments.content);
+  const commentList = [...Object.values(comments.content.filter((comment) => !comment.isDeleted))];
+  const [currentComments, setCurrentComments] = useState(commentList);
 
   const { totalPage } = comments;
 
   return (
     <>
-      {currentComments &&
-        currentComments.map((comment) => (
+      {commentList &&
+        commentList.map((comment) => (
           <Comment
             key={comment.commentId}
-            actions={[<CommentUtils key={comment.commentId} comment={comment} />]}
+            actions={[
+              <CommentUtils
+                key={comment.commentId}
+                comment={comment}
+                reviewId={reviewId}
+                parentId={comment.commentId}
+                onDeleteButtonClick={onDeleteButtonClick}
+                onEditButtonClick={onEditButtonClick}
+              />,
+            ]}
             author={<Link href={`/user/${comment.user.userId}`}>{comment.user.nickname}</Link>}
             avatar={
               <UserAvatar userId={comment.user.userId} profileImage={comment.user.profileImage} />

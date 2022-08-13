@@ -6,6 +6,8 @@ import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { userAtom } from 'states';
+import { useRecoilValue } from 'recoil';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
@@ -26,8 +28,17 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     date,
   } = data;
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
+
+  const currentUser = useRecoilValue(userAtom);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [reviewComments, setReviewComments] = useState({ ...comments });
+  const [reviewCommentCount, setReviewCommentCount] = useState(commentCount);
+
+  // 댓글 무한 스크롤
+
+  // 댓글 액션
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -35,16 +46,27 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   const handleOk = async (reviewId: number) => {
     setIsModalVisible(false);
-
     const { data } = await reviewAPI.deleteReview(reviewId);
     const { message: responseMessage } = data;
     message.success(responseMessage);
-
     router.push('/community');
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleCommentReload = async () => {
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId });
+    setReviewComments({ ...reviewComments, ...data.data });
+    setReviewCommentCount(reviewCommentCount + 1);
+    setReviewCommentCount(reviewComments.content.length);
+  };
+
+  const handleCommentButtonClick = async () => {
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId });
+    setReviewComments({ ...reviewComments, ...data.data });
+    setReviewCommentCount(reviewCommentCount - 1);
   };
 
   return (
@@ -56,7 +78,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         <ReviewDetail
           reviewId={reviewId}
           likeCount={likeCount}
-          commentCount={commentCount}
+          commentCount={reviewCommentCount}
           isLiked={isLiked}
           createdAt={createdAt}
           title={title}
@@ -70,10 +92,13 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
           user={user}
           onDeleteButtonClick={showModal}
         />
-
-        {/* 전역 상태 머지 되면 로직 구현 */}
-        <CommentWrite user={undefined} />
-        <CommentList comments={comments} reviewId={reviewId} />
+        <CommentWrite reviewId={reviewId} onCommentReload={handleCommentReload} />
+        <CommentList
+          comments={{ ...reviewComments }}
+          reviewId={reviewId}
+          onDeleteButtonClick={handleCommentButtonClick}
+          onEditButtonClick={handleCommentButtonClick}
+        />
       </>
       <Modal
         title="리뷰를 삭제할까요?"
