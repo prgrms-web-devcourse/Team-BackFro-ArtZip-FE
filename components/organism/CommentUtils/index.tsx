@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Button, Comment, message, Tooltip, Modal, Input, Form } from 'antd';
 import { useState } from 'react';
 import { CommentProps } from 'types/model';
-import { CommentWrite } from 'components/organism';
+import { CommentWrite, ReplyUtils } from 'components/organism';
 import router from 'next/router';
 import Link from 'next/link';
 import { UserAvatar } from 'components/atom';
@@ -112,7 +112,7 @@ const CommentUtils = ({
     const newChildrenCount = data.data.content.filter(
       (comment: CommentProps) => !comment.isDeleted,
     ).length;
-    setReplyList([...newReplies]);
+    setReplyList([...newReplies.filter((reply) => !reply.isDeleted)]);
     const totalPageResponse = data.data.totalPages;
     setTotalPage(totalPageResponse);
     if (currentPage < totalPageResponse) {
@@ -226,12 +226,26 @@ const CommentUtils = ({
               avatar={
                 <UserAvatar userId={reply.user.userId} profileImage={reply.user.profileImage} />
               }
-              content={<p>{reply.content}</p>}
+              content={
+                <p>
+                  {reply.content} {reply.isEdited && <EditText>(수정됨)</EditText>}
+                </p>
+              }
               datetime={
                 <Tooltip title={moment(reply.createdAt).format('YYYY-MM-DD HH:mm:ss')}>
                   <span>{displayDate(reply.createdAt)}</span>
                 </Tooltip>
               }
+              actions={[
+                [
+                  <ReplyUtils
+                    key={reply.commentId}
+                    reply={reply}
+                    onDeleteButtonClick={getReply}
+                    onEditButtonClick={getReply}
+                  />,
+                ],
+              ]}
             />
           ))}
         {showReply && hasMoreReply && (
@@ -290,5 +304,10 @@ const CommentReplayUtils = styled.div`
 `;
 
 const CommentButtonContainer = styled.div``;
+
+const EditText = styled.span`
+  margin-left: 5px;
+  color: ${({ theme }) => theme.color.font.light};
+`;
 
 export default CommentUtils;

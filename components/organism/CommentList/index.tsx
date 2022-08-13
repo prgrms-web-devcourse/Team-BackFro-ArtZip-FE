@@ -9,6 +9,7 @@ import { CommentUtils } from 'components/organism';
 import moment from 'moment';
 import { displayDate } from 'utils';
 import reviewAPI from 'apis/review';
+import styled from '@emotion/styled';
 
 const CommentList = ({
   comments,
@@ -58,7 +59,12 @@ const CommentList = ({
             avatar={
               <UserAvatar userId={comment.user.userId} profileImage={comment.user.profileImage} />
             }
-            content={<p>{comment.content}</p>}
+            content={
+              <p>
+                {comment.content}
+                {comment.isEdited && <EditText>(수정됨)</EditText>}
+              </p>
+            }
             datetime={
               <Tooltip title={moment(comment.createdAt).format('YYYY-MM-DD HH:mm:ss')}>
                 <span>{displayDate(comment.createdAt)}</span>
@@ -69,5 +75,10 @@ const CommentList = ({
     </>
   );
 };
+
+const EditText = styled.span`
+  margin-left: 5px;
+  color: ${({ theme }) => theme.color.font.light};
+`;
 
 export default CommentList;
