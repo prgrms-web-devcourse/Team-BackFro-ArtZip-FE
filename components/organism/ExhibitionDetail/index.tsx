@@ -1,8 +1,15 @@
 import * as S from './style';
-import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
+import { ShareAltOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import { ExhibitionInfo } from 'components/molecule';
+import { LikeInfo } from 'components/molecule';
+import { exhibitionAPI } from 'apis';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 interface ExhibitionDetailProps {
+  exhibitionId: number;
   name: string;
   thumbnail: string;
   startDate: string;
@@ -13,11 +20,13 @@ interface ExhibitionDetailProps {
   area: string;
   fee: string;
   inquiry: string;
-  genre: string;
+  genre: string | null;
   isLiked: boolean;
+  likeCount: number;
 }
 
 const ExhibitionDetail = ({
+  exhibitionId,
   name,
   thumbnail,
   startDate,
@@ -30,7 +39,23 @@ const ExhibitionDetail = ({
   inquiry,
   genre,
   isLiked,
+  likeCount,
 }: ExhibitionDetailProps) => {
+  const { userId } = useRecoilValue(userAtom);
+  const [currentIsLiked, setCurrentIsLiked] = useState(isLiked);
+  const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+
+  const handleLikeClick = async () => {
+    if (userId) {
+      const { data } = await exhibitionAPI.likeToggle(exhibitionId);
+      const { isLiked, likeCount } = data.data;
+      setCurrentIsLiked(isLiked);
+      setCurrentLikeCount(likeCount);
+    } else {
+      message.warning('로그인이 필요한 기능입니다');
+      return;
+    }
+  };
   return (
     <S.ExhibitionContainer>
       <S.Thumbnail src={thumbnail} preview={false}></S.Thumbnail>
@@ -50,15 +75,20 @@ const ExhibitionDetail = ({
             isLink={true}
             href={placeUrl}
             info={placeAddr}
+            copy
           ></ExhibitionInfo>
           <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
           <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>
           <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
         </S.InfoContainer>
         <S.IconContainer>
-          {isLiked ? <HeartFilled /> : <HeartOutlined />}
+          <LikeInfo
+            isLiked={currentIsLiked}
+            likeCount={currentLikeCount}
+            onClick={handleLikeClick}
+          />
           {'    '}
-          <ShareAltOutlined />
+          <ShareAltOutlined style={{ padding: 5 }} />
         </S.IconContainer>
       </S.Container>
     </S.ExhibitionContainer>

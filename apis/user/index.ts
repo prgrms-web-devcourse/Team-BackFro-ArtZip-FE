@@ -12,19 +12,30 @@ const userAPI = {
     return unAuthRequest.post('api/v1/users/signup', payload);
   },
   logout: () => {
-    return unAuthRequest.patch('/api/v1/users/logout');
+    return authRequest.patch('/api/v1/users/logout');
   },
   nicknameCheck: (nickname: string) => {
     return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
-  },
-  getUserInfo: (userId: number) => {
-    return unAuthRequest.get(`api/v1/users/${userId}/info`);
   },
   reissueToken: (payload: UserReissueTokenRequest) => {
     return unAuthRequest.post(`api/v1/users/token/reissue`, payload);
   },
   getMyInfo: () => {
     return authRequest.get(`api/v1/users/me/info`);
+  },
+  getUserInfo: (userId: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info`);
+  },
+  getMyReview: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info/my/reviews?page=${page}&size=${size}`);
+  },
+  getLikeReview: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(`/api/v1/users/${userId}/info/reviews/like?page=${page}&size=${size}`);
+  },
+  getLikeExhibition: (userId: number, page: number, size: number) => {
+    return unAuthRequest.get(
+      `/api/v1/users/${userId}/info/exhibitions/like?page=${page}&size=${size}`,
+    );
   },
 };
 

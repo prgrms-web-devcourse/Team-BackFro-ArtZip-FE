@@ -1,4 +1,4 @@
-import { ExhibitionProps, ReviewProps } from 'types/model';
+import { ExhibitionProps, ReviewCardProps } from 'types/model';
 import { BaseResponse } from '../base';
 
 export interface UserLocalLoginRequest {
@@ -26,9 +26,9 @@ export interface UserReissueTokenRequest {
   refreshToken: string; // 만료되지 않은 refreshToken
 }
 
-export interface UserInfoReviewLikeResponse extends BaseResponse {
+export interface UserReviewResponse extends BaseResponse {
   data?: {
-    content: ReviewProps[];
+    content: ReviewCardProps[];
   };
 }
 
@@ -53,9 +53,9 @@ export interface UserInfoResponse extends BaseResponse {
     profileImage: string;
     email: string;
     reviewCount: number;
-    likeCount: number;
+    reviewLikeCount: number;
+    exhibitionLikeCount: number;
     commentCount: number;
-    reviews: ReviewProps[];
   };
 }
 

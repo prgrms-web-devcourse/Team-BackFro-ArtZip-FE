@@ -1,210 +1,184 @@
 import styled from '@emotion/styled';
-import { Tabs, Image } from 'antd';
+import { Tabs, Image, Spin } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecule';
+import { userAPI } from 'apis';
+import { GetServerSideProps } from 'next';
+import { UserInfoResponse, UserReviewResponse } from 'types/apis/user';
+import { useState } from 'react';
+import { ReviewCardProps, ExhibitionProps } from 'types/model';
 
-const UserPage = () => {
-  return (
+interface UserPageProps {
+  userInfoResponse: UserInfoResponse;
+  userReviewResponse: UserReviewResponse;
+}
+
+const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
+  const userInfo = userInfoResponse.data;
+  const userReviews = userReviewResponse.data?.content;
+
+  const [myReviews, setMyReviews] = useState<ReviewCardProps[] | undefined>(userReviews);
+  const [likeReviews, setLikeReviews] = useState<ReviewCardProps[]>();
+  const [likeExhibitions, setLikeExhibitions] = useState<Required<ExhibitionProps>[]>();
+
+  const handleTabClick = (key: string) => {
+    switch (key) {
+      case 'myReview': {
+        return;
+      }
+      case 'likeReview': {
+        fetchLikeReviews();
+        return;
+      }
+      case 'likeExhibition': {
+        fetchLikeExhibitions();
+        return;
+      }
+      default:
+        console.error('Invalid key');
+    }
+  };
+
+  const fetchLikeReviews = async () => {
+    if (userInfo && !likeReviews) {
+      const { content } = await userAPI
+        .getLikeReview(userInfo.userId, 0, 10)
+        .then((res) => res.data.data);
+      setLikeReviews(content);
+    }
+  };
+
+  const fetchLikeExhibitions = async () => {
+    if (userInfo && !likeExhibitions) {
+      const { content } = await userAPI
+        .getLikeExhibition(userInfo.userId, 0, 10)
+        .then((res) => res.data.data);
+      setLikeExhibitions(content);
+    }
+  };
+
+  return userInfo && userReviews ? (
     <PageContainer>
       <ProfileContainer>
-        <ProfileImage
-          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          alt="profile image"
-          preview={false}
-        />
-        <UserName>비긴어게인</UserName>
-        <UserEmail>gitul0515@gmail.com</UserEmail>
+        <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
+        <UserName>{userInfo.nickname}</UserName>
+        <UserEmail>{userInfo.email}</UserEmail>
       </ProfileContainer>
-      <TabCardContainer type="card" tabPosition="top" centered>
-        <Tab tab="작성한 글 (12)" key={1}>
+      <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
+        <Tab tab={`작성한 후기 (${userInfo.reviewCount})`} key="myReview">
           <ReviewContainer>
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content="오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~"
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content="오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ "
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content="오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 번아웃증후군 전시회를 다녀왔다. 정말 재밌었다~~"
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
+            {myReviews?.map((review) => (
+              <ReviewCard
+                key={review.reviewId}
+                reviewId={review.reviewId}
+                title={review.title}
+                content={review.content}
+                thumbnail={review.exhibition.thumbnail}
+                createdAt={review.createdAt}
+                likeCount={review.likeCount}
+                commentCount={review.commentCount}
+                photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                userId={review.user.userId}
+                nickname={review.user.nickname}
+                profileImage={review.user.profileImage}
+              />
+            ))}
           </ReviewContainer>
         </Tab>
-        <Tab tab="좋아하는 전시회 (6)" key={2}>
+        <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="likeReview">
+          <ReviewContainer>
+            {likeReviews ? (
+              likeReviews.map((review) => (
+                <ReviewCard
+                  key={review.reviewId}
+                  reviewId={review.reviewId}
+                  title={review.title}
+                  content={review.content}
+                  thumbnail={review.exhibition.thumbnail}
+                  createdAt={review.createdAt}
+                  likeCount={review.likeCount}
+                  commentCount={review.commentCount}
+                  photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                  userId={review.user.userId}
+                  nickname={review.user.nickname}
+                  profileImage={review.user.profileImage}
+                />
+              ))
+            ) : (
+              <Spinner size="large" />
+            )}
+          </ReviewContainer>
+        </Tab>
+        <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="likeExhibition">
           <ExhibitionContainer>
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
-            <ExhibitionCard
-              exhibitionId={exhibitionDummy.exhibitionId}
-              name={exhibitionDummy.name}
-              thumbnail={exhibitionDummy.thumbnail}
-              startDate={exhibitionDummy.startDate}
-              endDate={exhibitionDummy.endDate}
-              likeCount={exhibitionDummy.likeCount}
-              reviewCount={exhibitionDummy.reviewCount}
-              isLiked={exhibitionDummy.isLiked}
-            />
+            {likeExhibitions ? (
+              likeExhibitions.map((exhibition) => (
+                <ExhibitionCard
+                  key={exhibition.exhibitionId}
+                  exhibitionId={exhibition.exhibitionId}
+                  name={exhibition.name}
+                  thumbnail={exhibition.thumbnail}
+                  startDate={exhibition.startDate}
+                  endDate={exhibition.endDate}
+                  likeCount={exhibition.likeCount}
+                  reviewCount={exhibition.reviewCount}
+                  isLiked={exhibition.isLiked}
+                />
+              ))
+            ) : (
+              <Spinner size="large" />
+            )}
           </ExhibitionContainer>
-        </Tab>
-        <Tab tab="좋아하는 후기 (17)" key={3}>
-          <ReviewContainer>
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-            <ReviewCard
-              reviewId={reviewDummy.reviewId}
-              thumbnail={reviewDummy.exhibition.thumbnail}
-              title={reviewDummy.title}
-              content={reviewDummy.content}
-              createdAt={reviewDummy.createdAt}
-              likeCount={reviewDummy.likeCount}
-              commentCount={reviewDummy.commentCount}
-              photo={reviewDummy.photos[0]}
-              userId={reviewDummy.user.userId}
-              nickname={reviewDummy.user.nickname}
-              profileImage={reviewDummy.user.profileImage}
-            />
-          </ReviewContainer>
         </Tab>
       </TabCardContainer>
       <SideNavigation
         paths={[
           {
-            href: '/users/1', // TODO: `/users/${userId}`로 수정
+            href: `/users/${userInfo.userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: '/users/1/edit',
+            href: `/users/${userInfo.userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            href: '/users/1/edit-password',
+            href: `/users/${userInfo.userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
       />
     </PageContainer>
+  ) : (
+    <Spinner size="large" />
   );
+};
+
+// TODO: 추후 getStaticProps로 변경 예정 (getStaticPaths도 추가)
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  if (params) {
+    const userInfoResponse = await userAPI.getUserInfo(Number(params.id)).then((res) => res.data); // 추후 then을 await으로 변경
+
+    const userReviewResponse = await userAPI
+      .getMyReview(Number(params.id), 0, 10)
+      .then((res) => res.data);
+
+    return {
+      props: {
+        userInfoResponse,
+        userReviewResponse,
+      },
+    };
+  }
+  return {
+    props: {
+      userInfoResponse: {},
+      userReviewResponse: {},
+    },
+  };
 };
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   text-align: center;
 `;
@@ -255,7 +229,9 @@ const ReviewContainer = styled.div`
 const ExhibitionContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
   justify-items: center;
+  gap: 10px;
   padding-bottom: 30px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
@@ -267,46 +243,8 @@ const ExhibitionContainer = styled.div`
   }
 `;
 
-const reviewDummy = {
-  reviewId: 43,
-  user: {
-    userId: 11,
-    profileImage: 'https~',
-    nickname: 'Emily',
-  },
-  exhibition: {
-    exhibitionId: 24,
-    name: '전시회 이름',
-    startDate: '2022-10-11',
-    thumbnail: 'https~~',
-  },
-  title: '번아웃증후군 전시회 다녀옴~',
-  content:
-    '오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~ 오늘 핸드아트코리아 전시회를 다녀왔다. 정말 재밌었다~~',
-  createdAt: '2022-03-22T22:33:11',
-  updatedAt: '2022-03-23T13:03:51',
-  isEdited: true,
-  isLiked: false,
-  isPublic: true,
-  likeCount: 32,
-  commentCount: 2,
-  photos: ['https~', 'https~'],
-};
-
-const exhibitionDummy = {
-  exhibitionId: 1,
-  name: '번아웃증후군',
-  thumbnail: 'https://www.culture.go.kr/upload/rdf/22/07/show_2022071816261910020.jpg',
-  startDate: '2022-08-04',
-  endDate: '2022-08-10',
-  isLiked: false,
-  likeCount: 5,
-  reviewCount: 3,
-};
-
-const exhibitionCardStyle = {
-  width: '240px',
-  height: '350px',
-};
+const Spinner = styled(Spin)`
+  margin-bottom: 400px;
+`;
 
 export default UserPage;

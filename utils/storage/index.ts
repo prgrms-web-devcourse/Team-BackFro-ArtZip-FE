@@ -1,7 +1,7 @@
 const storage = {
   getItem: <T>(key: string, initialValue: T) => {
     const value = localStorage.getItem(key);
-    return value ? JSON.parse(value).value : initialValue;
+    return value ? JSON.parse(value) : initialValue;
   },
   setItem: <T>(key: string, value: T) => {
     const expireDate = new Date();

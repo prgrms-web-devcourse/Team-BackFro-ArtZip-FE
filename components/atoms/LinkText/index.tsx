@@ -5,14 +5,14 @@ import { CSSProperties } from 'react';
 interface LinkTextProps {
   href: string;
   text: string;
-  textStyle?: CSSProperties;
+  style?: CSSProperties;
   isCurrentPage?: boolean;
 }
 
-const LinkText = ({ href, text, textStyle, isCurrentPage }: LinkTextProps) => {
+const LinkText = ({ href, text, style, isCurrentPage }: LinkTextProps) => {
   return (
     <Link href={href} passHref>
-      <StyledA style={textStyle} isCurrentPage={isCurrentPage}>
+      <StyledA style={style} isCurrentPage={isCurrentPage}>
         {text}
       </StyledA>
     </Link>
@@ -22,7 +22,7 @@ const LinkText = ({ href, text, textStyle, isCurrentPage }: LinkTextProps) => {
 const StyledA = styled.a<{
   isCurrentPage?: boolean;
 }>`
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   white-space: nowrap;
 
   ${({ isCurrentPage }) =>
@@ -30,7 +30,7 @@ const StyledA = styled.a<{
     ` 
     color: #242f9b;
     font-weight: 500;
-    border-bottom: 4px solid #242f9b;
+    border-bottom: 3px solid #242f9b;
   `}
 `;
 
