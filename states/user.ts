@@ -47,9 +47,8 @@ const userAtom = atom({
         const userId = data.data.userId;
         return { userId };
       } catch (error: unknown) {
-        cookie.remove('ACCESS_TOKEN');
         cookie.remove('REFRESH_TOKEN');
-        console.error(error);
+        cookie.remove('ACCESS_TOKEN');
         return { userId: null };
       }
     },

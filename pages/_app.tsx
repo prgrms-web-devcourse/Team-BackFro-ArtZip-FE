@@ -8,8 +8,6 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 import cookies from 'next-cookies';
-import { authRequest } from 'apis/common';
-import cookie from 'react-cookies';
 import App from 'next/app';
 import { setToken } from 'utils';
 declare global {
@@ -38,6 +36,7 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
   const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
+  // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
