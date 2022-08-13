@@ -12,18 +12,10 @@ const commentAPI = {
   delete: (commentId: number) => {
     return authRequest.delete(`/api/v1/comments/${commentId}`);
   },
-  getReplies: ({
-    commentId,
-    pages,
-    size,
-  }: {
-    commentId: number;
-    pages?: number;
-    size?: number;
-  }) => {
+  getReplies: ({ commentId, page, size }: { commentId: number; page?: number; size?: number }) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
     const params = {
-      ...(pages ? { pages: pages } : {}),
+      ...(page ? { page: page } : {}),
       ...(size ? { size: size } : {}),
     };
 

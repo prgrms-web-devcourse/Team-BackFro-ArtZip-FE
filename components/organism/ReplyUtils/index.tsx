@@ -12,10 +12,12 @@ const ReplyUtils = ({
   reply,
   onDeleteButtonClick,
   onEditButtonClick,
+  onLikeToggle,
 }: {
   reply: CommentProps;
   onDeleteButtonClick: () => void;
   onEditButtonClick: () => void;
+  onLikeToggle: () => void;
 }) => {
   const currentUser = useRecoilValue(userAtom);
   const { TextArea } = Input;
@@ -83,6 +85,7 @@ const ReplyUtils = ({
     setIsLikeComment(isLiked);
     setCommentLikeCount(likeCount);
     setLikeLoading(false);
+    onLikeToggle();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

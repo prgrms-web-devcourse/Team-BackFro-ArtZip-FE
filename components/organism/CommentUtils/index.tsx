@@ -113,7 +113,7 @@ const CommentUtils = ({
       (comment: CommentProps) => !comment.isDeleted,
     ).length;
     setReplyList([...newReplies.filter((reply) => !reply.isDeleted)]);
-    const totalPageResponse = data.data.totalPages;
+    const totalPageResponse = data.data.totalPage;
     setTotalPage(totalPageResponse);
     if (currentPage < totalPageResponse) {
       setHasMoreReply(true);
@@ -122,15 +122,13 @@ const CommentUtils = ({
     setCommentChildrenCount(newChildrenCount);
   };
 
-  // TODO: 얘 수정해야함
   const getMoreReply = async () => {
     if (totalPage <= currentPage + 1) {
       setHasMoreReply(false);
     }
-    const { data } = await commentAPI.getReplies({ commentId: commentId, pages: currentPage + 1 });
-
+    const { data } = await commentAPI.getReplies({ commentId: commentId, page: currentPage + 1 });
     const newReplies: CommentProps[] = Object.values(data.data.content);
-    setReplyList([...replyList, ...newReplies]);
+    setReplyList([...replyList, ...newReplies.filter((reply) => !reply.isDeleted)]);
     setCurrentPage(currentPage + 1);
   };
 
@@ -186,7 +184,9 @@ const CommentUtils = ({
             <LikeInfo
               isLiked={isLikeComment}
               likeCount={commentLikeCount}
-              onClick={() => handleCommentLikeClick(commentId)}
+              onClick={() => {
+                handleCommentLikeClick(commentId);
+              }}
             />
           </CommentReplayUtils>
           {user.userId === currentUser.userId && (
