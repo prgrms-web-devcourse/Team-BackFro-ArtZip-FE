@@ -99,8 +99,9 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
           <Link
             href={{
               pathname: `/reviews/create`,
-              query: { exhibitionId: exhibitionId },
+              query: { exhibitionId, name, thumbnail },
             }}
+            as={'/reviews/create'}
           >
             <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
           </Link>

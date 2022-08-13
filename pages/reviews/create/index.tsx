@@ -11,7 +11,13 @@ import { useRouter } from 'next/router';
 import { useClickAway } from 'hooks';
 
 interface SubmitData {
-  [key: string]: number | string | boolean;
+  exhibitionId: number;
+  date: string;
+  title: string;
+  content: string;
+  isPublic: boolean;
+
+  // [key: string]: number | string | boolean;
 }
 
 const initialData: SubmitData = {
@@ -36,6 +42,17 @@ const ReviewCreatePage = () => {
   const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
   const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
+  const { query } = router;
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+    if (query.exhibitionId) {
+      submitData.current['exhibitionId'] = Number(query.exhibitionId);
+      setPosterImage(query.thumbnail as string);
+    }
+  }, [router.isReady]);
 
   const searchContainer = useRef<HTMLDivElement>(null);
   const resultList = useRef<HTMLUListElement>(null);
@@ -46,9 +63,9 @@ const ReviewCreatePage = () => {
     }
   });
 
-  const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
-    submitData.current[key] = newValue;
-  };
+  // const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
+  //   submitData.current[key] = newValue;
+  // };
 
   const handleSearch = async (value: string) => {
     const isEmpty = !/\S/.test(value);
@@ -59,7 +76,7 @@ const ReviewCreatePage = () => {
     }
 
     try {
-      const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data);
+      const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data); // TODO: await과 .then을 함께 쓰지 않기
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
 
@@ -104,6 +121,7 @@ const ReviewCreatePage = () => {
                   placeholder="전시회 제목을 검색해 주세요."
                   enterButton
                   onSearch={handleSearch}
+                  defaultValue={query.name}
                 />
                 <ResultList ref={resultList}>
                   {searchResults &&
@@ -111,7 +129,7 @@ const ReviewCreatePage = () => {
                       <ResultItem
                         key={exhibitionId}
                         onClick={() => {
-                          handleChange('exhibitionId', exhibitionId);
+                          submitData.current['exhibitionId'] = exhibitionId; // TODO: 함수로 뽑아내기 (타입 이슈 해결해야 함)
                           setPosterImage(thumbnail);
                         }}
                       >
@@ -120,13 +138,19 @@ const ReviewCreatePage = () => {
                     ))}
                 </ResultList>
               </InnerContainer>
-              <Poster src={posterImage} alt="전시회 포스터 이미지" />
+              <Poster
+                src={posterImage}
+                alt="전시회 포스터 이미지"
+                preview={posterImage !== imageUrl.EXHIBITION_DEFAULT}
+              />
             </SearchContainer>
           </Form.Item>
           <Form.Item label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
-                value && handleChange('date', value.format('YYYY-MM-DD'));
+                if (value) {
+                  submitData.current['date'] = value.format('YYYY-MM-DD');
+                }
               }}
             />
           </Form.Item>
@@ -135,14 +159,14 @@ const ReviewCreatePage = () => {
               placeholder="제목을 입력해주세요."
               showCount
               maxLength={30}
-              onChange={(e) => handleChange('title', e.target.value)}
+              onChange={(e) => (submitData.current['title'] = e.target.value)}
             />
           </Form.Item>
           <Form.Item label="내용">
             <TextArea
               placeholder="내용을 입력해주세요."
               autoSize
-              onChange={(e) => handleChange('content', e.target.value)}
+              onChange={(e) => (submitData.current['content'] = e.target.value)}
             />
           </Form.Item>
           <Form.Item label="사진">
@@ -152,8 +176,9 @@ const ReviewCreatePage = () => {
             <ToggleSwitch
               defaultChecked
               onChange={(checked) => {
-                handleChange('isPublic', checked);
+                submitData.current['isPublic'] = checked;
                 setIsPublic(checked);
+                console.log(submitData.current);
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
@@ -167,6 +192,7 @@ const ReviewCreatePage = () => {
     </>
   );
 };
+// TODO: 작성완료 버튼 연타 방어 코드
 
 const Section = styled.section`
   max-width: 600px;
