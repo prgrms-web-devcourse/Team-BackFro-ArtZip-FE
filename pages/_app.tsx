@@ -1,4 +1,4 @@
-import '../styles/global/globals.css';
+import '../styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import { Layout } from 'components/template';

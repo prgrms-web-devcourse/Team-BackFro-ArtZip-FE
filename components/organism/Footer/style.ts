@@ -7,7 +7,6 @@ export const Footer = styled.footer`
   bottom: 0;
   left: 0;
   background-color: ${({ theme }) => theme.color.blue.light};
-  padding: 0px 30px 0px 30px;
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
     height: 220px;
   }
@@ -17,18 +16,10 @@ export const Footer = styled.footer`
 `;
 
 export const Container = styled.div`
-  max-width: 900px;
-  min-width: 400px;
+  width: 80%;
+  max-width: 1400px;
   padding-top: 30px;
   margin: auto;
-  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
-    max-width: 800px;
-    padding-top: 25px;
-  }
-  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    max-width: 600px;
-    padding-top: 25px;
-  }
 `;
 
 export const Title = styled.h1`

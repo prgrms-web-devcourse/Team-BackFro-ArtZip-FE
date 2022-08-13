@@ -1,5 +1,5 @@
 @import './reset.css';
-@import './fonts/fontface.css';
+@import './global/fonts/fontface.css';
 @import '~antd/dist/antd.css';
 
 * {
@@ -19,9 +19,19 @@ body {
   background-color: #fafafa;
 }
 
+html,
+body,
 #__next {
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#__next {
   position: relative;
+  width: 100vw;
 }
 
 h1,
