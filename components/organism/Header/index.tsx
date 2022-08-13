@@ -8,7 +8,7 @@ import { userAtom } from 'states';
 
 const Header = () => {
   const { pathname } = useRouter();
-  const { userId } = useRecoilValue(userAtom);
+  // const { userId } = useRecoilValue(userAtom);
 
   const router = useRouter();
 
@@ -29,7 +29,7 @@ const Header = () => {
       <Container>
         <Logo width={252} height={92} />
         <Utility>
-          {userId ? (
+          {/* {userId ? (
             <>
               <LinkText href={`/users/${userId}`} text="마이페이지" />
               <LogoutButton>로그아웃</LogoutButton>
@@ -39,7 +39,7 @@ const Header = () => {
               <LinkText href="/signin" text="로그인" />
               <LinkText href="/signup" text="회원가입" />
             </>
-          )}
+          )} */}
         </Utility>
       </Container>
       <Container>
