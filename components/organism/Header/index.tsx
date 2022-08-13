@@ -25,8 +25,6 @@ const Header = () => {
     });
   };
 
-  console.log(userId);
-
   return (
     <StyledHeader>
       <Container>
