@@ -243,6 +243,7 @@ const CommentUtils = ({
                     reply={reply}
                     onDeleteButtonClick={getReply}
                     onEditButtonClick={getReply}
+                    onLikeToggle={getReply}
                   />,
                 ],
               ]}
