@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 export const ExhibitionPageContainer = styled.div`
   margin-top: 70px;
@@ -42,12 +43,10 @@ export const PlaceInfo = styled.div`
 export const ReviewContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
   gap: 30px;
   margin-bottom: 70px;
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
   }
 `;
 
@@ -101,4 +100,8 @@ export const StyledCopyButton = styled.button`
 
 export const Clipboard = styled(CopyOutlined)`
   font-size: 1.9rem;
+`;
+
+export const ButtonWrapper = styled.div`
+  margin-bottom: 100px;
 `;
