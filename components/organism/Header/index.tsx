@@ -8,7 +8,8 @@ import { userAtom } from 'states';
 
 const Header = () => {
   const { pathname } = useRouter();
-  const userId = useRecoilValue(userAtom);
+  const { userId } = useRecoilValue(userAtom);
+
   const router = useRouter();
 
   const handleSearchExhibition = (value: string) => {
