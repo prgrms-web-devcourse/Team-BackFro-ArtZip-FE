@@ -3,15 +3,16 @@ import Logo from 'components/atoms/Logo';
 import { Input, message } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { useUserAuthActions } from 'hooks';
 
 const Header = () => {
   const { pathname } = useRouter();
-  const { userId } = useRecoilValue(userAtom);
-  const router = useRouter();
+
+  const [userState, setUserState] = useRecoilState(userAtom);
   const { logout } = useUserAuthActions();
+  const router = useRouter();
 
   const handleSearchExhibition = (value: string) => {
     const isEmpty = !/\S/.test(value);
@@ -30,10 +31,10 @@ const Header = () => {
       <Container>
         <Logo width={252} height={92} />
         <Utility>
-          {userId ? (
+          {userState.userId ? (
             <>
-              <LinkText href={`/users/${userId}`} text="마이페이지" />
-              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+              <LinkText href={`/users/${userState.userId}`} text="마이페이지" />
+              <LogoutButton>로그아웃</LogoutButton>
             </>
           ) : (
             <>
