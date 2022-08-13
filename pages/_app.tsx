@@ -10,6 +10,9 @@ import 'swiper/scss/pagination';
 import cookies from 'next-cookies';
 import App from 'next/app';
 import { setToken } from 'utils';
+import cookie from 'react-cookies';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -18,6 +21,12 @@ declare global {
 }
 
 function ArtZip({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>
@@ -40,6 +49,9 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
+  } else {
+    cookie.remove('ACCESS_TOKEN');
+    cookie.remove('REFRESH_TOKEN');
   }
 
   return { ...appProps };
