@@ -38,7 +38,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   // 댓글 무한 스크롤
   const getMoreComment = async () => {
-    if (totalPage <= currentPage) {
+    if (totalPage < currentPage) {
       return;
     }
     const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
@@ -71,7 +71,6 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     const { data } = await reviewAPI.getComments({ reviewId: reviewId });
     // TODO: 임시 구현, 샤크에게 데이터 더 담아달라고 요청하기.
     const { data: reviewData } = await reviewAPI.getReviewSingle(reviewId);
-    console.log('data', data);
     setReviewComments(data.data.content);
     setReviewCommentCount(reviewData.data.commentCount);
   };
