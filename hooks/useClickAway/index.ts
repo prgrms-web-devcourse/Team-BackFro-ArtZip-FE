@@ -8,8 +8,8 @@ const useClickAway = <T extends HTMLElement = HTMLElement>(
 ) => {
   useEffect(() => {
     const listener = (event: Event) => {
-      const el = ref?.current;
-      if (!el || el.contains((event?.target as Node) || null)) {
+      const element = ref?.current;
+      if (!element || element.contains((event?.target as Node) || null)) {
         return;
       }
 

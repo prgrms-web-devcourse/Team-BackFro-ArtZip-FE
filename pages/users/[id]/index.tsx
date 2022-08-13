@@ -76,7 +76,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                 createdAt={review.createdAt}
                 likeCount={review.likeCount}
                 commentCount={review.commentCount}
-                photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                photo={[{ path: review.photos[0]?.path, photoId: 13 }]}
                 userId={review.user.userId}
                 nickname={review.user.nickname}
                 profileImage={review.user.profileImage}
@@ -97,7 +97,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                   createdAt={review.createdAt}
                   likeCount={review.likeCount}
                   commentCount={review.commentCount}
-                  photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                  photo={[{ path: review.photos[0]?.path, photoId: 13 }]}
                   userId={review.user.userId}
                   nickname={review.user.nickname}
                   profileImage={review.user.profileImage}
