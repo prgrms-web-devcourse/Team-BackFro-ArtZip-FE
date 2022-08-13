@@ -9,9 +9,9 @@ import { useUserAuthActions } from 'hooks';
 
 const Header = () => {
   const { pathname } = useRouter();
+
   const [userState, setUserState] = useRecoilState(userAtom);
   const { logout } = useUserAuthActions();
-
   const router = useRouter();
 
   const handleSearchExhibition = (value: string) => {

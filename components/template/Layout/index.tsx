@@ -2,23 +2,17 @@ import { ReactElement } from 'react';
 import styled from '@emotion/styled';
 import { Header, Footer } from '../../organism';
 
-interface LayoutProps {
-  children: ReactElement;
-}
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }: { children: ReactElement }) => {
   return (
-    <>
-      <PageWrapper>
-        <Header />
-        {children}
-        <Footer />
-      </PageWrapper>
-    </>
+    <PageContainer>
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </PageContainer>
   );
 };
 
-const PageWrapper = styled.div`
+const PageContainer = styled.div`
   width: 80%;
   max-width: 1400px;
   padding-top: 200px;

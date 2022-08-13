@@ -53,8 +53,7 @@ export const IconContainer = styled.div`
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
   font-size: 3rem;
   color: ${({ theme }) => theme.color.font.dark};
   cursor: pointer;

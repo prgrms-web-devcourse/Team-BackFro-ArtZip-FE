@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 
 export const ExhibitionPageContainer = styled.div`
   margin-top: 70px;
@@ -30,7 +31,7 @@ export const DescriptionWrapper = styled.div`
 `;
 
 export const PlaceInfo = styled.div`
-  margin: 5px 0px 15px 0px;
+  margin: 5px 0px 30px 0px;
   width: 80%;
   display: flex;
   font-size: 1.7rem;
@@ -72,4 +73,32 @@ export const StyledButton = styled(Button)`
   &:hover {
     background-color: ${({ theme }) => theme.color.blue.dark};
   }
+`;
+
+export const MapWrapper = styled.div`
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
+    width: 700px;
+    height: 250px;
+  }
+  @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 400px;
+    height: 200px;
+  }
+`;
+
+export const StyledCopyButton = styled.button`
+  margin-left: 10px;
+  position: relative;
+  top: 1px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.blue.dark};
+  }
+`;
+
+export const Clipboard = styled(CopyOutlined)`
+  font-size: 1.9rem;
 `;

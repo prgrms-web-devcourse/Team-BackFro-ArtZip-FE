@@ -17,9 +17,15 @@ export const ReviewCard = styled(Card)`
 `;
 
 export const Title = styled.div`
+  width: 70%;
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 5px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   cursor: pointer;
 `;
 
