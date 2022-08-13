@@ -25,7 +25,6 @@ const cookieEffect =
         }
 
         const { data } = await userAPI.getMyInfo();
-        console.log('data', data);
         const { userId, email, nickname, profileImage } = data.data;
         return { userId, email, nickname, profileImage };
       } catch (error: unknown) {
