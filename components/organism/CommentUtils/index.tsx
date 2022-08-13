@@ -124,7 +124,6 @@ const CommentUtils = ({
   };
 
   const getMoreReply = async () => {
-    console.log(totalPage, currentPage);
     if (totalPage <= currentPage + 1) {
       setHasMoreReply(false);
     }
