@@ -31,6 +31,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
     lng,
     likeCount,
     reviews,
+    reviewCount,
   } = data;
 
   const handleCopyClick = () => {
@@ -71,7 +72,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
           }
         </S.PlaceInfo>
         <Map lat={lat} lng={lng} width={800} height={450} title={'지도'} address={placeAddress} />
-        <h3>후기({reviews && reviews.length}개)</h3>
+        <h3>후기({reviewCount}개)</h3>
         {reviews && (
           <S.ReviewContainer>
             {reviews.map((review) => (
@@ -92,19 +93,34 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
             ))}
           </S.ReviewContainer>
         )}
-        <S.ButtonContainer>
-          <Link href={`/community/${exhibitionId}`}>
-            <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
-          </Link>
-          <Link
-            href={{
-              pathname: `/reviews/create`,
-              query: { exhibitionId: exhibitionId },
-            }}
-          >
-            <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
-          </Link>
-        </S.ButtonContainer>
+        {reviewCount > 0 ? (
+          <S.ButtonContainer>
+            <Link href={`/community?exhibitionId=${exhibitionId}`}>
+              <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
+            </Link>
+            <Link
+              href={{
+                pathname: `/reviews/create`,
+                query: { exhibitionId, name, thumbnail },
+              }}
+              as={`/reviews/create`}
+            >
+              <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
+            </Link>
+          </S.ButtonContainer>
+        ) : (
+          <S.ButtonWrapper>
+            <Link
+              href={{
+                pathname: `/reviews/create`,
+                query: { exhibitionId, name, thumbnail },
+              }}
+              as={`/reviews/create`}
+            >
+              <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
+            </Link>
+          </S.ButtonWrapper>
+        )}
       </S.ExhibitionPageContainer>
     </>
   );
