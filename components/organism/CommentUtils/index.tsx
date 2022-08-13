@@ -34,7 +34,8 @@ const CommentUtils = ({
   const [showReply, setShowReply] = useState(false);
   const [commentChildrenCount, setCommentChildrenCount] = useState(childrenCount);
   const [replyList, setReplyList] = useState<CommentProps[]>([]);
-  const [showReplyCount, setShowReplyCount] = useState(childrenCount === 0 ? false : true);
+  const [replyCount, setReplyCount] = useState(childrenCount);
+  const [showReplyCount, setShowReplyCount] = useState(replyCount === 0 ? false : true);
 
   // 답글  더보기
   const [currentPage, setCurrentPage] = useState(0);
@@ -113,16 +114,17 @@ const CommentUtils = ({
       (comment: CommentProps) => !comment.isDeleted,
     ).length;
     setReplyList([...newReplies.filter((reply) => !reply.isDeleted)]);
+    setReplyCount(data.data.totalElements);
     const totalPageResponse = data.data.totalPage;
-    setTotalPage(totalPageResponse);
-    if (currentPage < totalPageResponse) {
+    setTotalPage(totalPageResponse - 1);
+    if (currentPage < totalPageResponse - 1) {
       setHasMoreReply(true);
     }
-
     setCommentChildrenCount(newChildrenCount);
   };
 
   const getMoreReply = async () => {
+    console.log(totalPage, currentPage);
     if (totalPage <= currentPage + 1) {
       setHasMoreReply(false);
     }
