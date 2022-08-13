@@ -40,3 +40,5 @@ yarn-error.log*
 # evn
 .env
 .env.development
+.env.production
+
