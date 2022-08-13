@@ -1,7 +1,7 @@
 import { CommentProps } from 'types/model';
 import { PaginationResponse } from 'types/apis/base';
 import { useInfiniteScroll } from 'hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Comment, Tooltip } from 'antd';
 import { UserAvatar } from 'components/atom';
@@ -17,27 +17,12 @@ const CommentList = ({
   onDeleteButtonClick,
   onEditButtonClick,
 }: {
-  comments: PaginationResponse<CommentProps>;
+  comments: CommentProps[];
   reviewId: number;
   onDeleteButtonClick: () => void;
   onEditButtonClick: () => void;
 }) => {
-  const getMoreComment = async () => {
-    if (totalPage <= currentPage) {
-      return;
-    }
-    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
-    const newComments: CommentProps[] = Object.values(data.data);
-    setCurrentComments([...currentComments, ...newComments]);
-    setCurrentPage(currentPage + 1);
-  };
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
-  const commentList = [...Object.values(comments.content.filter((comment) => !comment.isDeleted))];
-  const [currentComments, setCurrentComments] = useState(commentList);
-
-  const { totalPage } = comments;
+  const commentList = comments.filter((comment) => !comment.isDeleted);
 
   return (
     <>

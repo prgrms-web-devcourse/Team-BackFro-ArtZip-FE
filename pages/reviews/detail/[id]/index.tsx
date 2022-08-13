@@ -6,8 +6,8 @@ import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { userAtom } from 'states';
-import { useRecoilValue } from 'recoil';
+import { useInfiniteScroll } from 'hooks';
+import { CommentProps } from 'types/model';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
@@ -30,13 +30,24 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   const router = useRouter();
 
-  const currentUser = useRecoilValue(userAtom);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const [reviewComments, setReviewComments] = useState({ ...comments });
+  const [reviewComments, setReviewComments] = useState([...comments.content]);
   const [reviewCommentCount, setReviewCommentCount] = useState(commentCount);
+  const { totalPage, pageNumber } = comments;
+  const [currentPage, setCurrentPage] = useState(pageNumber);
 
   // 댓글 무한 스크롤
+  const getMoreComment = async () => {
+    if (totalPage <= currentPage) {
+      return;
+    }
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
+    const newComments: CommentProps[] = Object.values(data.data.content);
+    setReviewComments([...reviewComments, ...newComments]);
+    setCurrentPage(currentPage + 1);
+  };
+
+  const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
 
   // 댓글 액션
 
@@ -58,15 +69,11 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   const handleCommentReload = async () => {
     const { data } = await reviewAPI.getComments({ reviewId: reviewId });
-    setReviewComments({ ...reviewComments, ...data.data });
-    setReviewCommentCount(reviewCommentCount + 1);
-    setReviewCommentCount(reviewComments.content.length);
-  };
-
-  const handleCommentButtonClick = async () => {
-    const { data } = await reviewAPI.getComments({ reviewId: reviewId });
-    setReviewComments({ ...reviewComments, ...data.data });
-    setReviewCommentCount(reviewCommentCount - 1);
+    // TODO: 임시 구현, 샤크에게 데이터 더 담아달라고 요청하기.
+    const { data: reviewData } = await reviewAPI.getReviewSingle(reviewId);
+    console.log('data', data);
+    setReviewComments(data.data.content);
+    setReviewCommentCount(reviewData.data.commentCount);
   };
 
   return (
@@ -94,10 +101,10 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         />
         <CommentWrite reviewId={reviewId} onCommentReload={handleCommentReload} />
         <CommentList
-          comments={{ ...reviewComments }}
+          comments={reviewComments}
           reviewId={reviewId}
-          onDeleteButtonClick={handleCommentButtonClick}
-          onEditButtonClick={handleCommentButtonClick}
+          onDeleteButtonClick={handleCommentReload}
+          onEditButtonClick={handleCommentReload}
         />
       </>
       <Modal
