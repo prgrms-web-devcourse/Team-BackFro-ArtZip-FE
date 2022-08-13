@@ -1,5 +1,10 @@
 import { unAuthRequest, authRequest } from 'apis/common';
-import { UserLocalLoginRequest, UserReissueTokenRequest, UserSignupRequest } from 'types/apis/user';
+import {
+  UserLocalLoginRequest,
+  UserReissueTokenRequest,
+  UserSignupRequest,
+  UserChangePasswordRequest,
+} from 'types/apis/user';
 
 const userAPI = {
   localLogin: (payload: UserLocalLoginRequest) => {
@@ -36,6 +41,16 @@ const userAPI = {
     return unAuthRequest.get(
       `/api/v1/users/${userId}/info/exhibitions/like?page=${page}&size=${size}`,
     );
+  },
+  changeMyInfo: (formData: FormData) => {
+    return authRequest.patch(`/api/v1/users/me/info`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+  changePassword: (payload: UserChangePasswordRequest) => {
+    return authRequest.patch(`/api/v1/users/me/password`, payload);
   },
 };
 
