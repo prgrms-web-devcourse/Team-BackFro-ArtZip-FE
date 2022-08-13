@@ -1,4 +1,5 @@
 import { unAuthRequest, authRequest } from 'apis/common';
+import cookie from 'react-cookies';
 
 const exhibitionAPI = {
   getUpcoming: (page: number, size: number) => {
@@ -10,7 +11,10 @@ const exhibitionAPI = {
     );
   },
   getDetail: (exhibitionId: number) => {
-    return unAuthRequest.get(`/api/v1/exhibitions/${exhibitionId}`);
+    const refreshToken = cookie.load('REFRESH_TOKEN');
+    return refreshToken
+      ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)
+      : unAuthRequest.get(`/api/v1/exhibitions/${exhibitionId}`);
   },
   search: (query: string, page: number, size: number, includeEnd: boolean) => {
     return unAuthRequest.get(

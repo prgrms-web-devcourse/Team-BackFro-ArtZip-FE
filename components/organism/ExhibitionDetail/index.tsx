@@ -1,9 +1,12 @@
 import * as S from './style';
-import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
+import { ShareAltOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import { ExhibitionInfo } from 'components/molecule';
 import { LikeInfo } from 'components/molecule';
 import { exhibitionAPI } from 'apis';
-import { useEffect } from 'react';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 interface ExhibitionDetailProps {
   exhibitionId: number;
@@ -38,9 +41,20 @@ const ExhibitionDetail = ({
   isLiked,
   likeCount,
 }: ExhibitionDetailProps) => {
+  const { userId } = useRecoilValue(userAtom);
+  const [currentIsLiked, setCurrentIsLiked] = useState(isLiked);
+  const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+
   const handleLikeClick = async () => {
-    const res = await exhibitionAPI.likeToggle(exhibitionId);
-    console.log(res);
+    if (userId) {
+      const { data } = await exhibitionAPI.likeToggle(exhibitionId);
+      const { isLiked, likeCount } = data.data;
+      setCurrentIsLiked(isLiked);
+      setCurrentLikeCount(likeCount);
+    } else {
+      message.warning('로그인이 필요한 기능입니다');
+      return;
+    }
   };
   return (
     <S.ExhibitionContainer>
@@ -68,7 +82,11 @@ const ExhibitionDetail = ({
           <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
         </S.InfoContainer>
         <S.IconContainer>
-          <LikeInfo isLiked={isLiked} likeCount={likeCount} onClick={handleLikeClick} />
+          <LikeInfo
+            isLiked={currentIsLiked}
+            likeCount={currentLikeCount}
+            onClick={handleLikeClick}
+          />
           {'    '}
           <ShareAltOutlined style={{ padding: 5 }} />
         </S.IconContainer>
