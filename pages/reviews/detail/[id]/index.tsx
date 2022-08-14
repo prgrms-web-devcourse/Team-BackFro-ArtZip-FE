@@ -41,8 +41,9 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     if (totalPage < currentPage) {
       return;
     }
+
     const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
-    const newComments: CommentProps[] = Object.values(data.data.content);
+    const newComments: CommentProps[] = Object.values(data.data.comments.content);
     setReviewComments([...reviewComments, ...newComments]);
     setCurrentPage(currentPage + 1);
   };
@@ -69,10 +70,9 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   const handleCommentReload = async () => {
     const { data } = await reviewAPI.getComments({ reviewId: reviewId });
-    // TODO: 임시 구현, 샤크에게 데이터 더 담아달라고 요청하기.
-    const { data: reviewData } = await reviewAPI.getReviewSingle(reviewId);
-    setReviewComments(data.data.content);
-    setReviewCommentCount(reviewData.data.commentCount);
+    const { comments, commentCount } = data.data;
+    setReviewComments(comments.content);
+    setReviewCommentCount(commentCount);
   };
 
   return (
