@@ -55,7 +55,6 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
   const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
-  console.log('allCookies', allCookies);
   // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
