@@ -19,7 +19,7 @@ const SearchResultPage: NextPage = () => {
   useEffect(() => {
     if (typeof exhibition === 'string') {
       exhibitionAPI
-        .search(exhibition, currentPage, 8, true)
+        .search(exhibition, currentPage, 10, true)
         .then((res) => {
           setTotal(res.data.data.totalPage);
           setExhibitions(res.data.data.content);
