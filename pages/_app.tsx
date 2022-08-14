@@ -55,7 +55,7 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
   const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
-  console.log('initial Props', ctx);
+  console.log('initial Props', ctx.req?.headers.cookie);
   console.log('initial accessTokenByCookie', accessTokenByCookie);
   console.log('initial refreshTokenByCookie', refreshTokenByCookie);
 
