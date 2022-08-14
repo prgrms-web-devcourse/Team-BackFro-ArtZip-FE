@@ -23,21 +23,21 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
-  color: ${({ theme }) => theme.color.border.light};
+  color: ${({ theme }) => theme.color.border.white};
   font-weight: 500;
   font-size: 2.8rem;
   margin-bottom: 10px;
 `;
 
 export const Description = styled.p`
-  color: ${({ theme }) => theme.color.border.light};
+  color: ${({ theme }) => theme.color.border.white};
   font-weight: 300;
   font-size: 1.5rem;
   margin-bottom: 25px;
 `;
 
 export const Developers = styled.p`
-  color: ${({ theme }) => theme.color.border.light};
+  color: ${({ theme }) => theme.color.border.white};
   font-weight: 100;
   font-size: 1.3rem;
   display: flex;
@@ -46,7 +46,7 @@ export const Developers = styled.p`
 `;
 
 export const Copyright = styled.p`
-  color: ${({ theme }) => theme.color.border.light};
+  color: ${({ theme }) => theme.color.border.white};
   font-weight: 300;
   display: flex;
   justify-content: center;
