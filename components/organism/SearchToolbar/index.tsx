@@ -32,7 +32,6 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
     (checked: boolean) => {
       if (checked) {
         const checkedListArray: CheckBoxType[] = [];
-
         if (type === 'place') {
           exhibitionPlace.forEach((it) => checkedListArray.push(it));
         } else if (type === 'period') {

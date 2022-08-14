@@ -6,6 +6,7 @@ import * as S from '../../../styles/pages/exhibitionsCustom';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionCard } from 'components/molecule';
+import styled from '@emotion/styled';
 
 //exhibitions/custom
 const ExhibitionCustom: NextPage = () => {
@@ -73,19 +74,26 @@ const ExhibitionCustom: NextPage = () => {
         setSelectedValues={setSelectedGenre}
       />
       <S.ExhibitionsCustomContent>
-        {exhibitions.map((exhibition) => (
-          <ExhibitionCard
-            exhibitionId={exhibition.exhibitionId}
-            key={exhibition.exhibitionId}
-            name={exhibition.name}
-            thumbnail={exhibition.thumbnail}
-            startDate={exhibition.startDate!}
-            endDate={exhibition.endDate!}
-            likeCount={exhibition.likeCount!}
-            reviewCount={exhibition.reviewCount!}
-            isLiked={exhibition.isLiked!}
-          />
-        ))}
+        {exhibitions.length > 0 ? (
+          exhibitions.map((exhibition) => (
+            <ExhibitionCard
+              exhibitionId={exhibition.exhibitionId}
+              key={exhibition.exhibitionId}
+              name={exhibition.name}
+              thumbnail={exhibition.thumbnail}
+              startDate={exhibition.startDate!}
+              endDate={exhibition.endDate!}
+              likeCount={exhibition.likeCount!}
+              reviewCount={exhibition.reviewCount!}
+              isLiked={exhibition.isLiked!}
+            />
+          ))
+        ) : (
+          <div>
+            <Logo>Art.zip</Logo>
+            <div>해당하는 전시회가 없습니다. </div>
+          </div>
+        )}
       </S.ExhibitionsCustomContent>
       <Pagination
         className="pagination"
@@ -101,3 +109,11 @@ const ExhibitionCustom: NextPage = () => {
   );
 };
 export default ExhibitionCustom;
+
+const Logo = styled.div`
+  font-size: 5rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.color.blue.main};
+  margin-bottom: 30px;
+  cursor: pointer;
+`;
