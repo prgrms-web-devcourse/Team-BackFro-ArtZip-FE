@@ -10,9 +10,9 @@ import 'swiper/scss/pagination';
 import cookies from 'next-cookies';
 import App from 'next/app';
 import { setToken } from 'utils';
-import cookie from 'react-cookies';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -60,6 +60,11 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
   }
+  // else {
+  //   cookie.remove('ACCESS_TOKEN');
+  //   cookie.remove('REFRESH_TOKEN');
+  // }
+
   // else {
   //   cookie.remove('ACCESS_TOKEN');
   //   cookie.remove('REFRESH_TOKEN');

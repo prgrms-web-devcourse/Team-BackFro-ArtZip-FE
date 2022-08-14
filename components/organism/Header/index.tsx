@@ -34,7 +34,7 @@ const Header = () => {
           {userState.userId ? (
             <>
               <LinkText href={`/users/${userState.userId}`} text="마이페이지" />
-              <LogoutButton>로그아웃</LogoutButton>
+              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
             </>
           ) : (
             <>
@@ -146,7 +146,6 @@ const SearchBar = styled(Input.Search)`
   .ant-btn {
     height: 35px;
   }
-  
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     display: none;

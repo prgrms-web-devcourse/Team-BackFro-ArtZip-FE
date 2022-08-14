@@ -12,6 +12,7 @@ const exhibitionAPI = {
   },
   getDetail: (exhibitionId: number) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
+
     return refreshToken
       ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)
       : unAuthRequest.get(`/api/v1/exhibitions/${exhibitionId}`);
