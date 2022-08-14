@@ -6,6 +6,7 @@ import * as S from '../../../styles/pages/exhibitionsCustom';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionCard } from 'components/molecule';
+import styled from '@emotion/styled';
 
 //exhibitions/custom
 const ExhibitionCustom: NextPage = () => {
@@ -17,6 +18,9 @@ const ExhibitionCustom: NextPage = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<
     { id: number; value: string; name: string }[]
   >([]);
+  const [selectedGenre, setSelectedGenre] = useState<{ id: number; value: string; name: string }[]>(
+    [],
+  );
 
   const [total, setTotal] = useState(0);
 
@@ -32,16 +36,22 @@ const ExhibitionCustom: NextPage = () => {
   useEffect(() => {
     console.log('currentPage', currentPage);
     exhibitionAPI
-      .custom(getSelectedValue(selectedArea), getSelectedValue(selectedPeriod), currentPage, 8)
+      .custom(
+        getSelectedValue(selectedArea),
+        getSelectedValue(selectedPeriod),
+        getSelectedValue(selectedGenre),
+        currentPage,
+        8,
+      )
       .then((res) => {
         console.log('data', res.data.data.content);
         setTotal(res.data.data.totalPage);
         setExhibitions(res.data.data.content);
       });
-  }, [currentPage, selectedArea, selectedPeriod]);
+  }, [currentPage, selectedArea, selectedPeriod, selectedGenre]);
 
   useEffect(() => {
-    exhibitionAPI.custom('ALL', 'ALL', 0, 8).then((res) => {
+    exhibitionAPI.custom('ALL', 'ALL', 'ALL', 0, 8).then((res) => {
       setTotal(res.data.data.totalPage);
       setExhibitions(res.data.data.content);
     });
@@ -58,20 +68,32 @@ const ExhibitionCustom: NextPage = () => {
         selectedValues={selectedPeriod}
         setSelectedValues={setSelectedPeriod}
       />
+      <SearchToolbar
+        type="genre"
+        selectedValues={selectedGenre}
+        setSelectedValues={setSelectedGenre}
+      />
       <S.ExhibitionsCustomContent>
-        {exhibitions.map((exhibition) => (
-          <ExhibitionCard
-            exhibitionId={exhibition.exhibitionId}
-            key={exhibition.exhibitionId}
-            name={exhibition.name}
-            thumbnail={exhibition.thumbnail}
-            startDate={exhibition.startDate!}
-            endDate={exhibition.endDate!}
-            likeCount={exhibition.likeCount!}
-            reviewCount={exhibition.reviewCount!}
-            isLiked={exhibition.isLiked!}
-          />
-        ))}
+        {exhibitions.length > 0 ? (
+          exhibitions.map((exhibition) => (
+            <ExhibitionCard
+              exhibitionId={exhibition.exhibitionId}
+              key={exhibition.exhibitionId}
+              name={exhibition.name}
+              thumbnail={exhibition.thumbnail}
+              startDate={exhibition.startDate!}
+              endDate={exhibition.endDate!}
+              likeCount={exhibition.likeCount!}
+              reviewCount={exhibition.reviewCount!}
+              isLiked={exhibition.isLiked!}
+            />
+          ))
+        ) : (
+          <div>
+            <Logo>Art.zip</Logo>
+            <h4>해당하는 전시회가 없습니다. </h4>
+          </div>
+        )}
       </S.ExhibitionsCustomContent>
       <Pagination
         className="pagination"
@@ -87,3 +109,11 @@ const ExhibitionCustom: NextPage = () => {
   );
 };
 export default ExhibitionCustom;
+
+const Logo = styled.div`
+  font-size: 5rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.color.blue.main};
+  margin-bottom: 30px;
+  cursor: pointer;
+`;
