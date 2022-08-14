@@ -53,6 +53,7 @@ const reviewAPI = {
   },
   getReviewSingle: (reviewId: number) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
+
     return refreshToken
       ? authRequest.get(`/api/v1/reviews/${reviewId}`)
       : unAuthRequest.get(`/api/v1/reviews/${reviewId}`);
