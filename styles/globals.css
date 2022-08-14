@@ -133,3 +133,8 @@ button {
 .ant-image-img {
   object-fit: cover;
 }
+
+a:hover {
+  color: #646fd4;
+  text-decoration: none;
+}
