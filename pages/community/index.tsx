@@ -2,32 +2,47 @@ import Head from 'next/head';
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecule';
 import { useInfiniteScroll } from 'hooks';
-import { useState } from 'react';
-import { ReviewMultiReadResponse, ReviewSingleReadData } from 'types/apis/review';
+import { useEffect, useState } from 'react';
 import { ReviewFeed } from 'components/organism';
 import { reviewAPI } from 'apis';
-import { GetServerSidePropsContext } from 'next';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useRouter } from 'next/router';
+import { ReviewSingleReadData } from 'types/apis/review';
 
-const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
-  const { totalPages, content } = data;
+const CommunityPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
+  const exhibitionId = router.query.exhibitionId;
+
+  useEffect(() => {
+    const getFeed = async () => {
+      const { data } = await reviewAPI.getReviewMulti({
+        exhibitionId: Number(exhibitionId),
+      });
+      setFeeds([...data.data.content]);
+      setTotalPages(data.data.totalPages);
+    };
+    getFeed();
+  }, []);
+
+  const [feeds, setFeeds] = useState<ReviewSingleReadData[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   const getMoreFeed = async () => {
     if (totalPages <= currentPage) {
       return;
     }
-    const { data } = await reviewAPI.getReviewMulti({ page: currentPage + 1 });
+    const { data } = await reviewAPI.getReviewMulti({
+      page: currentPage + 1,
+      exhibitionId: Number(exhibitionId),
+    });
     const newFeeds: ReviewSingleReadData[] = Object.values(data.data.content);
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
   };
 
   const [fetching, setFetching] = useInfiniteScroll(getMoreFeed);
-  const [feeds, setFeeds] = useState([...content]);
 
   const { userId } = useRecoilValue(userAtom);
 
@@ -61,16 +76,6 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
       </>
     </>
   );
-};
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const exhibitionId = context.query.exhibitionId;
-  const { data } = await reviewAPI.getReviewMulti({ exhibitionId: Number(exhibitionId) });
-  return {
-    props: {
-      data: data.data,
-    },
-  };
 };
 
 const CommunityFeedWrapper = styled.div`

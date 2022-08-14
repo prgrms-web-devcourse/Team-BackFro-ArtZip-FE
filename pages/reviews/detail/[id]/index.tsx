@@ -1,48 +1,55 @@
 import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
 import { ReviewDetail, CommentWrite, CommentList } from 'components/organism';
-import { ReviewSingleReadResponse } from 'types/apis/review';
+import { ReviewSingleReadData, ReviewSingleReadResponse } from 'types/apis/review';
 import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useInfiniteScroll } from 'hooks';
 import { CommentProps } from 'types/model';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
-const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
-  const {
-    exhibition,
-    user,
-    reviewId,
-    isPublic,
-    isEdited,
-    isLiked,
-    likeCount,
-    photos,
-    title,
-    content,
-    createdAt,
-    updatedAt,
-    commentCount,
-    comments,
-    date,
-  } = data;
-
+const ReviewDetailPage = () => {
   const router = useRouter();
+  const { id } = router.query;
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [reviewComments, setReviewComments] = useState([...comments.content]);
-  const [reviewCommentCount, setReviewCommentCount] = useState(commentCount);
-  const { totalPage, pageNumber } = comments;
+  const [review, setReview] = useState<ReviewSingleReadData>();
+
+  // TODO: 이후에 useSWR로 마이그레이션
+  useEffect(() => {
+    const getReviewDetail = async () => {
+      const { data } = await reviewAPI.getReviewSingle(Number(id));
+      setReview(data.data);
+      setReviewCommentCount(data.data.commentCount);
+      setTotalPage(data.data.comments.totalPage);
+      setPageNumber(data.data.pageNumber);
+    };
+
+    const getComment = async () => {
+      const { data } = await reviewAPI.getComments({ reviewId: Number(id) });
+      setReviewComments(data.data.comments.content);
+    };
+
+    getReviewDetail();
+    getComment();
+  }, []);
+
+  const [reviewComments, setReviewComments] = useState<CommentProps[]>([]);
+  const [reviewCommentCount, setReviewCommentCount] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
   const [currentPage, setCurrentPage] = useState(pageNumber);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // 댓글 무한 스크롤
   const getMoreComment = async () => {
-    if (totalPage < currentPage) {
+    if (totalPage <= currentPage) {
       return;
     }
-
-    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
+    const { data } = await reviewAPI.getComments({ reviewId: Number(id), page: currentPage + 1 });
     const newComments: CommentProps[] = Object.values(data.data.comments.content);
     setReviewComments([...reviewComments, ...newComments]);
     setCurrentPage(currentPage + 1);
@@ -69,7 +76,8 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   };
 
   const handleCommentReload = async () => {
-    const { data } = await reviewAPI.getComments({ reviewId: reviewId });
+    console.log('reload!');
+    const { data } = await reviewAPI.getComments({ reviewId: Number(id) });
     const { comments, commentCount } = data.data;
     setReviewComments(comments.content);
     setReviewCommentCount(commentCount);
@@ -80,59 +88,42 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
       <Head>
         <title>ArtZip | ReviewDetailPage</title>
       </Head>
-      <>
-        <ReviewDetail
-          reviewId={reviewId}
-          likeCount={likeCount}
-          commentCount={reviewCommentCount}
-          isLiked={isLiked}
-          createdAt={createdAt}
-          title={title}
-          isPublic={isPublic}
-          isEdited={isEdited}
-          content={content}
-          photos={photos}
-          updatedAt={updatedAt}
-          exhibition={exhibition}
-          date={date}
-          user={user}
-          onDeleteButtonClick={showModal}
-        />
-        <CommentWrite reviewId={reviewId} onCommentReload={handleCommentReload} />
-        <CommentList
-          comments={reviewComments}
-          reviewId={reviewId}
-          onDeleteButtonClick={handleCommentReload}
-          onEditButtonClick={handleCommentReload}
-        />
-      </>
-      <Modal
-        title="리뷰를 삭제할까요?"
-        visible={isModalVisible}
-        onOk={() => handleOk(reviewId)}
-        okText="삭제하기"
-        onCancel={handleCancel}
-        cancelText="취소"
-      >
-        <p>이 작업은 되돌릴 수 없습니다. 정말 삭제하시겠어요?</p>
-      </Modal>
+
+      {review && (
+        <>
+          <>
+            <ReviewDetail
+              reviewDetail={review}
+              onDeleteButtonClick={showModal}
+              commentCount={reviewCommentCount}
+            />
+            <CommentWrite reviewId={review.reviewId} onCommentReload={handleCommentReload} />
+            {reviewComments && (
+              <CommentList
+                comments={reviewComments}
+                reviewId={review.reviewId}
+                onDeleteButtonClick={handleCommentReload}
+                onEditButtonClick={handleCommentReload}
+              />
+            )}
+          </>
+
+          <Modal
+            title="리뷰를 삭제할까요?"
+            visible={isModalVisible}
+            onOk={() => handleOk(review.reviewId)}
+            okText="삭제하기"
+            onCancel={handleCancel}
+            cancelText="취소"
+          >
+            <p>이 작업은 되돌릴 수 없습니다. 정말 삭제하시겠어요?</p>
+          </Modal>
+        </>
+      )}
+
+      {!review && <Spin indicator={antIcon} />}
     </>
   );
-};
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  if (!context.params) {
-    return;
-  }
-
-  const { id } = context.params;
-  const { data } = await reviewAPI.getReviewSingle(Number(id));
-
-  return {
-    props: {
-      data: data.data,
-    },
-  };
 };
 
 export default ReviewDetailPage;
