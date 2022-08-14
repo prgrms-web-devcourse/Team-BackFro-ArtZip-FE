@@ -223,7 +223,7 @@ const CommentUtils = ({
           replyList.map((reply) => (
             <Comment
               key={reply.commentId}
-              author={<Link href={`/user/${reply.user.userId}`}>{reply.user.nickname}</Link>}
+              author={<Link href={`/users/${reply.user.userId}`}>{reply.user.nickname}</Link>}
               avatar={
                 <UserAvatar userId={reply.user.userId} profileImage={reply.user.profileImage} />
               }

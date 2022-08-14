@@ -40,7 +40,7 @@ const CommentList = ({
                 onEditButtonClick={onEditButtonClick}
               />,
             ]}
-            author={<Link href={`/user/${comment.user.userId}`}>{comment.user.nickname}</Link>}
+            author={<Link href={`/users/${comment.user.userId}`}>{comment.user.nickname}</Link>}
             avatar={
               <UserAvatar userId={comment.user.userId} profileImage={comment.user.profileImage} />
             }

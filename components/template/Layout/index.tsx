@@ -6,7 +6,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <PageContainer>
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </PageContainer>
   );

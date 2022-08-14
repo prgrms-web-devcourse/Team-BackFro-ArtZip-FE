@@ -5,6 +5,8 @@ export const ReviewFeedCard = styled(Card)`
   width: 70%;
   margin: 30px 0;
   height: 230px;
+  box-sizing: content-box;
+  padding: 10px;
 `;
 
 export const ReviewFeedWrapper = styled.div`
@@ -65,6 +67,11 @@ export const ReviewFeedMain = styled.div`
 `;
 
 export const ReviewTitle = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   font-size: 2.2rem;
   margin-top: 10px;
   font-weight: bold;

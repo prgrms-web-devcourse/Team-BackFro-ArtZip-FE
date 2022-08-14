@@ -1,112 +1,80 @@
 import Head from 'next/head';
 import { Pagination } from 'antd';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchResultPageStyle as S } from '../../styles/pages';
 import { NextPage } from 'next';
+import { ExhibitionProps } from 'types/model';
+import { exhibitionAPI } from 'apis';
+import { ExhibitionCard } from 'components/molecule';
+import styled from '@emotion/styled';
 
 const SearchResultPage: NextPage = () => {
   const router = useRouter();
   const { exhibition } = router.query;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
+  const [total, setTotal] = useState(0);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  //TODO : 서버애서 받은 total 값 넣을 예정
-  const [total, setTotal] = useState(100);
+  useEffect(() => {
+    if (typeof exhibition === 'string') {
+      exhibitionAPI
+        .search(exhibition, currentPage, 10, true)
+        .then((res) => {
+          setTotal(res.data.data.totalPage);
+          setExhibitions(res.data.data.content);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [currentPage]);
 
   return (
     <S.SearchResultContainer>
       <Head>
         <title>ArtZip | SearchResult</title>
       </Head>
-      {exhibition && <div>SearchResult: {exhibition}</div>}
-      {/* 
       <S.SearchResultContents>
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />{' '}
-        <ExhibitionCard
-          exhibitionId={ret.exhibitionId}
-          name={ret.name}
-          thumbnail={ret.thumbnail}
-          startDate={ret.startDate}
-          endDate={ret.endDate}
-          likeCount={ret.likeCount}
-          reviewCount={ret.reviews.length}
-        />
-      </S.SearchResultContents> */}
+        {exhibitions.length > 0 ? (
+          exhibitions.map((exhibition) => (
+            <ExhibitionCard
+              exhibitionId={exhibition.exhibitionId}
+              key={exhibition.exhibitionId}
+              name={exhibition.name}
+              thumbnail={exhibition.thumbnail}
+              startDate={exhibition.startDate!}
+              endDate={exhibition.endDate!}
+              likeCount={exhibition.likeCount!}
+              reviewCount={exhibition.reviewCount!}
+              isLiked={exhibition.isLiked!}
+            />
+          ))
+        ) : (
+          <div>
+            <Logo>Art.zip</Logo>
+            <h4>해당하는 전시회가 없습니다. </h4>
+          </div>
+        )}
+      </S.SearchResultContents>
       <Pagination
         className="pagination"
         defaultCurrent={1}
-        current={currentPage}
+        current={currentPage + 1}
         total={total}
         defaultPageSize={10}
         showSizeChanger={false}
         pageSize={10}
-        onChange={(page) => setCurrentPage(page)}
+        onChange={(page) => setCurrentPage(page - 1)}
       />
     </S.SearchResultContainer>
   );
 };
 
 export default SearchResultPage;
+
+const Logo = styled.div`
+  font-size: 5rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.color.blue.main};
+  margin-bottom: 30px;
+  cursor: pointer;
+`;
