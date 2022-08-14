@@ -9,26 +9,27 @@ import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
 import * as S from './style';
 
-interface ReviewDetailProps extends Omit<ReviewSingleReadData, 'comments'> {
+interface ReviewDetailProps {
+  reviewDetail: Omit<ReviewSingleReadData, 'comments'>;
+  commentCount: number;
   onDeleteButtonClick: () => void;
 }
 
-const ReviewDetail = ({
-  reviewId,
-  createdAt,
-  user,
-  exhibition,
-  date,
-  title,
-  isPublic,
-  isEdited,
-  content,
-  isLiked,
-  likeCount,
-  commentCount,
-  photos,
-  onDeleteButtonClick,
-}: ReviewDetailProps) => {
+const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: ReviewDetailProps) => {
+  const {
+    reviewId,
+    user,
+    exhibition,
+    title,
+    content,
+    createdAt,
+    isEdited,
+    isLiked,
+    isPublic,
+    likeCount,
+    photos,
+  } = reviewDetail;
+
   const { userId, nickname, profileImage } = user;
   const isMyReview = useRecoilValue(userAtom).userId === userId;
   const [detailLikeCount, setDetailLikeCount] = useState(likeCount);
