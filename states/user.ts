@@ -1,6 +1,7 @@
 import { userAPI } from 'apis';
 import { atom, selector } from 'recoil';
 import cookie from 'react-cookies';
+import { SIGNOUT_USER_STATE } from '../constants';
 
 const cookieEffect =
   (accessTokenKey: string, refreshTokenKey: string) =>
@@ -12,19 +13,26 @@ const cookieEffect =
     if (!accessToken || !refreshToken) {
       cookie.remove('ACCESS_TOKEN');
       cookie.remove('REFRESH_TOKEN');
-      setSelf({ userId: null });
+      setSelf(SIGNOUT_USER_STATE);
     }
 
     onSet(async () => {
       try {
+        if (!cookie.load(accessTokenKey) || !cookie.load(refreshTokenKey)) {
+          cookie.remove('ACCESS_TOKEN');
+          cookie.remove('REFRESH_TOKEN');
+          return SIGNOUT_USER_STATE;
+        }
+
         const { data } = await userAPI.getMyInfo();
-        const userId = data.data.userId;
-        return { userId };
+        const { userId, email, nickname, profileImage } = data.data;
+        return { userId, email, nickname, profileImage };
       } catch (error: unknown) {
         cookie.remove('ACCESS_TOKEN');
         cookie.remove('REFRESH_TOKEN');
         console.error(error);
-        return { userId: null };
+
+        return SIGNOUT_USER_STATE;
       }
     });
   };
@@ -36,20 +44,19 @@ const userAtom = atom({
     key: 'user/get',
     get: async () => {
       if (!cookie.load('ACCESS_TOKEN') || !cookie.load('REFRESH_TOKEN')) {
-        console.log('암것도 없음');
         cookie.remove('ACCESS_TOKEN');
         cookie.remove('REFRESH_TOKEN');
-        return { userId: null };
+        return SIGNOUT_USER_STATE;
       }
 
       try {
         const { data } = await userAPI.getMyInfo();
-        const userId = data.data.userId;
-        return { userId };
+        const { userId, email, nickname, profileImage } = data.data;
+        return { userId, email, nickname, profileImage };
       } catch (error: unknown) {
-        cookie.remove('REFRESH_TOKEN');
         cookie.remove('ACCESS_TOKEN');
-        return { userId: null };
+        cookie.remove('REFRESH_TOKEN');
+        return SIGNOUT_USER_STATE;
       }
     },
   }),
