@@ -7,16 +7,11 @@ import { homeStyle as S } from '../styles/pages';
 import React, { useEffect, useState } from 'react';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
-import { useRecoilValue } from 'recoil';
-import { userAtom } from 'states';
 
 const Home: NextPage = () => {
   const [upcomingExhibitions, setUpcomingExhibitions] = useState<ExhibitionProps[]>([]);
   const [mostLikeExhibitions, setMostLikeExhibitions] = useState<ExhibitionProps[]>([]);
 
-  const userState = useRecoilValue(userAtom);
-
-  console.log('user', userState);
   useEffect(() => {
     exhibitionAPI.getUpcoming(0, 8).then((res) => {
       setUpcomingExhibitions(res.data.data.content);
