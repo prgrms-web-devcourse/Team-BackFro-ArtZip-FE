@@ -6,12 +6,19 @@ const reviewAPI = {
     return authRequest.patch(`/api/v1/reviews/${reviewId}/like`);
   },
   getComments: ({ reviewId, page, size }: { reviewId: number; page?: number; size?: number }) => {
-    return unAuthRequest.get(`/api/v1/reviews/${reviewId}/comments`, {
-      params: {
-        ...(page ? { page: page } : {}),
-        ...(size ? { size: size } : {}),
-      },
-    });
+    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const params = {
+      ...(page ? { page: page } : {}),
+      ...(size ? { size: size } : {}),
+    };
+
+    return refreshToken
+      ? authRequest.get(`/api/v1/reviews/${reviewId}/comments`, {
+          params,
+        })
+      : unAuthRequest.get(`/api/v1/reviews/${reviewId}/comments`, {
+          params,
+        });
   },
   searchExhibition: (query: string) => {
     return unAuthRequest.get(`/api/v1/reviews/search/exhibitions?query=${query}`);

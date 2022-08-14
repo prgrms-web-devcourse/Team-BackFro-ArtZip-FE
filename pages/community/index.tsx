@@ -9,8 +9,6 @@ import { reviewAPI } from 'apis';
 import { GetServerSidePropsContext } from 'next';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
-import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
 import { useRouter } from 'next/router';
 
 const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
@@ -30,10 +28,8 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
 
   const [fetching, setFetching] = useInfiniteScroll(getMoreFeed);
   const [feeds, setFeeds] = useState([...content]);
-  const [loading, setLoding] = useState(false);
 
   const { userId } = useRecoilValue(userAtom);
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   const handleDeleteButtonClick = async () => {
     const { exhibitionId } = router.query;
@@ -50,21 +46,17 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
       <>
         <Banner title="커뮤니티" content={'Art.zip에서 다양한 전시회 후기를 만나보세요'} />
         <CommunityFeedWrapper>
-          {!loading &&
-            feeds.map((feed) => {
-              const { reviewId, user } = feed;
-              return (
-                <ReviewFeed
-                  key={reviewId}
-                  feed={feed}
-                  // 전역 상태로 관리, 우선은 true
-                  isMyFeed={userId === user.userId}
-                  onDeleteButtonClick={handleDeleteButtonClick}
-                />
-              );
-            })}
-
-          {loading && [...Array(20)].map((_, i) => <Spin indicator={antIcon} key={i} />)}
+          {feeds.map((feed) => {
+            const { reviewId, user } = feed;
+            return (
+              <ReviewFeed
+                key={reviewId}
+                feed={feed}
+                isMyFeed={userId === user.userId}
+                onDeleteButtonClick={handleDeleteButtonClick}
+              />
+            );
+          })}
         </CommunityFeedWrapper>
       </>
     </>
