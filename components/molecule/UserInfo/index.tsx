@@ -13,7 +13,7 @@ const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps
     <UserInfoContainer>
       <UserAvatar profileImage={profileImage} userId={userId}></UserAvatar>
       <UserInfoTextWrapper>
-        <Link href={`/user/${userId}`}>
+        <Link href={`/users/${userId}`}>
           <a>
             <UserInfoName>{nickname}</UserInfoName>
           </a>
