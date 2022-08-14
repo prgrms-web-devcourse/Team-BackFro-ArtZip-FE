@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
 import { Input, Button } from 'antd';
 import { UserAvatar, NotLoginAvatar } from 'components/atom';
-import { useRef, useState } from 'react';
-import { UserProps } from 'types/model';
+import { useEffect, useRef, useState } from 'react';
+import { CommentProps, UserProps } from 'types/model';
 import { useClickAway } from 'hooks';
 import router from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
+import { commentAPI } from 'apis';
 
 interface CommentWriteProps {
-  user?: UserProps;
+  // isLogin: boolean;
+  reviewId: number;
+  onCommentReload?: () => void;
   parentId?: number;
   handleReplyCancel?: () => void;
 }
@@ -15,11 +20,19 @@ interface CommentWriteProps {
 // TODO: 유저의 로그인 상태는 전역 관리.
 // 우선은 props로 받지만, 전역 관리 로직이 완료되면
 // 컴포넌트 안에서 관리하도록 한다.
-const CommentWrite = ({ user, parentId, handleReplyCancel }: CommentWriteProps) => {
+const CommentWrite = ({
+  reviewId,
+  parentId,
+  handleReplyCancel,
+  onCommentReload,
+}: CommentWriteProps) => {
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState('');
   const commentContainerRef = useRef<HTMLDivElement>(null);
+  const currentUser = useRecoilValue(userAtom);
+  const isLogin = currentUser.userId !== null;
 
+  // 유저 상태
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
@@ -37,22 +50,25 @@ const CommentWrite = ({ user, parentId, handleReplyCancel }: CommentWriteProps) 
 
   useClickAway(commentContainerRef, clickAwayHandler);
 
-  const handleOnClick = () => {
-    // TODO: 댓글 작성 api 호출하는 로직
-    // TODO: 댓글과 답글 로직을 구분, 답글의 경우, parentId(commentId)를 받음
+  const handleOnClick = async () => {
     if (parentId) {
-      console.log('답글 작성 api 호출');
+      const { data } = await commentAPI.create(reviewId, {
+        content: comment,
+        parentId,
+      });
+      onCommentReload && onCommentReload();
     } else {
-      console.log('댓글 작성 api 호출');
+      const { data } = await commentAPI.create(reviewId, {
+        content: comment,
+      });
+      onCommentReload && onCommentReload();
     }
-
-    console.log('보낼 content', comment);
     setShow(false);
     setComment('');
   };
 
   {
-    return !user ? (
+    return !isLogin ? (
       <CommentWriteContainer
         onClick={() => {
           router.push('/signin');
@@ -64,11 +80,13 @@ const CommentWrite = ({ user, parentId, handleReplyCancel }: CommentWriteProps) 
     ) : (
       <CommentWriteWrapper ref={commentContainerRef}>
         <CommentWriteContainer>
-          <UserAvatar userId={user.userId} profileImage={user.profileImage} />
+          <UserAvatar userId={currentUser.userId} profileImage={currentUser.profileImage} />
           <CommentInput
             value={comment}
             placeholder="댓글을 작성하세요."
-            onClick={() => setShow(true)}
+            onClick={() => {
+              setShow(true);
+            }}
             onChange={handleChange}
           />
         </CommentWriteContainer>
@@ -115,6 +133,8 @@ const CancelButton = styled(Button)`
   margin-right: 10px;
 `;
 
-const CommentInput = styled(Input)``;
+const CommentInput = styled(Input)`
+  margin-left: 15px;
+`;
 
 export default CommentWrite;

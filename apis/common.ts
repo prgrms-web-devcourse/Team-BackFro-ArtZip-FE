@@ -26,9 +26,13 @@ authRequest.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     const UNAUTHORIZE_CODE = 'U005';
+    const LOGOUT_TOKEN = 'U017';
+
     if (
       error.response.status === 401 ||
-      (error.response.status === 403 && error.response.data.code === UNAUTHORIZE_CODE)
+      (error.response.status === 400 &&
+        (error.response.data.code === UNAUTHORIZE_CODE ||
+          error.response.data.code === LOGOUT_TOKEN))
     ) {
       originalRequest._retry = true;
       const accessToken = cookie.load('ACCESS_TOKEN');

@@ -86,7 +86,6 @@ const Container = styled.div`
   width: 80%;
   max-width: 1400px;
   margin: 0 auto;
-
   &:first-of-type {
     margin-bottom: 10px;
   }
@@ -118,17 +117,14 @@ const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   & > a {
     margin-right: 80px;
     padding-bottom: 14px;
     margin-bottom: -3px;
     border-bottom: 3px solid transparent;
-
     &:last-of-type {
       margin-right: 0;
     }
-
     &:hover {
       font-weight: 500;
       border-bottom: 3px solid ${({ theme }) => theme.color.blue.main};
@@ -147,10 +143,10 @@ const Navigation = styled.nav`
 const SearchBar = styled(Input.Search)`
   width: 400px;
   margin-bottom: 14px;
-
   .ant-btn {
     height: 35px;
   }
+  
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     display: none;

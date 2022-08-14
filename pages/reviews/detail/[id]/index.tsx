@@ -6,6 +6,8 @@ import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useInfiniteScroll } from 'hooks';
+import { CommentProps } from 'types/model';
 
 const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
   const {
@@ -26,8 +28,28 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
     date,
   } = data;
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [reviewComments, setReviewComments] = useState([...comments.content]);
+  const [reviewCommentCount, setReviewCommentCount] = useState(commentCount);
+  const { totalPage, pageNumber } = comments;
+  const [currentPage, setCurrentPage] = useState(pageNumber);
+
+  // 댓글 무한 스크롤
+  const getMoreComment = async () => {
+    if (totalPage < currentPage) {
+      return;
+    }
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId, page: currentPage + 1 });
+    const newComments: CommentProps[] = Object.values(data.data.content);
+    setReviewComments([...reviewComments, ...newComments]);
+    setCurrentPage(currentPage + 1);
+  };
+
+  const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
+
+  // 댓글 액션
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -35,16 +57,22 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
 
   const handleOk = async (reviewId: number) => {
     setIsModalVisible(false);
-
     const { data } = await reviewAPI.deleteReview(reviewId);
     const { message: responseMessage } = data;
     message.success(responseMessage);
-
     router.push('/community');
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleCommentReload = async () => {
+    const { data } = await reviewAPI.getComments({ reviewId: reviewId });
+    // TODO: 임시 구현, 샤크에게 데이터 더 담아달라고 요청하기.
+    const { data: reviewData } = await reviewAPI.getReviewSingle(reviewId);
+    setReviewComments(data.data.content);
+    setReviewCommentCount(reviewData.data.commentCount);
   };
 
   return (
@@ -56,7 +84,7 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
         <ReviewDetail
           reviewId={reviewId}
           likeCount={likeCount}
-          commentCount={commentCount}
+          commentCount={reviewCommentCount}
           isLiked={isLiked}
           createdAt={createdAt}
           title={title}
@@ -70,10 +98,13 @@ const ReviewDetailPage = ({ data }: ReviewSingleReadResponse) => {
           user={user}
           onDeleteButtonClick={showModal}
         />
-
-        {/* 전역 상태 머지 되면 로직 구현 */}
-        <CommentWrite user={undefined} />
-        <CommentList comments={comments} reviewId={reviewId} />
+        <CommentWrite reviewId={reviewId} onCommentReload={handleCommentReload} />
+        <CommentList
+          comments={reviewComments}
+          reviewId={reviewId}
+          onDeleteButtonClick={handleCommentReload}
+          onEditButtonClick={handleCommentReload}
+        />
       </>
       <Modal
         title="리뷰를 삭제할까요?"
