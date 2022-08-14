@@ -17,6 +17,9 @@ const ExhibitionCustom: NextPage = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<
     { id: number; value: string; name: string }[]
   >([]);
+  const [selectedGenre, setSelectedGenre] = useState<{ id: number; value: string; name: string }[]>(
+    [],
+  );
 
   const [total, setTotal] = useState(0);
 
@@ -32,16 +35,22 @@ const ExhibitionCustom: NextPage = () => {
   useEffect(() => {
     console.log('currentPage', currentPage);
     exhibitionAPI
-      .custom(getSelectedValue(selectedArea), getSelectedValue(selectedPeriod), currentPage, 8)
+      .custom(
+        getSelectedValue(selectedArea),
+        getSelectedValue(selectedPeriod),
+        getSelectedValue(selectedGenre),
+        currentPage,
+        8,
+      )
       .then((res) => {
         console.log('data', res.data.data.content);
         setTotal(res.data.data.totalPage);
         setExhibitions(res.data.data.content);
       });
-  }, [currentPage, selectedArea, selectedPeriod]);
+  }, [currentPage, selectedArea, selectedPeriod, selectedGenre]);
 
   useEffect(() => {
-    exhibitionAPI.custom('ALL', 'ALL', 0, 8).then((res) => {
+    exhibitionAPI.custom('ALL', 'ALL', 'ALL', 0, 8).then((res) => {
       setTotal(res.data.data.totalPage);
       setExhibitions(res.data.data.content);
     });
@@ -57,6 +66,11 @@ const ExhibitionCustom: NextPage = () => {
         type="period"
         selectedValues={selectedPeriod}
         setSelectedValues={setSelectedPeriod}
+      />
+      <SearchToolbar
+        type="genre"
+        selectedValues={selectedGenre}
+        setSelectedValues={setSelectedGenre}
       />
       <S.ExhibitionsCustomContent>
         {exhibitions.map((exhibition) => (
