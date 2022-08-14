@@ -30,17 +30,6 @@ const Home: NextPage = () => {
       <SwiperContainer title="인기많은 전시회" type="popular">
         <SwiperWrapper items={mostLikeExhibitions} />
       </SwiperContainer>
-
-      <S.MapContainer>
-        <Map
-          title={'프로그래머스'}
-          lat={37.491806}
-          lng={127.029933}
-          width={800}
-          height={500}
-          address={'서울특별시 서초구 서초동 강남대로 327'}
-        />
-      </S.MapContainer>
     </div>
   );
 };
