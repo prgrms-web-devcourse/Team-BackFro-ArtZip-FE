@@ -16,12 +16,12 @@ function useUserAuthActions() {
       setToken('ACCESS_TOKEN', accessToken);
       setToken('REFRESH_TOKEN', refreshToken);
       setUser({ userId: userId });
-      alert(res.data.message);
+      message.success(res.data.message);
       router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
-      alert(e.response.data.message);
+      message.error(e.response.data.message);
       throw e;
     }
   };
