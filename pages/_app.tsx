@@ -45,14 +45,18 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
   const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
+  console.log('accessTokenByCookie', accessTokenByCookie);
+  console.log('refreshTokenByCookie', refreshTokenByCookie);
+
   // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
-  } else {
-    cookie.remove('ACCESS_TOKEN');
-    cookie.remove('REFRESH_TOKEN');
   }
+  // else {
+  //   cookie.remove('ACCESS_TOKEN');
+  //   cookie.remove('REFRESH_TOKEN');
+  // }
 
   return { ...appProps };
 };
