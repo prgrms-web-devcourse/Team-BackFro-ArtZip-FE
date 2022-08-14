@@ -30,7 +30,7 @@ const ExhibitionInfo = ({
       <InfoTextBold>{title}</InfoTextBold>
       {isLink ? (
         <CopyWrapper>
-          <StyledLink href={`${href}`}>
+          <StyledLink href={`${href}`} target="_blank">
             <InfoText> {info}</InfoText>
           </StyledLink>
           {copy && (
