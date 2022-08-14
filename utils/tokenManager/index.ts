@@ -8,7 +8,7 @@ function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
   expires.setDate(expires.getDate() + 14);
 
   // TODO: 테스트용 주석, 배포 확정시 삭제
-  console.log('환경:', process.env.NEXT_PUBLIC_ENVIRONMENT);
+  // console.log('환경:', process.env.NEXT_PUBLIC_ENVIRONMENT);
 
   cookie.save(key, token, {
     path: '/',
@@ -16,7 +16,7 @@ function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
     domain:
       process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP'
         ? '.localhost'
-        : 'team-back-fro-art-zip-fe.vercel.app',
+        : '.team-back-fro-art-zip-fe.vercel.app',
     // httpOnly: HTTP_ONLY,
   });
 }
