@@ -102,7 +102,12 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                   createdAt={review.createdAt}
                   likeCount={review.likeCount}
                   commentCount={review.commentCount}
-                  photo={[{ path: review.photos[0]?.path, photoId: 13 }]}
+                  photo={[
+                    {
+                      path: review.photos[0] ? review.photos[0].path : review.exhibition.thumbnail,
+                      photoId: 13,
+                    },
+                  ]}
                   userId={review.user.userId}
                   nickname={review.user.nickname}
                   profileImage={review.user.profileImage}
