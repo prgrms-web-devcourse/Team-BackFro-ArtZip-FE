@@ -4,9 +4,10 @@ import { message } from 'antd';
 import { ExhibitionInfo } from 'components/molecule';
 import { LikeInfo } from 'components/molecule';
 import { exhibitionAPI } from 'apis';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
+import { exhibitionGenre, exhibitionPlace } from '../../../constants';
 
 interface ExhibitionDetailProps {
   exhibitionId: number;
@@ -44,6 +45,25 @@ const ExhibitionDetail = ({
   const { userId } = useRecoilValue(userAtom);
   const [currentIsLiked, setCurrentIsLiked] = useState(isLiked);
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+  const [currentArea, setCurrentArea] = useState('');
+  const [currentGenre, setCurrentGenre] = useState('');
+
+  const setInfoName = () => {
+    exhibitionPlace.forEach((areaObj) => {
+      if (areaObj.value === area) {
+        setCurrentArea(areaObj.name);
+      }
+    });
+    exhibitionGenre.forEach((genreObj) => {
+      if (genreObj.value === genre) {
+        setCurrentGenre(genreObj.name);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setInfoName();
+  }, []);
 
   const handleLikeClick = async () => {
     if (userId) {
@@ -69,7 +89,7 @@ const ExhibitionDetail = ({
             title={'전시기간'}
           ></ExhibitionInfo>
           <ExhibitionInfo isLink={true} href={url} info={url} title={'홈페이지'}></ExhibitionInfo>
-          <ExhibitionInfo title={'지역'} info={area}></ExhibitionInfo>
+          <ExhibitionInfo title={'지역'} info={currentArea}></ExhibitionInfo>
           <ExhibitionInfo
             title={'장소'}
             isLink={true}
@@ -79,7 +99,7 @@ const ExhibitionDetail = ({
           ></ExhibitionInfo>
           <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
           <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>
-          <ExhibitionInfo title={'장르'} info={genre}></ExhibitionInfo>
+          <ExhibitionInfo title={'장르'} info={currentGenre}></ExhibitionInfo>
         </S.InfoContainer>
         <S.IconContainer>
           <LikeInfo

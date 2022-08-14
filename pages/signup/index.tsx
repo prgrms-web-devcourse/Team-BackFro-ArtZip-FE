@@ -51,12 +51,16 @@ const SignUpPage = () => {
   };
 
   const onClick = async () => {
-    const res = await userAPI.nicknameCheck(nickname);
-    setIsUnique(res.data.data.isUnique);
+    if (nickname) {
+      const res = await userAPI.nicknameCheck(nickname);
+      setIsUnique(res.data.data.isUnique);
 
-    message.info(
-      res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
-    );
+      message.info(
+        res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
+      );
+    } else {
+      message.error('닉네임을 입력해 주세요');
+    }
   };
 
   return (
@@ -183,7 +187,6 @@ const StyledInput = styled(Input)`
   padding: 10px;
   background-color: transparent;
   border: none;
-
   border-bottom: 1px solid ${({ theme }) => theme.color.blue.light};
   font-size: 18px;
   &:hover {
