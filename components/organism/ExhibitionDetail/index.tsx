@@ -62,7 +62,6 @@ const ExhibitionDetail = ({
   };
 
   useEffect(() => {
-    console.log('ghcnf');
     setInfoName();
   }, []);
 
