@@ -7,6 +7,7 @@ import { NextPage } from 'next';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionCard } from 'components/molecule';
+import styled from '@emotion/styled';
 
 const SearchResultPage: NextPage = () => {
   const router = useRouter();
@@ -32,22 +33,27 @@ const SearchResultPage: NextPage = () => {
       <Head>
         <title>ArtZip | SearchResult</title>
       </Head>
-      {exhibition && <div>SearchResult: {exhibition}</div>}
-
       <S.SearchResultContents>
-        {exhibitions.map((exhibition) => (
-          <ExhibitionCard
-            exhibitionId={exhibition.exhibitionId}
-            key={exhibition.exhibitionId}
-            name={exhibition.name}
-            thumbnail={exhibition.thumbnail}
-            startDate={exhibition.startDate!}
-            endDate={exhibition.endDate!}
-            likeCount={exhibition.likeCount!}
-            reviewCount={exhibition.reviewCount!}
-            isLiked={exhibition.isLiked!}
-          />
-        ))}
+        {exhibitions.length > 0 ? (
+          exhibitions.map((exhibition) => (
+            <ExhibitionCard
+              exhibitionId={exhibition.exhibitionId}
+              key={exhibition.exhibitionId}
+              name={exhibition.name}
+              thumbnail={exhibition.thumbnail}
+              startDate={exhibition.startDate!}
+              endDate={exhibition.endDate!}
+              likeCount={exhibition.likeCount!}
+              reviewCount={exhibition.reviewCount!}
+              isLiked={exhibition.isLiked!}
+            />
+          ))
+        ) : (
+          <div>
+            <Logo>Art.zip</Logo>
+            <h4>해당하는 전시회가 없습니다. </h4>
+          </div>
+        )}
       </S.SearchResultContents>
       <Pagination
         className="pagination"
@@ -64,3 +70,11 @@ const SearchResultPage: NextPage = () => {
 };
 
 export default SearchResultPage;
+
+const Logo = styled.div`
+  font-size: 5rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.color.blue.main};
+  margin-bottom: 30px;
+  cursor: pointer;
+`;
