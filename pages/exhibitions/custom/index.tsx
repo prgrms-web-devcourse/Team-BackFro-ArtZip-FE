@@ -91,7 +91,7 @@ const ExhibitionCustom: NextPage = () => {
         ) : (
           <div>
             <Logo>Art.zip</Logo>
-            <div>해당하는 전시회가 없습니다. </div>
+            <h4>해당하는 전시회가 없습니다. </h4>
           </div>
         )}
       </S.ExhibitionsCustomContent>
