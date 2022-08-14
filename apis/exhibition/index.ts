@@ -21,9 +21,9 @@ const exhibitionAPI = {
       `/api/v1/exhibitions?query=${query}&page=${page}&size=${size}&include-end=${includeEnd}`,
     );
   },
-  custom: (area?: string, month?: string, page?: number, size?: number) => {
+  custom: (area?: string, month?: string, genre?: string, page?: number, size?: number) => {
     return unAuthRequest.get(
-      `/api/v1/exhibitions/custom?areas=${area}&months=${month}&page=${page}&size=${size}`,
+      `/api/v1/exhibitions/custom?areas=${area}&months=${month}&genres=${genre}&page=${page}&size=${size}`,
     );
   },
   likeToggle: (exhibitionId: number) => {

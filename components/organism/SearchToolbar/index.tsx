@@ -1,7 +1,7 @@
 import * as S from './style';
-import { HomeOutlined, CalendarOutlined } from '@ant-design/icons';
+import { HomeOutlined, CalendarOutlined, AreaChartOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { exhibitionPeriod, exhibitionPlace } from '../../../constants';
+import { exhibitionPeriod, exhibitionPlace, exhibitionGenre } from '../../../constants';
 
 type CheckBoxType = {
   id: number;
@@ -9,22 +9,34 @@ type CheckBoxType = {
   value: string;
 };
 interface SearchToolbarProps {
-  type: 'place' | 'period';
+  type: 'place' | 'period' | 'genre';
   selectedValues: CheckBoxType[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSelectedValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
-  const [array, setArray] = useState(type === 'place' ? exhibitionPlace : exhibitionPeriod);
+  const [array, setArray] = useState(exhibitionPlace);
+
+  useEffect(() => {
+    if (type === 'place') {
+      setArray(exhibitionPlace);
+    } else if (type === 'period') {
+      setArray(exhibitionPeriod);
+    } else {
+      setArray(exhibitionGenre);
+    }
+  }, []);
+
   const onCheckedAll = useCallback(
     (checked: boolean) => {
       if (checked) {
         const checkedListArray: CheckBoxType[] = [];
-
         if (type === 'place') {
           exhibitionPlace.forEach((it) => checkedListArray.push(it));
-        } else {
+        } else if (type === 'period') {
+          exhibitionPeriod.forEach((it) => checkedListArray.push(it));
+        } else if (type === 'genre') {
           exhibitionPeriod.forEach((it) => checkedListArray.push(it));
         }
 
@@ -54,21 +66,33 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
 
   return (
     <S.SearchToolbar>
-      {type === 'place' ? (
+      {type === 'place' && (
         <S.IconBox>
           <S.Icon>
             <HomeOutlined />
           </S.Icon>
         </S.IconBox>
-      ) : (
+      )}
+      {type === 'period' && (
         <S.IconBox>
           <S.Icon>
             <CalendarOutlined />
           </S.Icon>
         </S.IconBox>
       )}
+      {type === 'genre' && (
+        <S.IconBox>
+          <S.Icon>
+            <AreaChartOutlined />
+          </S.Icon>
+        </S.IconBox>
+      )}
       <S.ContentBox>
-        <div className="content-box-title">{type === 'place' ? '개최장소' : '개최시기'}</div>
+        <div className="content-box-title">
+          {type === 'place' && '개최장소'}
+          {type === 'period' && '개최시기'}
+          {type === 'genre' && '장르'}
+        </div>
         <div className="content-box-sub">
           {array.map((it) => (
             <div className="content-box-input" key={it.id}>
