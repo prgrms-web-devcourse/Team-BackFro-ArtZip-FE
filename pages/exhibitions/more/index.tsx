@@ -30,9 +30,6 @@ const ExhibitionsMore: NextPage = () => {
         .then((res) => {
           setTotal(res.data.data.totalPage);
           setExhibitions(res.data.data.content);
-
-          //이 부분은 제리와 이야기되면 주석 삭제하겠습니다
-          console.log(res.data.data.content);
         })
         .catch((err) => console.log(err));
     }
