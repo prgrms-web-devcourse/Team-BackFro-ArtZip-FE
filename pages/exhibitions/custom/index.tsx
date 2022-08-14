@@ -34,7 +34,6 @@ const ExhibitionCustom: NextPage = () => {
     return areas.join(',');
   };
   useEffect(() => {
-    console.log('currentPage', currentPage);
     exhibitionAPI
       .custom(
         getSelectedValue(selectedArea),
@@ -51,7 +50,7 @@ const ExhibitionCustom: NextPage = () => {
   }, [currentPage, selectedArea, selectedPeriod, selectedGenre]);
 
   useEffect(() => {
-    exhibitionAPI.custom('ALL', 'ALL', 'ALL', 0, 8).then((res) => {
+    exhibitionAPI.custom('ALL', 'ALL', 'ALL', 0, 10).then((res) => {
       setTotal(res.data.data.totalPage);
       setExhibitions(res.data.data.content);
     });

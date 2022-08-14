@@ -14,7 +14,7 @@ const SwiperContainer = ({ title, children, type }: SwiperContainerProps) => {
   return (
     <S.SwiperContainer>
       <div className="swiper-container-head">
-        <h3>{title}</h3>
+        <h2>{title}</h2>
         <Link
           href={{
             pathname: '/exhibitions/more',

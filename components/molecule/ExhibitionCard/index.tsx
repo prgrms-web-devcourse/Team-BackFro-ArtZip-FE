@@ -23,7 +23,7 @@ const ExhibitionCard = ({
   const mouseHover = () => setIsHover((isHover) => !isHover);
 
   return (
-    <Link href={`exhibitions/detail/${exhibitionId}`}>
+    <Link href={`/exhibitions/detail/${exhibitionId}`}>
       <S.ExhibitionCard>
         <Card
           className="exhibition-card"
