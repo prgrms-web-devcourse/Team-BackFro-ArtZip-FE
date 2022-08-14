@@ -1,7 +1,5 @@
-import { useRecoilValue } from 'recoil';
 import { authRequest, unAuthRequest } from 'apis/common';
 import cookie from 'react-cookies';
-import { userAtom } from 'states';
 
 const reviewAPI = {
   likeToggle: (reviewId: number) => {
@@ -14,11 +12,7 @@ const reviewAPI = {
       ...(size ? { size: size } : {}),
     };
 
-    // TODO: 배포를 위한 임시 코드, 이슈 해결 후 삭제
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const userState = useRecoilValue(userAtom);
-
-    return refreshToken || userState.userId !== null
+    return refreshToken
       ? authRequest.get(`/api/v1/reviews/${reviewId}/comments`, {
           params,
         })
@@ -49,11 +43,7 @@ const reviewAPI = {
       ...(sort ? { sort: sort } : {}),
     };
 
-    // TODO: 배포를 위한 임시 코드, 이슈 해결 후 삭제
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const userState = useRecoilValue(userAtom);
-
-    return refreshToken || userState.userId !== null
+    return refreshToken
       ? authRequest.get(`/api/v1/reviews`, {
           params,
         })
@@ -64,11 +54,7 @@ const reviewAPI = {
   getReviewSingle: (reviewId: number) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
 
-    // TODO: 배포를 위한 임시 코드, 이슈 해결 후 삭제
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const userState = useRecoilValue(userAtom);
-
-    return refreshToken || userState.userId !== null
+    return refreshToken
       ? authRequest.get(`/api/v1/reviews/${reviewId}`)
       : unAuthRequest.get(`/api/v1/reviews/${reviewId}`);
   },
