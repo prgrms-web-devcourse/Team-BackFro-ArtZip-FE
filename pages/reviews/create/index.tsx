@@ -1,23 +1,14 @@
-import { useRef, useState, FormEvent } from 'react';
+import { useRef, useState, FormEvent, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import {
-  Input,
-  DatePicker,
-  Switch,
-  Image,
-  Button,
-  message,
-  InputRef,
-  Form,
-  UploadFile,
-} from 'antd';
+import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
 import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
+import { useClickAway } from 'hooks';
 
 interface SubmitData {
   [key: string]: number | string | boolean;
@@ -37,6 +28,7 @@ interface SearchResult {
   thumbnail: string;
 }
 
+// TODO: 미로그인 상태로 감상평 쓰기 진입 시 막기 (private route를 전역적으로 설정)
 const ReviewCreatePage = () => {
   const submitData = useRef<SubmitData>(initialData);
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -44,6 +36,15 @@ const ReviewCreatePage = () => {
   const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
   const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
+
+  const searchContainer = useRef<HTMLDivElement>(null);
+  const resultList = useRef<HTMLUListElement>(null);
+
+  useClickAway(searchContainer, () => {
+    if (resultList.current) {
+      resultList.current.style.visibility = 'hidden';
+    }
+  });
 
   const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
     submitData.current[key] = newValue;
@@ -61,18 +62,23 @@ const ReviewCreatePage = () => {
       const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data);
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
+
+      if (resultList.current) {
+        resultList.current.style.visibility = 'visible';
+      }
     } catch (error) {
       console.error('전시회 검색 에러'); // TODO: 에러 처리 로직 추가
     }
-  }; // TODO: useClickAway 적용하여 searchResults 초기화
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // TODO: 제출 전, validation 검사 추가
+    // TODO: 제출 전 validation 검사 추가
+    // required, 다녀 온 날짜 < 오늘 날짜
 
-    let formData = objectToFormData(submitData.current);
-    formData = filesToFormData(files, formData);
+    let formData = objectToFormData('data', submitData.current);
+    formData = filesToFormData('files', files, formData);
 
     try {
       await reviewAPI.createReview(formData);
@@ -92,14 +98,14 @@ const ReviewCreatePage = () => {
         />
         <ReviewEditForm layout="vertical">
           <Form.Item label="다녀 온 전시회">
-            <OuterContainer>
+            <SearchContainer ref={searchContainer}>
               <InnerContainer>
                 <SearchBar
                   placeholder="전시회 제목을 검색해 주세요."
                   enterButton
                   onSearch={handleSearch}
                 />
-                <ResultList>
+                <ResultList ref={resultList}>
                   {searchResults &&
                     searchResults.map(({ exhibitionId, name, thumbnail }) => (
                       <ResultItem
@@ -115,7 +121,7 @@ const ReviewCreatePage = () => {
                 </ResultList>
               </InnerContainer>
               <Poster src={posterImage} alt="전시회 포스터 이미지" />
-            </OuterContainer>
+            </SearchContainer>
           </Form.Item>
           <Form.Item label="다녀 온 날짜">
             <DateInput
@@ -179,7 +185,7 @@ const ReviewEditForm = styled(Form)`
   }
 `;
 
-const OuterContainer = styled.div`
+const SearchContainer = styled.div`
   width: 100%;
   display: flex;
 `;

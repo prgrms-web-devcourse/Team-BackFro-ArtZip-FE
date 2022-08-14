@@ -53,7 +53,7 @@ const Header = () => {
           />
           <LinkText
             href="/reviews/create"
-            text="감상평 쓰기"
+            text="후기 작성"
             isCurrentPage={pathname === '/reviews/create'}
           />
           <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
@@ -89,14 +89,27 @@ const Container = styled.div`
   &:first-of-type {
     margin-bottom: 10px;
   }
-  @media (max-width: 767px) {
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 90%;
   }
 `;
 
 const Utility = styled.div`
+  display: flex;
+
   & > a:first-of-type {
     margin-right: 20px;
+
+    @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+      margin-right: 10px;
+    }
+  }
+
+  & > a:last-of-type {
+    @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+      display: none;
+    }
   }
 `;
 
@@ -116,11 +129,13 @@ const Navigation = styled.nav`
       font-weight: 500;
       border-bottom: 3px solid ${({ theme }) => theme.color.blue.main};
     }
-    @media (max-width: 767px) {
+
+    @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
       margin-right: auto;
     }
   }
-  @media (max-width: 767px) {
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 100%;
   }
 `;
@@ -131,7 +146,9 @@ const SearchBar = styled(Input.Search)`
   .ant-btn {
     height: 35px;
   }
-  @media (max-width: 767px) {
+  
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     display: none;
   }
 `;

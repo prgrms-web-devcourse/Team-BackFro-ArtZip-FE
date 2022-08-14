@@ -76,7 +76,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                 createdAt={review.createdAt}
                 likeCount={review.likeCount}
                 commentCount={review.commentCount}
-                photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                photo={[{ path: review.photos[0]?.path, photoId: 13 }]}
                 userId={review.user.userId}
                 nickname={review.user.nickname}
                 profileImage={review.user.profileImage}
@@ -97,7 +97,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                   createdAt={review.createdAt}
                   likeCount={review.likeCount}
                   commentCount={review.commentCount}
-                  photo={[{ path: review.photos[0].path, photoId: 13 }]}
+                  photo={[{ path: review.photos[0]?.path, photoId: 13 }]}
                   userId={review.user.userId}
                   nickname={review.user.nickname}
                   profileImage={review.user.profileImage}
@@ -133,16 +133,18 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
       <SideNavigation
         paths={[
           {
-            href: `/users/${userInfo.userId}`,
+            pathName: `/users/${userInfo.userId}`,
             pageName: '사용자 정보',
           },
           {
-            href: `/users/${userInfo.userId}/edit`,
+            pathName: `/users/${userInfo.userId}/edit`,
             pageName: '프로필 수정',
+            query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            href: `/users/${userInfo.userId}/edit-password`,
+            pathName: `/users/${userInfo.userId}/edit-password`,
             pageName: '비밀번호 변경',
+            query: userInfo,
           },
         ]}
       />
@@ -190,7 +192,8 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileImage = styled(Image)`
-  width: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   margin-bottom: 20px;
 `;
