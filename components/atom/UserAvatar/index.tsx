@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const UserAvatar = ({ userId, profileImage }: { userId: number; profileImage: string }) => {
   return (
-    <Link href={`/user/${userId}`}>
+    <Link href={`/users/${userId}`}>
       <a>
         <StyledAvatar src={profileImage} />
       </a>
