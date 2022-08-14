@@ -14,6 +14,7 @@ function useUserAuthActions() {
     try {
       const res = await userAPI.localLogin(values);
       const { accessToken, refreshToken } = res.data.data;
+      console.log('in Login', 'accessToken', accessToken, 'refreshToken', refreshToken);
       setToken('ACCESS_TOKEN', accessToken);
       setToken('REFRESH_TOKEN', refreshToken);
       const { data } = await userAPI.getMyInfo();

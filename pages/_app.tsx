@@ -22,10 +22,19 @@ declare global {
 
 function ArtZip({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const accessToken = cookie.load('ACCESS_TOKEN');
+
+    setToken('ACCESS_TOKEN', accessToken);
+    setToken('REFRESH_TOKEN', refreshToken);
+  }, [router]);
 
   return (
     <RecoilRoot>
@@ -42,6 +51,7 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
+
   const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
   const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
 
@@ -49,10 +59,11 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
-  } else {
-    cookie.remove('ACCESS_TOKEN');
-    cookie.remove('REFRESH_TOKEN');
   }
+  // else {
+  //   cookie.remove('ACCESS_TOKEN');
+  //   cookie.remove('REFRESH_TOKEN');
+  // }
 
   return { ...appProps };
 };
