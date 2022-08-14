@@ -22,19 +22,10 @@ declare global {
 
 function ArtZip({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  useEffect(() => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
-    const accessToken = cookie.load('ACCESS_TOKEN');
-
-    setToken('ACCESS_TOKEN', accessToken);
-    setToken('REFRESH_TOKEN', refreshToken);
-  }, [router]);
 
   return (
     <RecoilRoot>
