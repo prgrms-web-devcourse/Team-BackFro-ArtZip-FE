@@ -49,7 +49,7 @@ const ReviewCard = ({
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/users/${userId}`}>
-              <S.UserInfoAvatar src={'https://joeschmoe.io/api/v1/random'} size={60} />
+              <S.UserInfoAvatar src={profileImage} size={60} />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/users/${userId}`}>

@@ -38,6 +38,7 @@ export interface ExhibitionDetailResponse extends BaseResponse {
     lng: number;
     isLiked: boolean;
     reviews: ReviewProps[] | null;
+    reviewCount: number;
   };
 }
 

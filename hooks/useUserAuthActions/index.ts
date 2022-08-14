@@ -19,12 +19,12 @@ function useUserAuthActions() {
       const { data } = await userAPI.getMyInfo();
       const { userId, email, nickname, profileImage } = data.data;
       setUser({ userId, email, nickname, profileImage });
-      alert(res.data.message);
+      message.success(res.data.message);
       router.push('/');
       // eslint-disable-next-line
     } catch (e: any) {
       e.message = 'SigninError';
-      alert(e.response.data.message);
+      message.error(e.response.data.message);
       throw e;
     }
   };
