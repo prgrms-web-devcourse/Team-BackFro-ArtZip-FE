@@ -3,7 +3,7 @@ import router from 'next/router';
 import { useSetRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
-import { setToken } from 'utils';
+import { setToken, storage } from 'utils';
 import cookie from 'react-cookies';
 import { message } from 'antd';
 import { SIGNOUT_USER_STATE } from '../../constants';
@@ -16,6 +16,8 @@ function useUserAuthActions() {
       const { accessToken, refreshToken } = res.data.data;
       setToken('ACCESS_TOKEN', accessToken);
       setToken('REFRESH_TOKEN', refreshToken);
+      // 임시 코드
+      storage.setItem('ACCESS_TOKEN', accessToken);
       const { data } = await userAPI.getMyInfo();
       const { userId, email, nickname, profileImage } = data.data;
       setUser({ userId, email, nickname, profileImage });

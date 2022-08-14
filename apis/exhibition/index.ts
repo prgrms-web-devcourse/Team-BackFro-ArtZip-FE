@@ -1,5 +1,7 @@
 import { unAuthRequest, authRequest } from 'apis/common';
 import cookie from 'react-cookies';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 const exhibitionAPI = {
   getUpcoming: (page: number, size: number) => {
@@ -12,7 +14,12 @@ const exhibitionAPI = {
   },
   getDetail: (exhibitionId: number) => {
     const refreshToken = cookie.load('REFRESH_TOKEN');
-    return refreshToken
+
+    // TODO: 배포를 위한 임시 코드, 이슈 해결 후 삭제
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const userState = useRecoilValue(userAtom);
+
+    return refreshToken || userState.userId !== null
       ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)
       : unAuthRequest.get(`/api/v1/exhibitions/${exhibitionId}`);
   },

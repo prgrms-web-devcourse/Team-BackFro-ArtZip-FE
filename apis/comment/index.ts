@@ -1,6 +1,8 @@
 import { authRequest, unAuthRequest } from 'apis/common';
 import { CommentCreateRequest, CommentUpdateRequest } from 'types/apis/comment';
 import cookie from 'react-cookies';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from 'states';
 
 const commentAPI = {
   create: (reviewId: number, payload: CommentCreateRequest) => {
@@ -19,7 +21,11 @@ const commentAPI = {
       ...(size ? { size: size } : {}),
     };
 
-    return refreshToken
+    // TODO: 배포를 위한 임시 코드, 이슈 해결 후 삭제
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const userState = useRecoilValue(userAtom);
+
+    return refreshToken || userState.userId !== null
       ? authRequest.get(`/api/v1/comments/${commentId}/children`, {
           params,
         })
