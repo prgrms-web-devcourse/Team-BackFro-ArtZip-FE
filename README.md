@@ -1,4 +1,4 @@
-<a href="https://luvook.netlify.app/">
+<a href="https://artzip.shop/">
     <img src="https://user-images.githubusercontent.com/74234333/184600046-e6e494f3-ed09-4b2a-b678-e4f35f49456f.png" alt="artzip logo" title="artzip" align="right" height="100" />
 </a>
 
