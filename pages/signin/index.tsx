@@ -23,15 +23,15 @@ const SignInPage = () => {
           autoComplete="off"
           onFinish={localLogin}
         >
-          <Form.Item name="email" rules={[{ required: true, message: '!이메일을 입력해 주세요' }]}>
-            <StyledInput placeholder="이메일을 입력해 주세요" />
+          <Form.Item name="email" rules={[{ required: true, message: '이메일을 입력해 주세요' }]}>
+            <StyledInput bordered={false} placeholder="이메일을 입력해 주세요" />
           </Form.Item>
 
           <Form.Item
             name="password"
-            rules={[{ required: true, message: '!비밀번호를 입력해 주세요' }]}
+            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
           >
-            <StyledInput type="password" placeholder="비밀번호를 입력해 주세요" />
+            <StyledInput bordered={false} type="password" placeholder="비밀번호를 입력해 주세요" />
           </Form.Item>
 
           <Form.Item>
