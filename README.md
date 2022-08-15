@@ -3,7 +3,7 @@
 </a>
 
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
-
+[Artzip 사이트 배포 링크](https://artzip.shop/)
 ## ✨ 팀원 소개
 
 ### 프론트엔드
@@ -277,7 +277,7 @@
 <a href="https://artzip.shop/">
     <img src="https://user-images.githubusercontent.com/93373357/184640492-adcb8b5b-0725-4945-b1d1-b49243815975.png" alt="artzip logo" title="ARTZIP" height="200" />
 </a>
- <p>위의 로고를 클릭하여, ArtZip 으로 접속하세요!</p>
+ <p>위의 로고를 클릭하여, Art.zip 으로 접속하세요!</p>
 
 [Artzip 사이트](https://artzip.shop/)
 
