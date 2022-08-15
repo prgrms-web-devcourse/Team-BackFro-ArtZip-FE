@@ -11,7 +11,7 @@ function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
     path: '/',
     expires: key === 'REFRESH_TOKEN' ? expires : undefined,
     domain: process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP' ? '' : '.artzip.shop',
-    httpOnly: HTTP_ONLY,
+    // httpOnly: HTTP_ONLY,
   });
 }
 
