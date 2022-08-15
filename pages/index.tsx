@@ -5,6 +5,7 @@ import SwiperContainer from 'components/organism/SwiperContainer';
 import type { NextPage } from 'next';
 import { homeStyle as S } from '../styles/pages';
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
 
@@ -22,15 +23,20 @@ const Home: NextPage = () => {
     });
   }, []);
   return (
-    <div>
-      <SwiperContainer title="다가오는 전시회" type="upcoming">
-        <SwiperWrapper items={upcomingExhibitions} />
-      </SwiperContainer>
+    <>
+      <Head>
+        <title>ArtZip | Home</title>
+      </Head>
+      <div>
+        <SwiperContainer title="다가오는 전시회" type="upcoming">
+          <SwiperWrapper items={upcomingExhibitions} />
+        </SwiperContainer>
 
-      <SwiperContainer title="인기많은 전시회" type="popular">
-        <SwiperWrapper items={mostLikeExhibitions} />
-      </SwiperContainer>
-    </div>
+        <SwiperContainer title="인기많은 전시회" type="popular">
+          <SwiperWrapper items={mostLikeExhibitions} />
+        </SwiperContainer>
+      </div>
+    </>
   );
 };
 
