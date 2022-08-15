@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { setToken, storage } from 'utils';
+import cookie from 'utils/cookie';
 
 const Callback = () => {
   const router = useRouter();
@@ -10,11 +11,13 @@ const Callback = () => {
 
   useEffect(() => {
     if (accessToken && refreshToken) {
-      setToken('REFRESH_TOKEN', refreshToken.toString());
-      setToken('ACCESS_TOKEN', accessToken.toString());
+      cookie.setItem('REFRESH_TOKEN', refreshToken.toString());
+      cookie.setItem('ACCESS_TOKEN', accessToken.toString());
 
       storage.setItem('ACCESS_TOKEN', accessToken.toString);
     }
+
+    router.push('/');
   }, []);
 
   return <></>;
