@@ -1,8 +1,8 @@
 <a href="https://artzip.shop/">
-    <img src="https://user-images.githubusercontent.com/93373357/184640214-832488b2-f514-4b20-ba8f-9dffc9aeb1d5.png" alt="artzip logo" title="artzip" align="right" height="80" />
+    <img src="https://user-images.githubusercontent.com/93373357/184640214-832488b2-f514-4b20-ba8f-9dffc9aeb1d5.png" alt="artzip logo" title="artzip" align="right" height="60" />
 </a>
 
-## 🏠 ArtZip, 세상 모든 전시회를 한 번에
+# 🏠 ArtZip, 세상 모든 전시회를 한 번에
 [Artzip 사이트 배포 링크](https://artzip.shop/)
 ## ✨ 팀원 소개
 
