@@ -17,6 +17,12 @@ const cookie = {
           ';expires=' +
           expires +
           ';path=/';
+      } else {
+        document.cookie =
+          encodeURIComponent(key) +
+          '=' +
+          // eslint-disable-next-line
+          encodeURIComponent(JSON.stringify(value).replace(/\"/gi, ''));
       }
     } catch (error) {
       console.error(error);
