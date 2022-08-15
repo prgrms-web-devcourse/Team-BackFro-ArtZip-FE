@@ -1,3 +1,7 @@
+<a href="https://luvook.netlify.app/">
+    <img src="https://user-images.githubusercontent.com/74234333/184600046-e6e494f3-ed09-4b2a-b678-e4f35f49456f.png" alt="artzip logo" title="artzip" align="right" height="100" />
+</a>
+
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
 
 ## ✨ 팀원 소개
