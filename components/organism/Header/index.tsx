@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <StyledHeader>
       <Container>
-        <Logo width={200} height={70} />
+        <Logo width={180} height={70} />
         <Utility>
           {userState.userId ? (
             <>
@@ -102,7 +102,7 @@ const Container = styled.div`
 
 const Utility = styled.div`
   display: flex;
-
+  align-items: center;
   & > a:first-of-type {
     margin-right: 20px;
 
@@ -171,8 +171,11 @@ const SearchBar = styled(Input.Search)`
 `;
 
 const LogoutButton = styled.button`
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   white-space: nowrap;
+  &:hover {
+    color: ${({ theme }) => theme.color.blue.dark};
+  }
 `;
 
 export default Header;
