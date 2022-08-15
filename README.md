@@ -1,5 +1,5 @@
 <a href="https://artzip.shop/">
-    <img src="https://user-images.githubusercontent.com/74234333/184600046-e6e494f3-ed09-4b2a-b678-e4f35f49456f.png" alt="artzip logo" title="artzip" align="right" height="100" />
+    <img src="https://user-images.githubusercontent.com/93373357/184640214-832488b2-f514-4b20-ba8f-9dffc9aeb1d5.png" alt="artzip logo" title="artzip" align="right" height="80" />
 </a>
 
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
@@ -275,7 +275,7 @@
 
 <div align="center">
 <a href="https://artzip.shop/">
-    <img src="https://user-images.githubusercontent.com/74234333/184600046-e6e494f3-ed09-4b2a-b678-e4f35f49456f.png" alt="artzip logo" title="ARTZIP" height="200" />
+    <img src="https://user-images.githubusercontent.com/93373357/184640492-adcb8b5b-0725-4945-b1d1-b49243815975.png" alt="artzip logo" title="ARTZIP" height="200" />
 </a>
  <p>위의 로고를 클릭하여, ArtZip 으로 접속하세요!</p>
 
