@@ -67,6 +67,8 @@ const ExhibitionDetail = ({
 
   const handleLikeClick = async () => {
     if (userId) {
+      setCurrentIsLiked(!currentIsLiked);
+      setCurrentLikeCount(currentIsLiked ? currentLikeCount - 1 : currentLikeCount + 1);
       const { data } = await exhibitionAPI.likeToggle(exhibitionId);
       const { isLiked, likeCount } = data.data;
       setCurrentIsLiked(isLiked);
