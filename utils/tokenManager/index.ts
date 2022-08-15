@@ -10,11 +10,6 @@ function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
   cookie.save(key, token, {
     path: '/',
     expires: key === 'REFRESH_TOKEN' ? expires : undefined,
-    domain:
-      process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP'
-        ? '.localhost'
-        : '.team-back-fro-art-zip-fe.vercel.app',
-    // httpOnly: HTTP_ONLY,
   });
 }
 
