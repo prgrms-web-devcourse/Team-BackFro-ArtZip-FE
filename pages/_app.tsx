@@ -50,15 +50,7 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   if (refreshTokenByCookie) {
     accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
     refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
-  } else {
-    cookie.remove('ACCESS_TOKEN');
-    cookie.remove('REFRESH_TOKEN');
   }
-
-  // else {
-  //   cookie.remove('ACCESS_TOKEN');
-  //   cookie.remove('REFRESH_TOKEN');
-  // }
 
   return { ...appProps };
 };

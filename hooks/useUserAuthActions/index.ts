@@ -40,6 +40,7 @@ function useUserAuthActions() {
       router.push('/');
     } catch (e) {
       message.error('로그아웃 실패'); // TODO: 에러 처리 보강
+      console.log(e);
       throw e;
     }
   };
