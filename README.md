@@ -224,7 +224,7 @@
   </tr>
   <tr>    
     <td align="center">
-     <a href="https://prgrms.notion.site/f567b7542b3d4708be7827b91c74e4b6">
+     <a href="https://backend-devcourse.notion.site/BackFro-8db56ad1304e441e8abe0b7045207852">
         <div>Notion</div>
        </a>
     </td>
