@@ -13,7 +13,7 @@ const Logo = ({ href = '/', width, height, imageStyle }: LogoProps) => {
   return (
     <Link href={href}>
       <a>
-        <Image src="/logo.png" alt="logo" width={width} height={height} style={imageStyle} />
+        <Image src="/logo.svg" alt="logo" width={width} height={height} style={imageStyle} />
       </a>
     </Link>
   );

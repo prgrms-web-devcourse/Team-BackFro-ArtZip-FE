@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <StyledHeader>
       <Container>
-        <Logo width={252} height={92} />
+        <Logo width={200} height={70} />
         <Utility>
           {userState.userId ? (
             <>
@@ -59,9 +59,12 @@ const Header = () => {
           <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
         </Navigation>
         <SearchBar
+          bordered={false}
           placeholder="전시회 제목을 검색해주세요."
           allowClear
           onSearch={handleSearchExhibition}
+          size="large"
+          enterButton={true}
         />
       </Container>
     </StyledHeader>
@@ -86,7 +89,9 @@ const Container = styled.div`
   width: 80%;
   max-width: 1400px;
   margin: 0 auto;
+
   &:first-of-type {
+    margin-top: 20px;
     margin-bottom: 10px;
   }
 
@@ -143,8 +148,21 @@ const Navigation = styled.nav`
 const SearchBar = styled(Input.Search)`
   width: 400px;
   margin-bottom: 14px;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.color.blue.light};
+  input::placeholder {
+    color: ${({ theme }) => theme.color.blue.light};
+  }
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.color.blue.dark};
+  }
   .ant-btn {
+    background-color: transparent;
+    color: ${({ theme }) => theme.color.blue.dark};
     height: 35px;
+    border: none;
+    box-shadow: none;
   }
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
