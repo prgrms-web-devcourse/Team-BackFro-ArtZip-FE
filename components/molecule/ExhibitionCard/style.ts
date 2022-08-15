@@ -5,10 +5,10 @@ export const ExhibitionCard = styled.div`
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   width: 250px;
-  height: 400px;
+  height: 380px;
   margin-top: 20px;
   padding-bottom: 20px;
-
+  cursor: pointer;
   position: relative;
 
   &:hover {
@@ -52,15 +52,18 @@ export const HoverContent = styled.div`
 export const Description = styled.div`
   padding-top: 5px;
   padding-left: 10px;
+  padding-right: 10px;
   padding-bottom: 5px;
 
   .title {
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
   div {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
 
     h3 {
