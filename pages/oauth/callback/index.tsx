@@ -14,10 +14,10 @@ const Callback = () => {
       cookie.setItem('REFRESH_TOKEN', refreshToken.toString());
       cookie.setItem('ACCESS_TOKEN', accessToken.toString());
 
-      storage.setItem('ACCESS_TOKEN', accessToken.toString);
+      storage.setItem('ACCESS_TOKEN', accessToken.toString());
     }
 
-    router.push('/');
+    // router.push('/');
   }, []);
 
   return <></>;
