@@ -52,7 +52,6 @@
 </div>
 
 ### 백엔드
-
 <div align="center">
 <br />
 <table>
@@ -94,6 +93,7 @@
   </tr>
 </table>
 <br />
+  <a href="https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-BE">백엔드 레포 바로가기</a>
 </div>
 <div>
 </div>
@@ -104,7 +104,6 @@
     <li>
       <a href="#프로젝트-소개">프로젝트 소개</a>
       <ul>
-      <li><a href="#주요-기능">주요 기능</a></li>
         <li><a href="#기술스택">가술스택</a></li>
       </ul>
     </li>
@@ -271,7 +270,7 @@
    npm start
    ```
 
-- 배포 링크
+### 배포 링크 
 
 <div align="center">
 <a href="https://artzip.shop/">
