@@ -1,6 +1,6 @@
 import * as S from './style';
 import { ShareAltOutlined } from '@ant-design/icons';
-import { message } from 'antd';
+import { message, Tooltip } from 'antd';
 import { ExhibitionInfo } from 'components/molecule';
 import { LikeInfo } from 'components/molecule';
 import { exhibitionAPI } from 'apis';
@@ -8,8 +8,6 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { exhibitionGenre, exhibitionPlace } from '../../../constants';
-import { Tooltip } from 'antd';
-
 interface ExhibitionDetailProps {
   exhibitionId: number;
   name: string;
