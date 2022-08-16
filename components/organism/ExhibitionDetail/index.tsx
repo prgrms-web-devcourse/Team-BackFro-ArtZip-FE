@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { exhibitionGenre, exhibitionPlace } from '../../../constants';
+import { Tooltip } from 'antd';
 
 interface ExhibitionDetailProps {
   exhibitionId: number;
@@ -81,7 +82,10 @@ const ExhibitionDetail = ({
       <S.Thumbnail src={thumbnail} preview={false}></S.Thumbnail>
       <S.Container>
         <S.InfoContainer>
-          <S.Title>{name}</S.Title>
+          <Tooltip title={name}>
+            <S.Title>{name}</S.Title>
+          </Tooltip>
+
           <ExhibitionInfo
             isDate={true}
             startDate={startDate}
