@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <StyledHeader>
       <Container>
-        <Logo width={180} height={70} />
+        <Logo width={180} height={55} />
         <Utility>
           {userState.userId ? (
             <>
