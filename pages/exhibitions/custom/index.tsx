@@ -43,7 +43,6 @@ const ExhibitionCustom: NextPage = () => {
         8,
       )
       .then((res) => {
-        console.log('data', res.data.data.content);
         setTotal(res.data.data.totalPage);
         setExhibitions(res.data.data.content);
       });
@@ -98,7 +97,7 @@ const ExhibitionCustom: NextPage = () => {
         className="pagination"
         defaultCurrent={1}
         current={currentPage + 1}
-        total={total}
+        total={total * 8}
         defaultPageSize={10}
         showSizeChanger={false}
         pageSize={10}
