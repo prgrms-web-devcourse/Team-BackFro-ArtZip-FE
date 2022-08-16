@@ -120,8 +120,8 @@
 <br/>
 
 ## 프로젝트 소개
+![readme메인](https://user-images.githubusercontent.com/74234333/184803023-e7f9848b-a49c-4c5c-962d-93b8af171603.gif)
 
-![artzip](https://user-images.githubusercontent.com/74234333/184607462-84558c05-dc57-40bf-b6a2-41b344a81382.gif)
 
 ### [프로젝트의 주요 기능은 Github Wiki - 페이지별 기능 을 참고하세요!](https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-FE/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%B3%84-%EA%B8%B0%EB%8A%A5)
 
