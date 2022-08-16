@@ -1,5 +1,5 @@
 <a href="https://artzip.shop/">
-    <img src="https://user-images.githubusercontent.com/93373357/184640214-832488b2-f514-4b20-ba8f-9dffc9aeb1d5.png" alt="artzip logo" title="artzip" align="right" height="60" />
+    <img src="https://user-images.githubusercontent.com/80658269/184808498-b67b4af8-f42e-4bcb-ab91-27720a4c5dd8.png" alt="artzip logo" title="artzip" align="right" height="60" />
 </a>
 
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
@@ -140,7 +140,7 @@
       <img src="https://user-images.githubusercontent.com/74234333/184597607-653484c8-34f8-4789-9be6-8cf6f94300cf.png" width="100px;" alt="typescript"/>
     </td>
     <td align="center">
-      <img src="https://user-images.githubusercontent.com/74234333/184597894-bf70d017-1b75-45e8-852b-7aee0589b5ef.svg" width="100px;" alt="NEXTJS"/>
+      <img src="https://user-images.githubusercontent.com/80658269/184807814-4224b213-55ff-4852-8cd3-73e3f222c566.png" width="100px;" alt="NEXTJS"/>
     </td>
     <td align="center">
       <img src="https://user-images.githubusercontent.com/74234333/184598332-72d3ecac-afbe-4e93-b89c-c2905586d395.svg" width="100px;" alt="RECOIL"/>
