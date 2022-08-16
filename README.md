@@ -89,7 +89,7 @@
       </a>
     </td>    
     <td align="center">
-      <a href="https://api.github.com/users/yshjft">
+      <a href="https://github.com/yshjft">
         <div>홍유석</div>
       </a>
     </td>
