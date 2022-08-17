@@ -62,21 +62,23 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
   return (
     <S.ReviewDetailContainer>
       <S.ReviewDetailHeader>
-        <UserInfo
-          profileImage={profileImage}
-          nickname={nickname}
-          createdDate={createdAt}
-          userId={userId}
-        />
         <S.ReviewDetailTitle>
           <h1>{title}</h1>
+        </S.ReviewDetailTitle>
+        <S.ReviewInfoContainer>
+          <UserInfo
+            profileImage={profileImage}
+            nickname={nickname}
+            createdDate={createdAt}
+            userId={userId}
+          />{' '}
           {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
           {isPublic ? (
             <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
           ) : (
             <S.ReviewDetailPublic>비공개</S.ReviewDetailPublic>
           )}
-        </S.ReviewDetailTitle>
+        </S.ReviewInfoContainer>
       </S.ReviewDetailHeader>
 
       <S.ReviewDetailSection>

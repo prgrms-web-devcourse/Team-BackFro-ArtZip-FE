@@ -60,10 +60,6 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
     }
   };
 
-  useEffect(() => {
-    console.log('change', selectedValues);
-  }, [selectedValues, setSelectedValues]);
-
   return (
     <S.SearchToolbar>
       {type === 'place' && (

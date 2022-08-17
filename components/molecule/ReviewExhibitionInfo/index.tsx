@@ -36,12 +36,19 @@ const ReviewExhibitionInfo = ({ exhibition }: { exhibition: ExhibitionProps }) =
 
 const ExhibitionInfoCard = styled(Card)`
   height: fit-content;
+  margin: 0px 100px;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 40px;
+  padding: 0px 5px;
 `;
 
 const ExhibitionInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  height: fit-content;
+  height: 180px;
+
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     flex-direction: column;
     justify-content: center;
@@ -51,12 +58,12 @@ const ExhibitionInfoContainer = styled.div`
 `;
 
 const ExhibitionInfoImage = styled(Image)`
-  width: 200px;
-  max-height: 250px;
-
+  width: 150px;
+  height: 180px;
+  border-radius: 20px;
   @media (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
-    width: 150px;
-    max-height: 150px;
+    width: 130px;
+    max-height: 130px;
   }
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     height: 150px;
@@ -65,23 +72,29 @@ const ExhibitionInfoImage = styled(Image)`
 
 const ExhibitionDetailContainer = styled.div`
   display: flex;
-  height: fit-content;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-grow: 1;
 `;
 
 const ExhibitionTextContainer = styled.div`
   color: ${({ theme }) => theme.color.font.main};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 80px;
 `;
 
 const ExhibitionLinkTitle = styled.p`
   text-align: center;
-  font-size: 3rem;
-  color: ${({ theme }) => theme.color.blue.main};
-  font-weight: bold;
-
+  font-size: 2.5rem;
+  font-weight: 300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     display: block;
   }
@@ -89,7 +102,8 @@ const ExhibitionLinkTitle = styled.p`
 
 const ExhibitionLinkPlainText = styled.p`
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 500;
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     flex-direction: column;
@@ -99,21 +113,26 @@ const ExhibitionLinkPlainText = styled.p`
   }
 `;
 
-const ExhibitionLinkContainer = styled.div``;
+const ExhibitionLinkContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 60px;
+`;
 
 const ExhibitionLinkButton = styled(Button)`
   margin-top: 30px;
-  background-color: ${({ theme }) => theme.color.blue.dark};
-  color: ${({ theme }) => theme.color.white};
+  color: ${({ theme }) => theme.color.blue.dark};
   font-size: 2rem;
   font-weight: bold;
   width: fit-content;
   height: fit-content;
-  border-color: transparent;
+  border-color: ${({ theme }) => theme.color.blue.dark};
+  border-radius: 10px;
 
   &:hover {
-    border-color: ${({ theme }) => theme.color.blue.dark};
-    color: ${({ theme }) => theme.color.blue.dark};
+    border-color: ${({ theme }) => theme.color.blue.light};
+    color: ${({ theme }) => theme.color.blue.light};
   }
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {

@@ -7,13 +7,18 @@ interface LogoProps {
   width: number;
   height: number;
   imageStyle?: CSSProperties;
+  noTitle?: boolean;
 }
 
-const Logo = ({ href = '/', width, height, imageStyle }: LogoProps) => {
+const Logo = ({ href = '/', width, height, imageStyle, noTitle }: LogoProps) => {
   return (
     <Link href={href}>
       <a>
-        <Image src="/logo3.png" alt="logo" width={width} height={height} style={imageStyle} />
+        {noTitle ? (
+          <Image src="/logo4.svg" alt="logo" width={width} height={height} style={imageStyle} />
+        ) : (
+          <Image src="/logo3.png" alt="logo" width={width} height={height} style={imageStyle} />
+        )}
       </a>
     </Link>
   );

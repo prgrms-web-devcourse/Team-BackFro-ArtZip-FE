@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const ReviewDetailContainer = styled.main`
-  margin: 20px 0;
+  margin: 20px 150px;
 `;
 
 export const ReviewDetailHeader = styled.div`
@@ -14,22 +14,29 @@ export const ReviewDetailEdited = styled.span`
 `;
 
 export const ReviewDetailPublic = styled.span`
-  color: ${({ theme }) => theme.color.font.light};
-  border: 1px solid ${({ theme }) => theme.color.font.light};
-  padding: 2px 6px;
+  position: relative;
+  height: fit-content;
+  bottom: -23px;
+  border: 1px solid ${({ theme }) => theme.color.blue.dark};
+  padding: 1px 6px;
   border-radius: 20px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  color: ${({ theme }) => theme.color.blue.dark};
 `;
 
 export const ReviewDetailSection = styled.section`
   display: flex;
   justify-content: space-between;
+  border-top: 1px solid ${({ theme }) => theme.color.border.light};
+  padding-top: 40px;
 `;
 
 export const ReviewDetailTitle = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 `;
 
 export const ReviewDetailContent = styled.div`
@@ -41,6 +48,8 @@ export const ReviewDetailContent = styled.div`
 
 export const ReviewDetailContentText = styled.p`
   font-size: 2rem;
+  text-align: center;
+  margin-bottom: 40px;
 `;
 
 export const ReviewDetailContentUtils = styled.div`
@@ -55,4 +64,9 @@ export const ButtonGroup = styled.div`
 
 export const ReviewDetailBottom = styled.div`
   margin-top: 50px;
+`;
+
+export const ReviewInfoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

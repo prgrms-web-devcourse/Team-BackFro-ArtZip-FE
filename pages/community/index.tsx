@@ -59,7 +59,11 @@ const CommunityPage = () => {
       </Head>
 
       <>
-        <Banner title="커뮤니티" content={'Art.zip에서 다양한 전시회 후기를 만나보세요'} />
+        <Banner
+          subtitle="Art.zip 커뮤니티"
+          title="아트집에서 다양한 후기를 만나보고"
+          content={'여러 사람들과 소통하세요 !'}
+        />
         <CommunityFeedWrapper>
           {feeds.map((feed) => {
             const { reviewId, user } = feed;
