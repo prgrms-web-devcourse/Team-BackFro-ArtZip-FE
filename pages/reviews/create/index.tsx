@@ -108,11 +108,12 @@ const ReviewCreatePage = () => {
 
   return (
     <>
+      <Banner
+        subtitle="Art.zip 후기 작성"
+        title="전시회 다녀오셨나요?"
+        content="소중한 경험을 후기로 작성하세요 !"
+      />
       <Section>
-        <Banner
-          title="후기 쓰기"
-          content="전시회를 다녀오셨나요? \n 소중한 경험을 후기로 작성하고 공유해보세요:)"
-        />
         <ReviewEditForm layout="vertical">
           <Form.Item label="다녀 온 전시회">
             <SearchContainer ref={searchContainer}>

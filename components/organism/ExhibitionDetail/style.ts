@@ -46,6 +46,11 @@ export const Title = styled.h2`
   padding-bottom: 10px;
   margin-bottom: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.color.font.light};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 `;
 
 export const IconContainer = styled.div`

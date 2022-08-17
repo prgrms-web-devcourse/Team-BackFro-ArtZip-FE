@@ -38,7 +38,15 @@ const ExhibitionsMore: NextPage = () => {
   return (
     <S.ExhibitionsMore>
       <div>
-        <Banner title={type === 'upcoming' ? '다가오는 전시회' : '인기많은 전시회'} />
+        <Banner
+          subtitle={'Art.zip 전시회 모아 보기'}
+          title={type === 'upcoming' ? '다가오는 전시회' : '인기많은 전시회'}
+          content={
+            type === 'upcoming'
+              ? '다가오는 전시회를 확인하세요 !'
+              : '지금 핫한 전시회를 확인하세요 !'
+          }
+        />
       </div>
       <S.ExhibitionsMoreContent>
         {exhibitions.map((exhibition) => (

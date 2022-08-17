@@ -10,6 +10,7 @@ import { useInfiniteScroll } from 'hooks';
 import { CommentProps } from 'types/model';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+import styled from '@emotion/styled';
 
 const ReviewDetailPage = () => {
   const router = useRouter();
@@ -97,15 +98,17 @@ const ReviewDetailPage = () => {
               onDeleteButtonClick={showModal}
               commentCount={reviewCommentCount}
             />
-            <CommentWrite reviewId={review.reviewId} onCommentReload={handleCommentReload} />
-            {reviewComments && (
-              <CommentList
-                comments={reviewComments}
-                reviewId={review.reviewId}
-                onDeleteButtonClick={handleCommentReload}
-                onEditButtonClick={handleCommentReload}
-              />
-            )}
+            <CommentContainer>
+              <CommentWrite reviewId={review.reviewId} onCommentReload={handleCommentReload} />
+              {reviewComments && (
+                <CommentList
+                  comments={reviewComments}
+                  reviewId={review.reviewId}
+                  onDeleteButtonClick={handleCommentReload}
+                  onEditButtonClick={handleCommentReload}
+                />
+              )}
+            </CommentContainer>
           </>
 
           <Modal
@@ -125,5 +128,9 @@ const ReviewDetailPage = () => {
     </>
   );
 };
+
+const CommentContainer = styled.div`
+  margin: 0 150px;
+`;
 
 export default ReviewDetailPage;

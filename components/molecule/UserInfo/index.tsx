@@ -40,9 +40,6 @@ const UserInfoTextWrapper = styled.div`
 const UserInfoName = styled.span`
   cursor: pointer;
   white-space: nowrap;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const UserInfoDate = styled.span``;
