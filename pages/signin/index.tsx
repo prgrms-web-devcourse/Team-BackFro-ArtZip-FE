@@ -39,7 +39,9 @@ const SignInPage = () => {
               로그인
             </StyledButton>
           </Form.Item>
-          <StyledButtonKakao>카카오 로그인</StyledButtonKakao>
+          <Link href={'https://server.artzip.shop/api/v1/users/oauth/login/kakao'}>
+            <StyledButtonKakao>카카오 로그인</StyledButtonKakao>
+          </Link>
         </Form>
         <Link href={`/signup`}>
           <StyledTextLink>회원이 아니신가요? 회원가입</StyledTextLink>

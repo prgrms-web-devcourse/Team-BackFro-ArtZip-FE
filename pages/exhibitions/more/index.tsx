@@ -59,7 +59,7 @@ const ExhibitionsMore: NextPage = () => {
         className="pagination"
         defaultCurrent={1}
         current={currentPage + 1}
-        total={total}
+        total={total * 8}
         defaultPageSize={10}
         showSizeChanger={false}
         pageSize={10}
