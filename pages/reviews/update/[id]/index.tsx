@@ -1,14 +1,12 @@
 import { useRef, useState, FormEvent, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
+import { Input, DatePicker, Switch, Image, Button, message, Form, Modal, UploadFile } from 'antd';
 import { Banner } from 'components/molecule';
 import { ImageUpload } from 'components/organism';
-import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
-import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useAxios, useClickAway } from 'hooks';
+import { useAxios } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
@@ -31,10 +29,13 @@ const initialData: SubmitData = {
 
 const ReviewUpdatePage = () => {
   const submitData = useRef<SubmitData>(initialData);
-  const [prevData, setPrevData] = useState<ReviewSingleReadData>();
-  const [prevImage, setPrevImage] = useState<PhotoProps[]>([]);
   const [files, setFiles] = useState<UploadFile[]>([]);
+  const [prevData, setPrevData] = useState<ReviewSingleReadData>();
+  const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
   const [isPublic, setIsPublic] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const clickedImage = useRef<number>(0);
+
   const router = useRouter();
   const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
 
@@ -51,12 +52,25 @@ const ReviewUpdatePage = () => {
       };
 
       setPrevData(response.data.data);
-      setPrevImage(photos);
+      setPrevImages(photos);
     }
   }, [response]);
 
-  const handleImageRemove = (photoId: number) => {
-    console.log(photoId);
+  const handleImageClick = (photoId: number) => {
+    clickedImage.current = photoId;
+    setIsModalVisible(true);
+  };
+
+  const handleImageDelete = () => {
+    const photoId = clickedImage.current;
+    submitData.current.deletedPhotos.push(photoId);
+    setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    clickedImage.current = 0;
+    setIsModalVisible(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -65,22 +79,16 @@ const ReviewUpdatePage = () => {
     let formData = objectToFormData('data', submitData.current);
     formData = filesToFormData('files', files, formData);
 
-    // for (const value of formData.values()) {
-    //   console.log(value);
-    // }
-
     try {
-      const result = await reviewAPI.updateReview(Number(router.query.id), formData);
-      console.log(result);
-      // message.success('후기 수정이 완료되었습니다.');
-      // router.replace('/community');
+      await reviewAPI.updateReview(Number(router.query.id), formData);
+      message.success('후기 수정이 완료되었습니다.');
+      router.replace('/community');
     } catch (error) {
       console.error('후기 수정 실패');
     }
   };
 
   return (
-    files &&
     prevData && (
       <>
         <Banner
@@ -131,7 +139,7 @@ const ReviewUpdatePage = () => {
             </Form.Item>
             <Form.Item label="사진">
               <PrevImageContainer>
-                {prevImage.map(({ photoId, path }) => (
+                {prevImages.map(({ photoId, path }) => (
                   <Image
                     key={photoId}
                     src={path}
@@ -139,11 +147,11 @@ const ReviewUpdatePage = () => {
                     width={104}
                     height={104}
                     preview={false}
-                    onClick={() => handleImageRemove(photoId)}
+                    onClick={() => handleImageClick(photoId)}
                   />
                 ))}
               </PrevImageContainer>
-              <ImageUpload fileList={files} setFileList={setFiles} limit={5 - prevImage.length} />
+              <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
             </Form.Item>
             <Form.Item label="공개 여부">
               <ToggleSwitch
@@ -151,7 +159,6 @@ const ReviewUpdatePage = () => {
                 onChange={(checked) => {
                   submitData.current['isPublic'] = checked;
                   setIsPublic(checked);
-                  console.log(submitData.current);
                 }}
               />
               {isPublic ? '전체 공개' : '비공개'}
@@ -162,6 +169,16 @@ const ReviewUpdatePage = () => {
             </SubmitButton>
           </ReviewEditForm>
         </Section>
+        <Modal
+          title="이미지 삭제"
+          visible={isModalVisible}
+          okText="삭제하기"
+          onOk={handleImageDelete}
+          cancelText="취소"
+          onCancel={handleModalCancel}
+        >
+          <p>이 이미지를 삭제할까요?</p>
+        </Modal>
       </>
     )
   );
@@ -202,22 +219,6 @@ const SearchBar = styled(Input.Search)`
   z-index: 1;
 `;
 
-const ResultList = styled.ul`
-  width: 100%;
-  max-height: 168px;
-  border: 1px solid ${({ theme }) => theme.color.border.light};
-  position: relative;
-  top: -9px;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.color.white};
-`;
-
-const ResultItem = styled.li`
-  font-size: 1.6rem;
-  cursor: pointer;
-  margin: 8px;
-`;
-
 const Poster = styled(Image)`
   width: 150px;
   height: 200px;
@@ -248,6 +249,11 @@ const SubmitButton = styled(Button)`
 `;
 
 const PrevImageContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 104px);
+  gap: 8px;
+  margin-bottom: 8px;
+
   img {
     cursor: pointer;
   }

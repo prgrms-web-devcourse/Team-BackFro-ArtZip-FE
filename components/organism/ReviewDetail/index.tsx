@@ -101,7 +101,7 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
           {/* TODO: 전역 유저 로그인 상태에 따라서, 수정 / 삭제 버튼 렌더링 */}
           {isMyReview && (
             <S.ButtonGroup>
-              {/* <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton> */}
+              <LinkButton href={`/reviews/update/${reviewId}`}>수정</LinkButton>
               <Button type="text" onClick={onDeleteButtonClick}>
                 삭제
               </Button>
