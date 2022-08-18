@@ -114,17 +114,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
 
                 {isMyFeed && (
                   <S.FeedButtonGroup>
-                    <Link
-                      href={{
-                        pathname: `/reviews/update/${reviewId}`,
-                        query: { review: JSON.stringify(feed) },
-                      }}
-                      as={`/reviews/update/${reviewId}`}
-                    >
-                      <a>
-                        <Button type="text">수정</Button>
-                      </a>
-                    </Link>
+                    <LinkButton href={`/reviews/update/${reviewId}`}>수정</LinkButton>
                     <Button
                       type="text"
                       onClick={() => {

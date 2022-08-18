@@ -8,8 +8,10 @@ import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway } from 'hooks';
+import { useAxios, useClickAway } from 'hooks';
 import moment from 'moment';
+import { PhotoProps } from 'types/model';
+import type { ReviewSingleReadData } from 'types/apis/review';
 
 interface SubmitData {
   date: string;
@@ -19,91 +21,149 @@ interface SubmitData {
   deletedPhotos: number[];
 }
 
+const initialData: SubmitData = {
+  date: '',
+  title: '',
+  content: '',
+  isPublic: true,
+  deletedPhotos: [],
+};
+
 const ReviewUpdatePage = () => {
+  const submitData = useRef<SubmitData>(initialData);
+  const [prevData, setPrevData] = useState<ReviewSingleReadData>();
+  const [prevImage, setPrevImage] = useState<PhotoProps[]>([]);
+  const [files, setFiles] = useState<UploadFile[]>([]);
+  const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
-  const review = JSON.parse(router.query.review as string);
+  const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
 
-  const {
-    exhibition: { name, thumbnail },
-    date,
-    title,
-    content,
-    isPublic,
-  } = review;
+  useEffect(() => {
+    if (response) {
+      const { date, title, content, isPublic, photos } = response.data.data;
 
-  const submitData = useRef<SubmitData>({
-    date,
-    title,
-    content,
-    isPublic,
-    deletedPhotos: [],
-  });
+      submitData.current = {
+        date,
+        title,
+        content,
+        isPublic,
+        deletedPhotos: [],
+      };
 
-  console.log(date);
+      setPrevData(response.data.data);
+      setPrevImage(photos);
+    }
+  }, [response]);
+
+  const handleImageRemove = (photoId: number) => {
+    console.log(photoId);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    let formData = objectToFormData('data', submitData.current);
+    formData = filesToFormData('files', files, formData);
+
+    // for (const value of formData.values()) {
+    //   console.log(value);
+    // }
+
+    try {
+      const result = await reviewAPI.updateReview(Number(router.query.id), formData);
+      console.log(result);
+      // message.success('후기 수정이 완료되었습니다.');
+      // router.replace('/community');
+    } catch (error) {
+      console.error('후기 수정 실패');
+    }
+  };
 
   return (
-    <>
-      <Banner
-        subtitle="Art.zip 후기 작성"
-        title="전시회 다녀오셨나요?"
-        content="소중한 경험을 후기로 작성하세요 !"
-      />
-      <Section>
-        <ReviewEditForm layout="vertical">
-          <Form.Item label="다녀 온 전시회">
-            <SearchContainer>
-              <InnerContainer>
-                <SearchBar placeholder="전시회 제목을 검색해 주세요." enterButton value={name} />
-              </InnerContainer>
-              <Poster src={thumbnail} alt="전시회 포스터 이미지" />
-            </SearchContainer>
-          </Form.Item>
-          <Form.Item label="다녀 온 날짜">
-            <DateInput
-              onChange={(value) => {
-                if (value) {
-                  submitData.current['date'] = value.format('YYYY-MM-DD');
-                }
-              }}
-              defaultValue={moment(date, 'YYYY-MM-DD')}
-            />
-          </Form.Item>
-          <Form.Item label="제목">
-            <Input
-              placeholder="제목을 입력해주세요."
-              showCount
-              maxLength={30}
-              onChange={(e) => (submitData.current['title'] = e.target.value)}
-              defaultValue={title}
-            />
-          </Form.Item>
-          <Form.Item label="내용">
-            <TextArea
-              placeholder="내용을 입력해주세요."
-              autoSize
-              onChange={(e) => (submitData.current['content'] = e.target.value)}
-              defaultValue={content}
-            />
-          </Form.Item>
-          {/* <Form.Item label="사진">
-            <ImageUpload fileList={files} setFileList={setFiles} />
-          </Form.Item> */}
-          <Form.Item label="공개 여부">
-            <ToggleSwitch
-              defaultChecked={isPublic}
-              onChange={(checked) => {
-                submitData.current['isPublic'] = checked;
-                // setIsPublic(checked);
-                console.log(submitData.current);
-              }}
-            />
-            {isPublic ? '전체 공개' : '비공개'}
-          </Form.Item>
+    files &&
+    prevData && (
+      <>
+        <Banner
+          subtitle="Art.zip 후기 작성"
+          title="전시회 다녀오셨나요?"
+          content="소중한 경험을 후기로 작성하세요 !"
+        />
+        <Section>
+          <ReviewEditForm layout="vertical">
+            <Form.Item label="다녀 온 전시회">
+              <SearchContainer>
+                <InnerContainer>
+                  <SearchBar
+                    placeholder="전시회 제목을 검색해 주세요."
+                    enterButton
+                    value={prevData.exhibition.name}
+                  />
+                </InnerContainer>
+                <Poster src={prevData.exhibition.thumbnail} alt="전시회 포스터 이미지" />
+              </SearchContainer>
+            </Form.Item>
+            <Form.Item label="다녀 온 날짜">
+              <DateInput
+                onChange={(value) => {
+                  if (value) {
+                    submitData.current['date'] = value.format('YYYY-MM-DD');
+                  }
+                }}
+                defaultValue={moment(prevData.date, 'YYYY-MM-DD')}
+              />
+            </Form.Item>
+            <Form.Item label="제목">
+              <Input
+                placeholder="제목을 입력해주세요."
+                showCount
+                maxLength={30}
+                onChange={(e) => (submitData.current['title'] = e.target.value)}
+                defaultValue={prevData.title}
+              />
+            </Form.Item>
+            <Form.Item label="내용">
+              <TextArea
+                placeholder="내용을 입력해주세요."
+                autoSize
+                onChange={(e) => (submitData.current['content'] = e.target.value)}
+                defaultValue={prevData.content}
+              />
+            </Form.Item>
+            <Form.Item label="사진">
+              <PrevImageContainer>
+                {prevImage.map(({ photoId, path }) => (
+                  <Image
+                    key={photoId}
+                    src={path}
+                    alt="previous image"
+                    width={104}
+                    height={104}
+                    preview={false}
+                    onClick={() => handleImageRemove(photoId)}
+                  />
+                ))}
+              </PrevImageContainer>
+              <ImageUpload fileList={files} setFileList={setFiles} limit={5 - prevImage.length} />
+            </Form.Item>
+            <Form.Item label="공개 여부">
+              <ToggleSwitch
+                defaultChecked={prevData.isPublic}
+                onChange={(checked) => {
+                  submitData.current['isPublic'] = checked;
+                  setIsPublic(checked);
+                  console.log(submitData.current);
+                }}
+              />
+              {isPublic ? '전체 공개' : '비공개'}
+            </Form.Item>
 
-          <SubmitButton type="primary">작성완료</SubmitButton>
-        </ReviewEditForm>
-      </Section>
-    </>
+            <SubmitButton type="primary" onClick={handleSubmit}>
+              작성완료
+            </SubmitButton>
+          </ReviewEditForm>
+        </Section>
+      </>
+    )
   );
 };
 
@@ -185,6 +245,12 @@ const SubmitButton = styled(Button)`
   border-radius: 6px;
   margin: 30px auto 0;
   font-size: 1.8rem;
+`;
+
+const PrevImageContainer = styled.div`
+  img {
+    cursor: pointer;
+  }
 `;
 
 export default ReviewUpdatePage;
