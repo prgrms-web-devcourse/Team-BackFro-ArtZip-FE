@@ -97,7 +97,7 @@ const ExhibitionCustom: NextPage = () => {
         className="pagination"
         defaultCurrent={1}
         current={currentPage + 1}
-        total={total * 8}
+        total={total * 10}
         defaultPageSize={10}
         showSizeChanger={false}
         pageSize={10}
