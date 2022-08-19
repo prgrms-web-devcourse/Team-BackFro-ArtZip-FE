@@ -125,18 +125,17 @@ const ReviewCreatePage = () => {
                   defaultValue={query.name}
                 />
                 <ResultList ref={resultList}>
-                  {searchResults &&
-                    searchResults.map(({ exhibitionId, name, thumbnail }) => (
-                      <ResultItem
-                        key={exhibitionId}
-                        onClick={() => {
-                          submitData.current['exhibitionId'] = exhibitionId; // TODO: 함수로 뽑아내기 (타입 이슈 해결해야 함)
-                          setPosterImage(thumbnail);
-                        }}
-                      >
-                        {name}
-                      </ResultItem>
-                    ))}
+                  {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
+                    <ResultItem
+                      key={exhibitionId}
+                      onClick={() => {
+                        submitData.current['exhibitionId'] = exhibitionId;
+                        setPosterImage(thumbnail);
+                      }}
+                    >
+                      {name}
+                    </ResultItem>
+                  ))}
                 </ResultList>
               </InnerContainer>
               <Poster
