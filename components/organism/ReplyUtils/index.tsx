@@ -100,7 +100,7 @@ const ReplyUtils = ({
           likeCount={commentLikeCount}
           onClick={() => handleCommentLikeClick(commentId)}
         />
-        {currentUser.userId && (
+        {currentUser.userId === reply.user.userId && (
           <ReplyUtilsButtons>
             <StyledButton
               type="text"
