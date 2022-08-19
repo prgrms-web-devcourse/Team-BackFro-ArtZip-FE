@@ -1,20 +1,34 @@
 import styled from '@emotion/styled';
 import { Form, Input, Button } from 'antd';
-import { SideNavigation } from 'components/molecules';
+import { useForm } from 'antd/lib/form/Form';
+import { SideNavigation } from 'components/molecule';
 import { useRouter } from 'next/router';
-import { FormEvent, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
-import { UserChangePasswordRequest } from 'types/apis/user';
-import { ValueOf } from 'types/utility';
+import { userAPI } from 'apis';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
+  const [form] = useForm();
+
+  const handleFinish = async () => {
+    console.log(form.getFieldsValue());
+
+    const submitData = form.getFieldsValue();
+    delete submitData['passwordCheck'];
+    console.log(submitData);
+
+    const result = await userAPI.changePassword({
+      oldPassword: '123456',
+      newPassword: '940515',
+    });
+    console.log(result);
+  };
 
   return (
     <PageContainer>
       <Title>비밀번호 변경</Title>
-      <PasswordEditForm layout="vertical">
+      <PasswordEditForm layout="vertical" form={form} onFinish={handleFinish}>
         <FormItem label="현재 비밀번호" name="oldPassword">
           <Input type="password" />
         </FormItem>
