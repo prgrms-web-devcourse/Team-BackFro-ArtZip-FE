@@ -171,7 +171,7 @@ const ReviewCreatePage = () => {
             />
           </Form.Item>
           <Form.Item label="사진">
-            <ImageUpload fileList={files} setFileList={setFiles} />
+            <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
           </Form.Item>
           <Form.Item label="공개 여부">
             <ToggleSwitch

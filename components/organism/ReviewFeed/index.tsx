@@ -114,7 +114,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
 
                 {isMyFeed && (
                   <S.FeedButtonGroup>
-                    {/* <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton> */}
+                    <LinkButton href={`/reviews/update/${reviewId}`}>수정</LinkButton>
                     <Button
                       type="text"
                       onClick={() => {
