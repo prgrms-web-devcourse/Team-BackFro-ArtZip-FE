@@ -65,12 +65,16 @@ const SignUpPage = () => {
 
   const onClick = async () => {
     if (nickname) {
-      const res = await userAPI.nicknameCheck(nickname);
-      setIsUnique(res.data.data.isUnique);
+      if (nickname.length > 10) {
+        message.error('닉네임을 10자 이내로 입력해 주세요');
+      } else {
+        const res = await userAPI.nicknameCheck(nickname);
+        setIsUnique(res.data.data.isUnique);
 
-      message.info(
-        res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
-      );
+        message.info(
+          res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
+        );
+      }
     } else {
       message.error('닉네임을 입력해 주세요');
     }
@@ -189,15 +193,16 @@ const Title = styled.p`
   margin-bottom: 30px;
 `;
 const FormWrapper = styled.div`
-  margin: 5% 25% 30% 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
+
 const StyledInput = styled(Input)`
   width: 350px;
   padding: 10px;
+  margin-bottom: 5px;
   background-color: transparent;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.color.blue.light};
@@ -234,6 +239,7 @@ const StyledButton = styled(Button)`
 
 const StyledTextLink = styled.p`
   margin-top: 20px;
+  margin-bottom: 150px;
   font-size: 1.6rem;
   font-weight: 500;
   cursor: pointer;
