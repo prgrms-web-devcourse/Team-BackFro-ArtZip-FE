@@ -22,6 +22,7 @@ const LinkText = ({ href, text, style, isCurrentPage }: LinkTextProps) => {
 const StyledA = styled.a<{
   isCurrentPage?: boolean;
 }>`
+  display: block;
   font-size: 2.2rem;
   white-space: nowrap;
 

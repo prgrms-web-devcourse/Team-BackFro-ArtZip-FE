@@ -1,18 +1,29 @@
 import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
-import { Input, message } from 'antd';
+import { Input, message, Image } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
-import { useUserAuthActions } from 'hooks';
+import { useClickAway, useUserAuthActions } from 'hooks';
+import imageUrl from 'constants/imageUrl';
+import { useRef, useState } from 'react';
 
 const Header = () => {
   const { pathname } = useRouter();
-
   const [userState, setUserState] = useRecoilState(userAtom);
   const { logout } = useUserAuthActions();
   const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const avatarContainer = useRef<HTMLDivElement>(null);
+
+  useClickAway(avatarContainer, () => {
+    setIsDropdownOpen(false);
+  });
+
+  const handleAvatarClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   const handleSearchExhibition = (value: string) => {
     const isEmpty = !/\S/.test(value);
@@ -30,19 +41,24 @@ const Header = () => {
     <StyledHeader>
       <Container>
         <Logo width={180} height={55} />
-        <Utility>
-          {userState.userId ? (
-            <>
-              <LinkText href={`/users/${userState.userId}`} text="마이페이지" />
-              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
-            </>
-          ) : (
-            <>
-              <LinkText href="/signin" text="로그인" />
-              <LinkText href="/signup" text="회원가입" />
-            </>
+        <AvatarContainer ref={avatarContainer} onClick={handleAvatarClick}>
+          <Avatar src={userState.profileImage || imageUrl.USER_DEFAULT} preview={false} />
+          {isDropdownOpen && (
+            <Dropdown>
+              {userState.userId ? (
+                <>
+                  <LinkText href={`/users/${userState.userId}`} text="마이페이지" />
+                  <Button onClick={logout}>로그아웃</Button>
+                </>
+              ) : (
+                <>
+                  <LinkText href="/signin" text="로그인" />
+                  <LinkText href="/signup" text="회원가입" />
+                </>
+              )}
+            </Dropdown>
           )}
-        </Utility>
+        </AvatarContainer>
       </Container>
       <Container>
         <Navigation>
@@ -170,12 +186,37 @@ const SearchBar = styled(Input.Search)`
   }
 `;
 
-const LogoutButton = styled.button`
+const Button = styled.button`
+  width: 100%;
   font-size: 2.2rem;
   white-space: nowrap;
   &:hover {
     color: ${({ theme }) => theme.color.blue.dark};
   }
+`;
+
+const AvatarContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+`;
+
+const Avatar = styled(Image)`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+`;
+
+const Dropdown = styled.div`
+  position: absolute;
+  background-color: white;
+  width: 140px;
+  top: 50px;
+  right: 0;
+  z-index: 1;
+  box-shadow: rgb(63 71 77 / 20%) 0px 4px 10px 0px;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
 `;
 
 export default Header;
