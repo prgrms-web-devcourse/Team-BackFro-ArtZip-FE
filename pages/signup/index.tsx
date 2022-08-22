@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { userAPI } from 'apis';
 import Router from 'next/router';
 import React, { useState } from 'react';
-import { setToken } from 'utils';
 import { useUserAuthActions } from 'hooks';
+import { useCallback } from 'react';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +14,19 @@ const SignUpPage = () => {
   const [nickname, setNickname] = useState('');
   const [isUnique, setIsUnique] = useState(false);
   const { localLogin } = useUserAuthActions();
+
+  // eslint-disable-next-line
+  const validatePassword = useCallback((_: any, value: string) => {
+    console.log(value);
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,13}$/;
+    if (!value) {
+      return Promise.reject(new Error('비밀번호를 입력해 주세요.'));
+    }
+    if (!regExp.test(value)) {
+      return Promise.reject(new Error('비밀번호는 8~16자 영문, 숫자를 모두 사용해 주세요.'));
+    }
+    return Promise.resolve();
+  }, []);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -99,7 +112,10 @@ const SignUpPage = () => {
           <NicknameContainer>
             <Form.Item
               name="nickname"
-              rules={[{ required: true, message: '닉네임을 입력해 주세요' }]}
+              rules={[
+                { required: true, message: '닉네임을 입력해 주세요' },
+                { max: 10, message: '닉네임을 10자 이내로 입력해 주세요' },
+              ]}
             >
               <StyledInputNickname
                 type="basic"
@@ -112,10 +128,7 @@ const SignUpPage = () => {
               {isUnique ? '✔' : '중복 확인'}
             </StyledCheckButton>
           </NicknameContainer>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
-          >
+          <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <StyledInput
               type="password"
               placeholder="비밀번호를 입력해 주세요"
