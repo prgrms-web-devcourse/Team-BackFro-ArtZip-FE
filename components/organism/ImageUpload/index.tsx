@@ -7,6 +7,7 @@ import type { UploadFile } from 'antd/es/upload/interface';
 interface ImageUploadProps {
   fileList: UploadFile[];
   setFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+  limit: number;
 }
 
 const getBase64 = (file: RcFile): Promise<string> => {
@@ -18,7 +19,7 @@ const getBase64 = (file: RcFile): Promise<string> => {
   });
 };
 
-const ImageUpload = ({ fileList, setFileList }: ImageUploadProps) => {
+const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -37,7 +38,7 @@ const ImageUpload = ({ fileList, setFileList }: ImageUploadProps) => {
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     console.log(newFileList);
-    return setFileList(newFileList);
+    setFileList(newFileList);
   };
 
   const uploadButton = (
@@ -55,7 +56,7 @@ const ImageUpload = ({ fileList, setFileList }: ImageUploadProps) => {
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {fileList.length >= 5 ? null : uploadButton}
+        {fileList.length < limit ? uploadButton : null}
       </Upload>
       <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
         <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />

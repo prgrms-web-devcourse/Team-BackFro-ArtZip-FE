@@ -35,9 +35,10 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
   const [detailLikeCount, setDetailLikeCount] = useState(likeCount);
   const [isLikeDetail, setIsLikedFeed] = useState(isLiked);
   const [likeLoading, setLikeLoading] = useState(false);
+  const userState = useRecoilValue(userAtom);
 
   const handleLikeClick = async (reviewId: number) => {
-    if (!userId) {
+    if (!userState.userId) {
       message.warning('로그인 해주세요');
       return;
     }
@@ -47,7 +48,6 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
     }
 
     setLikeLoading(true);
-    // 낙관적 업데이트
     setIsLikedFeed(!isLikeDetail);
     setDetailLikeCount(isLikeDetail ? detailLikeCount - 1 : detailLikeCount + 1);
 
@@ -71,7 +71,7 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
             nickname={nickname}
             createdDate={createdAt}
             userId={userId}
-          />{' '}
+          />
           {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
           {isPublic ? (
             <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
@@ -100,7 +100,7 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
 
           {isMyReview && (
             <S.ButtonGroup>
-              {/* <LinkButton href={`/reviews/${reviewId}/edit`}>수정</LinkButton> */}
+              <LinkButton href={`/reviews/update/${reviewId}`}>수정</LinkButton>
               <Button type="text" onClick={onDeleteButtonClick}>
                 삭제
               </Button>

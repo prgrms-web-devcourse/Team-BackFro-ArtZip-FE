@@ -65,6 +65,13 @@ const reviewAPI = {
       },
     });
   },
+  updateReview: (reviewId: number, formData: FormData) => {
+    return authRequest.patch(`/api/v1/reviews/${reviewId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
   deleteReview: (reviewId: number) => {
     return authRequest.delete(`/api/v1/reviews/${reviewId}`);
   },
