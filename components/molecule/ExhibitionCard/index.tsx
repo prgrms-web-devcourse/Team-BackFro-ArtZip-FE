@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Image } from 'antd';
+import { Card } from 'antd';
 import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
 import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
 import { displayDday, displayFormattedDate } from 'utils';
+import Image from 'next/image';
 
 const { Meta } = Card;
 
@@ -29,7 +30,7 @@ const ExhibitionCard = ({
           className="exhibition-card"
           onMouseEnter={mouseHover}
           onMouseLeave={mouseHover}
-          cover={<Image alt="card image" src={thumbnail} className="card-image" preview={false} />}
+          cover={<Image alt="card image" src={thumbnail} width={250} height={300} />}
         >
           {isHover && (
             <S.HoverContent>
