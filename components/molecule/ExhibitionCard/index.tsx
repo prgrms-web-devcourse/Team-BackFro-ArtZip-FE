@@ -30,7 +30,15 @@ const ExhibitionCard = ({
           className="exhibition-card"
           onMouseEnter={mouseHover}
           onMouseLeave={mouseHover}
-          cover={<Image alt="card image" src={thumbnail} width={250} height={300} />}
+          cover={
+            <Image
+              alt="card image"
+              src={thumbnail}
+              width={250}
+              height={300}
+              className="card-image"
+            />
+          }
         >
           {isHover && (
             <S.HoverContent>
