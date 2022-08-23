@@ -4,7 +4,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useUserAuthActions } from 'hooks';
 import { Logo } from 'components/atoms';
-import { BorderBottomOutlined } from '@ant-design/icons';
 
 const SignInPage = () => {
   const { localLogin } = useUserAuthActions();
