@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
-import { Button, Form, message, Input } from 'antd';
+import { Button, Form, Input, Image } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useUserAuthActions } from 'hooks';
+import { Logo } from 'components/atoms';
+import { BorderBottomOutlined } from '@ant-design/icons';
 
 const SignInPage = () => {
   const { localLogin } = useUserAuthActions();
@@ -40,7 +42,13 @@ const SignInPage = () => {
             </StyledButton>
           </Form.Item>
           <Link href={'https://server.artzip.shop/api/v1/users/oauth/login/kakao'}>
-            <StyledButtonKakao>카카오 로그인</StyledButtonKakao>
+            <Image
+              alt="kakao"
+              width={300}
+              height={45}
+              src="/kakao_login_medium_wide.png"
+              preview={false}
+            ></Image>
           </Link>
         </Form>
         <Link href={`/signup`}>
@@ -91,12 +99,12 @@ const StyledButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
   margin-top: 20px;
   width: 300px;
-  height: 50px;
-  font-size: 18px;
+  height: 45px;
+  font-size: 15px;
   background-color: ${({ theme }) => theme.color.blue.light};
-  font-weight: 500;
+  font-weight: 400;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   &:hover {
     box-shadow: none;
     color: ${({ theme }) => theme.color.white};
@@ -106,16 +114,6 @@ const StyledButton = styled(Button)`
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.blue.light};
   }
-`;
-
-const StyledButtonKakao = styled.button`
-  width: 300px;
-  height: 50px;
-  font-size: 18px;
-  font-weight: 500;
-  border: none;
-  border-radius: 10px;
-  background-color: #fee500;
 `;
 
 const StyledTextLink = styled.p`
