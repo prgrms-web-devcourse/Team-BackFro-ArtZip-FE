@@ -23,7 +23,11 @@ const SignUpPage = () => {
       return Promise.reject(new Error('비밀번호를 입력해 주세요.'));
     }
     if (!regExp.test(value)) {
-      return Promise.reject(new Error('비밀번호는 8~16자 영문, 숫자를 모두 사용해 주세요.'));
+      return Promise.reject(new Error('8~13자 영문, 숫자, 특수문자를 사용하세요.'));
+    }
+    return Promise.resolve();
+  }, []);
+
     }
     return Promise.resolve();
   }, []);
@@ -51,7 +55,7 @@ const SignUpPage = () => {
         localLogin(valuesSignin);
         Router.push('/');
       } else {
-        message.error('닉네임 중복 확인을 진행해 주세요');
+        message.error('닉네임 중복 확인을 진행해 주세요.');
       }
 
       // eslint-disable-next-line
@@ -66,17 +70,17 @@ const SignUpPage = () => {
   const onClick = async () => {
     if (nickname) {
       if (nickname.length > 10) {
-        message.error('닉네임을 10자 이내로 입력해 주세요');
+        message.error('닉네임을 10자 이내로 입력해 주세요.');
       } else {
         const res = await userAPI.nicknameCheck(nickname);
         setIsUnique(res.data.data.isUnique);
 
         message.info(
-          res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
+          res.data.data.isUnique ? '사용 가능한 닉네임 입니다.' : '이미 존재하는 닉네임 입니다.',
         );
       }
     } else {
-      message.error('닉네임을 입력해 주세요');
+      message.error('닉네임을 입력해 주세요.');
     }
   };
 
@@ -102,13 +106,13 @@ const SignUpPage = () => {
             rules={[
               {
                 type: 'email',
-                message: '이메일 형식이 아닙니다',
+                message: '이메일 형식이 아닙니다.',
               },
-              { required: true, message: '이메일을 입력해 주세요' },
+              { required: true, message: '이메일을 입력해 주세요.' },
             ]}
           >
             <StyledInput
-              placeholder="이메일을 입력해 주세요"
+              placeholder="이메일을 입력해 주세요."
               onChange={onChangeEmail}
               bordered={false}
             />
@@ -123,7 +127,7 @@ const SignUpPage = () => {
             >
               <StyledInputNickname
                 type="basic"
-                placeholder="닉네임을 입력해 주세요"
+                placeholder="닉네임을 입력해 주세요."
                 onChange={onChangeNickname}
                 bordered={false}
               />
@@ -135,7 +139,7 @@ const SignUpPage = () => {
           <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <StyledInput
               type="password"
-              placeholder="비밀번호를 입력해 주세요"
+              placeholder="비밀번호를 입력해 주세요."
               onChange={onChangePassword}
               bordered={false}
             />
@@ -146,21 +150,21 @@ const SignUpPage = () => {
             rules={[
               {
                 required: true,
-                message: '비밀번호를 입력해 주세요',
+                message: '비밀번호를 입력해 주세요.',
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error('비밀번호와 일치하지 않습니다'));
+                  return Promise.reject(new Error('비밀번호와 일치하지 않습니다.'));
                 },
               }),
             ]}
           >
             <StyledInput
               type="password"
-              placeholder="비밀번호를 한 번 더 입력해 주세요"
+              placeholder="비밀번호를 한 번 더 입력해 주세요."
               bordered={false}
             />
           </Form.Item>
