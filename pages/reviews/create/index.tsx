@@ -9,6 +9,7 @@ import { objectToFormData, filesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway } from 'hooks';
+import withAuth from 'HOC/withAuth';
 
 interface SubmitData {
   exhibitionId: number;
@@ -274,4 +275,4 @@ const SubmitButton = styled(Button)`
   font-size: 1.8rem;
 `;
 
-export default ReviewCreatePage;
+export default withAuth(ReviewCreatePage);
