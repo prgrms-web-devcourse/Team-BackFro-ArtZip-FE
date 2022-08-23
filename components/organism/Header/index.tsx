@@ -32,8 +32,7 @@ const Header = () => {
       return;
     }
     router.push({
-      pathname: '/search-result',
-      query: { exhibition: value },
+      pathname: `/search-result/${value}`,
     });
   };
 
