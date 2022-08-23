@@ -7,6 +7,7 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import { useUserAuthActions } from 'hooks';
 import { useCallback } from 'react';
+import Logo from 'components/atoms/Logo';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -102,7 +103,9 @@ const SignUpPage = () => {
 
       <FormWrapper>
         <Link href={'/'}>
-          <Logo>Art.zip</Logo>
+          <LogoWrapper>
+            <Logo width={200} height={60}></Logo>
+          </LogoWrapper>
         </Link>
         <Title>회원가입</Title>
         <Form
@@ -193,10 +196,7 @@ const SignUpPage = () => {
     </>
   );
 };
-const Logo = styled.div`
-  font-size: 5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.blue.main};
+const LogoWrapper = styled.div`
   margin-bottom: 30px;
   cursor: pointer;
 `;
@@ -213,6 +213,7 @@ const FormItemContainer = styled.div`
 `;
 
 const FormWrapper = styled.div`
+  margin: 2% 25% 5% 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
