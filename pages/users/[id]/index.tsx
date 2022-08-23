@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Tabs, Image, Spin } from 'antd';
-import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecule';
+import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
 import { GetServerSideProps } from 'next';
 import { UserInfoResponse, UserReviewResponse } from 'types/apis/user';

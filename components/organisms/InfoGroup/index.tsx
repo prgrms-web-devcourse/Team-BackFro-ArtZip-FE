@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { CommentInfo, LikeInfo } from 'components/molecule';
+import { CommentInfo, LikeInfo } from 'components/molecules';
 
 interface InfoGroupProps {
   isLiked: boolean;

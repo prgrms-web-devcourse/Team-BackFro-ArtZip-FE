@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Button, message, Modal, Form, Input } from 'antd';
 import { commentAPI } from 'apis';
-import { LikeInfo } from 'components/molecule';
+import { LikeInfo } from 'components/molecules';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';

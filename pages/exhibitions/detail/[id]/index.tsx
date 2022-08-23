@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import ReviewCard from 'components/molecule/ReviewCard';
+import ReviewCard from 'components/molecules/ReviewCard';
 import { exhibitionsStyle as S } from '../../../../styles/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { ExhibitionDetail } from 'components/organism';
+import { ExhibitionDetail } from 'components/organisms';
 import { GetServerSidePropsContext } from 'next';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionDetailResponse } from 'types/apis/exhibition';
