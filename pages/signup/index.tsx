@@ -17,8 +17,7 @@ const SignUpPage = () => {
 
   // eslint-disable-next-line
   const validatePassword = useCallback((_: any, value: string) => {
-    console.log(value);
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,13}$/;
+    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,13}$/;
     if (!value) {
       return Promise.reject(new Error('비밀번호를 입력해 주세요.'));
     }
@@ -28,6 +27,17 @@ const SignUpPage = () => {
     return Promise.resolve();
   }, []);
 
+  // eslint-disable-next-line
+  const validateNickname = useCallback((_: any, value: string) => {
+    const regExp = /\s/g;
+    if (!value) {
+      return Promise.reject(new Error('닉네임을 입력해 주세요.'));
+    }
+    if (regExp.test(value)) {
+      return Promise.reject(new Error('공백 문자를 제외하고 입력해 주세요.'));
+    }
+    if (value.length > 10) {
+      return Promise.reject(new Error('최대 10자까지 입력 가능합니다.'));
     }
     return Promise.resolve();
   }, []);
@@ -118,13 +128,7 @@ const SignUpPage = () => {
             />
           </Form.Item>
           <NicknameContainer>
-            <Form.Item
-              name="nickname"
-              rules={[
-                { required: true, message: '닉네임을 입력해 주세요' },
-                { max: 10, message: '닉네임을 10자 이내로 입력해 주세요' },
-              ]}
-            >
+            <Form.Item name="nickname" rules={[{ validator: validateNickname }]}>
               <StyledInputNickname
                 type="basic"
                 placeholder="닉네임을 입력해 주세요."
