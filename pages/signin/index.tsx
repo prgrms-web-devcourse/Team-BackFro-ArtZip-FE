@@ -14,7 +14,7 @@ const SignInPage = () => {
         <title>ArtZip | SignIn</title>
       </Head>
 
-      <FormWrapper>
+      <FormContainer>
         <Link href={'/'}>
           <Logo>Art.zip</Logo>
         </Link>
@@ -25,17 +25,23 @@ const SignInPage = () => {
           autoComplete="off"
           onFinish={localLogin}
         >
-          <Form.Item name="email" rules={[{ required: true, message: '이메일을 입력해 주세요' }]}>
-            <StyledInput bordered={false} placeholder="이메일을 입력해 주세요" />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
-          >
-            <StyledInput bordered={false} type="password" placeholder="비밀번호를 입력해 주세요" />
-          </Form.Item>
-
+          <FormWrapper>
+            <Form.Item name="email" rules={[{ required: true, message: '이메일을 입력해 주세요' }]}>
+              <StyledInput bordered={false} placeholder="이메일을 입력해 주세요" />
+            </Form.Item>
+          </FormWrapper>
+          <FormWrapper>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
+            >
+              <StyledInput
+                bordered={false}
+                type="password"
+                placeholder="비밀번호를 입력해 주세요"
+              />
+            </Form.Item>
+          </FormWrapper>
           <Form.Item>
             <StyledButton type="text" htmlType="submit">
               로그인
@@ -54,7 +60,7 @@ const SignInPage = () => {
         <Link href={`/signup`}>
           <StyledTextLink>회원이 아니신가요? 회원가입</StyledTextLink>
         </Link>
-      </FormWrapper>
+      </FormContainer>
     </>
   );
 };
@@ -72,12 +78,16 @@ const Title = styled.p`
   color: ${({ theme }) => theme.color.font.main};
   margin-bottom: 30px;
 `;
-const FormWrapper = styled.div`
-  margin: 5% 25% 30% 25%;
+
+const FormContainer = styled.div`
+  margin: 2% 25% 20% 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+const FormWrapper = styled.div`
+  height: 75px;
 `;
 const StyledInput = styled(Input)`
   width: 300px;
