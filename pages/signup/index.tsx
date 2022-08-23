@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Form, Input, message, Space } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { userAPI } from 'apis';
@@ -111,22 +111,24 @@ const SignUpPage = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-          <Form.Item
-            name="email"
-            rules={[
-              {
-                type: 'email',
-                message: '이메일 형식이 아닙니다.',
-              },
-              { required: true, message: '이메일을 입력해 주세요.' },
-            ]}
-          >
-            <StyledInput
-              placeholder="이메일을 입력해 주세요."
-              onChange={onChangeEmail}
-              bordered={false}
-            />
-          </Form.Item>
+          <FormItemContainer>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: '이메일 형식이 아닙니다.',
+                },
+                { required: true, message: '이메일을 입력해 주세요.' },
+              ]}
+            >
+              <StyledInput
+                placeholder="이메일을 입력해 주세요."
+                onChange={onChangeEmail}
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
           <NicknameContainer>
             <Form.Item name="nickname" rules={[{ validator: validateNickname }]}>
               <StyledInputNickname
@@ -140,44 +142,49 @@ const SignUpPage = () => {
               {isUnique ? '✔' : '중복 확인'}
             </StyledCheckButton>
           </NicknameContainer>
-          <Form.Item name="password" rules={[{ validator: validatePassword }]}>
-            <StyledInput
-              type="password"
-              placeholder="비밀번호를 입력해 주세요."
-              onChange={onChangePassword}
-              bordered={false}
-            />
-          </Form.Item>
-          <Form.Item
-            name="confirm"
-            dependencies={['password']}
-            rules={[
-              {
-                required: true,
-                message: '비밀번호를 입력해 주세요.',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('비밀번호와 일치하지 않습니다.'));
+          <FormItemContainer>
+            <Form.Item name="password" rules={[{ validator: validatePassword }]}>
+              <StyledInput
+                type="password"
+                placeholder="비밀번호를 입력해 주세요."
+                onChange={onChangePassword}
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
+          <FormItemContainer>
+            <Form.Item
+              name="confirm"
+              dependencies={['password']}
+              rules={[
+                {
+                  required: true,
+                  message: '비밀번호를 입력해 주세요.',
                 },
-              }),
-            ]}
-          >
-            <StyledInput
-              type="password"
-              placeholder="비밀번호를 한 번 더 입력해 주세요."
-              bordered={false}
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <StyledButton type="text" htmlType="submit">
-              회원가입
-            </StyledButton>
-          </Form.Item>
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('비밀번호와 일치하지 않습니다.'));
+                  },
+                }),
+              ]}
+            >
+              <StyledInput
+                type="password"
+                placeholder="비밀번호를 한 번 더 입력해 주세요."
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
+          <FormItemContainer>
+            <Form.Item>
+              <StyledButton type="text" htmlType="submit">
+                회원가입
+              </StyledButton>
+            </Form.Item>
+          </FormItemContainer>
         </Form>
         <Link href={`/signin`}>
           <StyledTextLink>이미 계정이 있으신가요? 로그인</StyledTextLink>
@@ -200,6 +207,11 @@ const Title = styled.p`
   color: ${({ theme }) => theme.color.font.main};
   margin-bottom: 30px;
 `;
+
+const FormItemContainer = styled.div`
+  height: 75px;
+`;
+
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -272,7 +284,7 @@ const StyledCheckButton = styled.button`
   }
 `;
 
-const NicknameContainer = styled.div`
+const NicknameContainer = styled(FormItemContainer)`
   display: flex;
   width: 100%;
   justify-content: space-between;
