@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Input, Button } from 'antd';
-import { UserAvatar, NotLoginAvatar } from 'components/atom';
+import { UserAvatar, NotLoginAvatar } from 'components/atoms';
 import { useEffect, useRef, useState } from 'react';
 import { CommentProps, UserProps } from 'types/model';
 import { useClickAway } from 'hooks';

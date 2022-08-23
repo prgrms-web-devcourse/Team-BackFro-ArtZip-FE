@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Form, Input, Button } from 'antd';
-import { SideNavigation } from 'components/molecule';
+import { SideNavigation } from 'components/molecules';
 import { useRouter } from 'next/router';
 import { FormEvent, useRef } from 'react';
 import { useRecoilValue } from 'recoil';

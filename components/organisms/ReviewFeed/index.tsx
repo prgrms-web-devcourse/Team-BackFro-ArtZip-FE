@@ -1,11 +1,11 @@
-import { UserInfo } from 'components/molecule';
+import { UserInfo } from 'components/molecules';
 import * as S from './style';
 import { Button, message, Tooltip, Modal } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReviewFeedProps } from 'types/model';
-import { InfoGroup } from 'components/organism';
-import { LinkButton } from 'components/atom';
+import { InfoGroup } from 'components/organisms';
+import { LinkButton } from 'components/atoms';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
