@@ -16,7 +16,9 @@ const SignInPage = () => {
 
       <FormContainer>
         <Link href={'/'}>
-          <Logo>Art.zip</Logo>
+          <LogoWrapper>
+            <Logo width={200} height={60}></Logo>
+          </LogoWrapper>
         </Link>
         <Title>로그인</Title>
         <Form
@@ -64,10 +66,8 @@ const SignInPage = () => {
     </>
   );
 };
-const Logo = styled.div`
-  font-size: 5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.blue.main};
+
+const LogoWrapper = styled.div`
   margin-bottom: 30px;
   cursor: pointer;
 `;
