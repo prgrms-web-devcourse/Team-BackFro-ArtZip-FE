@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import styled from '@emotion/styled';
-import { Header, Footer } from '../../organism';
+import { Header, Footer } from '../../organisms';
 
 const Layout = ({ children }: { children: ReactElement }) => {
   return (

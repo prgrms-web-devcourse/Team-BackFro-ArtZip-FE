@@ -2,16 +2,16 @@ import styled from '@emotion/styled';
 import { Button, Comment, message, Tooltip, Modal, Input, Form } from 'antd';
 import { useState } from 'react';
 import { CommentProps } from 'types/model';
-import { CommentWrite, ReplyUtils } from 'components/organism';
+import { CommentWrite, ReplyUtils } from 'components/organisms';
 import router from 'next/router';
 import Link from 'next/link';
-import { UserAvatar } from 'components/atom';
+import { UserAvatar } from 'components/atoms';
 import moment from 'moment';
 import { displayDate } from 'utils';
 import { commentAPI } from 'apis';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
-import { LikeInfo } from 'components/molecule';
+import { LikeInfo } from 'components/molecules';
 
 const CommentUtils = ({
   comment,

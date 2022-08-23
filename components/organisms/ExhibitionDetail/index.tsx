@@ -1,8 +1,8 @@
 import * as S from './style';
 import { ShareAltOutlined } from '@ant-design/icons';
 import { message, Tooltip } from 'antd';
-import { ExhibitionInfo } from 'components/molecule';
-import { LikeInfo } from 'components/molecule';
+import { ExhibitionInfo } from 'components/molecules';
+import { LikeInfo } from 'components/molecules';
 import { exhibitionAPI } from 'apis';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';

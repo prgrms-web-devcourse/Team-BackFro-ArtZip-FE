@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { LikeToggle } from 'components/atom';
+import { LikeToggle } from 'components/atoms';
 interface LikeInfoProps {
   isLiked: boolean;
   likeCount: number;
