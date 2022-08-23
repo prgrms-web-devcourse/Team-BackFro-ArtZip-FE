@@ -1,8 +1,8 @@
 import { Button, message } from 'antd';
 import { reviewAPI } from 'apis';
-import { LinkButton } from 'components/atom';
-import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecule';
-import { InfoGroup } from 'components/organism';
+import { LinkButton } from 'components/atoms';
+import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecules';
+import { InfoGroup } from 'components/organisms';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';

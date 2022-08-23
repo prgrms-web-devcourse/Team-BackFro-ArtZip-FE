@@ -3,7 +3,7 @@ import SwiperCore, { Navigation, Autoplay } from 'swiper';
 import * as S from './style';
 import React, { ReactElement } from 'react';
 import { ExhibitionProps } from 'types/model';
-import { ExhibitionCard } from 'components/molecule';
+import { ExhibitionCard } from 'components/molecules';
 
 SwiperCore.use([Navigation, Autoplay]);
 

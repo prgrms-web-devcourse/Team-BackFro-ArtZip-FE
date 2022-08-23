@@ -1,11 +1,11 @@
-import SearchToolbar from 'components/organism/SearchToolbar';
+import SearchToolbar from 'components/organisms/SearchToolbar';
 import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { Pagination } from 'antd';
 import * as S from '../../../styles/pages/exhibitionsCustom';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
-import { ExhibitionCard } from 'components/molecule';
+import { ExhibitionCard } from 'components/molecules';
 import styled from '@emotion/styled';
 
 //exhibitions/custom
