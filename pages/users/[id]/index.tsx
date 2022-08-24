@@ -1,22 +1,25 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Spin } from 'antd';
+import { Tabs, Image, Spin, Pagination } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
-import { GetServerSideProps } from 'next';
-import { UserInfoResponse, UserReviewResponse } from 'types/apis/user';
-import { useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
+import useSWR from 'swr';
 
-interface UserPageProps {
-  userInfoResponse: UserInfoResponse;
-  userReviewResponse: UserReviewResponse;
-}
+const UserPage = () => {
+  const { data: userInfo } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/27/info`,
+  );
+  const { data } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/27/info/my/reviews?page=0&size=4`,
+  );
+  const reviews = data?.content;
 
-const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
-  const userInfo = userInfoResponse.data;
-  const userReviews = userReviewResponse.data?.content;
+  useEffect(() => {
+    setMyReviews(reviews);
+  }, [reviews]);
 
-  const [myReviews, setMyReviews] = useState<ReviewCardProps[] | undefined>(userReviews);
+  const [myReviews, setMyReviews] = useState<ReviewCardProps[]>();
   const [likeReviews, setLikeReviews] = useState<ReviewCardProps[]>();
   const [likeExhibitions, setLikeExhibitions] = useState<Required<ExhibitionProps>[]>();
 
@@ -26,11 +29,11 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
         return;
       }
       case 'likeReview': {
-        fetchLikeReviews();
+        getLikeReviews();
         return;
       }
       case 'likeExhibition': {
-        fetchLikeExhibitions();
+        getLikeExhibitions();
         return;
       }
       default:
@@ -38,25 +41,29 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
     }
   };
 
-  const fetchLikeReviews = async () => {
+  const getLikeReviews = async () => {
     if (userInfo && !likeReviews) {
       const { content } = await userAPI
-        .getLikeReview(userInfo.userId, 0, 10)
+        .getLikeReview(userInfo.userId, 0, 4)
         .then((res) => res.data.data);
       setLikeReviews(content);
     }
   };
 
-  const fetchLikeExhibitions = async () => {
+  const getLikeExhibitions = async () => {
     if (userInfo && !likeExhibitions) {
       const { content } = await userAPI
-        .getLikeExhibition(userInfo.userId, 0, 10)
+        .getLikeExhibition(userInfo.userId, 0, 8)
         .then((res) => res.data.data);
       setLikeExhibitions(content);
     }
   };
 
-  return userInfo && userReviews ? (
+  const handleChange = (page: number) => {
+    console.log(page);
+  };
+
+  return userInfo && myReviews ? (
     <PageContainer>
       <ProfileContainer>
         <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
@@ -83,6 +90,14 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
               />
             ))}
           </ReviewContainer>
+          <Pagination
+            defaultCurrent={1}
+            pageSize={4}
+            total={userInfo.reviewCount}
+            hideOnSinglePage={true}
+            onChange={handleChange}
+            style={paginationStyle}
+          />
         </Tab>
         <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="likeReview">
           <ReviewContainer>
@@ -152,30 +167,6 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
   ) : (
     <Spinner size="large" />
   );
-};
-
-// TODO: 추후 getStaticProps로 변경 예정 (getStaticPaths도 추가)
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (params) {
-    const userInfoResponse = await userAPI.getUserInfo(Number(params.id)).then((res) => res.data); // 추후 then을 await으로 변경
-
-    const userReviewResponse = await userAPI
-      .getMyReview(Number(params.id), 0, 10)
-      .then((res) => res.data);
-
-    return {
-      props: {
-        userInfoResponse,
-        userReviewResponse,
-      },
-    };
-  }
-  return {
-    props: {
-      userInfoResponse: {},
-      userReviewResponse: {},
-    },
-  };
 };
 
 const PageContainer = styled.div`
@@ -249,5 +240,10 @@ const ExhibitionContainer = styled.div`
 const Spinner = styled(Spin)`
   margin-bottom: 400px;
 `;
+
+const paginationStyle: CSSProperties = {
+  textAlign: 'center',
+  marginBottom: '24px',
+};
 
 export default UserPage;
