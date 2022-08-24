@@ -12,6 +12,8 @@ import App from 'next/app';
 import { setToken } from 'utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { SWRConfig } from 'swr';
+import axios from 'axios';
 import cookie from 'react-cookies';
 declare global {
   interface Window {
@@ -19,6 +21,10 @@ declare global {
     kakao: any;
   }
 }
+
+const swrOptions = {
+  fetcher: (url: string) => axios.get(url).then((res) => res.data.data),
+};
 
 function ArtZip({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -29,11 +35,13 @@ function ArtZip({ Component, pageProps }: AppProps) {
 
   return (
     <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <SWRConfig value={swrOptions}>
+        <ThemeProvider theme={theme}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </SWRConfig>
     </RecoilRoot>
   );
 }
