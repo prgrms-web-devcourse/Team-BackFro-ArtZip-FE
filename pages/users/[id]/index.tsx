@@ -122,6 +122,14 @@ const UserPage = () => {
               <Spinner size="large" />
             )}
           </ReviewContainer>
+          <Pagination
+            defaultCurrent={1}
+            pageSize={4}
+            total={userInfo.reviewLikeCount}
+            hideOnSinglePage={true}
+            onChange={handleChange}
+            style={paginationStyle}
+          />
         </Tab>
         <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="likeExhibition">
           <ExhibitionContainer>
@@ -143,6 +151,14 @@ const UserPage = () => {
               <Spinner size="large" />
             )}
           </ExhibitionContainer>
+          <Pagination
+            defaultCurrent={1}
+            pageSize={8}
+            total={userInfo.exhibitionLikeCount}
+            hideOnSinglePage={true}
+            onChange={handleChange}
+            style={paginationStyle}
+          />
         </Tab>
       </TabCardContainer>
       <SideNavigation
