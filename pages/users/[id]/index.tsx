@@ -5,35 +5,57 @@ import { userAPI } from 'apis';
 import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import useSWR from 'swr';
+import { useRouter } from 'next/router';
+
+interface UserActivity<T> {
+  payload: T[];
+  currentPage: number;
+  pageSize: number;
+  totalSize: number;
+}
+
+const initialReview = {
+  payload: [],
+  currentPage: 1,
+  pageSize: 4,
+  totalSize: 0,
+};
+
+const initialExhibition = {
+  payload: [],
+  currentPage: 1,
+  pageSize: 8,
+  totalSize: 0,
+};
 
 const UserPage = () => {
+  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
+  const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
+  const [likeExhibition, setLikeExhibition] =
+    useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
+  const { id } = useRouter().query;
+
   const { data: userInfo } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/27/info`,
+    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/${id}/info`,
+    { revalidateOnFocus: false },
   );
-  const { data } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/27/info/my/reviews?page=0&size=4`,
-  );
-  const reviews = data?.content;
 
   useEffect(() => {
-    setMyReviews(reviews);
-  }, [reviews]);
-
-  const [myReviews, setMyReviews] = useState<ReviewCardProps[]>();
-  const [likeReviews, setLikeReviews] = useState<ReviewCardProps[]>();
-  const [likeExhibitions, setLikeExhibitions] = useState<Required<ExhibitionProps>[]>();
+    handleTabClick('MY_REVIEW');
+  }, []);
 
   const handleTabClick = (key: string) => {
     switch (key) {
-      case 'myReview': {
+      case 'MY_REVIEW': {
+        handleMyReviewChange(myReview.currentPage);
         return;
       }
-      case 'likeReview': {
-        getLikeReviews();
+      case 'LIKE_REVIEW': {
+        handleLikeReviewChange(likeReview.currentPage);
         return;
       }
-      case 'likeExhibition': {
-        getLikeExhibitions();
+      case 'LIKE_EXHIBITION': {
+        handleLikeExhibitionChange(likeExhibition.currentPage);
         return;
       }
       default:
@@ -41,29 +63,47 @@ const UserPage = () => {
     }
   };
 
-  const getLikeReviews = async () => {
-    if (userInfo && !likeReviews) {
-      const { content } = await userAPI
-        .getLikeReview(userInfo.userId, 0, 4)
-        .then((res) => res.data.data);
-      setLikeReviews(content);
+  const handleMyReviewChange = async (page: number) => {
+    if (!userInfo) {
+      return;
     }
+
+    const payload = await userAPI
+      .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
+      .then((res) => res.data.data.content);
+
+    setMyReview({
+      ...myReview,
+      payload,
+      currentPage: page,
+    });
   };
 
-  const getLikeExhibitions = async () => {
-    if (userInfo && !likeExhibitions) {
-      const { content } = await userAPI
-        .getLikeExhibition(userInfo.userId, 0, 8)
-        .then((res) => res.data.data);
-      setLikeExhibitions(content);
-    }
+  const handleLikeReviewChange = async (page: number) => {
+    const payload = await userAPI
+      .getLikeReview(userInfo?.userId, page - 1, myReview.pageSize)
+      .then((res) => res.data.data.content);
+
+    setLikeReview({
+      ...likeReview,
+      payload,
+      currentPage: page,
+    });
   };
 
-  const handleChange = (page: number) => {
-    console.log(page);
+  const handleLikeExhibitionChange = async (page: number) => {
+    const payload = await userAPI
+      .getLikeExhibition(userInfo?.userId, page - 1, likeExhibition.pageSize)
+      .then((res) => res.data.data.content);
+
+    setLikeExhibition({
+      ...likeExhibition,
+      payload,
+      currentPage: page,
+    });
   };
 
-  return userInfo && myReviews ? (
+  return userInfo ? (
     <PageContainer>
       <ProfileContainer>
         <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
@@ -71,9 +111,9 @@ const UserPage = () => {
         <UserEmail>{userInfo.email}</UserEmail>
       </ProfileContainer>
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
-        <Tab tab={`작성한 후기 (${userInfo.reviewCount})`} key="myReview">
+        <Tab tab={`작성한 후기 (${userInfo.reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReviews?.map((review) => (
+            {myReview.payload?.map((review) => (
               <ReviewCard
                 key={review.reviewId}
                 reviewId={review.reviewId}
@@ -95,14 +135,14 @@ const UserPage = () => {
             pageSize={4}
             total={userInfo.reviewCount}
             hideOnSinglePage={true}
-            onChange={handleChange}
+            onChange={handleMyReviewChange}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="likeReview">
+        <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="LIKE_REVIEW">
           <ReviewContainer>
-            {likeReviews ? (
-              likeReviews.map((review) => (
+            {likeReview ? (
+              likeReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
                   reviewId={review.reviewId}
@@ -127,14 +167,14 @@ const UserPage = () => {
             pageSize={4}
             total={userInfo.reviewLikeCount}
             hideOnSinglePage={true}
-            onChange={handleChange}
+            onChange={handleLikeReviewChange}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="likeExhibition">
+        <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="LIKE_EXHIBITION">
           <ExhibitionContainer>
-            {likeExhibitions ? (
-              likeExhibitions.map((exhibition) => (
+            {likeExhibition ? (
+              likeExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
                   exhibitionId={exhibition.exhibitionId}
@@ -156,7 +196,7 @@ const UserPage = () => {
             pageSize={8}
             total={userInfo.exhibitionLikeCount}
             hideOnSinglePage={true}
-            onChange={handleChange}
+            onChange={handleLikeExhibitionChange}
             style={paginationStyle}
           />
         </Tab>
