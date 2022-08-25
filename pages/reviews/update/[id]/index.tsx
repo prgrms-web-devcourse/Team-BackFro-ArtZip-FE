@@ -6,11 +6,11 @@ import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
 import { objectToFormData, filesToFormData } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios } from 'hooks';
+import { useAxios, useWithAuth } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
-import withAuth from 'HOC/withAuth';
+import { Spinner } from 'components/atoms';
 
 interface SubmitData {
   date: string;
@@ -88,6 +88,11 @@ const ReviewUpdatePage = () => {
       console.error('후기 수정 실패');
     }
   };
+
+  const [isChecking] = useWithAuth();
+  if (isChecking) {
+    return <Spinner />;
+  }
 
   if (!prevData) {
     return null;
@@ -262,4 +267,4 @@ const PrevImageContainer = styled.div`
   }
 `;
 
-export default withAuth(ReviewUpdatePage);
+export default ReviewUpdatePage;
