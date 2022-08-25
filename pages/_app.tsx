@@ -23,8 +23,22 @@ declare global {
 }
 
 const swrOptions = {
-  fetcher: (url: string) =>
-    axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`).then((res) => res.data.data),
+  fetcher: async (url: string) => {
+    const isLoggedIn = cookie.load('REFRESH_TOKEN');
+    const accessToken = cookie.load('ACCESS_TOKEN');
+
+    if (isLoggedIn) {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`, {
+        headers: {
+          accessToken,
+        },
+      });
+      return res.data.data;
+    } else {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`);
+      return res.data.data;
+    }
+  },
 };
 
 function ArtZip({ Component, pageProps }: AppProps) {
