@@ -23,7 +23,8 @@ declare global {
 }
 
 const swrOptions = {
-  fetcher: (url: string) => axios.get(url).then((res) => res.data.data),
+  fetcher: (url: string) =>
+    axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`).then((res) => res.data.data),
 };
 
 function ArtZip({ Component, pageProps }: AppProps) {
