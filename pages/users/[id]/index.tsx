@@ -5,7 +5,7 @@ import { userAPI } from 'apis';
 import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
-import useUserInfo from 'hooks/useUserInfo';
+import useSWR from 'swr';
 
 interface UserActivity<T> {
   payload: T[];
@@ -30,7 +30,7 @@ const initialExhibition = {
 
 const UserPage = () => {
   const { id } = useRouter().query;
-  const { userInfo, isLoading } = useUserInfo(String(id));
+  const { data: userInfo } = useSWR(`/api/v1/users/${id}/info`);
   const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeExhibition, setLikeExhibition] =
@@ -101,7 +101,7 @@ const UserPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (!userInfo) {
     return <Spinner size="large" />;
   }
 
