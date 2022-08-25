@@ -9,6 +9,7 @@ interface SpinnerProps {
 const Spinner = ({ size = 'large', style }: SpinnerProps) => {
   const spinStyle = {
     display: 'block',
+    height: '100vh',
     ...style,
   };
   return <Spin size={size} style={spinStyle} />;
