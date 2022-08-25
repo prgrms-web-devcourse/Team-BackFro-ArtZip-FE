@@ -4,8 +4,8 @@ import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules
 import { userAPI } from 'apis';
 import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
-import useSWR from 'swr';
 import { useRouter } from 'next/router';
+import useUserInfo from 'hooks/useUserInfo';
 
 interface UserActivity<T> {
   payload: T[];
@@ -29,16 +29,12 @@ const initialExhibition = {
 };
 
 const UserPage = () => {
+  const { id } = useRouter().query;
+  const { userInfo, isLoading } = useUserInfo(String(id));
   const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeExhibition, setLikeExhibition] =
     useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
-  const { id } = useRouter().query;
-
-  const { data: userInfo } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_END_POINT}/api/v1/users/${id}/info`,
-    { revalidateOnFocus: false },
-  );
 
   useEffect(() => {
     userInfo && handleTabClick('MY_REVIEW');
@@ -105,19 +101,29 @@ const UserPage = () => {
     }
   };
 
-  if (!userInfo) {
+  if (isLoading) {
     return <Spinner size="large" />;
   }
+
+  const {
+    userId,
+    profileImage,
+    nickname,
+    email,
+    reviewCount,
+    reviewLikeCount,
+    exhibitionLikeCount,
+  } = userInfo;
 
   return (
     <PageContainer>
       <ProfileContainer>
-        <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
-        <UserName>{userInfo.nickname}</UserName>
-        <UserEmail>{userInfo.email}</UserEmail>
+        <ProfileImage src={profileImage} alt="프로필 이미지" />
+        <UserName>{nickname}</UserName>
+        <UserEmail>{email}</UserEmail>
       </ProfileContainer>
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
-        <Tab tab={`작성한 후기 (${userInfo.reviewCount})`} key="MY_REVIEW">
+        <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
             {myReview.payload?.map((review) => (
               <ReviewCard
@@ -137,15 +143,15 @@ const UserPage = () => {
             ))}
           </ReviewContainer>
           <Pagination
-            defaultCurrent={1}
-            pageSize={4}
-            total={userInfo.reviewCount}
-            hideOnSinglePage={true}
+            defaultCurrent={myReview.currentPage}
+            pageSize={myReview.pageSize}
+            total={reviewCount}
             onChange={handleMyReviewChange}
+            hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="LIKE_REVIEW">
+        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKE_REVIEW">
           <ReviewContainer>
             {likeReview ? (
               likeReview.payload.map((review) => (
@@ -169,15 +175,15 @@ const UserPage = () => {
             )}
           </ReviewContainer>
           <Pagination
-            defaultCurrent={1}
-            pageSize={4}
-            total={userInfo.reviewLikeCount}
-            hideOnSinglePage={true}
+            defaultCurrent={likeReview.currentPage}
+            pageSize={likeReview.pageSize}
+            total={reviewLikeCount}
             onChange={handleLikeReviewChange}
+            hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="LIKE_EXHIBITION">
+        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKE_EXHIBITION">
           <ExhibitionContainer>
             {likeExhibition ? (
               likeExhibition.payload.map((exhibition) => (
@@ -198,8 +204,8 @@ const UserPage = () => {
             )}
           </ExhibitionContainer>
           <Pagination
-            defaultCurrent={1}
-            pageSize={8}
+            defaultCurrent={likeExhibition.currentPage}
+            pageSize={likeExhibition.pageSize}
             total={userInfo.exhibitionLikeCount}
             hideOnSinglePage={true}
             onChange={handleLikeExhibitionChange}
@@ -210,16 +216,16 @@ const UserPage = () => {
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userInfo.userId}`,
+            pathName: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userInfo.userId}/edit`,
+            pathName: `/users/${userId}/edit`,
             pageName: '프로필 수정',
             query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            pathName: `/users/${userInfo.userId}/edit-password`,
+            pathName: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
             query: userInfo,
           },
