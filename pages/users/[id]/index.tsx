@@ -41,11 +41,11 @@ const UserPage = () => {
   );
 
   useEffect(() => {
-    handleTabClick('MY_REVIEW');
-  }, []);
+    userInfo && handleTabClick('MY_REVIEW');
+  }, [userInfo]);
 
-  const handleTabClick = (key: string) => {
-    switch (key) {
+  const handleTabClick = (tabName: string) => {
+    switch (tabName) {
       case 'MY_REVIEW': {
         handleMyReviewChange(myReview.currentPage);
         return;
@@ -64,46 +64,52 @@ const UserPage = () => {
   };
 
   const handleMyReviewChange = async (page: number) => {
-    if (!userInfo) {
-      return;
+    if (userInfo) {
+      const payload = await userAPI
+        .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
+        .then((res) => res.data.data.content);
+
+      setMyReview({
+        ...myReview,
+        payload,
+        currentPage: page,
+      });
     }
-
-    const payload = await userAPI
-      .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
-      .then((res) => res.data.data.content);
-
-    setMyReview({
-      ...myReview,
-      payload,
-      currentPage: page,
-    });
   };
 
   const handleLikeReviewChange = async (page: number) => {
-    const payload = await userAPI
-      .getLikeReview(userInfo?.userId, page - 1, myReview.pageSize)
-      .then((res) => res.data.data.content);
+    if (userInfo) {
+      const payload = await userAPI
+        .getLikeReview(userInfo.userId, page - 1, myReview.pageSize)
+        .then((res) => res.data.data.content);
 
-    setLikeReview({
-      ...likeReview,
-      payload,
-      currentPage: page,
-    });
+      setLikeReview({
+        ...likeReview,
+        payload,
+        currentPage: page,
+      });
+    }
   };
 
   const handleLikeExhibitionChange = async (page: number) => {
-    const payload = await userAPI
-      .getLikeExhibition(userInfo?.userId, page - 1, likeExhibition.pageSize)
-      .then((res) => res.data.data.content);
+    if (userInfo) {
+      const payload = await userAPI
+        .getLikeExhibition(userInfo.userId, page - 1, likeExhibition.pageSize)
+        .then((res) => res.data.data.content);
 
-    setLikeExhibition({
-      ...likeExhibition,
-      payload,
-      currentPage: page,
-    });
+      setLikeExhibition({
+        ...likeExhibition,
+        payload,
+        currentPage: page,
+      });
+    }
   };
 
-  return userInfo ? (
+  if (!userInfo) {
+    return <Spinner size="large" />;
+  }
+
+  return (
     <PageContainer>
       <ProfileContainer>
         <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
@@ -220,8 +226,6 @@ const UserPage = () => {
         ]}
       />
     </PageContainer>
-  ) : (
-    <Spinner size="large" />
   );
 };
 
