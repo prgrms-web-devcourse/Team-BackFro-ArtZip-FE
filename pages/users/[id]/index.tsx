@@ -30,7 +30,7 @@ const initialExhibition = {
 
 const UserPage = () => {
   const { id } = useRouter().query;
-  const { data: userInfo } = useSWR(`/api/v1/users/${id}/info`);
+  const { data: userInfo } = useSWR(`api/v1/users/${id}/info`);
   const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
   const [likeExhibition, setLikeExhibition] =
