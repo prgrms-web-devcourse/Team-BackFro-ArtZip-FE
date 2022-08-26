@@ -1,36 +1,57 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Spin } from 'antd';
+import { Tabs, Image, Spin, Pagination } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
-import { GetServerSideProps } from 'next';
-import { UserInfoResponse, UserReviewResponse } from 'types/apis/user';
-import { useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
-interface UserPageProps {
-  userInfoResponse: UserInfoResponse;
-  userReviewResponse: UserReviewResponse;
+interface UserActivity<T> {
+  payload: T[];
+  currentPage: number;
+  pageSize: number;
+  totalSize: number;
 }
 
-const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
-  const userInfo = userInfoResponse.data;
-  const userReviews = userReviewResponse.data?.content;
+const initialReview = {
+  payload: [],
+  currentPage: 1,
+  pageSize: 4,
+  totalSize: 0,
+};
 
-  const [myReviews, setMyReviews] = useState<ReviewCardProps[] | undefined>(userReviews);
-  const [likeReviews, setLikeReviews] = useState<ReviewCardProps[]>();
-  const [likeExhibitions, setLikeExhibitions] = useState<Required<ExhibitionProps>[]>();
+const initialExhibition = {
+  payload: [],
+  currentPage: 1,
+  pageSize: 8,
+  totalSize: 0,
+};
 
-  const handleTabClick = (key: string) => {
-    switch (key) {
-      case 'myReview': {
+const UserPage = () => {
+  const { id } = useRouter().query;
+  const { data: userInfo } = useSWR(`/api/v1/users/${id}/info`);
+  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
+  const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
+  const [likeExhibition, setLikeExhibition] =
+    useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
+
+  useEffect(() => {
+    userInfo && handleTabClick('MY_REVIEW');
+  }, [userInfo]);
+
+  const handleTabClick = (tabName: string) => {
+    switch (tabName) {
+      case 'MY_REVIEW': {
+        handleMyReviewChange(myReview.currentPage);
         return;
       }
-      case 'likeReview': {
-        fetchLikeReviews();
+      case 'LIKE_REVIEW': {
+        handleLikeReviewChange(likeReview.currentPage);
         return;
       }
-      case 'likeExhibition': {
-        fetchLikeExhibitions();
+      case 'LIKE_EXHIBITION': {
+        handleLikeExhibitionChange(likeExhibition.currentPage);
         return;
       }
       default:
@@ -38,35 +59,73 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
     }
   };
 
-  const fetchLikeReviews = async () => {
-    if (userInfo && !likeReviews) {
-      const { content } = await userAPI
-        .getLikeReview(userInfo.userId, 0, 10)
-        .then((res) => res.data.data);
-      setLikeReviews(content);
+  const handleMyReviewChange = async (page: number) => {
+    if (userInfo) {
+      const payload = await userAPI
+        .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
+        .then((res) => res.data.data.content);
+
+      setMyReview({
+        ...myReview,
+        payload,
+        currentPage: page,
+      });
     }
   };
 
-  const fetchLikeExhibitions = async () => {
-    if (userInfo && !likeExhibitions) {
-      const { content } = await userAPI
-        .getLikeExhibition(userInfo.userId, 0, 10)
-        .then((res) => res.data.data);
-      setLikeExhibitions(content);
+  const handleLikeReviewChange = async (page: number) => {
+    if (userInfo) {
+      const payload = await userAPI
+        .getLikeReview(userInfo.userId, page - 1, myReview.pageSize)
+        .then((res) => res.data.data.content);
+
+      setLikeReview({
+        ...likeReview,
+        payload,
+        currentPage: page,
+      });
     }
   };
 
-  return userInfo && userReviews ? (
+  const handleLikeExhibitionChange = async (page: number) => {
+    if (userInfo) {
+      const payload = await userAPI
+        .getLikeExhibition(userInfo.userId, page - 1, likeExhibition.pageSize)
+        .then((res) => res.data.data.content);
+
+      setLikeExhibition({
+        ...likeExhibition,
+        payload,
+        currentPage: page,
+      });
+    }
+  };
+
+  if (!userInfo) {
+    return <Spinner size="large" />;
+  }
+
+  const {
+    userId,
+    profileImage,
+    nickname,
+    email,
+    reviewCount,
+    reviewLikeCount,
+    exhibitionLikeCount,
+  } = userInfo;
+
+  return (
     <PageContainer>
       <ProfileContainer>
-        <ProfileImage src={userInfo.profileImage} alt="프로필 이미지" />
-        <UserName>{userInfo.nickname}</UserName>
-        <UserEmail>{userInfo.email}</UserEmail>
+        <ProfileImage src={profileImage} alt="프로필 이미지" />
+        <UserName>{nickname}</UserName>
+        <UserEmail>{email}</UserEmail>
       </ProfileContainer>
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
-        <Tab tab={`작성한 후기 (${userInfo.reviewCount})`} key="myReview">
+        <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReviews?.map((review) => (
+            {myReview.payload?.map((review) => (
               <ReviewCard
                 key={review.reviewId}
                 reviewId={review.reviewId}
@@ -83,11 +142,19 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
               />
             ))}
           </ReviewContainer>
+          <Pagination
+            defaultCurrent={myReview.currentPage}
+            pageSize={myReview.pageSize}
+            total={reviewCount}
+            onChange={handleMyReviewChange}
+            hideOnSinglePage={true}
+            style={paginationStyle}
+          />
         </Tab>
-        <Tab tab={`좋아하는 후기 (${userInfo.reviewLikeCount})`} key="likeReview">
+        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKE_REVIEW">
           <ReviewContainer>
-            {likeReviews ? (
-              likeReviews.map((review) => (
+            {likeReview ? (
+              likeReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
                   reviewId={review.reviewId}
@@ -107,11 +174,19 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
               <Spinner size="large" />
             )}
           </ReviewContainer>
+          <Pagination
+            defaultCurrent={likeReview.currentPage}
+            pageSize={likeReview.pageSize}
+            total={reviewLikeCount}
+            onChange={handleLikeReviewChange}
+            hideOnSinglePage={true}
+            style={paginationStyle}
+          />
         </Tab>
-        <Tab tab={`좋아하는 전시회 (${userInfo.exhibitionLikeCount})`} key="likeExhibition">
+        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKE_EXHIBITION">
           <ExhibitionContainer>
-            {likeExhibitions ? (
-              likeExhibitions.map((exhibition) => (
+            {likeExhibition ? (
+              likeExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
                   exhibitionId={exhibition.exhibitionId}
@@ -128,54 +203,36 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
               <Spinner size="large" />
             )}
           </ExhibitionContainer>
+          <Pagination
+            defaultCurrent={likeExhibition.currentPage}
+            pageSize={likeExhibition.pageSize}
+            total={userInfo.exhibitionLikeCount}
+            hideOnSinglePage={true}
+            onChange={handleLikeExhibitionChange}
+            style={paginationStyle}
+          />
         </Tab>
       </TabCardContainer>
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userInfo.userId}`,
+            pathName: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userInfo.userId}/edit`,
+            pathName: `/users/${userId}/edit`,
             pageName: '프로필 수정',
             query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            pathName: `/users/${userInfo.userId}/edit-password`,
+            pathName: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
             query: userInfo,
           },
         ]}
       />
     </PageContainer>
-  ) : (
-    <Spinner size="large" />
   );
-};
-
-// TODO: 추후 getStaticProps로 변경 예정 (getStaticPaths도 추가)
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (params) {
-    const userInfoResponse = await userAPI.getUserInfo(Number(params.id)).then((res) => res.data); // 추후 then을 await으로 변경
-
-    const userReviewResponse = await userAPI
-      .getMyReview(Number(params.id), 0, 10)
-      .then((res) => res.data);
-
-    return {
-      props: {
-        userInfoResponse,
-        userReviewResponse,
-      },
-    };
-  }
-  return {
-    props: {
-      userInfoResponse: {},
-      userReviewResponse: {},
-    },
-  };
 };
 
 const PageContainer = styled.div`
@@ -249,5 +306,10 @@ const ExhibitionContainer = styled.div`
 const Spinner = styled(Spin)`
   margin-bottom: 400px;
 `;
+
+const paginationStyle: CSSProperties = {
+  textAlign: 'center',
+  marginBottom: '24px',
+};
 
 export default UserPage;
