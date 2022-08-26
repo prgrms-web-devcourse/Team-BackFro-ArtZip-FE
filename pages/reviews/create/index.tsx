@@ -8,7 +8,8 @@ import { ValueOf } from 'types/utility';
 import { objectToFormData, filesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway } from 'hooks';
+import { useClickAway, useWithAuth } from 'hooks';
+import { Spinner } from 'components/atoms';
 
 interface SubmitData {
   exhibitionId: number;
@@ -34,7 +35,6 @@ interface SearchResult {
   thumbnail: string;
 }
 
-// TODO: 미로그인 상태로 감상평 쓰기 진입 시 막기 (private route를 전역적으로 설정)
 const ReviewCreatePage = () => {
   const submitData = useRef<SubmitData>(initialData);
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -105,6 +105,11 @@ const ReviewCreatePage = () => {
       console.error('후기 생성 실패');
     }
   };
+
+  const [isChecking] = useWithAuth();
+  if (isChecking) {
+    return <Spinner />;
+  }
 
   return (
     <>

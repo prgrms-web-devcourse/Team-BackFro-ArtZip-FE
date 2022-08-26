@@ -5,3 +5,4 @@ export { default as Logo } from './Logo';
 export { default as Map } from './Map';
 export { default as NotLoginAvatar } from './NotLoginAvatar';
 export { default as UserAvatar } from './UserAvatar';
+export { default as Spinner } from './Spinner';
