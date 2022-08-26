@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Pagination } from 'antd';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { searchResultPageStyle as S } from '../../styles/pages';
+import { searchResultPageStyle as S } from 'styles/pages';
 import { NextPage } from 'next';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
@@ -11,22 +11,27 @@ import styled from '@emotion/styled';
 
 const SearchResultPage: NextPage = () => {
   const router = useRouter();
-  const { exhibition } = router.query;
+  const [exhibition, setExhibition] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    const { exhibition } = router.query;
     if (typeof exhibition === 'string') {
-      exhibitionAPI
-        .search(exhibition, currentPage, 10, true)
-        .then((res) => {
-          setTotal(res.data.data.totalPage);
-          setExhibitions(res.data.data.content);
-        })
-        .catch((err) => console.log(err));
+      setExhibition(exhibition);
     }
-  }, [currentPage]);
+  }, [router.query]);
+
+  useEffect(() => {
+    exhibitionAPI
+      .search(exhibition, currentPage, 10, true)
+      .then((res) => {
+        setTotal(res.data.data.totalPage);
+        setExhibitions(res.data.data.content);
+      })
+      .catch((err) => console.log(err));
+  }, [currentPage, exhibition]);
 
   return (
     <S.SearchResultContainer>
