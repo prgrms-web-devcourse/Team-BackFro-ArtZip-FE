@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
-import { Layout } from 'components/template';
+import { Layout } from 'components/templates';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/global/theme';
 import 'swiper/scss';

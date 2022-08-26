@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import styled from '@emotion/styled';
-import { Banner } from 'components/molecule';
+import { Banner } from 'components/molecules';
 import { useInfiniteScroll } from 'hooks';
 import { useEffect, useState } from 'react';
-import { ReviewFeed } from 'components/organism';
+import { ReviewFeed } from 'components/organisms';
 import { reviewAPI } from 'apis';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';

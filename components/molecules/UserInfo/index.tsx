@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { displayDate } from 'utils';
 import { UserProps } from 'types/model';
-import { UserAvatar } from 'components/atom';
+import { UserAvatar } from 'components/atoms';
 interface UserInfoProps extends UserProps {
   createdDate: string;
 }

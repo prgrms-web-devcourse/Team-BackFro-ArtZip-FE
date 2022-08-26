@@ -6,7 +6,7 @@ import { searchResultPageStyle as S } from 'styles/pages';
 import { NextPage } from 'next';
 import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
-import { ExhibitionCard } from 'components/molecule';
+import { ExhibitionCard } from 'components/molecules';
 import styled from '@emotion/styled';
 
 const SearchResultPage: NextPage = () => {

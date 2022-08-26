@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Tabs, Image, Spin } from 'antd';
-import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecule';
+import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
 import { GetServerSideProps } from 'next';
 import { UserInfoResponse, UserReviewResponse } from 'types/apis/user';
@@ -76,12 +76,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                 createdAt={review.createdAt}
                 likeCount={review.likeCount}
                 commentCount={review.commentCount}
-                photo={[
-                  {
-                    path: review.photos[0] ? review.photos[0].path : review.exhibition.thumbnail,
-                    photoId: 13,
-                  },
-                ]}
+                photo={review.photos}
                 userId={review.user.userId}
                 nickname={review.user.nickname}
                 profileImage={review.user.profileImage}
@@ -102,12 +97,7 @@ const UserPage = ({ userInfoResponse, userReviewResponse }: UserPageProps) => {
                   createdAt={review.createdAt}
                   likeCount={review.likeCount}
                   commentCount={review.commentCount}
-                  photo={[
-                    {
-                      path: review.photos[0] ? review.photos[0].path : review.exhibition.thumbnail,
-                      photoId: 13,
-                    },
-                  ]}
+                  photo={review.photos}
                   userId={review.user.userId}
                   nickname={review.user.nickname}
                   profileImage={review.user.profileImage}
