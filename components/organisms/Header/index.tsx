@@ -3,17 +3,19 @@ import Logo from 'components/atoms/Logo';
 import { Input, message, Image } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useClickAway, useUserAuthActions } from 'hooks';
 import imageUrl from 'constants/imageUrl';
 import { useRef, useState } from 'react';
 
 const Header = () => {
-  const { pathname } = useRouter();
-  const [userState, setUserState] = useRecoilState(userAtom);
-  const { logout } = useUserAuthActions();
   const router = useRouter();
+  const { userId, profileImage, isLoggedIn } = useRecoilValue(userAtom);
+  console.log(isLoggedIn);
+
+  const { logout } = useUserAuthActions();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const avatarContainer = useRef<HTMLDivElement>(null);
 
@@ -40,38 +42,40 @@ const Header = () => {
     <StyledHeader>
       <Container>
         <Logo width={180} height={55} />
-        <AvatarContainer ref={avatarContainer} onClick={handleAvatarClick}>
-          <Avatar src={userState.profileImage || imageUrl.USER_DEFAULT} preview={false} />
-          {isDropdownOpen && (
-            <Dropdown>
-              {userState.userId ? (
-                <>
-                  <LinkText href={`/users/${userState.userId}`} text="마이페이지" />
-                  <Button onClick={logout}>로그아웃</Button>
-                </>
-              ) : (
-                <>
-                  <LinkText href="/signin" text="로그인" />
-                  <LinkText href="/signup" text="회원가입" />
-                </>
-              )}
-            </Dropdown>
-          )}
-        </AvatarContainer>
+        {isLoggedIn ? (
+          <AvatarContainer ref={avatarContainer} onClick={handleAvatarClick}>
+            <Avatar src={profileImage || imageUrl.USER_DEFAULT} preview={false} />
+            {isDropdownOpen && (
+              <Dropdown>
+                <LinkText href={`/users/${userId}`} text="마이페이지" />
+                <Button onClick={logout}>로그아웃</Button>
+              </Dropdown>
+            )}
+          </AvatarContainer>
+        ) : (
+          <Utility>
+            <LinkText href="/signin" text="로그인" />
+            <LinkText href="/signup" text="회원가입" />
+          </Utility>
+        )}
       </Container>
       <Container>
         <Navigation>
           <LinkText
             href="/exhibitions/custom"
             text="맞춤 전시회"
-            isCurrentPage={pathname === '/exhibitions/custom'}
+            isCurrentPage={router.pathname === '/exhibitions/custom'}
           />
           <LinkText
             href="/reviews/create"
             text="후기 작성"
-            isCurrentPage={pathname === '/reviews/create'}
+            isCurrentPage={router.pathname === '/reviews/create'}
           />
-          <LinkText href="/community" text="커뮤니티" isCurrentPage={pathname === '/community'} />
+          <LinkText
+            href="/community"
+            text="커뮤니티"
+            isCurrentPage={router.pathname === '/community'}
+          />
         </Navigation>
         <SearchBar
           bordered={false}
