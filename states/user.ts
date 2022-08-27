@@ -26,7 +26,7 @@ const cookieEffect =
 
         const { data } = await userAPI.getMyInfo();
         const { userId, email, nickname, profileImage } = data.data;
-        return { userId, email, nickname, profileImage };
+        return { userId, email, nickname, profileImage, isLoggedIn: true };
       } catch (error: unknown) {
         cookie.remove('ACCESS_TOKEN');
         cookie.remove('REFRESH_TOKEN');
@@ -52,7 +52,7 @@ const userAtom = atom({
       try {
         const { data } = await userAPI.getMyInfo();
         const { userId, email, nickname, profileImage } = data.data;
-        return { userId, email, nickname, profileImage };
+        return { userId, email, nickname, profileImage, isLoggedIn: true };
       } catch (error: unknown) {
         cookie.remove('ACCESS_TOKEN');
         cookie.remove('REFRESH_TOKEN');
