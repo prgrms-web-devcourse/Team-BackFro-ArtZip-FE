@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import { Button, Form, message, Input } from 'antd';
+import { Button, Form, Input, Image } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useUserAuthActions } from 'hooks';
+import { Logo } from 'components/atoms';
 
 const SignInPage = () => {
   const { localLogin } = useUserAuthActions();
@@ -12,9 +13,11 @@ const SignInPage = () => {
         <title>ArtZip | SignIn</title>
       </Head>
 
-      <FormWrapper>
+      <FormContainer>
         <Link href={'/'}>
-          <Logo>Art.zip</Logo>
+          <LogoWrapper>
+            <Logo width={200} height={60}></Logo>
+          </LogoWrapper>
         </Link>
         <Title>로그인</Title>
         <Form
@@ -23,37 +26,47 @@ const SignInPage = () => {
           autoComplete="off"
           onFinish={localLogin}
         >
-          <Form.Item name="email" rules={[{ required: true, message: '이메일을 입력해 주세요' }]}>
-            <StyledInput bordered={false} placeholder="이메일을 입력해 주세요" />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
-          >
-            <StyledInput bordered={false} type="password" placeholder="비밀번호를 입력해 주세요" />
-          </Form.Item>
-
+          <FormWrapper>
+            <Form.Item name="email" rules={[{ required: true, message: '이메일을 입력해 주세요' }]}>
+              <StyledInput bordered={false} placeholder="이메일을 입력해 주세요" />
+            </Form.Item>
+          </FormWrapper>
+          <FormWrapper>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
+            >
+              <StyledInput
+                bordered={false}
+                type="password"
+                placeholder="비밀번호를 입력해 주세요"
+              />
+            </Form.Item>
+          </FormWrapper>
           <Form.Item>
             <StyledButton type="text" htmlType="submit">
               로그인
             </StyledButton>
           </Form.Item>
           <Link href={'https://server.artzip.shop/api/v1/users/oauth/login/kakao'}>
-            <StyledButtonKakao>카카오 로그인</StyledButtonKakao>
+            <Image
+              alt="kakao"
+              width={300}
+              height={45}
+              src="/kakao_login_medium_wide.png"
+              preview={false}
+            ></Image>
           </Link>
         </Form>
         <Link href={`/signup`}>
           <StyledTextLink>회원이 아니신가요? 회원가입</StyledTextLink>
         </Link>
-      </FormWrapper>
+      </FormContainer>
     </>
   );
 };
-const Logo = styled.div`
-  font-size: 5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.blue.main};
+
+const LogoWrapper = styled.div`
   margin-bottom: 30px;
   cursor: pointer;
 `;
@@ -64,12 +77,16 @@ const Title = styled.p`
   color: ${({ theme }) => theme.color.font.main};
   margin-bottom: 30px;
 `;
-const FormWrapper = styled.div`
-  margin: 5% 25% 30% 25%;
+
+const FormContainer = styled.div`
+  margin: 2% 25% 20% 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+const FormWrapper = styled.div`
+  height: 75px;
 `;
 const StyledInput = styled(Input)`
   width: 300px;
@@ -91,12 +108,12 @@ const StyledButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
   margin-top: 20px;
   width: 300px;
-  height: 50px;
-  font-size: 18px;
+  height: 45px;
+  font-size: 15px;
   background-color: ${({ theme }) => theme.color.blue.light};
-  font-weight: 500;
+  font-weight: 400;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   &:hover {
     box-shadow: none;
     color: ${({ theme }) => theme.color.white};
@@ -106,16 +123,6 @@ const StyledButton = styled(Button)`
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.blue.light};
   }
-`;
-
-const StyledButtonKakao = styled.button`
-  width: 300px;
-  height: 50px;
-  font-size: 18px;
-  font-weight: 500;
-  border: none;
-  border-radius: 10px;
-  background-color: #fee500;
 `;
 
 const StyledTextLink = styled.p`
