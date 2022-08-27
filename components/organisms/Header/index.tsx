@@ -10,14 +10,11 @@ import imageUrl from 'constants/imageUrl';
 import { useRef, useState } from 'react';
 
 const Header = () => {
-  const router = useRouter();
   const { userId, profileImage, isLoggedIn } = useRecoilValue(userAtom);
-  console.log(isLoggedIn);
-
-  const { logout } = useUserAuthActions();
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const avatarContainer = useRef<HTMLDivElement>(null);
+  const { logout } = useUserAuthActions();
+  const router = useRouter();
 
   useClickAway(avatarContainer, () => {
     setIsDropdownOpen(false);
@@ -64,17 +61,14 @@ const Header = () => {
           <LinkText
             href="/exhibitions/custom"
             text="맞춤 전시회"
-            isCurrentPage={router.pathname === '/exhibitions/custom'}
           />
           <LinkText
             href="/reviews/create"
             text="후기 작성"
-            isCurrentPage={router.pathname === '/reviews/create'}
           />
           <LinkText
             href="/community"
             text="커뮤니티"
-            isCurrentPage={router.pathname === '/community'}
           />
         </Navigation>
         <SearchBar
