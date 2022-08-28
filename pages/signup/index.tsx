@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
-import { Button, Form, Input, message, Space } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { userAPI } from 'apis';
 import Router from 'next/router';
 import React, { useState } from 'react';
-import { setToken } from 'utils';
 import { useUserAuthActions } from 'hooks';
+import { useCallback } from 'react';
+import Logo from 'components/atoms/Logo';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,33 @@ const SignUpPage = () => {
   const [nickname, setNickname] = useState('');
   const [isUnique, setIsUnique] = useState(false);
   const { localLogin } = useUserAuthActions();
+
+  // eslint-disable-next-line
+  const validatePassword = useCallback((_: any, value: string) => {
+    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,13}$/;
+    if (!value) {
+      return Promise.reject(new Error('비밀번호를 입력해 주세요.'));
+    }
+    if (!regExp.test(value)) {
+      return Promise.reject(new Error('8~13자 영문, 숫자, 특수문자를 사용하세요.'));
+    }
+    return Promise.resolve();
+  }, []);
+
+  // eslint-disable-next-line
+  const validateNickname = useCallback((_: any, value: string) => {
+    const regExp = /\s/g;
+    if (!value) {
+      return Promise.reject(new Error('닉네임을 입력해 주세요.'));
+    }
+    if (regExp.test(value)) {
+      return Promise.reject(new Error('공백 문자를 제외하고 입력해 주세요.'));
+    }
+    if (value.length > 10) {
+      return Promise.reject(new Error('최대 10자까지 입력 가능합니다.'));
+    }
+    return Promise.resolve();
+  }, []);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -38,7 +66,7 @@ const SignUpPage = () => {
         localLogin(valuesSignin);
         Router.push('/');
       } else {
-        message.error('닉네임 중복 확인을 진행해 주세요');
+        message.error('닉네임 중복 확인을 진행해 주세요.');
       }
 
       // eslint-disable-next-line
@@ -52,14 +80,18 @@ const SignUpPage = () => {
 
   const onClick = async () => {
     if (nickname) {
-      const res = await userAPI.nicknameCheck(nickname);
-      setIsUnique(res.data.data.isUnique);
+      if (nickname.length > 10) {
+        message.error('닉네임을 10자 이내로 입력해 주세요.');
+      } else {
+        const res = await userAPI.checkNickname(nickname);
+        setIsUnique(res.data.data.isUnique);
 
-      message.info(
-        res.data.data.isUnique ? '사용 가능한 닉네임 입니다' : '이미 존재하는 닉네임 입니다',
-      );
+        message.info(
+          res.data.data.isUnique ? '사용 가능한 닉네임 입니다.' : '이미 존재하는 닉네임 입니다.',
+        );
+      }
     } else {
-      message.error('닉네임을 입력해 주세요');
+      message.error('닉네임을 입력해 주세요.');
     }
   };
 
@@ -71,7 +103,9 @@ const SignUpPage = () => {
 
       <FormWrapper>
         <Link href={'/'}>
-          <Logo>Art.zip</Logo>
+          <LogoWrapper>
+            <Logo width={200} height={60}></Logo>
+          </LogoWrapper>
         </Link>
         <Title>회원가입</Title>
         <Form
@@ -80,30 +114,29 @@ const SignUpPage = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-          <Form.Item
-            name="email"
-            rules={[
-              {
-                type: 'email',
-                message: '이메일 형식이 아닙니다',
-              },
-              { required: true, message: '이메일을 입력해 주세요' },
-            ]}
-          >
-            <StyledInput
-              placeholder="이메일을 입력해 주세요"
-              onChange={onChangeEmail}
-              bordered={false}
-            />
-          </Form.Item>
-          <NicknameContainer>
+          <FormItemContainer>
             <Form.Item
-              name="nickname"
-              rules={[{ required: true, message: '닉네임을 입력해 주세요' }]}
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: '이메일 형식이 아닙니다.',
+                },
+                { required: true, message: '이메일을 입력해 주세요.' },
+              ]}
             >
+              <StyledInput
+                placeholder="이메일을 입력해 주세요."
+                onChange={onChangeEmail}
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
+          <NicknameContainer>
+            <Form.Item name="nickname" rules={[{ validator: validateNickname }]}>
               <StyledInputNickname
                 type="basic"
-                placeholder="닉네임을 입력해 주세요"
+                placeholder="닉네임을 입력해 주세요."
                 onChange={onChangeNickname}
                 bordered={false}
               />
@@ -112,47 +145,49 @@ const SignUpPage = () => {
               {isUnique ? '✔' : '중복 확인'}
             </StyledCheckButton>
           </NicknameContainer>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
-          >
-            <StyledInput
-              type="password"
-              placeholder="비밀번호를 입력해 주세요"
-              onChange={onChangePassword}
-              bordered={false}
-            />
-          </Form.Item>
-          <Form.Item
-            name="confirm"
-            dependencies={['password']}
-            rules={[
-              {
-                required: true,
-                message: '비밀번호를 입력해 주세요',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('비밀번호와 일치하지 않습니다'));
+          <FormItemContainer>
+            <Form.Item name="password" rules={[{ validator: validatePassword }]}>
+              <StyledInput
+                type="password"
+                placeholder="비밀번호를 입력해 주세요."
+                onChange={onChangePassword}
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
+          <FormItemContainer>
+            <Form.Item
+              name="confirm"
+              dependencies={['password']}
+              rules={[
+                {
+                  required: true,
+                  message: '비밀번호를 입력해 주세요.',
                 },
-              }),
-            ]}
-          >
-            <StyledInput
-              type="password"
-              placeholder="비밀번호를 한 번 더 입력해 주세요"
-              bordered={false}
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <StyledButton type="text" htmlType="submit">
-              회원가입
-            </StyledButton>
-          </Form.Item>
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('비밀번호와 일치하지 않습니다.'));
+                  },
+                }),
+              ]}
+            >
+              <StyledInput
+                type="password"
+                placeholder="비밀번호를 한 번 더 입력해 주세요."
+                bordered={false}
+              />
+            </Form.Item>
+          </FormItemContainer>
+          <FormItemContainer>
+            <Form.Item>
+              <StyledButton type="text" htmlType="submit">
+                회원가입
+              </StyledButton>
+            </Form.Item>
+          </FormItemContainer>
         </Form>
         <Link href={`/signin`}>
           <StyledTextLink>이미 계정이 있으신가요? 로그인</StyledTextLink>
@@ -161,10 +196,7 @@ const SignUpPage = () => {
     </>
   );
 };
-const Logo = styled.div`
-  font-size: 5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.blue.main};
+const LogoWrapper = styled.div`
   margin-bottom: 30px;
   cursor: pointer;
 `;
@@ -175,16 +207,23 @@ const Title = styled.p`
   color: ${({ theme }) => theme.color.font.main};
   margin-bottom: 30px;
 `;
+
+const FormItemContainer = styled.div`
+  height: 75px;
+`;
+
 const FormWrapper = styled.div`
-  margin: 5% 25% 30% 25%;
+  margin: 2% 25% 5% 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
+
 const StyledInput = styled(Input)`
   width: 350px;
   padding: 10px;
+  margin-bottom: 5px;
   background-color: transparent;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.color.blue.light};
@@ -221,6 +260,7 @@ const StyledButton = styled(Button)`
 
 const StyledTextLink = styled.p`
   margin-top: 20px;
+  margin-bottom: 150px;
   font-size: 1.6rem;
   font-weight: 500;
   cursor: pointer;
@@ -245,7 +285,7 @@ const StyledCheckButton = styled.button`
   }
 `;
 
-const NicknameContainer = styled.div`
+const NicknameContainer = styled(FormItemContainer)`
   display: flex;
   width: 100%;
   justify-content: space-between;
