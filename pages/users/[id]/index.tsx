@@ -61,13 +61,11 @@ const UserPage = () => {
 
   const handleMyReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getMyReview(userInfo.userId, page - 1, myReview.pageSize);
 
       setMyReview({
         ...myReview,
-        payload,
+        payload: data.data.content,
         currentPage: page,
       });
     }
@@ -75,13 +73,11 @@ const UserPage = () => {
 
   const handleLikeReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikeReview(userInfo.userId, page - 1, myReview.pageSize);
 
       setLikeReview({
         ...likeReview,
-        payload,
+        payload: data.data.content,
         currentPage: page,
       });
     }
@@ -89,13 +85,15 @@ const UserPage = () => {
 
   const handleLikeExhibitionChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeExhibition(userInfo.userId, page - 1, likeExhibition.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikeExhibition(
+        userInfo.userId,
+        page - 1,
+        likeExhibition.pageSize,
+      );
 
       setLikeExhibition({
         ...likeExhibition,
-        payload,
+        payload: data.data.content,
         currentPage: page,
       });
     }
