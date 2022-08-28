@@ -20,7 +20,7 @@ const userAPI = {
   logout: () => {
     return authRequest.patch('/api/v1/users/logout');
   },
-  nicknameCheck: (nickname: string) => {
+  checkNickname: (nickname: string) => {
     return unAuthRequest.get(`/api/v1/users/check?nickname=${nickname}`);
   },
   reissueToken: (payload: UserReissueTokenRequest) => {

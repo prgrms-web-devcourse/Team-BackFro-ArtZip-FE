@@ -83,7 +83,7 @@ const SignUpPage = () => {
       if (nickname.length > 10) {
         message.error('닉네임을 10자 이내로 입력해 주세요.');
       } else {
-        const res = await userAPI.nicknameCheck(nickname);
+        const res = await userAPI.checkNickname(nickname);
         setIsUnique(res.data.data.isUnique);
 
         message.info(
