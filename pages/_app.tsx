@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
-import { Layout } from 'components/template';
+import { Layout } from 'components/templates';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/global/theme';
 import 'swiper/scss';
@@ -12,6 +12,8 @@ import App from 'next/app';
 import { setToken } from 'utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { SWRConfig } from 'swr';
+import axios from 'axios';
 import cookie from 'react-cookies';
 declare global {
   interface Window {
@@ -19,6 +21,25 @@ declare global {
     kakao: any;
   }
 }
+
+const swrOptions = {
+  fetcher: async (url: string) => {
+    const isLoggedIn = cookie.load('REFRESH_TOKEN');
+    const accessToken = cookie.load('ACCESS_TOKEN');
+
+    if (isLoggedIn) {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`, {
+        headers: {
+          accessToken,
+        },
+      });
+      return res.data.data;
+    } else {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`);
+      return res.data.data;
+    }
+  },
+};
 
 function ArtZip({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -29,11 +50,13 @@ function ArtZip({ Component, pageProps }: AppProps) {
 
   return (
     <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <SWRConfig value={swrOptions}>
+        <ThemeProvider theme={theme}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </SWRConfig>
     </RecoilRoot>
   );
 }

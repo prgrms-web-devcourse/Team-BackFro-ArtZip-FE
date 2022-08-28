@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { GetServerSidePropsContext } from 'next';
-import { ReviewDetail, CommentWrite, CommentList } from 'components/organism';
+import { ReviewDetail, CommentWrite, CommentList } from 'components/organisms';
 import { ReviewSingleReadData, ReviewSingleReadResponse } from 'types/apis/review';
 import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';

@@ -1,7 +1,7 @@
 import Map from 'components/atoms/Map';
-import ExhibitionCard from 'components/molecule/ExhibitionCard';
-import SwiperWrapper from 'components/organism/Swiper';
-import SwiperContainer from 'components/organism/SwiperContainer';
+import ExhibitionCard from 'components/molecules/ExhibitionCard';
+import SwiperWrapper from 'components/organisms/Swiper';
+import SwiperContainer from 'components/organisms/SwiperContainer';
 import type { NextPage } from 'next';
 import { homeStyle as S } from '../styles/pages';
 import React, { useEffect, useState } from 'react';
