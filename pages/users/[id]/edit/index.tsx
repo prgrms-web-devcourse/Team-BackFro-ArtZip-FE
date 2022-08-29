@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { Button, Form, Input, Image, message } from 'antd';
-import { useState, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent, useEffect, Dispatch } from 'react';
 import { SideNavigation } from 'components/molecules';
 import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
-import { objectToFormData, filesToFormData } from 'utils';
+import { objectToFormData, filesToFormData, validateNickname, getBase64 } from 'utils';
 import { userAPI } from 'apis';
 
 interface SubmitData {
@@ -15,7 +15,6 @@ interface SubmitData {
 const UserEditPage = () => {
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
   const { userId, nickname, profileImage } = userInfo;
-
   const submitData = useRef<SubmitData>({
     nickname: nickname,
     profileImage: profileImage,
@@ -30,26 +29,20 @@ const UserEditPage = () => {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files) {
       submitFile.current = files;
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        fileReader.result && setPreviewImage(fileReader.result as string);
-      };
-      fileReader.readAsDataURL(files[0]);
+      const preview = await getBase64(files[0]);
+      setPreviewImage(preview);
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleFinish = async () => {
     let formData = objectToFormData('data', submitData.current);
     if (submitFile.current) {
       formData = filesToFormData('profileImage', submitFile.current, formData);
     }
-
     try {
       const { data } = await userAPI.changeMyInfo(formData);
       const { nickname, profileImage } = data.data;
@@ -64,10 +57,18 @@ const UserEditPage = () => {
     }
   };
 
+  const handleFinishFailed = () => {
+    message.error('입력값을 다시 확인해주세요.');
+  };
+
   return (
     <PageContainer>
       <Title>프로필 수정</Title>
-      <ProfileEditForm layout="vertical">
+      <ProfileEditForm
+        layout="vertical"
+        onFinish={handleFinish}
+        onFinishFailed={handleFinishFailed}
+      >
         <FormItem label="프로필 이미지">
           <ProfileImage
             src={previewImage}
@@ -83,16 +84,20 @@ const UserEditPage = () => {
             ref={fileInput}
           />
         </FormItem>
-        <FormItem label="닉네임">
+        <FormItem
+          name="nickname"
+          label="닉네임"
+          rules={[{ validator: validateNickname }]}
+          initialValue={nickname}
+        >
           <Input
             type="text"
-            defaultValue={nickname}
             onChange={(e) => {
               submitData.current.nickname = e.target.value;
             }}
           />
         </FormItem>
-        <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
+        <SubmitButton type="primary" htmlType="submit">
           저장
         </SubmitButton>
       </ProfileEditForm>
