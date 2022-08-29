@@ -1,6 +1,7 @@
 export const SIGNOUT_USER_STATE = {
   userId: null,
   email: null,
-  nicknamae: null,
+  nickname: null,
   profileImage: null,
+  isLoggedIn: false,
 };

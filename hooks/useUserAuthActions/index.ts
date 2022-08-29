@@ -18,7 +18,7 @@ function useUserAuthActions() {
       setToken('REFRESH_TOKEN', refreshToken);
       const { data } = await userAPI.getMyInfo();
       const { userId, email, nickname, profileImage } = data.data;
-      setUser({ userId, email, nickname, profileImage });
+      setUser({ userId, email, nickname, profileImage, isLoggedIn: true });
       message.success(res.data.message);
       router.push('/');
       // eslint-disable-next-line
@@ -39,7 +39,7 @@ function useUserAuthActions() {
       message.success('로그아웃 되었습니다.');
       router.push('/');
     } catch (e) {
-      message.error('로그아웃 실패'); // TODO: 에러 처리 보강
+      message.error('로그아웃 실패');
       throw e;
     }
   };
