@@ -22,7 +22,7 @@ const Callback = () => {
         setToken('ACCESS_TOKEN', accessToken.toString());
         const { data } = await userAPI.getMyInfo();
         const { userId, email, nickname, profileImage } = data.data;
-        setUser({ userId, email, nickname, profileImage });
+        setUser({ userId, email, nickname, profileImage, isLoggedIn: true });
         message.success('소셜 로그인 성공');
       }
     };
