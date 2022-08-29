@@ -1,10 +1,15 @@
 import styled from '@emotion/styled';
 import { Button, Form, Input, Image, message } from 'antd';
-import { useState, useRef, ChangeEvent, FormEvent, useEffect, Dispatch } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import { SideNavigation } from 'components/molecules';
 import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
-import { objectToFormData, filesToFormData, validateNickname, getBase64 } from 'utils';
+import {
+  convertObjectToFormData,
+  convertFilesToFormData,
+  validateNickname,
+  getBase64,
+} from 'utils';
 import { userAPI } from 'apis';
 
 interface SubmitData {
@@ -39,9 +44,9 @@ const UserEditPage = () => {
   };
 
   const handleFinish = async () => {
-    let formData = objectToFormData('data', submitData.current);
+    let formData = convertObjectToFormData('data', submitData.current);
     if (submitFile.current) {
-      formData = filesToFormData('profileImage', submitFile.current, formData);
+      formData = convertFilesToFormData('profileImage', submitFile.current, formData);
     }
     try {
       const { data } = await userAPI.changeMyInfo(formData);
