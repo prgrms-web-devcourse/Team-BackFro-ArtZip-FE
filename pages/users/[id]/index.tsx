@@ -214,18 +214,16 @@ const UserPage = () => {
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userId}`,
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userId}/edit`,
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
-            query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            pathName: `/users/${userId}/edit-password`,
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
-            query: userInfo,
           },
         ]}
       />
