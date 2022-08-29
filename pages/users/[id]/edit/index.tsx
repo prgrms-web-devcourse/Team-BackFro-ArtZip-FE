@@ -129,7 +129,7 @@ const UserEditPage = () => {
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   padding-left: 200px;
 `;
@@ -142,6 +142,7 @@ const ProfileEditForm = styled(Form)`
   border: 1px solid ${({ theme }) => theme.color.border.main};
   border-radius: 8px;
   padding: 28px;
+  margin-bottom: 40px;
 
   input[type='file'] {
     display: none;
@@ -151,6 +152,11 @@ const ProfileEditForm = styled(Form)`
 const FormItem = styled(Form.Item)`
   label {
     font-size: 2rem;
+  }
+
+  &:last-of-type {
+    height: 100px;
+    margin-bottom: 0;
   }
 `;
 
@@ -164,6 +170,7 @@ const FileInput = styled.input``;
 
 const SubmitButton = styled(Button)`
   font-size: 1.6rem;
+  margin-top: 4px;
 `;
 
 export default UserEditPage;
