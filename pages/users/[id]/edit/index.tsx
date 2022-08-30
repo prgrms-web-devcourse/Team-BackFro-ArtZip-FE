@@ -11,6 +11,7 @@ import {
   getBase64,
 } from 'utils';
 import { userAPI } from 'apis';
+import { AxiosError } from 'axios';
 
 interface SubmitData {
   nickname: string;
@@ -58,7 +59,14 @@ const UserEditPage = () => {
       });
       message.success('나의 프로필 정보가 수정되었습니다.');
     } catch (error) {
-      console.error('프로필 정보 실패'); // TODO: 에러 처리 보완
+      let errorMessage;
+      if (error instanceof AxiosError) {
+        errorMessage = error.response?.data.message;
+      } else {
+        errorMessage = String(error);
+      }
+      message.error(errorMessage);
+      console.error(error);
     }
   };
 
