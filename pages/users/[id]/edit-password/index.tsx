@@ -1,41 +1,101 @@
 import styled from '@emotion/styled';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { SideNavigation } from 'components/molecules';
-import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { userAPI } from 'apis';
+import { AxiosError } from 'axios';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
   const [form] = useForm();
 
+  const validatePassword = (_: unknown, value: string) => {
+    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!?@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,13}$/;
+    if (!value) {
+      return Promise.reject(new Error('필수 입력값 입니다.'));
+    }
+    if (!regExp.test(value)) {
+      return Promise.reject(new Error('8~13자 영문, 숫자, 특수문자를 사용하세요.'));
+    }
+    return Promise.resolve();
+  };
+
+  const validatePasswordConfirm = (_: unknown, value: string) => {
+    if (!value) {
+      return Promise.reject(new Error('필수 입력값 입니다.'));
+    }
+    if (value !== form.getFieldValue('newPassword')) {
+      return Promise.reject(new Error('비밀번호와 일치하지 않습니다.'));
+    }
+    return Promise.resolve();
+  };
+
   const handleFinish = async () => {
-    console.log(form.getFieldsValue());
+    const { oldPassword, newPassword } = form.getFieldsValue();
+    try {
+      await userAPI.changePassword({
+        oldPassword,
+        newPassword,
+      });
+      message.success('비밀번호가 변경되었습니다.');
+    } catch (error) {
+      let errorMessage;
+      if (error instanceof AxiosError) {
+        errorMessage = error.response?.data.message;
+      } else {
+        errorMessage = String(error);
+      }
+      message.error(errorMessage);
+      console.error(error);
+    }
+  };
 
-    const submitData = form.getFieldsValue();
-    delete submitData['passwordCheck'];
-    console.log(submitData);
-
-    const result = await userAPI.changePassword({
-      oldPassword: '123456',
-      newPassword: '940515',
-    });
-    console.log(result);
+  const handleFinishFailed = () => {
+    message.error('입력값을 다시 확인해주세요.');
   };
 
   return (
     <PageContainer>
       <Title>비밀번호 변경</Title>
-      <PasswordEditForm layout="vertical" form={form} onFinish={handleFinish}>
-        <FormItem label="현재 비밀번호" name="oldPassword">
+      <PasswordEditForm
+        form={form}
+        layout="vertical"
+        initialValues={{
+          oldPassword: '',
+          newPassword: '',
+        }}
+        onFinish={handleFinish}
+        onFinishFailed={handleFinishFailed}
+      >
+        <FormItem
+          label="현재 비밀번호"
+          name="oldPassword"
+          rules={[
+            {
+              validator: validatePassword,
+            },
+          ]}
+        >
           <Input type="password" />
         </FormItem>
-        <FormItem label="비밀번호" name="newPassword">
+        <FormItem
+          label="비밀번호"
+          name="newPassword"
+          rules={[
+            {
+              validator: validatePassword,
+            },
+          ]}
+        >
           <Input type="password" />
         </FormItem>
-        <FormItem label="비밀번호 확인" name="passwordCheck">
+        <FormItem
+          label="비밀번호 확인"
+          name="passWordCheck"
+          rules={[{ validator: validatePasswordConfirm }]}
+        >
           <Input type="password" />
         </FormItem>
         <SubmitButton type="primary" htmlType="submit">
@@ -65,7 +125,7 @@ const UserEditPasswordPage = () => {
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   padding-left: 200px;
 `;
@@ -74,9 +134,13 @@ const PasswordEditForm = styled(Form)`
   border: 1px solid ${({ theme }) => theme.color.border.main};
   border-radius: 8px;
   padding: 28px;
+  margin-bottom: 40px;
 `;
 
 const FormItem = styled(Form.Item)`
+  height: 100px;
+  margin-bottom: 0;
+
   label {
     font-size: 2rem;
   }
