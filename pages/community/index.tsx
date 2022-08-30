@@ -9,8 +9,6 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useRouter } from 'next/router';
 import { ReviewSingleReadData } from 'types/apis/review';
-import useSWR from 'swr';
-import axios from 'axios';
 import { swrOptions } from 'utils';
 import useSWRInfinite from 'swr/infinite';
 
@@ -41,7 +39,6 @@ const CommunityPage = () => {
   const [feeds, setFeeds] = useState<ReviewSingleReadData[]>([]);
 
   const getMoreFeed = async () => {
-    // console.log('get More!', totalPage, currentPage);
     if (totalPage <= currentPage) {
       return;
     }
