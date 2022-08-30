@@ -4,4 +4,4 @@ export { default as throttleOnRendering } from './throttleOnRendering';
 export { convertObjectToFormData, convertFilesToFormData, getBase64 } from './converter';
 export { setToken } from './tokenManager';
 export { parseJwt } from './parseJwt';
-export { validateNickname } from './validate';
+export { validateNickname, validatePassword } from './validation';

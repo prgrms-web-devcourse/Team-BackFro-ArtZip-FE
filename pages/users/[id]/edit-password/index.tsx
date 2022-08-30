@@ -6,23 +6,13 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
+import { validatePassword } from 'utils';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
   const [form] = useForm();
 
-  const validatePassword = (_: unknown, value: string) => {
-    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!?@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,13}$/;
-    if (!value) {
-      return Promise.reject(new Error('필수 입력값 입니다.'));
-    }
-    if (!regExp.test(value)) {
-      return Promise.reject(new Error('8~13자 영문, 숫자, 특수문자를 사용하세요.'));
-    }
-    return Promise.resolve();
-  };
-
-  const validatePasswordConfirm = (_: unknown, value: string) => {
+  const validatePasswordCheck = (_: unknown, value: string) => {
     if (!value) {
       return Promise.reject(new Error('필수 입력값 입니다.'));
     }
@@ -94,7 +84,7 @@ const UserEditPasswordPage = () => {
         <FormItem
           label="비밀번호 확인"
           name="passWordCheck"
-          rules={[{ validator: validatePasswordConfirm }]}
+          rules={[{ validator: validatePasswordCheck }]}
         >
           <Input type="password" />
         </FormItem>
