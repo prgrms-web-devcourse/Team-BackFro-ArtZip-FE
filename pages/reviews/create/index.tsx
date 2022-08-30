@@ -4,8 +4,7 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { ValueOf } from 'types/utility';
-import { objectToFormData, filesToFormData } from 'utils';
+import { objectToFormData, filesToFormData, getErrorMessage } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway, useWithAuth } from 'hooks';
@@ -102,7 +101,8 @@ const ReviewCreatePage = () => {
       message.success('후기 작성이 완료되었습니다.');
       router.replace('/community');
     } catch (error) {
-      console.error('후기 생성 실패');
+      message.error(getErrorMessage(error));
+      console.error(error);
     }
   };
 
