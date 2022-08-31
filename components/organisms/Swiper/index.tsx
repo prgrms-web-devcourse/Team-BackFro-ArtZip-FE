@@ -4,11 +4,12 @@ import * as S from './style';
 import React, { ReactElement } from 'react';
 import { ExhibitionProps } from 'types/model';
 import { ExhibitionCard } from 'components/molecules';
+import { ExhibitionReadResponse } from 'types/apis/exhibition';
 
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
-  items: ExhibitionProps[];
+  items: ExhibitionReadResponse[];
 }
 
 const SwiperWrapper = ({ items }: SwiperProps) => {
