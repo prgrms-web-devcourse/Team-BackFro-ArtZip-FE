@@ -23,10 +23,6 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
             delay: 3000,
             disableOnInteraction: false,
           }}
-          navigation={{
-            prevEl: '.swiper-button-prev',
-            nextEl: '.swiper-button-next',
-          }}
         >
           {items.map((item) => (
             <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
