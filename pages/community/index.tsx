@@ -49,7 +49,6 @@ const CommunityPage = () => {
     });
     const newFeeds: ReviewSingleReadData[] = Object.values(data.data.content);
 
-    console.log('newwFeeds', newFeeds);
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
   };
