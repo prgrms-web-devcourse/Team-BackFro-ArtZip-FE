@@ -1,18 +1,19 @@
 import styled from '@emotion/styled';
 import Logo from 'components/atoms/Logo';
-import { Input, message, Image } from 'antd';
+import { Input, message, Image, InputRef } from 'antd';
 import LinkText from 'components/atoms/LinkText';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useClickAway, useUserAuthActions } from 'hooks';
 import imageUrl from 'constants/imageUrl';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Header = () => {
   const { userId, profileImage, isLoggedIn } = useRecoilValue(userAtom);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const avatarContainer = useRef<HTMLDivElement>(null);
+  const searchBar = useRef<InputRef>(null);
   const { logout } = useUserAuthActions();
   const router = useRouter();
 
@@ -34,6 +35,15 @@ const Header = () => {
       pathname: `/search-result/${value}`,
     });
   };
+
+  useEffect(() => {
+    if (router.pathname === '/search-result/[exhibition]') {
+      return;
+    }
+    if (searchBar.current && searchBar.current.input) {
+      searchBar.current.input.value = '';
+    }
+  }, [router.pathname]);
 
   return (
     <StyledHeader>
@@ -58,18 +68,9 @@ const Header = () => {
       </Container>
       <Container>
         <Navigation>
-          <LinkText
-            href="/exhibitions/custom"
-            text="맞춤 전시회"
-          />
-          <LinkText
-            href="/reviews/create"
-            text="후기 작성"
-          />
-          <LinkText
-            href="/community"
-            text="커뮤니티"
-          />
+          <LinkText href="/exhibitions/custom" text="맞춤 전시회" />
+          <LinkText href="/reviews/create" text="후기 작성" />
+          <LinkText href="/community" text="커뮤니티" />
         </Navigation>
         <SearchBar
           bordered={false}
@@ -78,6 +79,7 @@ const Header = () => {
           onSearch={handleSearchExhibition}
           size="large"
           enterButton={true}
+          ref={searchBar}
         />
       </Container>
     </StyledHeader>
