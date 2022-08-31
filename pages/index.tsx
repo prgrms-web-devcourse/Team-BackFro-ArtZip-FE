@@ -32,7 +32,7 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
   );
 };
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = async () => {
   const upcomingExhibitionRes = await exhibitionAPI.getUpcoming(0, 8);
   const mostLikeExhibitionRes = await exhibitionAPI.getUpcoming(0, 8);
 
