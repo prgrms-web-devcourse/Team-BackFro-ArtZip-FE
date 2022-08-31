@@ -64,7 +64,7 @@ const ExhibitionDetail = ({
     setInfoName();
   }, []);
 
-  const handleLikeClick = async () => {
+  const handleLikeClick = async (exhibitionId: number) => {
     if (userId) {
       const { data } = await exhibitionAPI.likeToggle(exhibitionId);
       const { isLiked, likeCount } = data.data;
@@ -107,7 +107,7 @@ const ExhibitionDetail = ({
           <LikeInfo
             isLiked={currentIsLiked}
             likeCount={currentLikeCount}
-            onClick={handleLikeClick}
+            onClick={() => handleLikeClick(exhibitionId)}
           />
           {'    '}
           <ShareAltOutlined style={{ padding: 5 }} />
