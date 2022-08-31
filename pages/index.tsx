@@ -8,10 +8,11 @@ import { homeStyle as S } from '../styles/pages';
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { exhibitionAPI } from 'apis';
+import { ExhibitionProps } from 'types/model';
 
 interface HomeProps {
-  upcomingExhibitions: ExhibitionReadResponse[];
-  mostLikeExhibitions: ExhibitionReadResponse[];
+  upcomingExhibitions: ExhibitionProps[];
+  mostLikeExhibitions: ExhibitionProps[];
 }
 const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions }) => {
   return (
