@@ -71,43 +71,66 @@ const ReviewCreatePage = () => {
     }
 
     try {
-      const result = await reviewAPI.searchExhibition(value);
-      const exhibitions = result.data.data;
+      const { data } = await reviewAPI.searchExhibition(value);
+      const { exhibitions } = data.data;
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
-
       if (resultList.current) {
         resultList.current.style.visibility = 'visible';
       }
     } catch (error) {
-      console.error('전시회 검색 에러'); // TODO: 에러 처리 로직 추가
+      message.error(getErrorMessage(error));
+      console.error(error);
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (ValidateReviewEditForm()) {
+      let formData = convertObjectToFormData('data', submitData.current);
+      formData = convertFilesToFormData('files', files, formData);
 
-    // TODO: 제출 전 validation 검사 추가
-    // required, 다녀 온 날짜 < 오늘 날짜
-
-    let formData = convertObjectToFormData('data', submitData.current);
-    formData = convertFilesToFormData('files', files, formData);
-
-    try {
-      await reviewAPI.createReview(formData);
-      message.success('후기 작성이 완료되었습니다.');
-      router.replace('/community');
-    } catch (error) {
-      message.error(getErrorMessage(error));
-      console.error(error);
+      try {
+        await reviewAPI.createReview(formData);
+        message.success('후기 작성이 완료되었습니다.');
+        router.replace('/community');
+      } catch (error) {
+        message.error(getErrorMessage(error));
+        console.error(error);
+      }
     }
+  };
 
-    // TODO: 제출 전 validation 검사 추가
-    // required, 다녀 온 날짜 < 오늘 날짜
+  const ValidateReviewEditForm = () => {
+    const { exhibitionId, date, title, content } = submitData.current;
+    if (!exhibitionId) {
+      message.error('다녀온 전시회를 등록해주세요.');
+      return false;
+    }
+    if (!date) {
+      message.error('다녀온 날짜를 입력해주세요.');
+      return false;
+    }
+    if (new Date(date) > new Date()) {
+      message.error('다녀온 날짜는 오늘 이후일 수 없습니다.');
+      return false;
+    }
+    if (!title) {
+      message.error('후기 제목을 입력해주세요.');
+      return false;
+    }
+    if (!content) {
+      message.error('후기 내용을 입력해주세요.');
+      return false;
+    }
+    if (content.length > 1000) {
+      message.error('내용은 1000자 이하로 작성해주세요.');
+      return false;
+    }
+    return true;
   };
 
   const [isChecking] = useWithAuth();
-
   return isChecking ? (
     <Spinner />
   ) : (
@@ -115,15 +138,15 @@ const ReviewCreatePage = () => {
       <Banner
         subtitle="Art.zip 후기 작성"
         title="전시회 다녀오셨나요?"
-        content="소중한 경험을 후기로 작성하세요 !"
+        content="소중한 경험을 후기로 작성하세요!"
       />
       <Section>
         <ReviewEditForm layout="vertical">
-          <Form.Item label="다녀 온 전시회">
+          <FormItem label="다녀 온 전시회">
             <SearchContainer ref={searchContainer}>
               <InnerContainer>
                 <SearchBar
-                  placeholder="전시회 제목을 검색해 주세요."
+                  placeholder="전시회 제목을 검색해 주세요"
                   enterButton
                   onSearch={handleSearch}
                   defaultValue={query.name}
@@ -148,8 +171,8 @@ const ReviewCreatePage = () => {
                 preview={posterImage !== imageUrl.EXHIBITION_DEFAULT}
               />
             </SearchContainer>
-          </Form.Item>
-          <Form.Item label="다녀 온 날짜">
+          </FormItem>
+          <FormItem label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
                 if (value) {
@@ -157,26 +180,26 @@ const ReviewCreatePage = () => {
                 }
               }}
             />
-          </Form.Item>
-          <Form.Item label="제목">
+          </FormItem>
+          <FormItem label="제목">
             <Input
-              placeholder="제목을 입력해주세요."
+              placeholder="제목을 입력해주세요"
               showCount
               maxLength={30}
               onChange={(e) => (submitData.current['title'] = e.target.value)}
             />
-          </Form.Item>
-          <Form.Item label="내용">
+          </FormItem>
+          <FormItem label="내용">
             <TextArea
-              placeholder="내용을 입력해주세요."
+              placeholder="내용을 입력해주세요(1000자 이하)"
               autoSize
               onChange={(e) => (submitData.current['content'] = e.target.value)}
             />
-          </Form.Item>
-          <Form.Item label="사진">
+          </FormItem>
+          <FormItem label="사진">
             <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
-          </Form.Item>
-          <Form.Item label="공개 여부">
+          </FormItem>
+          <FormItem label="공개 여부">
             <ToggleSwitch
               defaultChecked
               onChange={(checked) => {
@@ -186,7 +209,7 @@ const ReviewCreatePage = () => {
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
-          </Form.Item>
+          </FormItem>
 
           <SubmitButton type="primary" onClick={handleSubmit}>
             작성완료
@@ -196,7 +219,6 @@ const ReviewCreatePage = () => {
     </>
   );
 };
-// TODO: 작성완료 버튼 연타 방어 코드
 
 const Section = styled.section`
   max-width: 600px;
@@ -212,6 +234,18 @@ const ReviewEditForm = styled(Form)`
   label {
     font-size: 2rem;
     font-weight: bold;
+  }
+`;
+
+const FormItem = styled(Form.Item)`
+  label[title='사진']::after {
+    content: '(optional)';
+    display: inline;
+    color: ${({ theme }) => theme.color.font.dark};
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-top: 2px;
+    margin-left: 4px;
   }
 `;
 
