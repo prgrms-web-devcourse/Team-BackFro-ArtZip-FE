@@ -16,8 +16,6 @@ interface SubmitData {
   title: string;
   content: string;
   isPublic: boolean;
-
-  // [key: string]: number | string | boolean;
 }
 
 const initialData: SubmitData = {
@@ -27,6 +25,7 @@ const initialData: SubmitData = {
   content: '',
   isPublic: true,
 };
+Object.freeze(initialData);
 
 interface SearchResult {
   exhibitionId: number;
@@ -35,7 +34,7 @@ interface SearchResult {
 }
 
 const ReviewCreatePage = () => {
-  const submitData = useRef<SubmitData>(initialData);
+  const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
@@ -44,14 +43,11 @@ const ReviewCreatePage = () => {
   const { query } = router;
 
   useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
     if (query.exhibitionId) {
       submitData.current['exhibitionId'] = Number(query.exhibitionId);
       setPosterImage(query.thumbnail as string);
     }
-  }, [router.isReady]);
+  }, []);
 
   const searchContainer = useRef<HTMLDivElement>(null);
   const resultList = useRef<HTMLUListElement>(null);
@@ -75,7 +71,8 @@ const ReviewCreatePage = () => {
     }
 
     try {
-      const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data); // TODO: await과 .then을 함께 쓰지 않기
+      const result = await reviewAPI.searchExhibition(value);
+      const exhibitions = result.data.data;
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
 
@@ -104,14 +101,16 @@ const ReviewCreatePage = () => {
       message.error(getErrorMessage(error));
       console.error(error);
     }
+
+    // TODO: 제출 전 validation 검사 추가
+    // required, 다녀 온 날짜 < 오늘 날짜
   };
 
   const [isChecking] = useWithAuth();
-  if (isChecking) {
-    return <Spinner />;
-  }
 
-  return (
+  return isChecking ? (
+    <Spinner />
+  ) : (
     <>
       <Banner
         subtitle="Art.zip 후기 작성"
