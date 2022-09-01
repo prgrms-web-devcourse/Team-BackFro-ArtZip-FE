@@ -6,52 +6,31 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 
 interface SideNavigationProps {
-  paths: Array<{
-    pathName: string;
+  paths: {
+    href: string;
     pageName: string;
-    query?: {
-      nickname: string;
-      profileImage: string;
-    };
-  }>;
+  }[];
 }
 
 const SideNavigation = ({ paths }: SideNavigationProps) => {
-  // TODO: beforeRender라는 속성 추가. 콜백함수를 받아서 실행할 것
   const { userId } = useRecoilValue(userAtom);
-  const {
-    query: { id },
-    asPath,
-  } = useRouter();
+  const { query, asPath } = useRouter();
 
-  const isNotMyPage = String(userId) !== id;
-  if (isNotMyPage) {
-    return null;
-  }
+  const isMyPage = String(userId) === query.id;
 
-  return (
+  return isMyPage ? (
     <Navigation>
-      {paths.map(({ pathName, pageName, query }, i) => (
-        <Link
-          href={{
-            pathname: pathName,
-            query: {
-              nickname: query?.nickname,
-              profileImage: query?.profileImage,
-            },
-          }}
-          as={pathName}
-          key={i}
-        >
+      {paths.map(({ href, pageName }, i) => (
+        <Link href={href} key={i}>
           <a>
-            <NavigationButton type={asPath === pathName ? 'primary' : 'default'} size="large">
+            <NavigationButton type={asPath === href ? 'primary' : 'default'} size="large">
               {pageName}
             </NavigationButton>
           </a>
         </Link>
       ))}
     </Navigation>
-  );
+  ) : null;
 };
 
 const Navigation = styled.nav`
