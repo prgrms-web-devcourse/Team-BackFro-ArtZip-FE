@@ -1,14 +1,10 @@
 import { CommentProps } from 'types/model';
-import { PaginationResponse } from 'types/apis/base';
-import { useInfiniteScroll } from 'hooks';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Comment, Tooltip } from 'antd';
 import { UserAvatar } from 'components/atoms';
 import { CommentUtils } from 'components/organisms';
 import moment from 'moment';
 import { displayDate } from 'utils';
-import reviewAPI from 'apis/review';
 import styled from '@emotion/styled';
 
 const CommentList = ({
