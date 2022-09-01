@@ -4,18 +4,24 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { convertObjectToFormData, convertFilesToFormData, getErrorMessage } from 'utils';
+import {
+  convertObjectToFormData,
+  convertFilesToFormData,
+  getErrorMessage,
+  validateReviewEditForm,
+} from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway, useWithAuth } from 'hooks';
 import { Spinner } from 'components/atoms';
 
-interface SubmitData {
+export interface SubmitData {
   exhibitionId: number;
   date: string;
   title: string;
   content: string;
   isPublic: boolean;
+  deletedPhotos?: number[];
 }
 
 const initialData: SubmitData = {
@@ -86,7 +92,7 @@ const ReviewCreatePage = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (ValidateReviewEditForm()) {
+    if (validateReviewEditForm(submitData.current)) {
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
 
@@ -99,35 +105,6 @@ const ReviewCreatePage = () => {
         console.error(error);
       }
     }
-  };
-
-  const ValidateReviewEditForm = () => {
-    const { exhibitionId, date, title, content } = submitData.current;
-    if (!exhibitionId) {
-      message.error('다녀온 전시회를 등록해주세요.');
-      return false;
-    }
-    if (!date) {
-      message.error('다녀온 날짜를 입력해주세요.');
-      return false;
-    }
-    if (new Date(date) > new Date()) {
-      message.error('다녀온 날짜는 오늘 이후일 수 없습니다.');
-      return false;
-    }
-    if (!title) {
-      message.error('후기 제목을 입력해주세요.');
-      return false;
-    }
-    if (!content) {
-      message.error('후기 내용을 입력해주세요.');
-      return false;
-    }
-    if (content.length > 1000) {
-      message.error('내용은 1000자 이하로 작성해주세요.');
-      return false;
-    }
-    return true;
   };
 
   const [isChecking] = useWithAuth();
