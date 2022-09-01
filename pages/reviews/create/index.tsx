@@ -64,10 +64,6 @@ const ReviewCreatePage = () => {
     }
   });
 
-  // const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
-  //   submitData.current[key] = newValue;
-  // };
-
   const handleSearch = async (value: string) => {
     const isEmpty = !/\S/.test(value);
     if (isEmpty) {
