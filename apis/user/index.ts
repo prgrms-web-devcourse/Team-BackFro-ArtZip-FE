@@ -36,11 +36,11 @@ const userAPI = {
     const request = cookie.load('REFRESH_TOKEN') ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/my/reviews?page=${page}&size=${size}`);
   },
-  getLikeReview: (userId: number, page: number, size: number) => {
+  getLikedReview: (userId: number, page: number, size: number) => {
     const request = cookie.load('REFRESH_TOKEN') ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/reviews/like?page=${page}&size=${size}`);
   },
-  getLikeExhibition: (userId: number, page: number, size: number) => {
+  getLikedExhibition: (userId: number, page: number, size: number) => {
     const request = cookie.load('REFRESH_TOKEN') ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/exhibitions/like?page=${page}&size=${size}`);
   },

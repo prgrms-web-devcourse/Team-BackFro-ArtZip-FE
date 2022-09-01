@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, Modal, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { objectToFormData, filesToFormData } from 'utils';
+import { convertObjectToFormData, convertFilesToFormData } from 'utils';
 import { useRouter } from 'next/router';
 import { useAxios, useWithAuth } from 'hooks';
 import moment from 'moment';
@@ -77,8 +77,8 @@ const ReviewUpdatePage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    let formData = objectToFormData('data', submitData.current);
-    formData = filesToFormData('files', files, formData);
+    let formData = convertObjectToFormData('data', submitData.current);
+    formData = convertFilesToFormData('files', files, formData);
 
     try {
       await reviewAPI.updateReview(Number(router.query.id), formData);

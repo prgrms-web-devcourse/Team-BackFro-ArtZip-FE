@@ -4,8 +4,7 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { ValueOf } from 'types/utility';
-import { objectToFormData, filesToFormData } from 'utils';
+import { convertObjectToFormData, convertFilesToFormData } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway, useWithAuth } from 'hooks';
@@ -94,8 +93,8 @@ const ReviewCreatePage = () => {
     // TODO: 제출 전 validation 검사 추가
     // required, 다녀 온 날짜 < 오늘 날짜
 
-    let formData = objectToFormData('data', submitData.current);
-    formData = filesToFormData('files', files, formData);
+    let formData = convertObjectToFormData('data', submitData.current);
+    formData = convertFilesToFormData('files', files, formData);
 
     try {
       await reviewAPI.createReview(formData);
