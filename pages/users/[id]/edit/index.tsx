@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Button, Form, Input, Image, message } from 'antd';
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, MouseEvent } from 'react';
 import { SideNavigation } from 'components/molecules';
 import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
@@ -12,6 +12,8 @@ import {
 } from 'utils';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
+import { useDebounceClick } from 'hooks';
+import { useForm } from 'antd/lib/form/Form';
 
 interface SubmitData {
   nickname: string;
@@ -19,6 +21,7 @@ interface SubmitData {
 }
 
 const UserEditPage = () => {
+  const [form] = useForm();
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
   const { userId, nickname, profileImage } = userInfo;
   const submitData = useRef<SubmitData>({
@@ -43,6 +46,12 @@ const UserEditPage = () => {
       setPreviewImage(preview);
     }
   };
+
+  const handleSubmit = (e?: Event) => {
+    e?.preventDefault();
+    form.submit();
+  };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const handleFinish = async () => {
     let formData = convertObjectToFormData('data', submitData.current);
@@ -74,6 +83,8 @@ const UserEditPage = () => {
     message.error('입력값을 다시 확인해주세요.');
   };
 
+
+
   return (
     <PageContainer>
       <Title>프로필 수정</Title>
@@ -81,6 +92,7 @@ const UserEditPage = () => {
         layout="vertical"
         onFinish={handleFinish}
         onFinishFailed={handleFinishFailed}
+        form={form}
       >
         <FormItem label="프로필 이미지">
           <ProfileImage
@@ -110,7 +122,7 @@ const UserEditPage = () => {
             }}
           />
         </FormItem>
-        <SubmitButton type="primary" htmlType="submit">
+        <SubmitButton type="primary" ref={debounceRef}>
           저장
         </SubmitButton>
       </ProfileEditForm>
@@ -179,6 +191,10 @@ const FileInput = styled.input``;
 const SubmitButton = styled(Button)`
   font-size: 1.6rem;
   margin-top: 4px;
+
+  span {
+    pointer-events: none;
+  }
 `;
 
 export default UserEditPage;
