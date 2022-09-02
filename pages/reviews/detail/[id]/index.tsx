@@ -130,7 +130,8 @@ const ReviewDetailPage = () => {
 };
 
 const CommentContainer = styled.div`
-  margin: 0 150px;
+  margin: 0 20px;
+  margin-bottom: 50px;
 `;
 
 export default ReviewDetailPage;
