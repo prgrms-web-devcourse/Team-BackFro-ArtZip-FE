@@ -17,9 +17,6 @@ interface CommentWriteProps {
   handleReplyCancel?: () => void;
 }
 
-// TODO: 유저의 로그인 상태는 전역 관리.
-// 우선은 props로 받지만, 전역 관리 로직이 완료되면
-// 컴포넌트 안에서 관리하도록 한다.
 const CommentWrite = ({
   reviewId,
   parentId,
@@ -32,7 +29,6 @@ const CommentWrite = ({
   const currentUser = useRecoilValue(userAtom);
   const isLogin = currentUser.userId !== null;
 
-  // 유저 상태
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
@@ -41,7 +37,6 @@ const CommentWrite = ({
     setComment('');
     setShow(false);
     handleReplyCancel && handleReplyCancel();
-    // 답글의 경우 핸들하는 함수
   };
 
   const clickAwayHandler = () => {
@@ -111,6 +106,7 @@ const CommentWrite = ({
 
 const CommentWriteContainer = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 const CommentWriteWrapper = styled.div``;
@@ -118,7 +114,7 @@ const CommentWriteWrapper = styled.div``;
 const CommentWriteUtilContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 10px 0;
+  margin: 20px 10px;
 `;
 
 const CommentButton = styled(Button)`

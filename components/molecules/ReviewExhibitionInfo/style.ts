@@ -1,20 +1,28 @@
 import styled from '@emotion/styled';
 import { Button, Card } from 'antd';
-import Image from 'next/image';
+
 export const ExhibitionInfoCard = styled(Card)`
+  width: 90%;
   height: fit-content;
-  margin: 0px 100px;
   border: none;
   border-radius: 30px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 40px;
   padding: 0px 5px;
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: fit-content;
+    padding: 10px 50px;
+  }
 `;
 
 export const ExhibitionInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 180px;
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     flex-direction: column;
@@ -24,18 +32,15 @@ export const ExhibitionInfoContainer = styled.div`
   }
 `;
 
-// next Image 로 변경
-export const ExhibitionInfoImage = styled(Image)`
+export const ExhibitionInfoImage = styled.div`
+  position: relative;
   width: 150px;
   height: 180px;
-  border-radius: 20px;
 
-  @media (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
-    width: 130px;
-    max-height: 130px;
-  }
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    height: 150px;
+    display: block;
+    width: 30vw;
+    height: 40vw;
   }
 `;
 
@@ -43,16 +48,23 @@ export const ExhibitionDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-grow: 1;
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    display: flex;
+    // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const ExhibitionTextContainer = styled.div`
   color: ${({ theme }) => theme.color.font.main};
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-left: 80px;
+  align-items: center;
+  // margin-left: 80px;
 `;
 
 export const ExhibitionLinkTitle = styled.p`
@@ -64,8 +76,10 @@ export const ExhibitionLinkTitle = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     display: block;
+    font-size: 24px;
   }
 `;
 
@@ -75,10 +89,7 @@ export const ExhibitionLinkPlainText = styled.p`
   font-weight: 500;
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+    font-size: 18px;
   }
 `;
 
@@ -87,6 +98,12 @@ export const ExhibitionLinkContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   padding-right: 60px;
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    font-size: 18px;
+    justify-content: center;
+    padding: 0;
+  }
 `;
 
 export const ExhibitionLinkButton = styled(Button)`
@@ -105,7 +122,7 @@ export const ExhibitionLinkButton = styled(Button)`
   }
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
-    width: 200px;
+    display: block;
     font-size: 2rem;
   }
 `;

@@ -1,22 +1,17 @@
 import Link from 'next/link';
-import styled from '@emotion/styled';
-import { Button, Image, Card } from 'antd';
 import { ExhibitionProps } from 'types/model';
 import { LinkOutlined } from '@ant-design/icons';
 import * as S from './style';
-
+import Image from 'next/image';
 const ReviewExhibitionInfo = ({ exhibition }: { exhibition: ExhibitionProps }) => {
   const { exhibitionId, name, thumbnail } = exhibition;
 
   return (
     <S.ExhibitionInfoCard>
       <S.ExhibitionInfoContainer>
-        <S.ExhibitionInfoImage
-          src={thumbnail}
-          width={150}
-          height={180}
-          alt={`exhibition(${name}) info Image`}
-        />
+        <S.ExhibitionInfoImage>
+          <Image src={thumbnail} layout="fill" alt={`exhibition(${name}) info Image`} />
+        </S.ExhibitionInfoImage>
 
         <S.ExhibitionDetailContainer>
           <S.ExhibitionTextContainer>

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const ReviewDetailContainer = styled.main`
-  margin: 20px 150px;
+  margin: 20px 10px;
 `;
 
 export const ReviewDetailHeader = styled.div`
@@ -48,8 +48,13 @@ export const ReviewDetailContent = styled.div`
 
 export const ReviewDetailContentText = styled.p`
   font-size: 2rem;
-  text-align: center;
   margin-bottom: 40px;
+`;
+
+export const ReviewExhibitionInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ReviewDetailContentUtils = styled.div`
