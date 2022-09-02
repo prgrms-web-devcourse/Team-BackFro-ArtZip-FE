@@ -4,20 +4,24 @@ import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { convertObjectToFormData, convertFilesToFormData, getErrorMessage } from 'utils';
+import {
+  convertObjectToFormData,
+  convertFilesToFormData,
+  getErrorMessage,
+  validateReviewEditForm,
+} from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway, useWithAuth } from 'hooks';
 import { Spinner } from 'components/atoms';
 
-interface SubmitData {
+export interface SubmitData {
   exhibitionId: number;
   date: string;
   title: string;
   content: string;
   isPublic: boolean;
-
-  // [key: string]: number | string | boolean;
+  deletedPhotos?: number[];
 }
 
 const initialData: SubmitData = {
@@ -27,6 +31,7 @@ const initialData: SubmitData = {
   content: '',
   isPublic: true,
 };
+Object.freeze(initialData);
 
 interface SearchResult {
   exhibitionId: number;
@@ -35,7 +40,7 @@ interface SearchResult {
 }
 
 const ReviewCreatePage = () => {
-  const submitData = useRef<SubmitData>(initialData);
+  const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
@@ -44,14 +49,11 @@ const ReviewCreatePage = () => {
   const { query } = router;
 
   useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
     if (query.exhibitionId) {
       submitData.current['exhibitionId'] = Number(query.exhibitionId);
       setPosterImage(query.thumbnail as string);
     }
-  }, [router.isReady]);
+  }, []);
 
   const searchContainer = useRef<HTMLDivElement>(null);
   const resultList = useRef<HTMLUListElement>(null);
@@ -62,10 +64,6 @@ const ReviewCreatePage = () => {
     }
   });
 
-  // const handleChange = (key: string, newValue: ValueOf<SubmitData>) => {
-  //   submitData.current[key] = newValue;
-  // };
-
   const handleSearch = async (value: string) => {
     const isEmpty = !/\S/.test(value);
     if (isEmpty) {
@@ -75,56 +73,53 @@ const ReviewCreatePage = () => {
     }
 
     try {
-      const { exhibitions } = await reviewAPI.searchExhibition(value).then((res) => res.data.data); // TODO: await과 .then을 함께 쓰지 않기
+      const { data } = await reviewAPI.searchExhibition(value);
+      const { exhibitions } = data.data;
       exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
-
       if (resultList.current) {
         resultList.current.style.visibility = 'visible';
       }
-    } catch (error) {
-      console.error('전시회 검색 에러'); // TODO: 에러 처리 로직 추가
-    }
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    // TODO: 제출 전 validation 검사 추가
-    // required, 다녀 온 날짜 < 오늘 날짜
-
-    let formData = convertObjectToFormData('data', submitData.current);
-    formData = convertFilesToFormData('files', files, formData);
-
-    try {
-      await reviewAPI.createReview(formData);
-      message.success('후기 작성이 완료되었습니다.');
-      router.replace('/community');
     } catch (error) {
       message.error(getErrorMessage(error));
       console.error(error);
     }
   };
 
-  const [isChecking] = useWithAuth();
-  if (isChecking) {
-    return <Spinner />;
-  }
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (validateReviewEditForm(submitData.current)) {
+      let formData = convertObjectToFormData('data', submitData.current);
+      formData = convertFilesToFormData('files', files, formData);
 
-  return (
+      try {
+        await reviewAPI.createReview(formData);
+        message.success('후기 작성이 완료되었습니다.');
+        router.replace('/community');
+      } catch (error) {
+        message.error(getErrorMessage(error));
+        console.error(error);
+      }
+    }
+  };
+
+  const [isChecking] = useWithAuth();
+  return isChecking ? (
+    <Spinner />
+  ) : (
     <>
       <Banner
         subtitle="Art.zip 후기 작성"
         title="전시회 다녀오셨나요?"
-        content="소중한 경험을 후기로 작성하세요 !"
+        content="소중한 경험을 후기로 작성하세요!"
       />
       <Section>
         <ReviewEditForm layout="vertical">
-          <Form.Item label="다녀 온 전시회">
+          <FormItem label="다녀 온 전시회">
             <SearchContainer ref={searchContainer}>
               <InnerContainer>
                 <SearchBar
-                  placeholder="전시회 제목을 검색해 주세요."
+                  placeholder="전시회 제목을 검색해 주세요"
                   enterButton
                   onSearch={handleSearch}
                   defaultValue={query.name}
@@ -149,8 +144,8 @@ const ReviewCreatePage = () => {
                 preview={posterImage !== imageUrl.EXHIBITION_DEFAULT}
               />
             </SearchContainer>
-          </Form.Item>
-          <Form.Item label="다녀 온 날짜">
+          </FormItem>
+          <FormItem label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
                 if (value) {
@@ -158,26 +153,26 @@ const ReviewCreatePage = () => {
                 }
               }}
             />
-          </Form.Item>
-          <Form.Item label="제목">
+          </FormItem>
+          <FormItem label="제목">
             <Input
-              placeholder="제목을 입력해주세요."
+              placeholder="제목을 입력해주세요"
               showCount
               maxLength={30}
               onChange={(e) => (submitData.current['title'] = e.target.value)}
             />
-          </Form.Item>
-          <Form.Item label="내용">
+          </FormItem>
+          <FormItem label="내용">
             <TextArea
-              placeholder="내용을 입력해주세요."
+              placeholder="내용을 입력해주세요(1000자 이하)"
               autoSize
               onChange={(e) => (submitData.current['content'] = e.target.value)}
             />
-          </Form.Item>
-          <Form.Item label="사진">
+          </FormItem>
+          <FormItem label="사진">
             <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
-          </Form.Item>
-          <Form.Item label="공개 여부">
+          </FormItem>
+          <FormItem label="공개 여부">
             <ToggleSwitch
               defaultChecked
               onChange={(checked) => {
@@ -187,7 +182,7 @@ const ReviewCreatePage = () => {
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
-          </Form.Item>
+          </FormItem>
 
           <SubmitButton type="primary" onClick={handleSubmit}>
             작성완료
@@ -197,7 +192,6 @@ const ReviewCreatePage = () => {
     </>
   );
 };
-// TODO: 작성완료 버튼 연타 방어 코드
 
 const Section = styled.section`
   max-width: 600px;
@@ -213,6 +207,18 @@ const ReviewEditForm = styled(Form)`
   label {
     font-size: 2rem;
     font-weight: bold;
+  }
+`;
+
+const FormItem = styled(Form.Item)`
+  label[title='사진']::after {
+    content: '(optional)';
+    display: inline;
+    color: ${({ theme }) => theme.color.font.dark};
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-top: 2px;
+    margin-left: 4px;
   }
 `;
 

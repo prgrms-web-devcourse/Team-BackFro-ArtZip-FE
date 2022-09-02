@@ -5,4 +5,4 @@ export { convertObjectToFormData, convertFilesToFormData, getBase64 } from './co
 export { setToken } from './tokenManager';
 export { parseJwt } from './parseJwt';
 export { getErrorMessage } from './errorHandling';
-export { validateNickname, validatePassword } from './validation';
+export { validateNickname, validatePassword, validateReviewEditForm } from './validation';
