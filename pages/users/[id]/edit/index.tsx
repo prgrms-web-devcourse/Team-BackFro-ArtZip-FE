@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Button, Form, Input, Image, message } from 'antd';
-import { useState, useRef, ChangeEvent, MouseEvent } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import { SideNavigation } from 'components/molecules';
 import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
