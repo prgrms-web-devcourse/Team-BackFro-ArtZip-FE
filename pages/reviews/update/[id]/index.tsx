@@ -11,7 +11,7 @@ import {
   validateReviewEditForm,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useWithAuth } from 'hooks';
+import { useAxios, useWithAuth, useDebounceClick } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
@@ -83,8 +83,8 @@ const ReviewUpdatePage = () => {
     setIsModalVisible(false);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
     if (validateReviewEditForm(submitData.current)) {
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
@@ -99,6 +99,7 @@ const ReviewUpdatePage = () => {
       }
     }
   };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   if (isChecking) {
@@ -184,7 +185,7 @@ const ReviewUpdatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>

@@ -12,7 +12,7 @@ import {
 } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway, useWithAuth } from 'hooks';
+import { useClickAway, useWithAuth, useDebounceClick } from 'hooks';
 import { Spinner } from 'components/atoms';
 
 export interface SubmitData {
@@ -86,8 +86,8 @@ const ReviewCreatePage = () => {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
     if (validateReviewEditForm(submitData.current)) {
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
@@ -102,6 +102,7 @@ const ReviewCreatePage = () => {
       }
     }
   };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -184,7 +185,7 @@ const ReviewCreatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
