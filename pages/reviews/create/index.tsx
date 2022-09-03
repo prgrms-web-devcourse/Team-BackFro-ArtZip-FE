@@ -47,6 +47,7 @@ const ReviewCreatePage = () => {
   const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
   const { query } = router;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (query.exhibitionId) {
@@ -86,9 +87,14 @@ const ReviewCreatePage = () => {
     }
   };
 
-  const handleSubmit = async (e?: Event) => {
-    e?.preventDefault();
-    if (validateReviewEditForm(submitData.current)) {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
+    if (!isLoading && validateReviewEditForm(submitData.current)) {
+      setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
 
@@ -100,9 +106,9 @@ const ReviewCreatePage = () => {
         message.error(getErrorMessage(error));
         console.error(error);
       }
+      setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -185,7 +191,7 @@ const ReviewCreatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" ref={debounceRef}>
+          <SubmitButton type="primary" onClick={handleSubmit}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
