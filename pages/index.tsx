@@ -34,12 +34,9 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
 };
 
 export const getServerSideProps = async () => {
-  const getUpcomingExhibition = await exhibitionAPI.getUpcoming(0, 8);
-  const getMostLikeExhibitionRes = await exhibitionAPI.getMostLike(0, 8, true);
-
   const [upcomingExhibitionRes, mostLikeExhibitionRes] = await Promise.all([
-    getUpcomingExhibition,
-    getMostLikeExhibitionRes,
+    exhibitionAPI.getUpcoming(0, 8),
+    exhibitionAPI.getMostLike(0, 8, true),
   ]);
 
   return {
