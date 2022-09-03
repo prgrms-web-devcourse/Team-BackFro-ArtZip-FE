@@ -2,26 +2,19 @@ import Map from 'components/atoms/Map';
 import ExhibitionCard from 'components/molecules/ExhibitionCard';
 import SwiperWrapper from 'components/organisms/Swiper';
 import SwiperContainer from 'components/organisms/SwiperContainer';
-import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next';
+import { ExhibitionReadResponse } from 'types/apis/exhibition';
 import { homeStyle as S } from '../styles/pages';
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
 
-const Home: NextPage = () => {
-  const [upcomingExhibitions, setUpcomingExhibitions] = useState<ExhibitionProps[]>([]);
-  const [mostLikeExhibitions, setMostLikeExhibitions] = useState<ExhibitionProps[]>([]);
-
-  useEffect(() => {
-    exhibitionAPI.getUpcoming(0, 8).then((res) => {
-      setUpcomingExhibitions(res.data.data.content);
-    });
-
-    exhibitionAPI.getMostLike(0, 8, true).then((res) => {
-      setMostLikeExhibitions(res.data.data.content);
-    });
-  }, []);
+interface HomeProps {
+  upcomingExhibitions: ExhibitionProps[];
+  mostLikeExhibitions: ExhibitionProps[];
+}
+const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions }) => {
   return (
     <>
       <Head>
@@ -38,6 +31,20 @@ const Home: NextPage = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async () => {
+  const [upcomingExhibitionRes, mostLikeExhibitionRes] = await Promise.all([
+    exhibitionAPI.getUpcoming(0, 8),
+    exhibitionAPI.getMostLike(0, 8, true),
+  ]);
+
+  return {
+    props: {
+      upcomingExhibitions: upcomingExhibitionRes.data.data.content,
+      mostLikeExhibitions: mostLikeExhibitionRes.data.data.content,
+    },
+  };
 };
 
 export default Home;
