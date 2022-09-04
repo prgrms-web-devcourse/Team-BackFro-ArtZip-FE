@@ -26,7 +26,6 @@ function useUserAuthActions() {
       console.error(e);
     }
   };
-  // TODO: 소셜 로그인 로직 여기에 구현
 
   const logout = async () => {
     try {

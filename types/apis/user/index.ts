@@ -69,11 +69,6 @@ export interface UserCheckResponse extends BaseResponse {
   isUnique: boolean;
 }
 
-// TODO
-// users/me/info
-// users/me/info/exhibitions/like?
-// users/me/info/reviews/like?
-
 export interface UserChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
