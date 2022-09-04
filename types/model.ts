@@ -50,7 +50,6 @@ export interface ReviewCardProps {
   photos: PhotoProps[];
 }
 
-// TODO: 명세서 올라오면 수정하기
 export interface CommentProps {
   commentId: number;
   content: string;
