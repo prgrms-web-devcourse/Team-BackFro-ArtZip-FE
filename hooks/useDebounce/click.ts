@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const useDebounceClick = <T extends HTMLElement = HTMLElement>(
   handler: (e?: Event) => void,
-  ms: number,
+  ms = 250,
 ) => {
   const timerId = useRef<ReturnType<typeof setTimeout>>();
   const ref = useRef<T>(null);
