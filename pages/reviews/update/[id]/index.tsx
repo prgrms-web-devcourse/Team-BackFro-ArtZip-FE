@@ -11,7 +11,7 @@ import {
   validateReviewEditForm,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useWithAuth } from 'hooks';
+import { useAxios, useWithAuth, useDebounceClick } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
@@ -36,6 +36,7 @@ const ReviewUpdatePage = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const clickedImage = useRef<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
@@ -83,9 +84,11 @@ const ReviewUpdatePage = () => {
     setIsModalVisible(false);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (validateReviewEditForm(submitData.current)) {
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
+
+    if (!isLoading && validateReviewEditForm(submitData.current)) {
+      setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
 
@@ -97,8 +100,10 @@ const ReviewUpdatePage = () => {
         message.error(getErrorMessage(error));
         console.error(error);
       }
+      setIsLoading(false);
     }
   };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   if (isChecking) {
@@ -184,7 +189,7 @@ const ReviewUpdatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>

@@ -12,7 +12,7 @@ import {
 } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway, useWithAuth } from 'hooks';
+import { useClickAway, useWithAuth, useDebounceClick } from 'hooks';
 import { Spinner } from 'components/atoms';
 
 export interface SubmitData {
@@ -47,6 +47,7 @@ const ReviewCreatePage = () => {
   const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
   const { query } = router;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (query.exhibitionId) {
@@ -86,12 +87,13 @@ const ReviewCreatePage = () => {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (validateReviewEditForm(submitData.current)) {
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
+
+    if (!isLoading && validateReviewEditForm(submitData.current)) {
+      setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
-
       try {
         await reviewAPI.createReview(formData);
         message.success('후기 작성이 완료되었습니다.');
@@ -100,8 +102,10 @@ const ReviewCreatePage = () => {
         message.error(getErrorMessage(error));
         console.error(error);
       }
+      setIsLoading(false);
     }
   };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -184,7 +188,7 @@ const ReviewCreatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
