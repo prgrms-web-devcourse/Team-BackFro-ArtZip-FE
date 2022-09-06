@@ -36,6 +36,7 @@ const ReviewUpdatePage = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const clickedImage = useRef<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
@@ -85,7 +86,9 @@ const ReviewUpdatePage = () => {
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
-    if (validateReviewEditForm(submitData.current)) {
+
+    if (!isLoading && validateReviewEditForm(submitData.current)) {
+      setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
 
@@ -97,6 +100,7 @@ const ReviewUpdatePage = () => {
         message.error(getErrorMessage(error));
         console.error(error);
       }
+      setIsLoading(false);
     }
   };
   const [debounceRef] = useDebounceClick(handleSubmit, 300);

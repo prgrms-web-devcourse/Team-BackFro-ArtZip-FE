@@ -87,17 +87,13 @@ const ReviewCreatePage = () => {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (isLoading) {
-      return;
-    }
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
 
     if (!isLoading && validateReviewEditForm(submitData.current)) {
       setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
       formData = convertFilesToFormData('files', files, formData);
-
       try {
         await reviewAPI.createReview(formData);
         message.success('후기 작성이 완료되었습니다.');
@@ -109,6 +105,7 @@ const ReviewCreatePage = () => {
       setIsLoading(false);
     }
   };
+  const [debounceRef] = useDebounceClick(handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -191,7 +188,7 @@ const ReviewCreatePage = () => {
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
