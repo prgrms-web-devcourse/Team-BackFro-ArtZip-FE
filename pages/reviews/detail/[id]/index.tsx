@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import { GetServerSidePropsContext } from 'next';
 import { ReviewDetail, CommentWrite, CommentList } from 'components/organisms';
-import { ReviewSingleReadData, ReviewSingleReadResponse } from 'types/apis/review';
+import { ReviewSingleReadData } from 'types/apis/review';
 import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
 import { useEffect, useState } from 'react';
@@ -11,33 +10,28 @@ import { CommentProps } from 'types/model';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import styled from '@emotion/styled';
+import useSWR from 'swr';
 
 const ReviewDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const { data: reviewDetailData } = useSWR(`api/v1/reviews/${id}`);
+  const { data: reviewCommentData } = useSWR(`api/v1/reviews/${id}/comments`);
+
+  useEffect(() => {
+    if (reviewDetailData) {
+      setReview(reviewDetailData);
+      setReviewCommentCount(reviewDetailData.commentCount);
+      setTotalPage(reviewDetailData.comments.totalPage);
+      setPageNumber(reviewDetailData.pageNumber);
+    }
+    if (reviewCommentData) {
+      setReviewComments(reviewCommentData.comments.content);
+    }
+  }, [reviewDetailData, reviewCommentData]);
 
   const [review, setReview] = useState<ReviewSingleReadData>();
-
-  // TODO: 이후에 useSWR로 마이그레이션
-  useEffect(() => {
-    const getReviewDetail = async () => {
-      const { data } = await reviewAPI.getReviewSingle(Number(id));
-      setReview(data.data);
-      setReviewCommentCount(data.data.commentCount);
-      setTotalPage(data.data.comments.totalPage);
-      setPageNumber(data.data.pageNumber);
-    };
-
-    const getComment = async () => {
-      const { data } = await reviewAPI.getComments({ reviewId: Number(id) });
-      setReviewComments(data.data.comments.content);
-    };
-
-    getReviewDetail();
-    getComment();
-  }, []);
-
   const [reviewComments, setReviewComments] = useState<CommentProps[]>([]);
   const [reviewCommentCount, setReviewCommentCount] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
@@ -59,7 +53,6 @@ const ReviewDetailPage = () => {
   const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
 
   // 댓글 액션
-
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -77,7 +70,6 @@ const ReviewDetailPage = () => {
   };
 
   const handleCommentReload = async () => {
-    console.log('reload!');
     const { data } = await reviewAPI.getComments({ reviewId: Number(id) });
     const { comments, commentCount } = data.data;
     setReviewComments(comments.content);
