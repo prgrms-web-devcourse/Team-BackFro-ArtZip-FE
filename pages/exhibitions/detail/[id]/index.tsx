@@ -63,18 +63,9 @@ const ExhibitionDetailPage = () => {
               {exhibitionData.reviews.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
-                  reviewId={review.reviewId}
+                  data={review}
                   thumbnail={exhibitionData.thumbnail}
-                  title={review.title}
-                  content={review.content}
-                  createdAt={review.createdAt}
-                  likeCount={review.likeCount}
-                  commentCount={review.commentCount}
-                  photo={review.photos}
-                  userId={review.user.userId}
-                  nickname={review.user.nickname}
-                  profileImage={review.user.profileImage}
-                ></ReviewCard>
+                />
               ))}
             </S.ReviewContainer>
           )}
