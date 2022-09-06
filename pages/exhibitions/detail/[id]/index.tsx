@@ -76,20 +76,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
         {reviews && (
           <S.ReviewContainer>
             {reviews.map((review) => (
-              <ReviewCard
-                key={review.reviewId}
-                reviewId={review.reviewId}
-                thumbnail={thumbnail}
-                title={review.title}
-                content={review.content}
-                createdAt={review.createdAt}
-                likeCount={review.likeCount}
-                commentCount={review.commentCount}
-                photo={review.photos}
-                userId={review.user.userId}
-                nickname={review.user.nickname}
-                profileImage={review.user.profileImage}
-              ></ReviewCard>
+              <ReviewCard key={review.reviewId} data={review} thumbnail={thumbnail} />
             ))}
           </S.ReviewContainer>
         )}

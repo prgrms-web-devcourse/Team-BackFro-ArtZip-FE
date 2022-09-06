@@ -126,17 +126,8 @@ const UserPage = () => {
             {myReview.payload?.map((review) => (
               <ReviewCard
                 key={review.reviewId}
-                reviewId={review.reviewId}
-                title={review.title}
-                content={review.content}
+                data={review}
                 thumbnail={review.exhibition.thumbnail}
-                createdAt={review.createdAt}
-                likeCount={review.likeCount}
-                commentCount={review.commentCount}
-                photo={review.photos}
-                userId={review.user.userId}
-                nickname={review.user.nickname}
-                profileImage={review.user.profileImage}
               />
             ))}
           </ReviewContainer>
@@ -155,17 +146,8 @@ const UserPage = () => {
               likedReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
-                  reviewId={review.reviewId}
-                  title={review.title}
-                  content={review.content}
+                  data={review}
                   thumbnail={review.exhibition.thumbnail}
-                  createdAt={review.createdAt}
-                  likeCount={review.likeCount}
-                  commentCount={review.commentCount}
-                  photo={review.photos}
-                  userId={review.user.userId}
-                  nickname={review.user.nickname}
-                  profileImage={review.user.profileImage}
                 />
               ))
             ) : (
