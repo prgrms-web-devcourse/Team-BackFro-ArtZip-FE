@@ -167,17 +167,7 @@ const UserPage = () => {
           <ExhibitionContainer>
             {likedExhibition ? (
               likedExhibition.payload.map((exhibition) => (
-                <ExhibitionCard
-                  key={exhibition.exhibitionId}
-                  exhibitionId={exhibition.exhibitionId}
-                  name={exhibition.name}
-                  thumbnail={exhibition.thumbnail}
-                  startDate={exhibition.startDate}
-                  endDate={exhibition.endDate}
-                  likeCount={exhibition.likeCount}
-                  reviewCount={exhibition.reviewCount}
-                  isLiked={exhibition.isLiked}
-                />
+                <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
               ))
             ) : (
               <Spinner size="large" />
