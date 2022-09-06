@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Navigation, Autoplay } from 'swiper';
 import * as S from './style';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ExhibitionProps } from 'types/model';
 import { ExhibitionCard } from 'components/molecules';
 import useWindowSize from 'hooks/useWindowSize';
@@ -10,7 +10,7 @@ import theme from 'styles/global/theme';
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
-  items: ExhibitionProps[];
+  items: Required<ExhibitionProps>[];
 }
 
 const checkIsMobile = (windowWidthSize: number) => {
@@ -46,16 +46,7 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
         >
           {items.map((item) => (
             <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
-              <ExhibitionCard
-                exhibitionId={item.exhibitionId}
-                name={item.name}
-                thumbnail={item.thumbnail}
-                startDate={item.startDate!}
-                endDate={item.endDate!}
-                likeCount={item.likeCount!}
-                reviewCount={item.reviewCount!}
-                isLiked={item.isLiked!}
-              />
+              <ExhibitionCard data={item} />
             </SwiperSlide>
           ))}
         </Swiper>

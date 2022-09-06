@@ -11,7 +11,7 @@ import styled from '@emotion/styled';
 //exhibitions/custom
 const ExhibitionCustom: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
+  const [exhibitions, setExhibitions] = useState<Required<ExhibitionProps>[]>([]);
   const [selectedArea, setSelectedArea] = useState<{ id: number; value: string; name: string }[]>(
     [],
   );
@@ -74,17 +74,7 @@ const ExhibitionCustom: NextPage = () => {
       <S.ExhibitionsCustomContent>
         {exhibitions.length > 0 ? (
           exhibitions.map((exhibition) => (
-            <ExhibitionCard
-              exhibitionId={exhibition.exhibitionId}
-              key={exhibition.exhibitionId}
-              name={exhibition.name}
-              thumbnail={exhibition.thumbnail}
-              startDate={exhibition.startDate!}
-              endDate={exhibition.endDate!}
-              likeCount={exhibition.likeCount!}
-              reviewCount={exhibition.reviewCount!}
-              isLiked={exhibition.isLiked!}
-            />
+            <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
           ))
         ) : (
           <div>

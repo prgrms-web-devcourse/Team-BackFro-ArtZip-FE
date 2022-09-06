@@ -12,7 +12,7 @@ const ExhibitionsMore: NextPage = () => {
   const router = useRouter();
   const { type } = router.query;
   const [currentPage, setCurrentPage] = useState(0);
-  const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
+  const [exhibitions, setExhibitions] = useState<Required<ExhibitionProps>[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -50,17 +50,7 @@ const ExhibitionsMore: NextPage = () => {
       </div>
       <S.ExhibitionsMoreContent>
         {exhibitions.map((exhibition) => (
-          <ExhibitionCard
-            exhibitionId={exhibition.exhibitionId}
-            key={exhibition.exhibitionId}
-            name={exhibition.name}
-            thumbnail={exhibition.thumbnail}
-            startDate={exhibition.startDate!}
-            endDate={exhibition.endDate!}
-            likeCount={exhibition.likeCount!}
-            reviewCount={exhibition.reviewCount!}
-            isLiked={exhibition.isLiked!}
-          />
+          <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
         ))}
       </S.ExhibitionsMoreContent>
       <Pagination
