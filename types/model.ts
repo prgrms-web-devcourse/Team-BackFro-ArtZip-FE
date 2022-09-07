@@ -1,5 +1,4 @@
 import { ReviewSingleReadData } from './apis/review/index';
-import { CSSProperties } from 'react';
 
 export interface ExhibitionProps {
   exhibitionId: number;
@@ -77,6 +76,7 @@ export interface PhotoProps {
 export interface UserAtomProps {
   userId: number | null;
   email: string | null;
-  nicknamae: string | null;
+  nickname: string | null;
   profileImage: string | null;
+  isLoggedIn: boolean;
 }
