@@ -103,7 +103,7 @@ const ReviewUpdatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounceClick('click', handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   if (isChecking) {

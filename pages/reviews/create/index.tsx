@@ -237,6 +237,14 @@ const SearchBar = styled(Input.Search)`
   font-size: 1.6rem;
   position: relative;
   z-index: 1;
+
+  .ant-input {
+    height: 36px;
+  }
+
+  .ant-input-search-button {
+    height: 36px;
+  }
 `;
 
 const ResultList = styled.ul`
