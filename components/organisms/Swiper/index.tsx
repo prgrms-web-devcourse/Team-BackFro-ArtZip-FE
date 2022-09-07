@@ -9,11 +9,13 @@ SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
   items: ExhibitionProps[];
+  type: 'upcoming' | 'popular';
 }
 
-const SwiperWrapper = ({ items }: SwiperProps) => {
+const SwiperWrapper = ({ items, type }: SwiperProps) => {
+  const leftBtnClassName = 'swiper-button-prev-' + { type };
   return (
-    <S.SwiperWrapper>
+    <S.SwiperWrapper type={type}>
       <div className="parent">
         <Swiper
           className="swiper-container"
@@ -22,6 +24,10 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
+          }}
+          navigation={{
+            prevEl: `.swiper-button-prev-${type}`,
+            nextEl: `.swiper-button-next-${type}`,
           }}
         >
           {items.map((item) => (
@@ -39,7 +45,7 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="swiper-button-prev"></div>
+        <div className={'swiper-button-prev-' + type}></div>
         <div className="swiper-button-next"></div>
       </div>
     </S.SwiperWrapper>
