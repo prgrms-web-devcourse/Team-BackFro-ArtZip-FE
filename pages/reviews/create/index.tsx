@@ -1,4 +1,4 @@
-import { useRef, useState, FormEvent, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
@@ -9,10 +9,12 @@ import {
   convertFilesToFormData,
   getErrorMessage,
   validateReviewEditForm,
+  show,
+  hide,
 } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway, useWithAuth, useDebounceClick } from 'hooks';
+import { useClickAway, useWithAuth, useDebounceClick, useDebounceSearch } from 'hooks';
 import { Spinner } from 'components/atoms';
 
 export interface SubmitData {
@@ -48,6 +50,7 @@ const ReviewCreatePage = () => {
   const router = useRouter();
   const { query } = router;
   const [isLoading, setIsLoading] = useState(false);
+  const [searchWord, setSearchWord] = useState('');
 
   useEffect(() => {
     if (query.exhibitionId) {
@@ -56,40 +59,30 @@ const ReviewCreatePage = () => {
     }
   }, []);
 
-  const searchContainer = useRef<HTMLDivElement>(null);
   const resultList = useRef<HTMLUListElement>(null);
 
-  useClickAway(searchContainer, () => {
-    if (resultList.current) {
-      resultList.current.style.visibility = 'hidden';
-    }
-  });
-
-  const handleSearch = async (value: string) => {
-    const isEmpty = !/\S/.test(value);
+  const handleSearch = async () => {
+    const isEmpty = !/\S/.test(searchWord);
     if (isEmpty) {
-      message.warning('한 글자 이상 입력해주세요.');
       setSearchResults([]);
       return;
     }
 
     try {
-      const { data } = await reviewAPI.searchExhibition(value);
+      const { data } = await reviewAPI.searchExhibition(searchWord);
       const { exhibitions } = data.data;
-      exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
-      if (resultList.current) {
-        resultList.current.style.visibility = 'visible';
-      }
+      resultList.current && show(resultList.current);
+      !exhibitions.length && message.warning('검색 결과가 없습니다.');
     } catch (error) {
       message.error(getErrorMessage(error));
       console.error(error);
     }
   };
+  useDebounceSearch(handleSearch, 500, [searchWord]);
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
-
     if (!isLoading && validateReviewEditForm(submitData.current)) {
       setIsLoading(true);
       let formData = convertObjectToFormData('data', submitData.current);
@@ -105,7 +98,7 @@ const ReviewCreatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounceClick('click', handleSubmit, 300);
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -120,13 +113,15 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <SearchContainer ref={searchContainer}>
+            <SearchContainer>
               <InnerContainer>
                 <SearchBar
                   placeholder="전시회 제목을 검색해 주세요"
-                  enterButton
-                  onSearch={handleSearch}
                   defaultValue={query.name}
+                  onChange={(e) => setSearchWord(e.target.value)}
+                  onFocus={() => {
+                    resultList.current && show(resultList.current);
+                  }}
                 />
                 <ResultList ref={resultList}>
                   {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
@@ -135,6 +130,7 @@ const ReviewCreatePage = () => {
                       onClick={() => {
                         submitData.current['exhibitionId'] = exhibitionId;
                         setPosterImage(thumbnail);
+                        resultList.current && hide(resultList.current);
                       }}
                     >
                       {name}
@@ -239,7 +235,6 @@ const InnerContainer = styled.div`
 
 const SearchBar = styled(Input.Search)`
   font-size: 1.6rem;
-  height: 40px;
   position: relative;
   z-index: 1;
 `;
