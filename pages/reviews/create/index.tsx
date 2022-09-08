@@ -1,7 +1,17 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
+import {
+  Input,
+  DatePicker,
+  Switch,
+  Image,
+  Button,
+  message,
+  Form,
+  UploadFile,
+  InputRef,
+} from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
 import {
@@ -14,7 +24,7 @@ import {
 } from 'utils';
 import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
-import { useClickAway, useWithAuth, useDebounceClick, useDebounceSearch } from 'hooks';
+import { useWithAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
 
 export interface SubmitData {
@@ -61,7 +71,7 @@ const ReviewCreatePage = () => {
 
   const resultList = useRef<HTMLUListElement>(null);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     const isEmpty = !/\S/.test(searchWord);
     if (isEmpty) {
       setSearchResults([]);
@@ -78,8 +88,8 @@ const ReviewCreatePage = () => {
       message.error(getErrorMessage(error));
       console.error(error);
     }
-  };
-  useDebounceSearch(handleSearch, 500, [searchWord]);
+  }, [searchWord]);
+  useDebounce(handleSearch, 500, [searchWord]);
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
@@ -98,7 +108,7 @@ const ReviewCreatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick('click', handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 300, [], 'click');
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -118,7 +128,9 @@ const ReviewCreatePage = () => {
                 <SearchBar
                   placeholder="전시회 제목을 검색해 주세요"
                   defaultValue={query.name}
-                  onChange={(e) => setSearchWord(e.target.value)}
+                  onChange={(e) => {
+                    setSearchWord(e.target.value);
+                  }}
                   onFocus={() => {
                     resultList.current && show(resultList.current);
                   }}
@@ -252,7 +264,7 @@ const ResultList = styled.ul`
   max-height: 168px;
   border: 1px solid ${({ theme }) => theme.color.border.light};
   position: relative;
-  top: -9px;
+  top: -2px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.color.white};
 `;

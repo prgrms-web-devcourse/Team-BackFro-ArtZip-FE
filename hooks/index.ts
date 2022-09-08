@@ -5,4 +5,4 @@ export { default as useUserAuthActions } from './useUserAuthActions';
 export { default as useInput } from './useInput';
 export { default as useWithAuth } from './useWithAuth';
 export { default as useDebounceClick } from './useDebounce/click';
-export { default as useDebounceSearch } from './useDebounce/search';
+export { default as useDebounce } from './useDebounce';
