@@ -6,6 +6,7 @@ import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import defaultImage from 'constants/defaultImage';
 
 interface UserActivity<T> {
   payload: T[];
@@ -116,7 +117,7 @@ const UserPage = () => {
   return (
     <PageContainer>
       <ProfileContainer>
-        <ProfileImage src={profileImage} alt="프로필 이미지" />
+        <ProfileImage src={profileImage || defaultImage.USER_PROFILE} alt="프로필 이미지" />
         <UserName>{nickname}</UserName>
         <UserEmail>{email}</UserEmail>
       </ProfileContainer>
