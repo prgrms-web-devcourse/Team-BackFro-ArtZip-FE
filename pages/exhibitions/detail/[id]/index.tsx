@@ -6,13 +6,20 @@ import Link from 'next/link';
 import { ExhibitionDetail } from 'components/organisms';
 import { GetServerSidePropsContext } from 'next';
 import { exhibitionAPI } from 'apis';
-import { ExhibitionDetailResponse } from 'types/apis/exhibition';
+import { ExhibitionDetailResponse, ExhibitionSingleData } from 'types/apis/exhibition';
 import Map from 'components/atoms/Map';
+import { useEffect, useState } from 'react';
 
 const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
   const router = useRouter();
   const { id } = router.query;
-
+  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>(data);
+  useEffect(() => {
+    exhibitionAPI.getDetail(Number(id)).then((res) => {
+      setExhibitionData(res.data.data);
+    });
+    console.log(exhibitionData);
+  }, []);
   const {
     exhibitionId,
     name,
@@ -32,7 +39,7 @@ const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
     likeCount,
     reviews,
     reviewCount,
-  } = data;
+  } = exhibitionData;
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(placeAddress);
