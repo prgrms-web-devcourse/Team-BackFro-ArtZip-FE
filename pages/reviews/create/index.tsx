@@ -10,7 +10,6 @@ import {
   message,
   Form,
   UploadFile,
-  InputRef,
 } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
@@ -89,7 +88,7 @@ const ReviewCreatePage = () => {
       console.error(error);
     }
   }, [searchWord]);
-  useDebounce(handleSearch, 500, [searchWord]);
+  useDebounce(handleSearch, 500, searchWord);
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
@@ -108,7 +107,7 @@ const ReviewCreatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounce(handleSubmit, 300, [], 'click');
+  const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
   const [isChecking] = useWithAuth();
   return isChecking ? (

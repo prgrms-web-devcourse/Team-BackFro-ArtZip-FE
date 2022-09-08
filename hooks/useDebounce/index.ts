@@ -1,30 +1,38 @@
-import { DependencyList, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-const useDebounce = (handler: () => void, ms = 300, deps: DependencyList, eventType?: string) => {
+const useDebounce = <T>(
+  handler: (e?: Event) => void,
+  ms = 300,
+  dependentValue: T,
+  eventType?: string,
+) => {
   const timerId = useRef<ReturnType<typeof setTimeout>>();
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const listener = () => {
+    const listener = (e?: Event) => {
       timerId.current && clearTimeout(timerId.current);
       timerId.current = setTimeout(() => {
-        handler();
+        handler(e);
       }, ms);
     };
 
-    if (ref.current && eventType) {
-      ref.current.addEventListener(eventType, listener);
+    const element = ref.current;
+    if (element && eventType) {
+      console.log('걸기');
+      element.addEventListener(eventType, listener);
     } else {
       listener();
     }
 
     return () => {
-      if (ref.current && eventType) {
-        ref.current.removeEventListener(eventType, listener);
+      if (element && eventType) {
+        console.log('삭제');
+        element.removeEventListener(eventType, listener);
       }
       timerId.current && clearTimeout(timerId.current);
     };
-  }, [ms, handler, eventType, ...deps]);
+  }, [ms, handler, dependentValue, eventType]);
 
   return [ref];
 };

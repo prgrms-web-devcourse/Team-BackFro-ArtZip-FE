@@ -1,4 +1,4 @@
-import { useRef, useState, FormEvent, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, Modal, UploadFile } from 'antd';
@@ -11,7 +11,7 @@ import {
   validateReviewEditForm,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useWithAuth, useDebounceClick } from 'hooks';
+import { useAxios, useWithAuth, useDebounce } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
@@ -103,7 +103,7 @@ const ReviewUpdatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick('click', handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
   const [isChecking] = useWithAuth();
   if (isChecking) {
