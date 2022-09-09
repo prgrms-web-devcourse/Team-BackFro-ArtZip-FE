@@ -21,7 +21,7 @@ const checkIsMobile = (windowWidthSize: number) => {
 };
 
 const SwiperWrapper = ({ items }: SwiperProps) => {
-  const { windowWidthSize, windowHeightSize } = useWindowSize();
+  const { windowWidthSize } = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
   console.log('windowWidthSize', windowWidthSize);
 
@@ -34,7 +34,7 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
       <div className="parent">
         <Swiper
           className="swiper-container"
-          spaceBetween={isMobile ? 100 : 20}
+          spaceBetween={isMobile ? 200 : 20}
           slidesPerView={isMobile ? 1 : 3}
           autoplay={{
             delay: 3000,
