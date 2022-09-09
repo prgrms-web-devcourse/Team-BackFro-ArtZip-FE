@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Spin, Pagination } from 'antd';
+import { Tabs, Image, Pagination } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
 import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { Spinner } from 'components/atoms';
 
 interface UserActivity<T> {
   payload: T[];
@@ -31,10 +32,13 @@ const initialExhibition = {
 const UserPage = () => {
   const { id } = useRouter().query;
   const { data: userInfo } = useSWR(`api/v1/users/${id}/info`);
-  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likedReview, setLikedReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likedExhibition, setLikedExhibition] =
-    useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
+  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>({ ...initialReview });
+  const [likedReview, setLikedReview] = useState<UserActivity<ReviewCardProps>>({
+    ...initialReview,
+  });
+  const [likedExhibition, setLikedExhibition] = useState<UserActivity<Required<ExhibitionProps>>>({
+    ...initialExhibition,
+  });
 
   useEffect(() => {
     userInfo && handleTabClick('MY_REVIEW');
@@ -123,22 +127,26 @@ const UserPage = () => {
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
         <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReview.payload?.map((review) => (
-              <ReviewCard
-                key={review.reviewId}
-                reviewId={review.reviewId}
-                title={review.title}
-                content={review.content}
-                thumbnail={review.exhibition.thumbnail}
-                createdAt={review.createdAt}
-                likeCount={review.likeCount}
-                commentCount={review.commentCount}
-                photo={review.photos}
-                userId={review.user.userId}
-                nickname={review.user.nickname}
-                profileImage={review.user.profileImage}
-              />
-            ))}
+            {myReview.payload.length ? (
+              myReview.payload?.map((review) => (
+                <ReviewCard
+                  key={review.reviewId}
+                  reviewId={review.reviewId}
+                  title={review.title}
+                  content={review.content}
+                  thumbnail={review.exhibition.thumbnail}
+                  createdAt={review.createdAt}
+                  likeCount={review.likeCount}
+                  commentCount={review.commentCount}
+                  photo={review.photos}
+                  userId={review.user.userId}
+                  nickname={review.user.nickname}
+                  profileImage={review.user.profileImage}
+                />
+              ))
+            ) : (
+              <Spinner />
+            )}
           </ReviewContainer>
           <Pagination
             defaultCurrent={myReview.currentPage}
@@ -151,7 +159,7 @@ const UserPage = () => {
         </Tab>
         <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKED_REVIEW">
           <ReviewContainer>
-            {likedReview ? (
+            {likedReview.payload.length ? (
               likedReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
@@ -169,7 +177,7 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner size="large" />
+              <Spinner />
             )}
           </ReviewContainer>
           <Pagination
@@ -183,7 +191,7 @@ const UserPage = () => {
         </Tab>
         <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKED_EXHIBITION">
           <ExhibitionContainer>
-            {likedExhibition ? (
+            {likedExhibition.payload.length ? (
               likedExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
@@ -198,7 +206,7 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner size="large" />
+              <Spinner />
             )}
           </ExhibitionContainer>
           <Pagination
@@ -297,10 +305,6 @@ const ExhibitionContainer = styled.div`
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     grid-template-columns: 1fr;
   }
-`;
-
-const Spinner = styled(Spin)`
-  margin-bottom: 400px;
 `;
 
 const paginationStyle: CSSProperties = {
