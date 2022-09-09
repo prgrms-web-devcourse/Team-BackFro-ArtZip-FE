@@ -23,7 +23,6 @@ const checkIsMobile = (windowWidthSize: number) => {
 const SwiperWrapper = ({ items }: SwiperProps) => {
   const { windowWidthSize } = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
-  console.log('windowWidthSize', windowWidthSize);
 
   useEffect(() => {
     setIsMobile(checkIsMobile(windowWidthSize));
