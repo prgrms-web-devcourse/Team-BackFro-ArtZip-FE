@@ -86,6 +86,9 @@ const ReviewUpdatePage = () => {
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
+    if (isChecking) {
+      return;
+    }
 
     if (!isLoading && validateReviewEditForm(submitData.current)) {
       setIsLoading(true);
