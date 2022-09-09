@@ -13,33 +13,14 @@ import { setToken } from 'utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
-import axios from 'axios';
-import cookie from 'react-cookies';
+import { swrOptions } from 'utils';
+
 declare global {
   interface Window {
     // eslint-disable-next-line
     kakao: any;
   }
 }
-
-const swrOptions = {
-  fetcher: async (url: string) => {
-    const isLoggedIn = cookie.load('REFRESH_TOKEN');
-    const accessToken = cookie.load('ACCESS_TOKEN');
-
-    if (isLoggedIn) {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`, {
-        headers: {
-          accessToken,
-        },
-      });
-      return res.data.data;
-    } else {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`);
-      return res.data.data;
-    }
-  },
-};
 
 function ArtZip({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();

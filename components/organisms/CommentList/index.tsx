@@ -1,15 +1,12 @@
 import { CommentProps } from 'types/model';
-import { PaginationResponse } from 'types/apis/base';
-import { useInfiniteScroll } from 'hooks';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Comment, Tooltip } from 'antd';
 import { UserAvatar } from 'components/atoms';
 import { CommentUtils } from 'components/organisms';
 import moment from 'moment';
 import { displayDate } from 'utils';
-import reviewAPI from 'apis/review';
 import styled from '@emotion/styled';
+import { Alert } from 'antd';
 
 const CommentList = ({
   comments,
@@ -26,6 +23,9 @@ const CommentList = ({
 
   return (
     <>
+      {commentList && commentList.length === 0 && (
+        <NoCommentAlert message="작성된 댓글이 없습니다." type="info" showIcon />
+      )}
       {commentList &&
         commentList.map((comment) => (
           <Comment
@@ -64,6 +64,10 @@ const CommentList = ({
 const EditText = styled.span`
   margin-left: 5px;
   color: ${({ theme }) => theme.color.font.light};
+`;
+
+const NoCommentAlert = styled(Alert)`
+  margin-top: 20px;
 `;
 
 export default CommentList;
