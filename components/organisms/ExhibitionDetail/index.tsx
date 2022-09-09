@@ -8,39 +8,27 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { exhibitionGenre, exhibitionPlace } from '../../../constants';
+import { ExhibitionSingleData } from 'types/apis/exhibition';
 interface ExhibitionDetailProps {
-  exhibitionId: number;
-  name: string;
-  thumbnail: string;
-  startDate: string;
-  endDate: string;
-  url: string;
-  placeUrl: string;
-  placeAddr: string;
-  area: string;
-  fee: string;
-  inquiry: string;
-  genre: string | null;
-  isLiked: boolean;
-  likeCount: number;
+  exhibitionDetail: ExhibitionSingleData;
 }
 
-const ExhibitionDetail = ({
-  exhibitionId,
-  name,
-  thumbnail,
-  startDate,
-  endDate,
-  area,
-  url,
-  placeUrl,
-  placeAddr,
-  fee,
-  inquiry,
-  genre,
-  isLiked,
-  likeCount,
-}: ExhibitionDetailProps) => {
+const ExhibitionDetail = ({ exhibitionDetail }: ExhibitionDetailProps) => {
+  const {
+    exhibitionId,
+    name,
+    thumbnail,
+    startDate,
+    endDate,
+    url,
+    placeAddress,
+    placeUrl,
+    area,
+    inquiry,
+    genre,
+    isLiked,
+    likeCount,
+  } = exhibitionDetail;
   const { userId } = useRecoilValue(userAtom);
   const [currentIsLiked, setCurrentIsLiked] = useState(isLiked);
   const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
@@ -97,10 +85,9 @@ const ExhibitionDetail = ({
             title={'장소'}
             isLink={true}
             href={placeUrl}
-            info={placeAddr}
+            info={placeAddress}
             copy
           ></ExhibitionInfo>
-          <ExhibitionInfo title={'입장료'} info={fee}></ExhibitionInfo>
           <ExhibitionInfo title={'문의처'} info={inquiry}></ExhibitionInfo>
           <ExhibitionInfo title={'장르'} info={currentGenre}></ExhibitionInfo>
         </S.InfoContainer>

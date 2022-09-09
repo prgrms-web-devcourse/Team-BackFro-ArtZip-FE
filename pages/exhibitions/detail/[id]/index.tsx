@@ -23,29 +23,8 @@ const ExhibitionDetailPage = () => {
     }
   }, [exhibitionDetailData]);
 
-  const {
-    exhibitionId,
-    name,
-    thumbnail,
-    startDate,
-    endDate,
-    url,
-    placeAddress,
-    placeUrl,
-    area,
-    inquiry,
-    genre,
-    isLiked,
-    description,
-    lat,
-    lng,
-    likeCount,
-    reviews,
-    reviewCount,
-  } = exhibitionData;
-
   const handleCopyClick = () => {
-    navigator.clipboard.writeText(placeAddress);
+    navigator.clipboard.writeText(exhibitionData.placeAddress);
   };
 
   return (
@@ -53,85 +32,87 @@ const ExhibitionDetailPage = () => {
       <Head>
         <title>ArtZip | ExhibitionDetail</title>
       </Head>
-      <S.ExhibitionPageContainer>
-        <ExhibitionDetail
-          exhibitionId={exhibitionId}
-          name={name}
-          thumbnail={thumbnail}
-          startDate={startDate}
-          endDate={endDate}
-          url={url}
-          placeAddr={placeAddress}
-          placeUrl={placeUrl}
-          area={area}
-          fee="무료"
-          inquiry={inquiry}
-          genre={genre}
-          isLiked={isLiked}
-          likeCount={likeCount}
-        ></ExhibitionDetail>
-        <h3>전시 소개</h3>
-        <S.DescriptionWrapper>{description}</S.DescriptionWrapper>
-        <h3>위치 안내</h3>
-        <S.PlaceInfo>
-          장소 | {placeAddress}{' '}
-          {
-            <S.StyledCopyButton>
-              <S.Clipboard onClick={handleCopyClick}></S.Clipboard>
-            </S.StyledCopyButton>
-          }
-        </S.PlaceInfo>
-        <Map lat={lat} lng={lng} width={800} height={450} title={'지도'} address={placeAddress} />
-        <h3>후기({reviewCount}개)</h3>
-        {reviews && (
-          <S.ReviewContainer>
-            {reviews.map((review) => (
-              <ReviewCard
-                key={review.reviewId}
-                reviewId={review.reviewId}
-                thumbnail={thumbnail}
-                title={review.title}
-                content={review.content}
-                createdAt={review.createdAt}
-                likeCount={review.likeCount}
-                commentCount={review.commentCount}
-                photo={review.photos}
-                userId={review.user.userId}
-                nickname={review.user.nickname}
-                profileImage={review.user.profileImage}
-              ></ReviewCard>
-            ))}
-          </S.ReviewContainer>
-        )}
-        {reviewCount > 0 ? (
-          <S.ButtonContainer>
-            <Link href={`/community?exhibitionId=${exhibitionId}`}>
-              <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
-            </Link>
-            <Link
-              href={{
-                pathname: `/reviews/create`,
-                query: { exhibitionId, name, thumbnail },
-              }}
-              as={`/reviews/create`}
-            >
-              <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
-            </Link>
-          </S.ButtonContainer>
-        ) : (
-          <S.ButtonWrapper>
-            <Link
-              href={{
-                pathname: `/reviews/create`,
-                query: { exhibitionId, name, thumbnail },
-              }}
-              as={`/reviews/create`}
-            >
-              <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
-            </Link>
-          </S.ButtonWrapper>
-        )}
-      </S.ExhibitionPageContainer>
+      {exhibitionData && (
+        <S.ExhibitionPageContainer>
+          <ExhibitionDetail exhibitionDetail={exhibitionData}></ExhibitionDetail>
+          <h3>전시 소개</h3>
+          <S.DescriptionWrapper>{exhibitionData.description}</S.DescriptionWrapper>
+          <h3>위치 안내</h3>
+          <S.PlaceInfo>
+            장소 | {exhibitionData.placeAddress}{' '}
+            {
+              <S.StyledCopyButton>
+                <S.Clipboard onClick={handleCopyClick}></S.Clipboard>
+              </S.StyledCopyButton>
+            }
+          </S.PlaceInfo>
+          <Map
+            lat={exhibitionData.lat}
+            lng={exhibitionData.lng}
+            width={800}
+            height={450}
+            title={'지도'}
+            address={exhibitionData.placeAddress}
+          />
+          <h3>후기({exhibitionData.reviewCount}개)</h3>
+          {exhibitionData.reviews && (
+            <S.ReviewContainer>
+              {exhibitionData.reviews.map((review) => (
+                <ReviewCard
+                  key={review.reviewId}
+                  reviewId={review.reviewId}
+                  thumbnail={exhibitionData.thumbnail}
+                  title={review.title}
+                  content={review.content}
+                  createdAt={review.createdAt}
+                  likeCount={review.likeCount}
+                  commentCount={review.commentCount}
+                  photo={review.photos}
+                  userId={review.user.userId}
+                  nickname={review.user.nickname}
+                  profileImage={review.user.profileImage}
+                ></ReviewCard>
+              ))}
+            </S.ReviewContainer>
+          )}
+          {exhibitionData.reviewCount > 0 ? (
+            <S.ButtonContainer>
+              <Link href={`/community?exhibitionId=${exhibitionData.exhibitionId}`}>
+                <S.StyledButton type="primary">후기 모두 보기</S.StyledButton>
+              </Link>
+              <Link
+                href={{
+                  pathname: `/reviews/create`,
+                  query: {
+                    exhibitionId: exhibitionData.exhibitionId,
+                    name: exhibitionData.name,
+                    thumbnail: exhibitionData.thumbnail,
+                  },
+                }}
+                as={`/reviews/create`}
+              >
+                <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
+              </Link>
+            </S.ButtonContainer>
+          ) : (
+            <S.ButtonWrapper>
+              <Link
+                href={{
+                  pathname: `/reviews/create`,
+                  query: {
+                    exhibitionId: exhibitionData.exhibitionId,
+                    name: exhibitionData.name,
+                    thumbnail: exhibitionData.thumbnail,
+                  },
+                }}
+                as={`/reviews/create`}
+              >
+                <S.StyledButton type="primary">후기 작성하기</S.StyledButton>
+              </Link>
+            </S.ButtonWrapper>
+          )}
+        </S.ExhibitionPageContainer>
+      )}
     </>
   );
 };
