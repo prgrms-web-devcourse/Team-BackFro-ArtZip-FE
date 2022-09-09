@@ -19,7 +19,6 @@ const useDebounce = <T>(
 
     const element = ref.current;
     if (element && eventType) {
-      console.log('걸기');
       element.addEventListener(eventType, listener);
     } else {
       listener();
@@ -27,7 +26,6 @@ const useDebounce = <T>(
 
     return () => {
       if (element && eventType) {
-        console.log('삭제');
         element.removeEventListener(eventType, listener);
       }
       timerId.current && clearTimeout(timerId.current);
