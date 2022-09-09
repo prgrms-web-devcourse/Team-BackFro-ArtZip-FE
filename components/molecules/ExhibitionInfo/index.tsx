@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { CopyOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 interface ExhibitionInfoProps {
   title: string;
@@ -24,6 +25,7 @@ const ExhibitionInfo = ({
 }: ExhibitionInfoProps) => {
   const onClick = () => {
     navigator.clipboard.writeText(info ? info : '');
+    message.success('클립보드에 복사되었습니다.');
   };
   return (
     <InfoTextContainer>
