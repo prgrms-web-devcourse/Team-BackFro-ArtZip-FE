@@ -6,20 +6,23 @@ import Link from 'next/link';
 import { ExhibitionDetail } from 'components/organisms';
 import { GetServerSidePropsContext } from 'next';
 import { exhibitionAPI } from 'apis';
-import { ExhibitionDetailResponse, ExhibitionSingleData } from 'types/apis/exhibition';
+import { ExhibitionSingleData } from 'types/apis/exhibition';
 import Map from 'components/atoms/Map';
 import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
-const ExhibitionDetailPage = ({ data }: ExhibitionDetailResponse) => {
+const ExhibitionDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>(data);
+  const { data: exhibitionDetailData } = useSWR(`/api/v1/exhibitions/${id}`);
+
+  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>(exhibitionDetailData);
   useEffect(() => {
-    exhibitionAPI.getDetail(Number(id)).then((res) => {
-      setExhibitionData(res.data.data);
-    });
-    console.log(exhibitionData);
-  }, []);
+    if (exhibitionDetailData) {
+      setExhibitionData(exhibitionDetailData);
+    }
+  }, [exhibitionDetailData]);
+
   const {
     exhibitionId,
     name,
