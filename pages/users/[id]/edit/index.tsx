@@ -14,7 +14,7 @@ import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
 import { useDebounceClick } from 'hooks';
 import { useForm } from 'antd/lib/form/Form';
-import defaultImage from 'constants/defaultImage';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 interface SubmitData {
   nickname: string;
@@ -95,7 +95,7 @@ const UserEditPage = () => {
       >
         <FormItem label="프로필 이미지">
           <ProfileImage
-            src={previewImage || defaultImage.USER_PROFILE}
+            src={previewImage || DEFAULT_IMAGE.USER_PROFILE}
             alt="profile image"
             onClick={handleImageClick}
             preview={false}
