@@ -32,8 +32,8 @@ const UserPage = () => {
   const { id } = useRouter().query;
   const { data: userInfo } = useSWR(`api/v1/users/${id}/info`);
   const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likeExhibition, setLikeExhibition] =
+  const [likedReview, setLikedReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
+  const [likedExhibition, setLikedExhibition] =
     useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
 
   useEffect(() => {
@@ -46,12 +46,12 @@ const UserPage = () => {
         handleMyReviewChange(myReview.currentPage);
         return;
       }
-      case 'LIKE_REVIEW': {
-        handleLikeReviewChange(likeReview.currentPage);
+      case 'LIKED_REVIEW': {
+        handleLikedReviewChange(likedReview.currentPage);
         return;
       }
-      case 'LIKE_EXHIBITION': {
-        handleLikeExhibitionChange(likeExhibition.currentPage);
+      case 'LIKED_EXHIBITION': {
+        handleLikedExhibitionChange(likedExhibition.currentPage);
         return;
       }
       default:
@@ -61,41 +61,39 @@ const UserPage = () => {
 
   const handleMyReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getMyReview(userInfo.userId, page - 1, myReview.pageSize);
 
       setMyReview({
         ...myReview,
-        payload,
+        payload: data.data.content,
         currentPage: page,
       });
     }
   };
 
-  const handleLikeReviewChange = async (page: number) => {
+  const handleLikedReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikedReview(userInfo.userId, page - 1, myReview.pageSize);
 
-      setLikeReview({
-        ...likeReview,
-        payload,
+      setLikedReview({
+        ...likedReview,
+        payload: data.data.content,
         currentPage: page,
       });
     }
   };
 
-  const handleLikeExhibitionChange = async (page: number) => {
+  const handleLikedExhibitionChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeExhibition(userInfo.userId, page - 1, likeExhibition.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikedExhibition(
+        userInfo.userId,
+        page - 1,
+        likedExhibition.pageSize,
+      );
 
-      setLikeExhibition({
-        ...likeExhibition,
-        payload,
+      setLikedExhibition({
+        ...likedExhibition,
+        payload: data.data.content,
         currentPage: page,
       });
     }
@@ -151,10 +149,10 @@ const UserPage = () => {
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKE_REVIEW">
+        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKED_REVIEW">
           <ReviewContainer>
-            {likeReview ? (
-              likeReview.payload.map((review) => (
+            {likedReview ? (
+              likedReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
                   reviewId={review.reviewId}
@@ -175,18 +173,18 @@ const UserPage = () => {
             )}
           </ReviewContainer>
           <Pagination
-            defaultCurrent={likeReview.currentPage}
-            pageSize={likeReview.pageSize}
+            defaultCurrent={likedReview.currentPage}
+            pageSize={likedReview.pageSize}
             total={reviewLikeCount}
-            onChange={handleLikeReviewChange}
+            onChange={handleLikedReviewChange}
             hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKE_EXHIBITION">
+        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKED_EXHIBITION">
           <ExhibitionContainer>
-            {likeExhibition ? (
-              likeExhibition.payload.map((exhibition) => (
+            {likedExhibition ? (
+              likedExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
                   exhibitionId={exhibition.exhibitionId}
@@ -204,11 +202,11 @@ const UserPage = () => {
             )}
           </ExhibitionContainer>
           <Pagination
-            defaultCurrent={likeExhibition.currentPage}
-            pageSize={likeExhibition.pageSize}
+            defaultCurrent={likedExhibition.currentPage}
+            pageSize={likedExhibition.pageSize}
             total={userInfo.exhibitionLikeCount}
             hideOnSinglePage={true}
-            onChange={handleLikeExhibitionChange}
+            onChange={handleLikedExhibitionChange}
             style={paginationStyle}
           />
         </Tab>
@@ -216,18 +214,16 @@ const UserPage = () => {
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userId}`,
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userId}/edit`,
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
-            query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            pathName: `/users/${userId}/edit-password`,
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
-            query: userInfo,
           },
         ]}
       />
