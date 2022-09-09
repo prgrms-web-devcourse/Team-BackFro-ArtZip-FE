@@ -14,17 +14,19 @@ import useSWR from 'swr';
 const ExhibitionDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: exhibitionDetailData } = useSWR(`api/v1/exhibitions/${id}`);
 
-  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>(exhibitionDetailData);
+  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>();
   useEffect(() => {
-    if (exhibitionDetailData) {
-      setExhibitionData(exhibitionDetailData);
-    }
-  }, [exhibitionDetailData]);
+    const getData = async () => {
+      const { data } = await exhibitionAPI.getDetail(Number(id));
+      setExhibitionData(data.data);
+    };
+
+    getData();
+  }, []);
 
   const handleCopyClick = () => {
-    navigator.clipboard.writeText(exhibitionData.placeAddress);
+    navigator.clipboard.writeText('aa');
   };
 
   return (
