@@ -27,6 +27,7 @@ export const ReviewFeedContent = styled.div`
   flex-grow: 1;
   margin-right: 10px;
   height: 150px;
+  white-space: pre-wrap;
 `;
 
 export const ReviewFeedThumbnail = styled.div`
@@ -54,6 +55,14 @@ export const ReviewTagText = styled.span`
 
   &:hover {
     color: ${({ theme }) => theme.color.blue.dark};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 450px) {
+    display: none;
   }
 `;
 
@@ -107,17 +116,22 @@ export const FeedButtonGroup = styled.div`
   align-content: center;
 `;
 
-export const FeedImage = styled(Image)`
+export const FeedImage = styled.div`
+  position: relative;
   width: 150px;
   height: 150px;
-  border-radius: 20px;
 
-  @media (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
-    width: 150px;
-    height: 150px;
-  }
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 80px;
     height: 80px;
+  }
+
+  @media (max-width: 380px) {
+    width: 50px;
+    height: 50px;
+  }
+
+  @media (max-width: 330px) {
+    display: none;
   }
 `;

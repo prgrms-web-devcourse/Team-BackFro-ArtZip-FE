@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { reviewAPI } from 'apis';
+import Image from 'next/image';
 
 const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) => {
   const router = useRouter();
@@ -134,11 +135,13 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
               router.push(`/reviews/detail/${reviewId}`);
             }}
           >
-            <S.FeedImage
-              src={photos.length ? photos[0].path : exhibition.thumbnail}
-              preview={false}
-              alt="Review Thumbnail"
-            />
+            <S.FeedImage>
+              <Image
+                src={photos.length ? photos[0].path : exhibition.thumbnail}
+                layout="fill"
+                alt="Review Thumbnail"
+              />
+            </S.FeedImage>
           </S.ReviewFeedThumbnail>
         </S.ReviewFeedWrapper>
       </S.ReviewFeedCard>
