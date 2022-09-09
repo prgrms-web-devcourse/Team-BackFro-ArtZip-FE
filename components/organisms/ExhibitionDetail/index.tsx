@@ -55,7 +55,6 @@ const ExhibitionDetail = ({ exhibitionDetail }: ExhibitionDetailProps) => {
   const handleLikeClick = async (exhibitionId: number) => {
     if (userId) {
       const { data } = await exhibitionAPI.likeToggle(exhibitionId);
-      console.log(data);
       const { isLiked, likeCount } = data.data;
       setCurrentIsLiked(isLiked);
       setCurrentLikeCount(likeCount);

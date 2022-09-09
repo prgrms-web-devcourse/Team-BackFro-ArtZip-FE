@@ -9,7 +9,6 @@ import { exhibitionAPI } from 'apis';
 import { ExhibitionSingleData } from 'types/apis/exhibition';
 import Map from 'components/atoms/Map';
 import { useEffect, useState } from 'react';
-import useSWR from 'swr';
 
 const ExhibitionDetailPage = () => {
   const router = useRouter();
