@@ -14,7 +14,7 @@ import useSWR from 'swr';
 const ExhibitionDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: exhibitionDetailData } = useSWR(`/api/v1/exhibitions/${id}`);
+  const { data: exhibitionDetailData } = useSWR(`api/v1/exhibitions/${id}`);
 
   const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>(exhibitionDetailData);
   useEffect(() => {
