@@ -24,10 +24,6 @@ const ExhibitionDetailPage = () => {
     getData();
   }, []);
 
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText('aa');
-  };
-
   return (
     <>
       <Head>
@@ -43,7 +39,11 @@ const ExhibitionDetailPage = () => {
             장소 | {exhibitionData.placeAddress}{' '}
             {
               <S.StyledCopyButton>
-                <S.Clipboard onClick={handleCopyClick}></S.Clipboard>
+                <S.Clipboard
+                  onClick={() => {
+                    navigator.clipboard.writeText(exhibitionData.placeAddress);
+                  }}
+                ></S.Clipboard>
               </S.StyledCopyButton>
             }
           </S.PlaceInfo>
