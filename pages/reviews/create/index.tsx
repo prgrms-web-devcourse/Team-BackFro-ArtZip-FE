@@ -1,16 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import {
-  Input,
-  DatePicker,
-  Switch,
-  Image,
-  Button,
-  message,
-  Form,
-  UploadFile,
-} from 'antd';
+import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
 import {
@@ -60,6 +51,7 @@ const ReviewCreatePage = () => {
   const { query } = router;
   const [isLoading, setIsLoading] = useState(false);
   const [searchWord, setSearchWord] = useState('');
+  const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
 
   useEffect(() => {
     if (query.exhibitionId) {
@@ -130,11 +122,12 @@ const ReviewCreatePage = () => {
               <InnerContainer>
                 <SearchBar
                   placeholder="전시회 제목을 검색해 주세요"
-                  defaultValue={query.name}
+                  value={exhibitionName || searchWord}
                   onChange={(e) => {
                     setSearchWord(e.target.value);
                   }}
                   onFocus={() => {
+                    setExhibitionName('');
                     resultList.current && show(resultList.current);
                   }}
                 />
@@ -145,6 +138,7 @@ const ReviewCreatePage = () => {
                       onClick={() => {
                         submitData.current['exhibitionId'] = exhibitionId;
                         setPosterImage(thumbnail);
+                        setExhibitionName(name);
                         resultList.current && hide(resultList.current);
                       }}
                     >
@@ -193,7 +187,6 @@ const ReviewCreatePage = () => {
               onChange={(checked) => {
                 submitData.current['isPublic'] = checked;
                 setIsPublic(checked);
-                console.log(submitData.current);
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
