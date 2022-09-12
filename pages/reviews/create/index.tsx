@@ -10,10 +10,11 @@ import {
   getErrorMessage,
   validateReviewEditForm,
 } from 'utils';
-import imageUrl from 'constants/imageUrl';
 import { useRouter } from 'next/router';
 import { useClickAway, useWithAuth, useDebounceClick } from 'hooks';
 import { Spinner } from 'components/atoms';
+import DEFAULT_IMAGE from 'constants/defaultImage';
+
 
 export interface SubmitData {
   exhibitionId: number;
@@ -43,7 +44,7 @@ const ReviewCreatePage = () => {
   const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
-  const [posterImage, setPosterImage] = useState(imageUrl.EXHIBITION_DEFAULT);
+  const [posterImage, setPosterImage] = useState(DEFAULT_IMAGE.EXHIBITION_THUMBNAIL);
   const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
   const { query } = router;
@@ -145,7 +146,7 @@ const ReviewCreatePage = () => {
               <Poster
                 src={posterImage}
                 alt="전시회 포스터 이미지"
-                preview={posterImage !== imageUrl.EXHIBITION_DEFAULT}
+                preview={posterImage !== DEFAULT_IMAGE.EXHIBITION_THUMBNAIL}
               />
             </SearchContainer>
           </FormItem>
