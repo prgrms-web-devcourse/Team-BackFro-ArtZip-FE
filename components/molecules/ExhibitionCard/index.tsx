@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
 import { displayDday, displayFormattedDate } from 'utils';
 import Image from 'next/image';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 const { Meta } = Card;
 
@@ -32,10 +33,13 @@ const ExhibitionCard = ({
           onMouseLeave={mouseHover}
           cover={
             <Image
-              alt="card image"
               src={thumbnail}
+              alt="card image"
+              layout="fixed"
               width={250}
               height={300}
+              placeholder="blur"
+              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
               className="card-image"
             />
           }
