@@ -34,7 +34,7 @@ export const ExhibitionCard = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 200px;
-    height: 320px;
+    height: 310px;
   }
 `;
 
