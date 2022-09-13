@@ -11,7 +11,7 @@ import {
   validateReviewEditForm,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useWithAuth, useDebounce } from 'hooks';
+import { useAxios, useCheckAuth, useDebounce } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
@@ -108,7 +108,7 @@ const ReviewUpdatePage = () => {
   };
   const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
-  const [isChecking] = useWithAuth();
+  const [isChecking] = useCheckAuth();
   if (isChecking) {
     return <Spinner />;
   }
