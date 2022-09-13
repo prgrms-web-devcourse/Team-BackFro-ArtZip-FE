@@ -12,9 +12,10 @@ import {
 } from 'utils';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
-import { useDebounce } from 'hooks';
+import { useDebounce, useCheckAuth } from 'hooks';
 import { useForm } from 'antd/lib/form/Form';
 import DEFAULT_IMAGE from 'constants/defaultImage';
+import { Spinner } from 'components/atoms';
 
 interface SubmitData {
   nickname: string;
@@ -84,7 +85,10 @@ const UserEditPage = () => {
     message.error('입력값을 다시 확인해주세요.');
   };
 
-  return (
+  const [isChecking] = useCheckAuth();
+  return isChecking ? (
+    <Spinner />
+  ) : (
     <PageContainer>
       <Title>프로필 수정</Title>
       <ProfileEditForm
