@@ -1,4 +1,4 @@
-import { useRef, useState, FormEvent, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
@@ -9,9 +9,11 @@ import {
   convertFilesToFormData,
   getErrorMessage,
   validateReviewEditForm,
+  show,
+  hide,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useClickAway, useWithAuth, useDebounceClick } from 'hooks';
+import { useWithAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
 import DEFAULT_IMAGE from 'constants/defaultImage';
 
@@ -49,6 +51,8 @@ const ReviewCreatePage = () => {
   const router = useRouter();
   const { query } = router;
   const [isLoading, setIsLoading] = useState(false);
+  const [searchWord, setSearchWord] = useState('');
+  const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
 
   useEffect(() => {
     if (query.exhibitionId) {
@@ -57,39 +61,33 @@ const ReviewCreatePage = () => {
     }
   }, []);
 
-  const searchContainer = useRef<HTMLDivElement>(null);
   const resultList = useRef<HTMLUListElement>(null);
 
-  useClickAway(searchContainer, () => {
-    if (resultList.current) {
-      resultList.current.style.visibility = 'hidden';
-    }
-  });
-
-  const handleSearch = async (value: string) => {
-    const isEmpty = !/\S/.test(value);
+  const handleSearch = useCallback(async () => {
+    const isEmpty = !/\S/.test(searchWord);
     if (isEmpty) {
-      message.warning('한 글자 이상 입력해주세요.');
       setSearchResults([]);
       return;
     }
 
     try {
-      const { data } = await reviewAPI.searchExhibition(value);
+      const { data } = await reviewAPI.searchExhibition(searchWord);
       const { exhibitions } = data.data;
-      exhibitions.length === 0 && message.warning('검색 결과가 없습니다.');
       setSearchResults([...exhibitions]);
-      if (resultList.current) {
-        resultList.current.style.visibility = 'visible';
-      }
+      resultList.current && show(resultList.current);
+      !exhibitions.length && message.warning('검색 결과가 없습니다.');
     } catch (error) {
       message.error(getErrorMessage(error));
       console.error(error);
     }
-  };
+  }, [searchWord]);
+  useDebounce(handleSearch, 500, searchWord);
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
+    if (isChecking) {
+      return;
+    }
 
     if (!isLoading && validateReviewEditForm(submitData.current)) {
       setIsLoading(true);
@@ -106,7 +104,7 @@ const ReviewCreatePage = () => {
       setIsLoading(false);
     }
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
   const [isChecking] = useWithAuth();
   return isChecking ? (
@@ -121,13 +119,18 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <SearchContainer ref={searchContainer}>
+            <SearchContainer>
               <InnerContainer>
                 <SearchBar
                   placeholder="전시회 제목을 검색해 주세요"
-                  enterButton
-                  onSearch={handleSearch}
-                  defaultValue={query.name}
+                  value={exhibitionName || searchWord}
+                  onChange={(e) => {
+                    setSearchWord(e.target.value);
+                  }}
+                  onFocus={() => {
+                    setExhibitionName('');
+                    resultList.current && show(resultList.current);
+                  }}
                 />
                 <ResultList ref={resultList}>
                   {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
@@ -136,6 +139,8 @@ const ReviewCreatePage = () => {
                       onClick={() => {
                         submitData.current['exhibitionId'] = exhibitionId;
                         setPosterImage(thumbnail);
+                        setExhibitionName(name);
+                        resultList.current && hide(resultList.current);
                       }}
                     >
                       {name}
@@ -183,7 +188,6 @@ const ReviewCreatePage = () => {
               onChange={(checked) => {
                 submitData.current['isPublic'] = checked;
                 setIsPublic(checked);
-                console.log(submitData.current);
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
@@ -240,9 +244,16 @@ const InnerContainer = styled.div`
 
 const SearchBar = styled(Input.Search)`
   font-size: 1.6rem;
-  height: 40px;
   position: relative;
   z-index: 1;
+
+  .ant-input {
+    height: 36px;
+  }
+
+  .ant-input-search-button {
+    height: 36px;
+  }
 `;
 
 const ResultList = styled.ul`
@@ -250,7 +261,7 @@ const ResultList = styled.ul`
   max-height: 168px;
   border: 1px solid ${({ theme }) => theme.color.border.light};
   position: relative;
-  top: -9px;
+  top: -2px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.color.white};
 `;

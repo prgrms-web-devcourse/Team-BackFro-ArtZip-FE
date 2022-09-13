@@ -12,7 +12,7 @@ import {
 } from 'utils';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
-import { useDebounceClick } from 'hooks';
+import { useDebounce } from 'hooks';
 import { useForm } from 'antd/lib/form/Form';
 import DEFAULT_IMAGE from 'constants/defaultImage';
 
@@ -52,7 +52,7 @@ const UserEditPage = () => {
     e?.preventDefault();
     form.submit();
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 500, null, 'click');
 
   const handleFinish = async () => {
     let formData = convertObjectToFormData('data', submitData.current);
