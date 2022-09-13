@@ -41,7 +41,15 @@ const ReviewCard = ({
       <a>
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-            <S.Photo preview={false} src={photo && photo.length > 0 ? photo[0].path : thumbnail} />
+            <S.Photo
+              src={photo && photo.length > 0 ? photo[0].path : thumbnail}
+              alt="review photo"
+              layout="fixed"
+              width={110}
+              height={110}
+              placeholder="blur"
+              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
+            />
             {isHover ? (
               <S.HoverContent>
                 <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
