@@ -7,7 +7,7 @@ import { userAtom } from 'states';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
 import { validatePassword } from 'utils';
-import { useDebounceClick } from 'hooks';
+import { useDebounce } from 'hooks';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
@@ -27,7 +27,7 @@ const UserEditPasswordPage = () => {
     e?.preventDefault();
     form.submit();
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 500, null, 'click');
 
   const handleFinish = async () => {
     const { oldPassword, newPassword } = form.getFieldsValue();
