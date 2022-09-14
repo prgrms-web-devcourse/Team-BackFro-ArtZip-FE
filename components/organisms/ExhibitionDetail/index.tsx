@@ -7,7 +7,7 @@ import { exhibitionAPI } from 'apis';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
-import { exhibitionGenre, exhibitionPlace } from '../../../constants';
+import { EXHIBITION_GENRE, EXHIBITION_PLACE } from '../../../constants';
 interface ExhibitionDetailProps {
   exhibitionId: number;
   name: string;
@@ -48,12 +48,12 @@ const ExhibitionDetail = ({
   const [currentGenre, setCurrentGenre] = useState('');
 
   const setInfoName = () => {
-    exhibitionPlace.forEach((areaObj) => {
+    EXHIBITION_PLACE.forEach((areaObj) => {
       if (areaObj.value === area) {
         setCurrentArea(areaObj.name);
       }
     });
-    exhibitionGenre.forEach((genreObj) => {
+    EXHIBITION_GENRE.forEach((genreObj) => {
       if (genreObj.value === genre) {
         setCurrentGenre(genreObj.name);
       }
