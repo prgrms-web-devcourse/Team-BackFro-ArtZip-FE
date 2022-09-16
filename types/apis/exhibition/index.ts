@@ -17,29 +17,31 @@ export interface ExhibitionLikeToggleResponse extends BaseResponse {
   };
 }
 
+export interface ExhibitionSingleData {
+  exhibitionId: number;
+  name: string;
+  thumbnail: string;
+  startDate: string;
+  endDate: string;
+  area: string;
+  url: string;
+  placeUrl: string;
+  inquiry: string;
+  // fee: string;
+  genre: string | null;
+  description: string | null;
+  likeCount: number;
+  placeAddress: string;
+  lat: number;
+  lng: number;
+  isLiked: boolean;
+  reviews: ReviewProps[] | null;
+  reviewCount: number;
+}
+
 //전시회 상세조회
 export interface ExhibitionDetailResponse extends BaseResponse {
-  data: {
-    exhibitionId: number;
-    name: string;
-    thumbnail: string;
-    startDate: string;
-    endDate: string;
-    area: string;
-    url: string;
-    placeUrl: string;
-    inquiry: string;
-    // fee: string;
-    genre: string | null;
-    description: string | null;
-    likeCount: number;
-    placeAddress: string;
-    lat: number;
-    lng: number;
-    isLiked: boolean;
-    reviews: ReviewProps[] | null;
-    reviewCount: number;
-  };
+  data: ExhibitionSingleData;
 }
 
 // 전시회검색
