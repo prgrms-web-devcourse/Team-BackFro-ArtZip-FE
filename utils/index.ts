@@ -7,3 +7,4 @@ export { parseJwt } from './parseJwt';
 export { swrOptions } from './swrOptions';
 export { getErrorMessage } from './errorHandling';
 export { validateNickname, validatePassword, validateReviewEditForm } from './validation';
+export { show, hide } from './visibility';

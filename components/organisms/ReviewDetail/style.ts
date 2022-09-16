@@ -49,6 +49,7 @@ export const ReviewDetailContent = styled.div`
 export const ReviewDetailContentText = styled.p`
   font-size: 2rem;
   margin-bottom: 40px;
+  white-space: pre-wrap;
 `;
 
 export const ReviewExhibitionInfoContainer = styled.div`
