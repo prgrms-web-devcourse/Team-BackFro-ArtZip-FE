@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { Avatar } from 'antd';
 import Link from 'next/link';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 const UserAvatar = ({ userId, profileImage }: { userId: number; profileImage: string }) => {
   return (
     <Link href={`/users/${userId}`}>
       <a>
-        <StyledAvatar src={profileImage} />
+        <StyledAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} />
       </a>
     </Link>
   );

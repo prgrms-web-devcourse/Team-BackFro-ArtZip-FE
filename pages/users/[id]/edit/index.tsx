@@ -12,8 +12,9 @@ import {
 } from 'utils';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
-import { useDebounceClick } from 'hooks';
+import { useDebounce } from 'hooks';
 import { useForm } from 'antd/lib/form/Form';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 interface SubmitData {
   nickname: string;
@@ -51,7 +52,7 @@ const UserEditPage = () => {
     e?.preventDefault();
     form.submit();
   };
-  const [debounceRef] = useDebounceClick(handleSubmit, 300);
+  const [debounceRef] = useDebounce(handleSubmit, 500, null, 'click');
 
   const handleFinish = async () => {
     let formData = convertObjectToFormData('data', submitData.current);
@@ -83,8 +84,6 @@ const UserEditPage = () => {
     message.error('입력값을 다시 확인해주세요.');
   };
 
-
-
   return (
     <PageContainer>
       <Title>프로필 수정</Title>
@@ -96,7 +95,7 @@ const UserEditPage = () => {
       >
         <FormItem label="프로필 이미지">
           <ProfileImage
-            src={previewImage}
+            src={previewImage || DEFAULT_IMAGE.USER_PROFILE}
             alt="profile image"
             onClick={handleImageClick}
             preview={false}
