@@ -1,4 +1,4 @@
-const exhibitionPlace = [
+const EXHIBITION_PLACE = [
   { id: 0, name: '모든 지역', value: 'ALL' },
   { id: 1, name: '서울', value: 'SEOUL' },
   { id: 2, name: '경기', value: 'GYEONGGI' },
@@ -18,4 +18,4 @@ const exhibitionPlace = [
   { id: 16, name: '경남', value: 'GYEONGNAM' },
   { id: 17, name: '제주', value: 'JEJU' },
 ];
-export default exhibitionPlace;
+export default EXHIBITION_PLACE;

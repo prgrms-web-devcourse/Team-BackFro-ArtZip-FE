@@ -1,4 +1,4 @@
-const exhibitionPeriod = [
+const EXHIBITION_PERIOD = [
   { id: 0, name: '모든 날짜', value: 'ALL' },
   { id: 1, name: '1월', value: 'JAN' },
   { id: 2, name: '2월', value: 'FEB' },
@@ -13,4 +13,4 @@ const exhibitionPeriod = [
   { id: 11, name: '11월', value: 'NOV' },
   { id: 12, name: '12월', value: 'DEC' },
 ];
-export default exhibitionPeriod;
+export default EXHIBITION_PERIOD;

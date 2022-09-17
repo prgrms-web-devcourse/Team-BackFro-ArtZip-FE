@@ -31,6 +31,11 @@ export const ExhibitionCard = styled.div`
   .exhibition-card {
     height: 300px;
   }
+
+  @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
+    width: 200px;
+    height: 320px;
+  }
 `;
 
 export const HoverContent = styled.div`

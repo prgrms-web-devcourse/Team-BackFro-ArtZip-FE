@@ -1,4 +1,4 @@
-const exhibitionGenre = [
+const EXHIBITION_GENRE = [
   { id: 0, name: '모든 장르', value: 'ALL' },
   { id: 1, name: '그림', value: 'PAINTING' },
   { id: 2, name: '사진', value: 'PHOTO' },
@@ -11,4 +11,4 @@ const exhibitionGenre = [
   { id: 9, name: '만화애니', value: 'ANIMATION' },
   { id: 10, name: '기타', value: 'ETC' },
 ];
-export default exhibitionGenre;
+export default EXHIBITION_GENRE;

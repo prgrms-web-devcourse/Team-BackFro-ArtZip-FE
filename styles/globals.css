@@ -138,3 +138,11 @@ a:hover {
   color: #646fd4;
   text-decoration: none;
 }
+
+.show {
+  visibility: visible;
+}
+
+.hide {
+  visibility: hidden;
+}
