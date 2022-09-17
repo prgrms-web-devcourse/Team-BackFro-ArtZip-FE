@@ -13,7 +13,7 @@ import {
   hide,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useWithAuth, useDebounce } from 'hooks';
+import { useCheckAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
 import DEFAULT_IMAGE from 'constants/defaultImage';
 
@@ -106,7 +106,7 @@ const ReviewCreatePage = () => {
   };
   const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
-  const [isChecking] = useWithAuth();
+  const [isChecking] = useCheckAuth();
   return isChecking ? (
     <Spinner />
   ) : (
