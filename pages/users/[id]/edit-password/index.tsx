@@ -7,7 +7,8 @@ import { userAtom } from 'states';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
 import { validatePassword } from 'utils';
-import { useDebounce } from 'hooks';
+import { useDebounce, useCheckAuth } from 'hooks';
+import { Spinner } from 'components/atoms';
 
 const UserEditPasswordPage = () => {
   const { userId } = useRecoilValue(userAtom);
@@ -53,7 +54,10 @@ const UserEditPasswordPage = () => {
     message.error('입력값을 다시 확인해주세요.');
   };
 
-  return (
+  const [isChecking] = useCheckAuth();
+  return isChecking ? (
+    <Spinner />
+  ) : (
     <PageContainer>
       <Title>비밀번호 변경</Title>
       <PasswordEditForm
