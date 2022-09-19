@@ -35,7 +35,8 @@ const ExhibitionCard = ({
             <Image
               src={thumbnail}
               alt="card image"
-              layout="fixed"
+              layout="responsive"
+              sizes="250px"
               width={250}
               height={300}
               placeholder="blur"

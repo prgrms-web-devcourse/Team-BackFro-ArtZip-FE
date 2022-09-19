@@ -27,11 +27,7 @@ export const ExhibitionCard = styled.div`
   .ant-card-head {
     height: 0px;
   }
-
-  .exhibition-card {
-    height: 300px;
-  }
-
+  
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 200px;
     height: 310px;
