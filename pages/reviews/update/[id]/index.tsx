@@ -1,50 +1,59 @@
-import { useRef, useState, FormEvent, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Image, Button, message, Form, Modal, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
 import { ImageUpload } from 'components/organisms';
-import { objectToFormData, filesToFormData } from 'utils';
+import {
+  convertObjectToFormData,
+  convertFilesToFormData,
+  getErrorMessage,
+  validateReviewEditForm,
+} from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useWithAuth } from 'hooks';
+import { useAxios, useCheckAuth, useDebounce } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
 import type { ReviewSingleReadData } from 'types/apis/review';
 import { Spinner } from 'components/atoms';
-
-interface SubmitData {
-  date: string;
-  title: string;
-  content: string;
-  isPublic: boolean;
-  deletedPhotos: number[];
-}
+import { SubmitData } from 'pages/reviews/create';
 
 const initialData: SubmitData = {
+  exhibitionId: 0,
   date: '',
   title: '',
   content: '',
   isPublic: true,
   deletedPhotos: [],
 };
+Object.freeze(initialData);
 
 const ReviewUpdatePage = () => {
-  const submitData = useRef<SubmitData>(initialData);
+  const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [prevData, setPrevData] = useState<ReviewSingleReadData>();
   const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
   const [isPublic, setIsPublic] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const clickedImage = useRef<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
 
   useEffect(() => {
     if (response) {
-      const { date, title, content, isPublic, photos } = response.data.data;
+      const {
+        exhibition: { exhibitionId },
+        date,
+        title,
+        content,
+        isPublic,
+        photos,
+      } = response.data.data;
 
       submitData.current = {
+        exhibitionId,
         date,
         title,
         content,
@@ -64,7 +73,8 @@ const ReviewUpdatePage = () => {
 
   const handleImageDelete = () => {
     const photoId = clickedImage.current;
-    submitData.current.deletedPhotos.push(photoId);
+    const { deletedPhotos } = submitData.current;
+    deletedPhotos && deletedPhotos.push(photoId);
     setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
     setIsModalVisible(false);
   };
@@ -74,22 +84,31 @@ const ReviewUpdatePage = () => {
     setIsModalVisible(false);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: Event) => {
+    e?.preventDefault();
+    if (isChecking) {
+      return;
+    }
 
-    let formData = objectToFormData('data', submitData.current);
-    formData = filesToFormData('files', files, formData);
+    if (!isLoading && validateReviewEditForm(submitData.current)) {
+      setIsLoading(true);
+      let formData = convertObjectToFormData('data', submitData.current);
+      formData = convertFilesToFormData('files', files, formData);
 
-    try {
-      await reviewAPI.updateReview(Number(router.query.id), formData);
-      message.success('후기 수정이 완료되었습니다.');
-      router.replace('/community');
-    } catch (error) {
-      console.error('후기 수정 실패');
+      try {
+        await reviewAPI.updateReview(Number(router.query.id), formData);
+        message.success('후기 수정이 완료되었습니다.');
+        router.replace('/community');
+      } catch (error) {
+        message.error(getErrorMessage(error));
+        console.error(error);
+      }
+      setIsLoading(false);
     }
   };
+  const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
-  const [isChecking] = useWithAuth();
+  const [isChecking] = useCheckAuth();
   if (isChecking) {
     return <Spinner />;
   }
@@ -107,7 +126,7 @@ const ReviewUpdatePage = () => {
       />
       <Section>
         <ReviewEditForm layout="vertical">
-          <Form.Item label="다녀 온 전시회">
+          <FormItem label="다녀 온 전시회">
             <SearchContainer>
               <InnerContainer>
                 <SearchBar
@@ -118,8 +137,8 @@ const ReviewUpdatePage = () => {
               </InnerContainer>
               <Poster src={prevData.exhibition.thumbnail} alt="전시회 포스터 이미지" />
             </SearchContainer>
-          </Form.Item>
-          <Form.Item label="다녀 온 날짜">
+          </FormItem>
+          <FormItem label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
                 if (value) {
@@ -128,8 +147,8 @@ const ReviewUpdatePage = () => {
               }}
               defaultValue={moment(prevData.date, 'YYYY-MM-DD')}
             />
-          </Form.Item>
-          <Form.Item label="제목">
+          </FormItem>
+          <FormItem label="제목">
             <Input
               placeholder="제목을 입력해주세요."
               showCount
@@ -137,16 +156,16 @@ const ReviewUpdatePage = () => {
               onChange={(e) => (submitData.current['title'] = e.target.value)}
               defaultValue={prevData.title}
             />
-          </Form.Item>
-          <Form.Item label="내용">
+          </FormItem>
+          <FormItem label="내용">
             <TextArea
               placeholder="내용을 입력해주세요."
               autoSize
               onChange={(e) => (submitData.current['content'] = e.target.value)}
               defaultValue={prevData.content}
             />
-          </Form.Item>
-          <Form.Item label="사진">
+          </FormItem>
+          <FormItem label="사진">
             <PrevImageContainer>
               {prevImages.map(({ photoId, path }) => (
                 <Image
@@ -161,8 +180,8 @@ const ReviewUpdatePage = () => {
               ))}
             </PrevImageContainer>
             <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
-          </Form.Item>
-          <Form.Item label="공개 여부">
+          </FormItem>
+          <FormItem label="공개 여부">
             <ToggleSwitch
               defaultChecked={prevData.isPublic}
               onChange={(checked) => {
@@ -171,9 +190,9 @@ const ReviewUpdatePage = () => {
               }}
             />
             {isPublic ? '전체 공개' : '비공개'}
-          </Form.Item>
+          </FormItem>
 
-          <SubmitButton type="primary" onClick={handleSubmit}>
+          <SubmitButton type="primary" ref={debounceRef}>
             작성완료
           </SubmitButton>
         </ReviewEditForm>
@@ -206,6 +225,18 @@ const ReviewEditForm = styled(Form)`
   label {
     font-size: 2rem;
     font-weight: bold;
+  }
+`;
+
+const FormItem = styled(Form.Item)`
+  label[title='사진']::after {
+    content: '(optional)';
+    display: inline;
+    color: ${({ theme }) => theme.color.font.dark};
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-top: 2px;
+    margin-left: 4px;
   }
 `;
 

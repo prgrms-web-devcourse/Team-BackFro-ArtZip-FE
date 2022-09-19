@@ -1,12 +1,21 @@
 import styled from '@emotion/styled';
 import { Button, Form, Input, Image, message } from 'antd';
-import { useState, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import { SideNavigation } from 'components/molecules';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userAtom } from 'states';
-import { useRouter } from 'next/router';
-import { objectToFormData, filesToFormData } from 'utils';
+import {
+  convertObjectToFormData,
+  convertFilesToFormData,
+  validateNickname,
+  getBase64,
+} from 'utils';
 import { userAPI } from 'apis';
+import { AxiosError } from 'axios';
+import { useDebounce, useCheckAuth } from 'hooks';
+import { useForm } from 'antd/lib/form/Form';
+import DEFAULT_IMAGE from 'constants/defaultImage';
+import { Spinner } from 'components/atoms';
 
 interface SubmitData {
   nickname: string;
@@ -14,16 +23,16 @@ interface SubmitData {
 }
 
 const UserEditPage = () => {
-  const route = useRouter();
-  const { nickname, profileImage } = route.query;
+  const [form] = useForm();
+  const [userInfo, setUserInfo] = useRecoilState(userAtom);
+  const { userId, nickname, profileImage } = userInfo;
   const submitData = useRef<SubmitData>({
-    nickname: nickname as string,
-    profileImage: profileImage as string,
+    nickname: nickname,
+    profileImage: profileImage,
   });
-  const submitImageFile = useRef<FileList>();
+  const submitFile = useRef<FileList>();
   const [previewImage, setPreviewImage] = useState(profileImage);
   const fileInput = useRef<HTMLInputElement>(null);
-  const { userId } = useRecoilValue(userAtom);
 
   const handleImageClick = () => {
     if (fileInput.current) {
@@ -31,63 +40,92 @@ const UserEditPage = () => {
     }
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files) {
-      submitImageFile.current = files;
-
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        fileReader.result && setPreviewImage(fileReader.result as string);
-      };
-      fileReader.readAsDataURL(files[0]);
+      submitFile.current = files;
+      const preview = await getBase64(files[0]);
+      setPreviewImage(preview);
     }
   };
 
-  const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    submitData.current.nickname = e.target.value;
+  const handleSubmit = (e?: Event) => {
+    e?.preventDefault();
+    form.submit();
   };
+  const [debounceRef] = useDebounce(handleSubmit, 500, null, 'click');
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    let formData = objectToFormData('data', submitData.current);
-    if (submitImageFile.current) {
-      formData = filesToFormData('profileImage', submitImageFile.current, formData);
+  const handleFinish = async () => {
+    let formData = convertObjectToFormData('data', submitData.current);
+    if (submitFile.current) {
+      formData = convertFilesToFormData('profileImage', submitFile.current, formData);
     }
-
     try {
-      await userAPI.changeMyInfo(formData);
+      const { data } = await userAPI.changeMyInfo(formData);
+      const { nickname, profileImage } = data.data;
+      setUserInfo({
+        ...userInfo,
+        nickname,
+        profileImage,
+      });
       message.success('나의 프로필 정보가 수정되었습니다.');
     } catch (error) {
-      console.error('프로필 정보 실패'); // TODO: 에러 처리 보완
+      let errorMessage;
+      if (error instanceof AxiosError) {
+        errorMessage = error.response?.data.message;
+      } else {
+        errorMessage = String(error);
+      }
+      message.error(errorMessage);
+      console.error(error);
     }
   };
 
-  return (
+  const handleFinishFailed = () => {
+    message.error('입력값을 다시 확인해주세요.');
+  };
+
+  const [isChecking] = useCheckAuth();
+  return isChecking ? (
+    <Spinner />
+  ) : (
     <PageContainer>
       <Title>프로필 수정</Title>
-      <ProfileEditForm layout="vertical">
+      <ProfileEditForm
+        layout="vertical"
+        onFinish={handleFinish}
+        onFinishFailed={handleFinishFailed}
+        form={form}
+      >
         <FormItem label="프로필 이미지">
           <ProfileImage
-            src={previewImage as string}
+            src={previewImage || DEFAULT_IMAGE.USER_PROFILE}
             alt="profile image"
             onClick={handleImageClick}
             preview={false}
           />
-          <input
+          <FileInput
             type="file"
-            style={{ display: 'none' }}
             accept="image/jpg, image/png, image/jpeg"
             name="profile_img"
-            onChange={handleImageChange}
+            onChange={handleFileChange}
             ref={fileInput}
           />
         </FormItem>
-        <FormItem label="닉네임">
-          <Input type="text" defaultValue={nickname} onChange={handleNicknameChange} />
+        <FormItem
+          name="nickname"
+          label="닉네임"
+          rules={[{ validator: validateNickname }]}
+          initialValue={nickname}
+        >
+          <Input
+            type="text"
+            onChange={(e) => {
+              submitData.current.nickname = e.target.value;
+            }}
+          />
         </FormItem>
-        <SubmitButton type="primary" htmlType="submit" onClick={handleSubmit}>
+        <SubmitButton type="primary" ref={debounceRef}>
           저장
         </SubmitButton>
       </ProfileEditForm>
@@ -95,15 +133,15 @@ const UserEditPage = () => {
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userId}`,
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userId}/edit`,
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
           },
           {
-            pathName: `/users/${userId}/edit-password`,
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
           },
         ]}
@@ -114,7 +152,7 @@ const UserEditPage = () => {
 
 const PageContainer = styled.div`
   position: relative;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   padding-left: 200px;
 `;
@@ -127,11 +165,21 @@ const ProfileEditForm = styled(Form)`
   border: 1px solid ${({ theme }) => theme.color.border.main};
   border-radius: 8px;
   padding: 28px;
+  margin-bottom: 40px;
+
+  input[type='file'] {
+    display: none;
+  }
 `;
 
 const FormItem = styled(Form.Item)`
   label {
     font-size: 2rem;
+  }
+
+  &:last-of-type {
+    height: 100px;
+    margin-bottom: 0;
   }
 `;
 
@@ -141,8 +189,15 @@ const ProfileImage = styled(Image)`
   cursor: pointer;
 `;
 
+const FileInput = styled.input``;
+
 const SubmitButton = styled(Button)`
   font-size: 1.6rem;
+  margin-top: 4px;
+
+  span {
+    pointer-events: none;
+  }
 `;
 
 export default UserEditPage;

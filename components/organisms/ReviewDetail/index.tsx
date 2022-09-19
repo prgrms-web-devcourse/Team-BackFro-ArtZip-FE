@@ -89,7 +89,10 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
       </S.ReviewDetailSection>
 
       <S.ReviewDetailBottom>
-        <ReviewExhibitionInfo exhibition={exhibition} />
+        <S.ReviewExhibitionInfoContainer>
+          <ReviewExhibitionInfo exhibition={exhibition} />
+        </S.ReviewExhibitionInfoContainer>
+
         <S.ReviewDetailContentUtils>
           <InfoGroup
             isLiked={isLikeDetail}

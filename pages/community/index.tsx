@@ -9,28 +9,37 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useRouter } from 'next/router';
 import { ReviewSingleReadData } from 'types/apis/review';
+import { swrOptions } from 'utils';
+import useSWRInfinite from 'swr/infinite';
 
 const CommunityPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
   const router = useRouter();
   const exhibitionId = router.query.exhibitionId;
 
+  const getKey = (currentPage: number, totalPage: number) => {
+    if (totalPage < currentPage) {
+      return null;
+    }
+    return `api/v1/reviews${
+      exhibitionId ? `?exhibitionId=${exhibitionId}` : ''
+    }?page=${currentPage}`;
+  };
+
+  const { data: exhibitionData } = useSWRInfinite(getKey, swrOptions.fetcher);
+
   useEffect(() => {
-    const getFeed = async () => {
-      const { data } = await reviewAPI.getReviewMulti({
-        exhibitionId: Number(exhibitionId),
-      });
-      setFeeds([...data.data.content]);
-      setTotalPages(data.data.totalPages);
-    };
-    getFeed();
-  }, []);
+    if (exhibitionData) {
+      setFeeds([...exhibitionData[0].content]);
+      setTotalPage(exhibitionData[0].totalPage);
+    }
+  }, [exhibitionData]);
 
   const [feeds, setFeeds] = useState<ReviewSingleReadData[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
 
   const getMoreFeed = async () => {
-    if (totalPages <= currentPage) {
+    if (totalPage <= currentPage) {
       return;
     }
     const { data } = await reviewAPI.getReviewMulti({
@@ -38,6 +47,7 @@ const CommunityPage = () => {
       exhibitionId: Number(exhibitionId),
     });
     const newFeeds: ReviewSingleReadData[] = Object.values(data.data.content);
+
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
   };

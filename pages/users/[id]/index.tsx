@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Spin, Pagination } from 'antd';
+import { Tabs, Image, Pagination } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
 import { CSSProperties, useEffect, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { Spinner } from 'components/atoms';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 interface UserActivity<T> {
   payload: T[];
@@ -31,10 +33,13 @@ const initialExhibition = {
 const UserPage = () => {
   const { id } = useRouter().query;
   const { data: userInfo } = useSWR(`api/v1/users/${id}/info`);
-  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likeReview, setLikeReview] = useState<UserActivity<ReviewCardProps>>(initialReview);
-  const [likeExhibition, setLikeExhibition] =
-    useState<UserActivity<Required<ExhibitionProps>>>(initialExhibition);
+  const [myReview, setMyReview] = useState<UserActivity<ReviewCardProps>>({ ...initialReview });
+  const [likedReview, setLikedReview] = useState<UserActivity<ReviewCardProps>>({
+    ...initialReview,
+  });
+  const [likedExhibition, setLikedExhibition] = useState<UserActivity<Required<ExhibitionProps>>>({
+    ...initialExhibition,
+  });
 
   useEffect(() => {
     userInfo && handleTabClick('MY_REVIEW');
@@ -46,12 +51,12 @@ const UserPage = () => {
         handleMyReviewChange(myReview.currentPage);
         return;
       }
-      case 'LIKE_REVIEW': {
-        handleLikeReviewChange(likeReview.currentPage);
+      case 'LIKED_REVIEW': {
+        handleLikedReviewChange(likedReview.currentPage);
         return;
       }
-      case 'LIKE_EXHIBITION': {
-        handleLikeExhibitionChange(likeExhibition.currentPage);
+      case 'LIKED_EXHIBITION': {
+        handleLikedExhibitionChange(likedExhibition.currentPage);
         return;
       }
       default:
@@ -61,41 +66,39 @@ const UserPage = () => {
 
   const handleMyReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getMyReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getMyReview(userInfo.userId, page - 1, myReview.pageSize);
 
       setMyReview({
         ...myReview,
-        payload,
+        payload: data.data.content,
         currentPage: page,
       });
     }
   };
 
-  const handleLikeReviewChange = async (page: number) => {
+  const handleLikedReviewChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeReview(userInfo.userId, page - 1, myReview.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikedReview(userInfo.userId, page - 1, myReview.pageSize);
 
-      setLikeReview({
-        ...likeReview,
-        payload,
+      setLikedReview({
+        ...likedReview,
+        payload: data.data.content,
         currentPage: page,
       });
     }
   };
 
-  const handleLikeExhibitionChange = async (page: number) => {
+  const handleLikedExhibitionChange = async (page: number) => {
     if (userInfo) {
-      const payload = await userAPI
-        .getLikeExhibition(userInfo.userId, page - 1, likeExhibition.pageSize)
-        .then((res) => res.data.data.content);
+      const { data } = await userAPI.getLikedExhibition(
+        userInfo.userId,
+        page - 1,
+        likedExhibition.pageSize,
+      );
 
-      setLikeExhibition({
-        ...likeExhibition,
-        payload,
+      setLikedExhibition({
+        ...likedExhibition,
+        payload: data.data.content,
         currentPage: page,
       });
     }
@@ -118,43 +121,15 @@ const UserPage = () => {
   return (
     <PageContainer>
       <ProfileContainer>
-        <ProfileImage src={profileImage} alt="프로필 이미지" />
+        <ProfileImage src={profileImage || DEFAULT_IMAGE.USER_PROFILE} alt="프로필 이미지" />
         <UserName>{nickname}</UserName>
         <UserEmail>{email}</UserEmail>
       </ProfileContainer>
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
         <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReview.payload?.map((review) => (
-              <ReviewCard
-                key={review.reviewId}
-                reviewId={review.reviewId}
-                title={review.title}
-                content={review.content}
-                thumbnail={review.exhibition.thumbnail}
-                createdAt={review.createdAt}
-                likeCount={review.likeCount}
-                commentCount={review.commentCount}
-                photo={review.photos}
-                userId={review.user.userId}
-                nickname={review.user.nickname}
-                profileImage={review.user.profileImage}
-              />
-            ))}
-          </ReviewContainer>
-          <Pagination
-            defaultCurrent={myReview.currentPage}
-            pageSize={myReview.pageSize}
-            total={reviewCount}
-            onChange={handleMyReviewChange}
-            hideOnSinglePage={true}
-            style={paginationStyle}
-          />
-        </Tab>
-        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKE_REVIEW">
-          <ReviewContainer>
-            {likeReview ? (
-              likeReview.payload.map((review) => (
+            {myReview.payload.length ? (
+              myReview.payload?.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
                   reviewId={review.reviewId}
@@ -171,22 +146,54 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner size="large" />
+              <Spinner />
             )}
           </ReviewContainer>
           <Pagination
-            defaultCurrent={likeReview.currentPage}
-            pageSize={likeReview.pageSize}
-            total={reviewLikeCount}
-            onChange={handleLikeReviewChange}
+            defaultCurrent={myReview.currentPage}
+            pageSize={myReview.pageSize}
+            total={reviewCount}
+            onChange={handleMyReviewChange}
             hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
-        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKE_EXHIBITION">
+        <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKED_REVIEW">
+          <ReviewContainer>
+            {likedReview.payload.length ? (
+              likedReview.payload.map((review) => (
+                <ReviewCard
+                  key={review.reviewId}
+                  reviewId={review.reviewId}
+                  title={review.title}
+                  content={review.content}
+                  thumbnail={review.exhibition.thumbnail}
+                  createdAt={review.createdAt}
+                  likeCount={review.likeCount}
+                  commentCount={review.commentCount}
+                  photo={review.photos}
+                  userId={review.user.userId}
+                  nickname={review.user.nickname}
+                  profileImage={review.user.profileImage}
+                />
+              ))
+            ) : (
+              <Spinner />
+            )}
+          </ReviewContainer>
+          <Pagination
+            defaultCurrent={likedReview.currentPage}
+            pageSize={likedReview.pageSize}
+            total={reviewLikeCount}
+            onChange={handleLikedReviewChange}
+            hideOnSinglePage={true}
+            style={paginationStyle}
+          />
+        </Tab>
+        <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKED_EXHIBITION">
           <ExhibitionContainer>
-            {likeExhibition ? (
-              likeExhibition.payload.map((exhibition) => (
+            {likedExhibition.payload.length ? (
+              likedExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
                   exhibitionId={exhibition.exhibitionId}
@@ -200,15 +207,15 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner size="large" />
+              <Spinner />
             )}
           </ExhibitionContainer>
           <Pagination
-            defaultCurrent={likeExhibition.currentPage}
-            pageSize={likeExhibition.pageSize}
+            defaultCurrent={likedExhibition.currentPage}
+            pageSize={likedExhibition.pageSize}
             total={userInfo.exhibitionLikeCount}
             hideOnSinglePage={true}
-            onChange={handleLikeExhibitionChange}
+            onChange={handleLikedExhibitionChange}
             style={paginationStyle}
           />
         </Tab>
@@ -216,18 +223,16 @@ const UserPage = () => {
       <SideNavigation
         paths={[
           {
-            pathName: `/users/${userId}`,
+            href: `/users/${userId}`,
             pageName: '사용자 정보',
           },
           {
-            pathName: `/users/${userId}/edit`,
+            href: `/users/${userId}/edit`,
             pageName: '프로필 수정',
-            query: userInfo, // TODO: 유저의 정보(nickname, profileImage)를 전역 데이터로 관리
           },
           {
-            pathName: `/users/${userId}/edit-password`,
+            href: `/users/${userId}/edit-password`,
             pageName: '비밀번호 변경',
-            query: userInfo,
           },
         ]}
       />
@@ -303,9 +308,10 @@ const ExhibitionContainer = styled.div`
   }
 `;
 
-const Spinner = styled(Spin)`
-  margin-bottom: 400px;
-`;
+const paginationStyle: CSSProperties = {
+  textAlign: 'center',
+  marginBottom: '24px',
+};
 
 const paginationStyle: CSSProperties = {
   textAlign: 'center',

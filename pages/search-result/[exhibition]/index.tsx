@@ -24,13 +24,15 @@ const SearchResultPage: NextPage = () => {
   }, [router.query]);
 
   useEffect(() => {
-    exhibitionAPI
-      .search(exhibition, currentPage, 10, true)
-      .then((res) => {
-        setTotal(res.data.data.totalPage);
-        setExhibitions(res.data.data.content);
-      })
-      .catch((err) => console.log(err));
+    if (exhibition) {
+      exhibitionAPI
+        .search(exhibition, currentPage, 10, true)
+        .then((res) => {
+          setTotal(res.data.data.totalPage);
+          setExhibitions(res.data.data.content);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [currentPage, exhibition]);
 
   return (

@@ -4,6 +4,7 @@ import * as S from './style';
 import Link from 'next/link';
 import { displayDate } from 'utils';
 import { PhotoProps } from 'types/model';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 interface ReviewCardProps {
   reviewId: number;
@@ -40,7 +41,15 @@ const ReviewCard = ({
       <a>
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-            <S.Photo preview={false} src={photo && photo.length > 0 ? photo[0].path : thumbnail} />
+            <S.Photo
+              src={photo && photo.length > 0 ? photo[0].path : thumbnail}
+              alt="review photo"
+              layout="fixed"
+              width={110}
+              height={110}
+              placeholder="blur"
+              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
+            />
             {isHover ? (
               <S.HoverContent>
                 <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
@@ -49,7 +58,7 @@ const ReviewCard = ({
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/users/${userId}`}>
-              <S.UserInfoAvatar src={profileImage} size={60} />
+              <S.UserInfoAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} size={60} />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/users/${userId}`}>

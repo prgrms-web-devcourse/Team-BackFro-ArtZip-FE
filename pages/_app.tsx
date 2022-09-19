@@ -13,8 +13,8 @@ import { setToken } from 'utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
-import axios from 'axios';
-import cookie from 'react-cookies';
+import { swrOptions } from 'utils';
+
 declare global {
   interface Window {
     // eslint-disable-next-line
