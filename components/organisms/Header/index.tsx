@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { useClickAway, useUserAuthActions } from 'hooks';
-import imageUrl from 'constants/imageUrl';
+import imageUrl from 'constants/defaultImage';
 import { useRef, useState } from 'react';
 
 const Header = () => {
@@ -41,7 +41,7 @@ const Header = () => {
         <Logo width={180} height={55} />
         {isLoggedIn ? (
           <AvatarContainer ref={avatarContainer} onClick={handleAvatarClick}>
-            <Avatar src={profileImage || imageUrl.USER_DEFAULT} preview={false} />
+            <Avatar src={profileImage || imageUrl.USER_PROFILE} preview={false} />
             {isDropdownOpen && (
               <Dropdown>
                 <LinkText href={`/users/${userId}`} text="마이페이지" />

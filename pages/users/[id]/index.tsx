@@ -313,9 +313,4 @@ const paginationStyle: CSSProperties = {
   marginBottom: '24px',
 };
 
-const paginationStyle: CSSProperties = {
-  textAlign: 'center',
-  marginBottom: '24px',
-};
-
 export default UserPage;
