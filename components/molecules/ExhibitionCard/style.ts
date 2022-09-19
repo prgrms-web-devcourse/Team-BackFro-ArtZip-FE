@@ -5,7 +5,7 @@ export const ExhibitionCard = styled.div`
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   width: 250px;
-  height: 380px;
+  height: 374px;
   margin-top: 20px;
   padding-bottom: 20px;
   cursor: pointer;
@@ -27,10 +27,10 @@ export const ExhibitionCard = styled.div`
   .ant-card-head {
     height: 0px;
   }
-
+  
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 200px;
-    height: 320px;
+    height: 310px;
   }
 `;
 

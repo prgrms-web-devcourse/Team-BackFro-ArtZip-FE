@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Avatar, Card, Image } from 'antd';
+import { Avatar, Card } from 'antd';
+import Image from 'next/image';
 
 export const ReviewCard = styled(Card)`
   width: 450px;
@@ -77,8 +78,6 @@ export const PhotoWrapper = styled.div`
 `;
 
 export const Photo = styled(Image)`
-  width: 110px;
-  height: 110px;
   border-radius: 20px;
 `;
 
@@ -94,5 +93,5 @@ export const HoverContent = styled.div`
   color: white;
   cursor: pointer;
   position: relative;
-  top: -110px;
+  top: -116px;
 `;
