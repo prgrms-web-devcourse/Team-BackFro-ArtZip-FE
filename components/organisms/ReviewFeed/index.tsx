@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { ReviewFeedProps } from 'types/model';
 import { InfoGroup } from 'components/organisms';
 import { LinkButton } from 'components/atoms';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { reviewAPI } from 'apis';
@@ -31,6 +31,11 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
   const [feedLikeCount, setFeedLikeCount] = useState(likeCount);
   const [likeLoading, setLikeLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    setIsLikedFeed(isLiked);
+    setFeedLikeCount(likeCount);
+  }, [isLiked, likeCount]);
 
   const showModal = () => {
     setIsModalVisible(true);
