@@ -1,22 +1,19 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { ChangeEvent, useCallback, useRef, useState, memo } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
+import { Input, DatePicker, Switch, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
-import { ImageUpload } from 'components/organisms';
+import { ExhibitionSearchBar, ImageUpload } from 'components/organisms';
 import {
   convertObjectToFormData,
   convertFilesToFormData,
   getErrorMessage,
   validateReviewEditForm,
-  show,
-  hide,
 } from 'utils';
 import { useRouter } from 'next/router';
 import { useCheckAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
-import DEFAULT_IMAGE from 'constants/defaultImage';
-
+import moment from 'moment';
 
 export interface SubmitData {
   exhibitionId: number;
@@ -36,55 +33,47 @@ const initialData: SubmitData = {
 };
 Object.freeze(initialData);
 
-interface SearchResult {
-  exhibitionId: number;
-  name: string;
-  thumbnail: string;
-}
-
 const ReviewCreatePage = () => {
-  const submitData = useRef<SubmitData>({ ...initialData });
-  const [files, setFiles] = useState<UploadFile[]>([]);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>();
-  const [posterImage, setPosterImage] = useState(DEFAULT_IMAGE.EXHIBITION_THUMBNAIL);
-  const [isPublic, setIsPublic] = useState(true);
   const router = useRouter();
   const { query } = router;
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
+  const submitData = useRef<SubmitData>({ ...initialData });
 
-  useEffect(() => {
-    if (query.exhibitionId) {
-      submitData.current['exhibitionId'] = Number(query.exhibitionId);
-      setPosterImage(query.thumbnail as string);
+  const [exhibitionId, setExhibitionId] = useState<number>(Number(query.exhibitionId) || 0);
+  const [date, setDate] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [files, setFiles] = useState<UploadFile[]>([]);
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   if (query.exhibitionId) {
+  //     submitData.current['exhibitionId'] = Number(query.exhibitionId);
+  //   }
+  // }, []);
+
+  const handleDateChange = useCallback((value: moment.Moment | null) => {
+    if (value) {
+      setDate(value.format('YYYY-MM-DD'));
     }
   }, []);
 
-  const resultList = useRef<HTMLUListElement>(null);
+  const handleContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  }, []);
 
-  const handleSearch = useCallback(async () => {
-    const isEmpty = !/\S/.test(searchWord);
-    if (isEmpty) {
-      setSearchResults([]);
-      return;
-    }
+  const handleTitleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }, []);
 
-    try {
-      const { data } = await reviewAPI.searchExhibition(searchWord);
-      const { exhibitions } = data.data;
-      setSearchResults([...exhibitions]);
-      resultList.current && show(resultList.current);
-      !exhibitions.length && message.warning('검색 결과가 없습니다.');
-    } catch (error) {
-      message.error(getErrorMessage(error));
-      console.error(error);
-    }
-  }, [searchWord]);
-  useDebounce(handleSearch, 500, searchWord);
+  const handleIsPublicChange = useCallback((checked: boolean) => {
+    setIsPublic(checked);
+  }, []);
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
+    console.log('결과:', exhibitionId, date, title, content, isPublic);
     if (isChecking) {
       return;
     }
@@ -119,49 +108,11 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <SearchContainer>
-              <InnerContainer>
-                <SearchBar
-                  placeholder="전시회 제목을 검색해 주세요"
-                  value={exhibitionName || searchWord}
-                  onChange={(e) => {
-                    setSearchWord(e.target.value);
-                  }}
-                  onFocus={() => {
-                    setExhibitionName('');
-                    resultList.current && show(resultList.current);
-                  }}
-                />
-                <ResultList ref={resultList}>
-                  {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
-                    <ResultItem
-                      key={exhibitionId}
-                      onClick={() => {
-                        submitData.current['exhibitionId'] = exhibitionId;
-                        setPosterImage(thumbnail);
-                        setExhibitionName(name);
-                        resultList.current && hide(resultList.current);
-                      }}
-                    >
-                      {name}
-                    </ResultItem>
-                  ))}
-                </ResultList>
-              </InnerContainer>
-              <Poster
-                src={posterImage}
-                alt="전시회 포스터 이미지"
-                preview={posterImage !== DEFAULT_IMAGE.EXHIBITION_THUMBNAIL}
-              />
-            </SearchContainer>
+            <ExhibitionSearchBar query={query} />
           </FormItem>
           <FormItem label="다녀 온 날짜">
             <DateInput
-              onChange={(value) => {
-                if (value) {
-                  submitData.current['date'] = value.format('YYYY-MM-DD');
-                }
-              }}
+              onChange={handleDateChange}
             />
           </FormItem>
           <FormItem label="제목">
@@ -169,27 +120,22 @@ const ReviewCreatePage = () => {
               placeholder="제목을 입력해주세요"
               showCount
               maxLength={30}
-              onChange={(e) => (submitData.current['title'] = e.target.value)}
+              value={title}
+              onChange={handleTitleChange}
             />
           </FormItem>
           <FormItem label="내용">
             <TextArea
               placeholder="내용을 입력해주세요(1000자 이하)"
               autoSize
-              onChange={(e) => (submitData.current['content'] = e.target.value)}
+              onChange={handleContentChange}
             />
           </FormItem>
           <FormItem label="사진">
             <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
           </FormItem>
           <FormItem label="공개 여부">
-            <ToggleSwitch
-              defaultChecked
-              onChange={(checked) => {
-                submitData.current['isPublic'] = checked;
-                setIsPublic(checked);
-              }}
-            />
+            <ToggleSwitch defaultChecked onChange={handleIsPublicChange} />
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
@@ -231,62 +177,15 @@ const FormItem = styled(Form.Item)`
   }
 `;
 
-const SearchContainer = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 200px;
-  margin-right: 20px;
-`;
-
-const SearchBar = styled(Input.Search)`
-  font-size: 1.6rem;
-  position: relative;
-  z-index: 1;
-
-  .ant-input {
-    height: 36px;
-  }
-
-  .ant-input-search-button {
-    height: 36px;
-  }
-`;
-
-const ResultList = styled.ul`
-  width: 100%;
-  max-height: 168px;
-  border: 1px solid ${({ theme }) => theme.color.border.light};
-  position: relative;
-  top: -2px;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.color.white};
-`;
-
-const ResultItem = styled.li`
-  font-size: 1.6rem;
-  cursor: pointer;
-  margin: 8px;
-`;
-
-const Poster = styled(Image)`
-  width: 150px;
-  height: 200px;
-  flex-shrink: 0;
-`;
-
-const DateInput = styled(DatePicker)`
+const DateInput = memo(styled(DatePicker)`
   width: 200px;
 
   & > input {
     font-size: 1.6rem;
   }
-`;
+`);
 
-const TextArea = styled(Input.TextArea)``;
+const TextArea = memo(styled(Input.TextArea)``);
 
 const ToggleSwitch = styled(Switch)`
   width: 54px;

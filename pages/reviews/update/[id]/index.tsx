@@ -52,6 +52,8 @@ const ReviewUpdatePage = () => {
         photos,
       } = response.data.data;
 
+      console.log(date);
+
       submitData.current = {
         exhibitionId,
         date,

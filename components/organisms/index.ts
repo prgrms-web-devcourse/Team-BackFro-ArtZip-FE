@@ -9,3 +9,4 @@ export { default as CommentWrite } from './CommentWrite';
 export { default as CommentList } from './CommentList';
 export { default as CommentUtils } from './CommentUtils';
 export { default as ReplyUtils } from './ReplyUtils';
+export { default as ExhibitionSearchBar } from './ExhibitionSearchBar';
