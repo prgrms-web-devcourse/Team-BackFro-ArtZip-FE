@@ -86,7 +86,7 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <ExhibitionSearchBar query={query} onExhibitionChange={handleChange} />
+            <ExhibitionSearchBar prevData={query} onExhibitionChange={handleChange} />
           </FormItem>
           <FormItem label="다녀 온 날짜">
             <DateInput

@@ -10,11 +10,12 @@ import { ValueOf } from 'types/utility';
 import { SubmitData } from 'pages/reviews/create';
 
 interface ExhibitionSearchBarProps {
-  query: {
+  prevData: {
     name?: string;
     thumbnail?: string;
   };
-  onExhibitionChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
+  disabled?: boolean;
 }
 
 interface SearchResult {
@@ -23,11 +24,15 @@ interface SearchResult {
   thumbnail: string;
 }
 
-const ExhibitionSearchBar = ({ query, onExhibitionChange }: ExhibitionSearchBarProps) => {
+const ExhibitionSearchBar = ({
+  prevData,
+  onExhibitionChange,
+  disabled = false,
+}: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
+  const [exhibitionName, setExhibitionName] = useState((prevData.name as string) || '');
   const [posterImage, setPosterImage] = useState(
-    query.thumbnail || DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
+    prevData.thumbnail || DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
   );
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const resultList = useRef<HTMLUListElement>(null);
@@ -64,13 +69,14 @@ const ExhibitionSearchBar = ({ query, onExhibitionChange }: ExhibitionSearchBarP
             setExhibitionName('');
             resultList.current && show(resultList.current);
           }}
+          disabled={disabled}
         />
         <ResultList ref={resultList}>
           {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
             <ResultItem
               key={exhibitionId}
               onClick={() => {
-                onExhibitionChange('exhibitionId', exhibitionId);
+                onExhibitionChange && onExhibitionChange('exhibitionId', exhibitionId);
                 setExhibitionName(name);
                 setPosterImage(thumbnail);
                 resultList.current && hide(resultList.current);
