@@ -6,12 +6,15 @@ import { useState, useRef, useCallback } from 'react';
 import { getErrorMessage, show, hide } from 'utils';
 import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
+import { ValueOf } from 'types/utility';
+import { SubmitData } from 'pages/reviews/create';
 
 interface ExhibitionSearchBarProps {
   query: {
     name?: string;
     thumbnail?: string;
   };
+  onExhibitionChange: (key: string, value: ValueOf<SubmitData>) => void;
 }
 
 interface SearchResult {
@@ -20,13 +23,13 @@ interface SearchResult {
   thumbnail: string;
 }
 
-const ExhibitionSearchBar = ({ query }: ExhibitionSearchBarProps) => {
+const ExhibitionSearchBar = ({ query, onExhibitionChange }: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
   const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
   const [posterImage, setPosterImage] = useState(
     query.thumbnail || DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
   );
-  const [searchResults, setSearchResults] = useState<SearchResult[]>(); //
+  const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const resultList = useRef<HTMLUListElement>(null);
 
   const handleSearch = useCallback(async () => {
@@ -67,9 +70,9 @@ const ExhibitionSearchBar = ({ query }: ExhibitionSearchBarProps) => {
             <ResultItem
               key={exhibitionId}
               onClick={() => {
-                // submitData.current['exhibitionId'] = exhibitionId;
-                setPosterImage(thumbnail);
+                onExhibitionChange('exhibitionId', exhibitionId);
                 setExhibitionName(name);
+                setPosterImage(thumbnail);
                 resultList.current && hide(resultList.current);
               }}
             >

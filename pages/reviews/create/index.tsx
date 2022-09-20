@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useRef, useState, memo } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
 import { Input, DatePicker, Switch, Button, message, Form, UploadFile } from 'antd';
@@ -13,15 +13,16 @@ import {
 import { useRouter } from 'next/router';
 import { useCheckAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
-import moment from 'moment';
+import { ValueOf } from 'types/utility';
 
 export interface SubmitData {
-  exhibitionId: number;
-  date: string;
-  title: string;
-  content: string;
-  isPublic: boolean;
-  deletedPhotos?: number[];
+  // exhibitionId: number;
+  // date: string;
+  // title: string;
+  // content: string;
+  // isPublic: boolean;
+  // deletedPhotos?: number[];
+  [key: string]: string | number | boolean | number[];
 }
 
 const initialData: SubmitData = {
@@ -34,46 +35,23 @@ const initialData: SubmitData = {
 Object.freeze(initialData);
 
 const ReviewCreatePage = () => {
-  const router = useRouter();
-  const { query } = router;
   const submitData = useRef<SubmitData>({ ...initialData });
-
-  const [exhibitionId, setExhibitionId] = useState<number>(Number(query.exhibitionId) || 0);
-  const [date, setDate] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isPublic, setIsPublic] = useState<boolean>(true);
-
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { query } = router;
 
-  // useEffect(() => {
-  //   if (query.exhibitionId) {
-  //     submitData.current['exhibitionId'] = Number(query.exhibitionId);
-  //   }
-  // }, []);
-
-  const handleDateChange = useCallback((value: moment.Moment | null) => {
-    if (value) {
-      setDate(value.format('YYYY-MM-DD'));
-    }
+  useEffect(() => {
+    query.exhibitionId && handleChange('exhibitionId', Number(query.exhibitionId));
   }, []);
 
-  const handleContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  }, []);
-
-  const handleTitleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  }, []);
-
-  const handleIsPublicChange = useCallback((checked: boolean) => {
-    setIsPublic(checked);
-  }, []);
+  const handleChange = (key: string, value: ValueOf<SubmitData>) => {
+    submitData.current[key] = value;
+  };
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
-    console.log('결과:', exhibitionId, date, title, content, isPublic);
     if (isChecking) {
       return;
     }
@@ -108,11 +86,13 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <ExhibitionSearchBar query={query} />
+            <ExhibitionSearchBar query={query} onExhibitionChange={handleChange} />
           </FormItem>
           <FormItem label="다녀 온 날짜">
             <DateInput
-              onChange={handleDateChange}
+              onChange={(value) => {
+                value && handleChange('date', value.format('YYYY-MM-DD'));
+              }}
             />
           </FormItem>
           <FormItem label="제목">
@@ -120,22 +100,31 @@ const ReviewCreatePage = () => {
               placeholder="제목을 입력해주세요"
               showCount
               maxLength={30}
-              value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => {
+                handleChange('title', e.target.value);
+              }}
             />
           </FormItem>
           <FormItem label="내용">
             <TextArea
               placeholder="내용을 입력해주세요(1000자 이하)"
               autoSize
-              onChange={handleContentChange}
+              onChange={(e) => {
+                handleChange('content', e.target.value);
+              }}
             />
           </FormItem>
           <FormItem label="사진">
             <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
           </FormItem>
           <FormItem label="공개 여부">
-            <ToggleSwitch defaultChecked onChange={handleIsPublicChange} />
+            <ToggleSwitch
+              defaultChecked
+              onChange={(checked) => {
+                handleChange('isPublic', checked);
+                setIsPublic(checked);
+              }}
+            />
             {isPublic ? '전체 공개' : '비공개'}
           </FormItem>
 
@@ -177,15 +166,15 @@ const FormItem = styled(Form.Item)`
   }
 `;
 
-const DateInput = memo(styled(DatePicker)`
+const DateInput = styled(DatePicker)`
   width: 200px;
 
   & > input {
     font-size: 1.6rem;
   }
-`);
+`;
 
-const TextArea = memo(styled(Input.TextArea)``);
+const TextArea = styled(Input.TextArea)``;
 
 const ToggleSwitch = styled(Switch)`
   width: 54px;
