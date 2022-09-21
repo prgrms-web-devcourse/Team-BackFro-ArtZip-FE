@@ -11,13 +11,13 @@ import {
   validateReviewEditForm,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { useAxios, useCheckAuth, useDebounce } from 'hooks';
+import { useCheckAuth, useDebounce } from 'hooks';
 import moment from 'moment';
 import { PhotoProps } from 'types/model';
-import type { ReviewSingleReadData } from 'types/apis/review';
 import { Spinner } from 'components/atoms';
 import { SubmitData } from 'pages/reviews/create';
 import useSWR from 'swr';
+import { ValueOf } from 'types/utility';
 
 const initialData: SubmitData = {
   exhibitionId: 0,
@@ -39,10 +39,6 @@ const ReviewUpdatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: prevData, mutate } = useSWR(`api/v1/reviews/${router.query.id}`);
-
-  // const { response } = useAxios(() => reviewAPI.getReviewSingle(Number(router.query.id)), []);
-
-  console.log(prevData);
 
   useEffect(() => {
     if (prevData) {
@@ -76,15 +72,20 @@ const ReviewUpdatePage = () => {
     setIsModalVisible(false);
   };
 
+  const handleChange = (key: string, value: ValueOf<SubmitData>) => {
+    submitData.current[key] = value;
+  };
+
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
     if (isChecking) {
       return;
     }
 
-    if (!isLoading && validateReviewEditForm(submitData.current)) {
+    const data = submitData.current;
+    if (!isLoading && validateReviewEditForm(data)) {
       setIsLoading(true);
-      let formData = convertObjectToFormData('data', submitData.current);
+      let formData = convertObjectToFormData('data', data);
       formData = convertFilesToFormData('files', files, formData);
 
       try {
@@ -93,10 +94,11 @@ const ReviewUpdatePage = () => {
         router.replace('/community');
         mutate({
           ...prevData,
-          date: submitData.current.date,
-          title: submitData.current.title,
-          content: submitData.current.content,
-          isPublic: submitData.current.isPublic,
+          date: data.date,
+          title: data.title,
+          content: data.content,
+          isPublic: data.isPublic,
+          photos: [...prevImages],
         });
       } catch (error) {
         message.error(getErrorMessage(error));
@@ -131,15 +133,12 @@ const ReviewUpdatePage = () => {
                 name: prevData.exhibition.name,
                 thumbnail: prevData.exhibition.thumbnail,
               }}
-              disabled={true}
             />
           </FormItem>
           <FormItem label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
-                if (value) {
-                  submitData.current['date'] = value.format('YYYY-MM-DD');
-                }
+                value && handleChange('date', value.format('YYYY-MM-DD'));
               }}
               defaultValue={moment(prevData.date, 'YYYY-MM-DD')}
             />
@@ -149,7 +148,9 @@ const ReviewUpdatePage = () => {
               placeholder="제목을 입력해주세요."
               showCount
               maxLength={30}
-              onChange={(e) => (submitData.current['title'] = e.target.value)}
+              onChange={(e) => {
+                handleChange('title', e.target.value);
+              }}
               defaultValue={prevData.title}
             />
           </FormItem>
@@ -157,7 +158,9 @@ const ReviewUpdatePage = () => {
             <TextArea
               placeholder="내용을 입력해주세요."
               autoSize
-              onChange={(e) => (submitData.current['content'] = e.target.value)}
+              onChange={(e) => {
+                handleChange('content', e.target.value);
+              }}
               defaultValue={prevData.content}
             />
           </FormItem>
@@ -181,7 +184,7 @@ const ReviewUpdatePage = () => {
             <ToggleSwitch
               defaultChecked={prevData.isPublic}
               onChange={(checked) => {
-                submitData.current['isPublic'] = checked;
+                handleChange('isPublic', checked);
                 setIsPublic(checked);
               }}
             />

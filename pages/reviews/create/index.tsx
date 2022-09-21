@@ -56,9 +56,10 @@ const ReviewCreatePage = () => {
       return;
     }
 
-    if (!isLoading && validateReviewEditForm(submitData.current)) {
+    const data = submitData.current;
+    if (!isLoading && validateReviewEditForm(data)) {
       setIsLoading(true);
-      let formData = convertObjectToFormData('data', submitData.current);
+      let formData = convertObjectToFormData('data', data);
       formData = convertFilesToFormData('files', files, formData);
       try {
         await reviewAPI.createReview(formData);
