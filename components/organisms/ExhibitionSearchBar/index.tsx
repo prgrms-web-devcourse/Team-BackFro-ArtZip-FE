@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import { Input, Image, message } from 'antd';
 import DEFAULT_IMAGE from 'constants/defaultImage';
@@ -15,7 +14,6 @@ interface ExhibitionSearchBarProps {
     thumbnail?: string;
   };
   onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
-  disabled?: boolean;
 }
 
 interface SearchResult {
@@ -24,11 +22,7 @@ interface SearchResult {
   thumbnail: string;
 }
 
-const ExhibitionSearchBar = ({
-  prevData,
-  onExhibitionChange,
-  disabled = false,
-}: ExhibitionSearchBarProps) => {
+const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
   const [exhibitionName, setExhibitionName] = useState((prevData.name as string) || '');
   const [posterImage, setPosterImage] = useState(
@@ -69,7 +63,7 @@ const ExhibitionSearchBar = ({
             setExhibitionName('');
             resultList.current && show(resultList.current);
           }}
-          disabled={disabled}
+          disabled={!!prevData.name}
         />
         <ResultList ref={resultList}>
           {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
@@ -126,7 +120,7 @@ const ResultList = styled.ul`
   max-height: 168px;
   border: 1px solid ${({ theme }) => theme.color.border.light};
   position: relative;
-  top: -2px;
+  top: -3px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.color.white};
 `;
@@ -143,4 +137,4 @@ const Poster = styled(Image)`
   flex-shrink: 0;
 `;
 
-export default React.memo(ExhibitionSearchBar);
+export default ExhibitionSearchBar;
