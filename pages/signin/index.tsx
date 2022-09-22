@@ -15,7 +15,7 @@ const SignInPage = () => {
   const redirectToOauthLogin = () => {
     if (!isLoading) {
       setIsLoading(true);
-      route.push('https://server.artzip.shop/api/v1/users/oauth/login/kakao');
+      route.push(`${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/oauth/login/kakao`);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
