@@ -1,6 +1,6 @@
 export const displayDate = (createdAt: string) => {
   const now = new Date();
-  const offset = now.getTimezoneOffset() * 60 * 1000; // KST와 UCT의 차이를 밀리초로 계산
+  const offset = now.getTimezoneOffset() * 60 * 1000; // KST와 UTC의 차이를 밀리초로 계산
   const milliSeconds = now.getTime() + offset - new Date(createdAt).getTime();
 
   const seconds = milliSeconds / 1000;
