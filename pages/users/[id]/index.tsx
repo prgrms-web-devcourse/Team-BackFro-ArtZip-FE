@@ -43,27 +43,31 @@ const UserPage = () => {
   const [likedExhibition, setLikedExhibition] = useState<UserActivity<Required<ExhibitionProps>>>({
     ...initialExhibition,
   });
+  const currentTab = useRef('');
 
   useEffect(() => {
     userInfo && handleTabClick('MY_REVIEW');
   }, [userInfo]);
 
   const handleTabClick = (tabName: string) => {
-    switch (tabName) {
-      case 'MY_REVIEW': {
-        handleMyReviewChange(myReview.currentPage);
-        return;
+    if (currentTab.current !== tabName) {
+      currentTab.current = tabName;
+      switch (tabName) {
+        case 'MY_REVIEW': {
+          handleMyReviewChange(myReview.currentPage);
+          return;
+        }
+        case 'LIKED_REVIEW': {
+          handleLikedReviewChange(likedReview.currentPage);
+          return;
+        }
+        case 'LIKED_EXHIBITION': {
+          handleLikedExhibitionChange(likedExhibition.currentPage);
+          return;
+        }
+        default:
+          console.error('Invalid key');
       }
-      case 'LIKED_REVIEW': {
-        handleLikedReviewChange(likedReview.currentPage);
-        return;
-      }
-      case 'LIKED_EXHIBITION': {
-        handleLikedExhibitionChange(likedExhibition.currentPage);
-        return;
-      }
-      default:
-        console.error('Invalid key');
     }
   };
 
