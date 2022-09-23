@@ -2,19 +2,19 @@ import styled from '@emotion/styled';
 import { Tabs, Image, Pagination } from 'antd';
 import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { Spinner } from 'components/atoms';
 import DEFAULT_IMAGE from 'constants/defaultImage';
+import { AxiosResponse } from 'axios';
 
 interface UserActivity<T> {
   payload: T[];
   currentPage: number;
   pageSize: number;
   totalSize: number;
-  isLoaded: boolean;
 }
 
 const initialReview = {
@@ -22,7 +22,6 @@ const initialReview = {
   currentPage: 1,
   pageSize: 4,
   totalSize: 0,
-  isLoaded: false,
 };
 
 const initialExhibition = {
@@ -30,8 +29,16 @@ const initialExhibition = {
   currentPage: 1,
   pageSize: 8,
   totalSize: 0,
-  isLoaded: false,
 };
+
+interface Tab {
+  name: '' | 'MY_REVIEW' | 'LIKED_REVIEW' | 'LIKED_EXHIBITION';
+  state: UserActivity<ReviewCardProps | Required<ExhibitionProps>>;
+  setState:
+    | Dispatch<SetStateAction<UserActivity<ReviewCardProps>>>
+    | Dispatch<SetStateAction<UserActivity<Required<ExhibitionProps>>>>;
+  fetcher: (userId: number, page: number, size: number) => Promise<AxiosResponse>;
+}
 
 const UserPage = () => {
   const { id } = useRouter().query;
@@ -43,89 +50,66 @@ const UserPage = () => {
   const [likedExhibition, setLikedExhibition] = useState<UserActivity<Required<ExhibitionProps>>>({
     ...initialExhibition,
   });
-  const currentTab = useRef('');
+  const tab = useRef<Tab>({
+    name: '',
+    state: myReview,
+    setState: setMyReview,
+    fetcher: userAPI.getMyReview,
+  });
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     userInfo && handleTabClick('MY_REVIEW');
   }, [userInfo]);
 
   const handleTabClick = (tabName: string) => {
-    if (currentTab.current !== tabName) {
-      currentTab.current = tabName;
+    if (tab.current.name !== tabName) {
       switch (tabName) {
         case 'MY_REVIEW': {
-          handleMyReviewChange(myReview.currentPage);
-          return;
+          tab.current = {
+            name: tabName,
+            state: myReview,
+            setState: setMyReview,
+            fetcher: userAPI.getMyReview,
+          };
+          break;
         }
         case 'LIKED_REVIEW': {
-          handleLikedReviewChange(likedReview.currentPage);
-          return;
+          tab.current = {
+            name: tabName,
+            state: likedReview,
+            setState: setLikedReview,
+            fetcher: userAPI.getLikedReview,
+          };
+          break;
         }
         case 'LIKED_EXHIBITION': {
-          handleLikedExhibitionChange(likedExhibition.currentPage);
-          return;
+          tab.current = {
+            name: tabName,
+            state: likedExhibition,
+            setState: setLikedExhibition,
+            fetcher: userAPI.getLikedExhibition,
+          };
+          break;
         }
         default:
-          console.error('Invalid key');
+          console.error('Invalid tabName');
       }
+      handleChange(tab.current.state.currentPage);
     }
   };
 
-  const handleMyReviewChange = async (page: number) => {
+  const handleChange = async (page: number) => {
     if (userInfo) {
-      setMyReview({
-        ...myReview,
-        isLoaded: false,
-      });
+      setIsLoaded(false);
+      const { state, setState, fetcher } = tab.current;
+      const { data } = await fetcher(userInfo.userId, page - 1, state.pageSize);
 
-      const { data } = await userAPI.getMyReview(userInfo.userId, page - 1, myReview.pageSize);
-
-      setMyReview({
-        ...myReview,
+      setState({
+        ...state,
         payload: data.data.content,
-        currentPage: page,
-        isLoaded: true,
       });
-    }
-  };
-
-  const handleLikedReviewChange = async (page: number) => {
-    if (userInfo) {
-      setLikedReview({
-        ...likedReview,
-        isLoaded: false,
-      });
-
-      const { data } = await userAPI.getLikedReview(userInfo.userId, page - 1, myReview.pageSize);
-
-      setLikedReview({
-        ...likedReview,
-        payload: data.data.content,
-        currentPage: page,
-        isLoaded: true,
-      });
-    }
-  };
-
-  const handleLikedExhibitionChange = async (page: number) => {
-    if (userInfo) {
-      setLikedExhibition({
-        ...likedExhibition,
-        isLoaded: false,
-      });
-
-      const { data } = await userAPI.getLikedExhibition(
-        userInfo.userId,
-        page - 1,
-        likedExhibition.pageSize,
-      );
-
-      setLikedExhibition({
-        ...likedExhibition,
-        payload: data.data.content,
-        currentPage: page,
-        isLoaded: true,
-      });
+      setIsLoaded(true);
     }
   };
 
@@ -153,7 +137,7 @@ const UserPage = () => {
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
         <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReview.isLoaded ? (
+            {isLoaded ? (
               myReview.payload?.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
@@ -178,14 +162,14 @@ const UserPage = () => {
             defaultCurrent={myReview.currentPage}
             pageSize={myReview.pageSize}
             total={reviewCount}
-            onChange={handleMyReviewChange}
+            onChange={handleChange}
             hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
         <Tab tab={`좋아하는 후기 (${reviewLikeCount})`} key="LIKED_REVIEW">
           <ReviewContainer>
-            {likedReview.isLoaded ? (
+            {isLoaded ? (
               likedReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
@@ -210,14 +194,14 @@ const UserPage = () => {
             defaultCurrent={likedReview.currentPage}
             pageSize={likedReview.pageSize}
             total={reviewLikeCount}
-            onChange={handleLikedReviewChange}
+            onChange={handleChange}
             hideOnSinglePage={true}
             style={paginationStyle}
           />
         </Tab>
         <Tab tab={`좋아하는 전시회 (${exhibitionLikeCount})`} key="LIKED_EXHIBITION">
           <ExhibitionContainer>
-            {likedExhibition.isLoaded ? (
+            {isLoaded ? (
               likedExhibition.payload.map((exhibition) => (
                 <ExhibitionCard
                   key={exhibition.exhibitionId}
@@ -240,7 +224,7 @@ const UserPage = () => {
             pageSize={likedExhibition.pageSize}
             total={userInfo.exhibitionLikeCount}
             hideOnSinglePage={true}
-            onChange={handleLikedExhibitionChange}
+            onChange={handleChange}
             style={paginationStyle}
           />
         </Tab>
