@@ -9,6 +9,7 @@ import { exhibitionAPI } from 'apis';
 import { ExhibitionSingleData } from 'types/apis/exhibition';
 import Map from 'components/atoms/Map';
 import { useEffect, useState } from 'react';
+import { message } from 'antd';
 
 const ExhibitionDetailPage = () => {
   const router = useRouter();
@@ -42,6 +43,7 @@ const ExhibitionDetailPage = () => {
                 <S.Clipboard
                   onClick={() => {
                     navigator.clipboard.writeText(exhibitionData.placeAddress);
+                    message.success('클립보드에 복사되었습니다.');
                   }}
                 ></S.Clipboard>
               </S.StyledCopyButton>
