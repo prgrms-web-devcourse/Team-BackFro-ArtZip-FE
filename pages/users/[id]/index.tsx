@@ -171,7 +171,7 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner />
+              <Spinner height="50vh" />
             )}
           </ReviewContainer>
           <Pagination
@@ -203,7 +203,7 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner />
+              <Spinner height="50vh" />
             )}
           </ReviewContainer>
           <Pagination
@@ -232,7 +232,7 @@ const UserPage = () => {
                 />
               ))
             ) : (
-              <Spinner />
+              <Spinner height="50vh" />
             )}
           </ExhibitionContainer>
           <Pagination
