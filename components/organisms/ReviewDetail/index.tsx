@@ -3,7 +3,7 @@ import { reviewAPI } from 'apis';
 import { LinkButton } from 'components/atoms';
 import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecules';
 import { InfoGroup } from 'components/organisms';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
@@ -36,6 +36,11 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
   const [isLikeDetail, setIsLikedFeed] = useState(isLiked);
   const [likeLoading, setLikeLoading] = useState(false);
   const userState = useRecoilValue(userAtom);
+
+  useEffect(() => {
+    setIsLikedFeed(isLiked);
+    setDetailLikeCount(likeCount);
+  }, [isLiked, likeCount]);
 
   const handleLikeClick = async (reviewId: number) => {
     if (!userState.userId) {
