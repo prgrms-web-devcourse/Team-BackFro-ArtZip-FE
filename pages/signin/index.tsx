@@ -4,9 +4,24 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useUserAuthActions } from 'hooks';
 import { Logo } from 'components/atoms';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const SignInPage = () => {
   const { localLogin } = useUserAuthActions();
+  const route = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const redirectToOauthLogin = () => {
+    if (!isLoading) {
+      setIsLoading(true);
+      route.push(`${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/oauth/login/kakao`);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -48,15 +63,15 @@ const SignInPage = () => {
               로그인
             </StyledButton>
           </Form.Item>
-          <Link href={'https://server.artzip.shop/api/v1/users/oauth/login/kakao'}>
-            <Image
-              alt="kakao"
-              width={300}
-              height={45}
-              src="/kakao_login_medium_wide.png"
-              preview={false}
-            ></Image>
-          </Link>
+          <Image
+            alt="kakao"
+            width={300}
+            height={45}
+            src="/kakao_login_medium_wide.png"
+            preview={false}
+            style={{ cursor: 'pointer' }}
+            onClick={redirectToOauthLogin}
+          />
         </Form>
         <Link href={`/signup`}>
           <StyledTextLink>회원이 아니신가요? 회원가입</StyledTextLink>
