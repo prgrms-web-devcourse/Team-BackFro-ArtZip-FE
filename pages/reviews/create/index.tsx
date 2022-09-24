@@ -1,30 +1,28 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { reviewAPI } from 'apis';
 import styled from '@emotion/styled';
-import { Input, DatePicker, Switch, Image, Button, message, Form, UploadFile } from 'antd';
+import { Input, DatePicker, Switch, Button, message, Form, UploadFile } from 'antd';
 import { Banner } from 'components/molecules';
-import { ImageUpload } from 'components/organisms';
+import { ExhibitionSearchBar, ImageUpload } from 'components/organisms';
 import {
   convertObjectToFormData,
   convertFilesToFormData,
   getErrorMessage,
   validateReviewEditForm,
-  show,
-  hide,
 } from 'utils';
 import { useRouter } from 'next/router';
 import { useCheckAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
-import DEFAULT_IMAGE from 'constants/defaultImage';
-
+import { ValueOf } from 'types/utility';
 
 export interface SubmitData {
-  exhibitionId: number;
-  date: string;
-  title: string;
-  content: string;
-  isPublic: boolean;
-  deletedPhotos?: number[];
+  // exhibitionId: number;
+  // date: string;
+  // title: string;
+  // content: string;
+  // isPublic: boolean;
+  // deletedPhotos?: number[];
+  [key: string]: string | number | boolean | number[];
 }
 
 const initialData: SubmitData = {
@@ -36,52 +34,21 @@ const initialData: SubmitData = {
 };
 Object.freeze(initialData);
 
-interface SearchResult {
-  exhibitionId: number;
-  name: string;
-  thumbnail: string;
-}
-
 const ReviewCreatePage = () => {
   const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>();
-  const [posterImage, setPosterImage] = useState(DEFAULT_IMAGE.EXHIBITION_THUMBNAIL);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { query } = router;
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState((query.name as string) || '');
 
   useEffect(() => {
-    if (query.exhibitionId) {
-      submitData.current['exhibitionId'] = Number(query.exhibitionId);
-      setPosterImage(query.thumbnail as string);
-    }
+    query.exhibitionId && handleChange('exhibitionId', Number(query.exhibitionId));
   }, []);
 
-  const resultList = useRef<HTMLUListElement>(null);
-
-  const handleSearch = useCallback(async () => {
-    const isEmpty = !/\S/.test(searchWord);
-    if (isEmpty) {
-      setSearchResults([]);
-      return;
-    }
-
-    try {
-      const { data } = await reviewAPI.searchExhibition(searchWord);
-      const { exhibitions } = data.data;
-      setSearchResults([...exhibitions]);
-      resultList.current && show(resultList.current);
-      !exhibitions.length && message.warning('검색 결과가 없습니다.');
-    } catch (error) {
-      message.error(getErrorMessage(error));
-      console.error(error);
-    }
-  }, [searchWord]);
-  useDebounce(handleSearch, 500, searchWord);
+  const handleChange = (key: string, value: ValueOf<SubmitData>) => {
+    submitData.current[key] = value;
+  };
 
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
@@ -89,9 +56,10 @@ const ReviewCreatePage = () => {
       return;
     }
 
-    if (!isLoading && validateReviewEditForm(submitData.current)) {
+    const data = submitData.current;
+    if (!isLoading && validateReviewEditForm(data)) {
       setIsLoading(true);
-      let formData = convertObjectToFormData('data', submitData.current);
+      let formData = convertObjectToFormData('data', data);
       formData = convertFilesToFormData('files', files, formData);
       try {
         await reviewAPI.createReview(formData);
@@ -119,48 +87,12 @@ const ReviewCreatePage = () => {
       <Section>
         <ReviewEditForm layout="vertical">
           <FormItem label="다녀 온 전시회">
-            <SearchContainer>
-              <InnerContainer>
-                <SearchBar
-                  placeholder="전시회 제목을 검색해 주세요"
-                  value={exhibitionName || searchWord}
-                  onChange={(e) => {
-                    setSearchWord(e.target.value);
-                  }}
-                  onFocus={() => {
-                    setExhibitionName('');
-                    resultList.current && show(resultList.current);
-                  }}
-                />
-                <ResultList ref={resultList}>
-                  {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
-                    <ResultItem
-                      key={exhibitionId}
-                      onClick={() => {
-                        submitData.current['exhibitionId'] = exhibitionId;
-                        setPosterImage(thumbnail);
-                        setExhibitionName(name);
-                        resultList.current && hide(resultList.current);
-                      }}
-                    >
-                      {name}
-                    </ResultItem>
-                  ))}
-                </ResultList>
-              </InnerContainer>
-              <Poster
-                src={posterImage}
-                alt="전시회 포스터 이미지"
-                preview={posterImage !== DEFAULT_IMAGE.EXHIBITION_THUMBNAIL}
-              />
-            </SearchContainer>
+            <ExhibitionSearchBar prevData={query} onExhibitionChange={handleChange} />
           </FormItem>
           <FormItem label="다녀 온 날짜">
             <DateInput
               onChange={(value) => {
-                if (value) {
-                  submitData.current['date'] = value.format('YYYY-MM-DD');
-                }
+                value && handleChange('date', value.format('YYYY-MM-DD'));
               }}
             />
           </FormItem>
@@ -169,14 +101,18 @@ const ReviewCreatePage = () => {
               placeholder="제목을 입력해주세요"
               showCount
               maxLength={30}
-              onChange={(e) => (submitData.current['title'] = e.target.value)}
+              onChange={(e) => {
+                handleChange('title', e.target.value);
+              }}
             />
           </FormItem>
           <FormItem label="내용">
             <TextArea
               placeholder="내용을 입력해주세요(1000자 이하)"
               autoSize
-              onChange={(e) => (submitData.current['content'] = e.target.value)}
+              onChange={(e) => {
+                handleChange('content', e.target.value);
+              }}
             />
           </FormItem>
           <FormItem label="사진">
@@ -186,7 +122,7 @@ const ReviewCreatePage = () => {
             <ToggleSwitch
               defaultChecked
               onChange={(checked) => {
-                submitData.current['isPublic'] = checked;
+                handleChange('isPublic', checked);
                 setIsPublic(checked);
               }}
             />
@@ -229,53 +165,6 @@ const FormItem = styled(Form.Item)`
     margin-top: 2px;
     margin-left: 4px;
   }
-`;
-
-const SearchContainer = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 200px;
-  margin-right: 20px;
-`;
-
-const SearchBar = styled(Input.Search)`
-  font-size: 1.6rem;
-  position: relative;
-  z-index: 1;
-
-  .ant-input {
-    height: 36px;
-  }
-
-  .ant-input-search-button {
-    height: 36px;
-  }
-`;
-
-const ResultList = styled.ul`
-  width: 100%;
-  max-height: 168px;
-  border: 1px solid ${({ theme }) => theme.color.border.light};
-  position: relative;
-  top: -2px;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.color.white};
-`;
-
-const ResultItem = styled.li`
-  font-size: 1.6rem;
-  cursor: pointer;
-  margin: 8px;
-`;
-
-const Poster = styled(Image)`
-  width: 150px;
-  height: 200px;
-  flex-shrink: 0;
 `;
 
 const DateInput = styled(DatePicker)`

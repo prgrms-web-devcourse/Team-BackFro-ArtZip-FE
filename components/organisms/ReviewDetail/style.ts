@@ -8,9 +8,16 @@ export const ReviewDetailHeader = styled.div`
   margin-bottom: 20px;
 `;
 
+export const ReviewStateContainer = styled.div`
+  display: flex;
+`;
+
 export const ReviewDetailEdited = styled.span`
+  position: relative;
   color: ${({ theme }) => theme.color.font.light};
   font-size: 1.5rem;
+  bottom: -23px;
+  margin-right: 14px;
 `;
 
 export const ReviewDetailPublic = styled.span`
