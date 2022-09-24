@@ -108,13 +108,14 @@ const UserPage = () => {
       setState({
         ...state,
         payload: data.data.content,
+        currentPage: page,
       });
       setIsLoaded(true);
     }
   };
 
   if (!userInfo) {
-    return <Spinner size="large" />;
+    return <Spinner />;
   }
 
   const {
