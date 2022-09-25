@@ -27,7 +27,7 @@ const CommunityPage = () => {
     }?page=${currentPage}`;
   };
 
-  const { data: exhibitionData } = useSWRInfinite(getKey, swrOptions.fetcher);
+  const { data: exhibitionData, mutate } = useSWRInfinite(getKey, swrOptions.fetcher);
 
   useEffect(() => {
     if (exhibitionData) {
@@ -62,6 +62,12 @@ const CommunityPage = () => {
     const { data } = await reviewAPI.getReviewMulti({ exhibitionId: Number(exhibitionId) });
     setFeeds([...data.data.content]);
   };
+
+  useEffect(() => {
+    return () => {
+      mutate(undefined, { revalidate: true });
+    };
+  }, []);
 
   return (
     <>
