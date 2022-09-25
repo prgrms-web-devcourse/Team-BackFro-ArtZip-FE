@@ -33,11 +33,11 @@ const initialExhibition = {
 
 interface Tab {
   name: '' | 'MY_REVIEW' | 'LIKED_REVIEW' | 'LIKED_EXHIBITION';
-  state: UserActivity<ReviewCardProps | Required<ExhibitionProps>>;
-  setState:
+  cardList: UserActivity<ReviewCardProps | Required<ExhibitionProps>>;
+  setCardList:
     | Dispatch<SetStateAction<UserActivity<ReviewCardProps>>>
     | Dispatch<SetStateAction<UserActivity<Required<ExhibitionProps>>>>;
-  fetcher: (userId: number, page: number, size: number) => Promise<AxiosResponse>;
+  fetchCardList: (userId: number, page: number, size: number) => Promise<AxiosResponse>;
 }
 
 const UserPage = () => {
@@ -52,9 +52,9 @@ const UserPage = () => {
   });
   const tab = useRef<Tab>({
     name: '',
-    state: myReview,
-    setState: setMyReview,
-    fetcher: userAPI.getMyReview,
+    cardList: myReview,
+    setCardList: setMyReview,
+    fetchCardList: userAPI.getMyReview,
   });
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -68,45 +68,45 @@ const UserPage = () => {
         case 'MY_REVIEW': {
           tab.current = {
             name: tabName,
-            state: myReview,
-            setState: setMyReview,
-            fetcher: userAPI.getMyReview,
+            cardList: myReview,
+            setCardList: setMyReview,
+            fetchCardList: userAPI.getMyReview,
           };
           break;
         }
         case 'LIKED_REVIEW': {
           tab.current = {
             name: tabName,
-            state: likedReview,
-            setState: setLikedReview,
-            fetcher: userAPI.getLikedReview,
+            cardList: likedReview,
+            setCardList: setLikedReview,
+            fetchCardList: userAPI.getLikedReview,
           };
           break;
         }
         case 'LIKED_EXHIBITION': {
           tab.current = {
             name: tabName,
-            state: likedExhibition,
-            setState: setLikedExhibition,
-            fetcher: userAPI.getLikedExhibition,
+            cardList: likedExhibition,
+            setCardList: setLikedExhibition,
+            fetchCardList: userAPI.getLikedExhibition,
           };
           break;
         }
         default:
           console.error('Invalid tabName');
       }
-      handleChange(tab.current.state.currentPage);
+      handleChange(tab.current.cardList.currentPage);
     }
   };
 
   const handleChange = async (page: number) => {
     if (userInfo) {
       setIsLoaded(false);
-      const { state, setState, fetcher } = tab.current;
-      const { data } = await fetcher(userInfo.userId, page - 1, state.pageSize);
+      const { cardList, setCardList, fetchCardList } = tab.current;
+      const { data } = await fetchCardList(userInfo.userId, page - 1, cardList.pageSize);
 
-      setState({
-        ...state,
+      setCardList({
+        ...cardList,
         payload: data.data.content,
         currentPage: page,
       });
