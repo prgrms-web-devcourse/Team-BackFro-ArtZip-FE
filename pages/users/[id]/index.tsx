@@ -128,26 +128,13 @@ const UserPage = () => {
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
         <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
-            {myReview.payload.length ? (
-              myReview.payload?.map((review) => (
-                <ReviewCard
-                  key={review.reviewId}
-                  reviewId={review.reviewId}
-                  title={review.title}
-                  content={review.content}
-                  thumbnail={review.exhibition.thumbnail}
-                  createdAt={review.createdAt}
-                  likeCount={review.likeCount}
-                  commentCount={review.commentCount}
-                  photo={review.photos}
-                  userId={review.user.userId}
-                  nickname={review.user.nickname}
-                  profileImage={review.user.profileImage}
-                />
-              ))
-            ) : (
-              <Spinner />
-            )}
+            {myReview.payload?.map((review) => (
+              <ReviewCard
+                key={review.reviewId}
+                data={review}
+                thumbnail={review.exhibition.thumbnail}
+              />
+            ))}
           </ReviewContainer>
           <Pagination
             defaultCurrent={myReview.currentPage}
@@ -164,17 +151,8 @@ const UserPage = () => {
               likedReview.payload.map((review) => (
                 <ReviewCard
                   key={review.reviewId}
-                  reviewId={review.reviewId}
-                  title={review.title}
-                  content={review.content}
+                  data={review}
                   thumbnail={review.exhibition.thumbnail}
-                  createdAt={review.createdAt}
-                  likeCount={review.likeCount}
-                  commentCount={review.commentCount}
-                  photo={review.photos}
-                  userId={review.user.userId}
-                  nickname={review.user.nickname}
-                  profileImage={review.user.profileImage}
                 />
               ))
             ) : (
@@ -194,17 +172,7 @@ const UserPage = () => {
           <ExhibitionContainer>
             {likedExhibition.payload.length ? (
               likedExhibition.payload.map((exhibition) => (
-                <ExhibitionCard
-                  key={exhibition.exhibitionId}
-                  exhibitionId={exhibition.exhibitionId}
-                  name={exhibition.name}
-                  thumbnail={exhibition.thumbnail}
-                  startDate={exhibition.startDate}
-                  endDate={exhibition.endDate}
-                  likeCount={exhibition.likeCount}
-                  reviewCount={exhibition.reviewCount}
-                  isLiked={exhibition.isLiked}
-                />
+                <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
               ))
             ) : (
               <Spinner />
