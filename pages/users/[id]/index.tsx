@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
-import { Tabs, Image, Pagination } from 'antd';
-import { ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
+import { Tabs, Pagination } from 'antd';
+import { UserProfileCard, ReviewCard, ExhibitionCard, SideNavigation } from 'components/molecules';
 import { userAPI } from 'apis';
 import { CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { ReviewCardProps, ExhibitionProps } from 'types/model';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { Spinner } from 'components/atoms';
-import DEFAULT_IMAGE from 'constants/defaultImage';
 import { AxiosResponse } from 'axios';
 
 interface UserActivity<T> {
@@ -130,11 +129,13 @@ const UserPage = () => {
 
   return (
     <PageContainer>
-      <ProfileContainer>
-        <ProfileImage src={profileImage || DEFAULT_IMAGE.USER_PROFILE} alt="프로필 이미지" />
-        <UserName>{nickname}</UserName>
-        <UserEmail>{email}</UserEmail>
-      </ProfileContainer>
+      <UserProfileCard
+        data={{
+          email,
+          nickname,
+          profileImage,
+        }}
+      />
       <TabCardContainer type="card" tabPosition="top" centered onTabClick={handleTabClick}>
         <Tab tab={`작성한 후기 (${reviewCount})`} key="MY_REVIEW">
           <ReviewContainer>
@@ -227,29 +228,6 @@ const PageContainer = styled.div`
   max-width: 1100px;
   margin: 0 auto;
   text-align: center;
-`;
-
-const ProfileContainer = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  padding: 20px;
-`;
-
-const ProfileImage = styled(Image)`
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-`;
-
-const UserName = styled.span`
-  font-size: 2.4rem;
-  font-weight: 700;
-`;
-
-const UserEmail = styled.span`
-  font-size: 1.8rem;
-  color: ${({ theme }) => theme.color.font.dark};
 `;
 
 const TabCardContainer = styled(Tabs)`
