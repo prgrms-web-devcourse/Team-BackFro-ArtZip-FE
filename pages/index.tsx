@@ -11,8 +11,8 @@ import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
 
 interface HomeProps {
-  upcomingExhibitions: ExhibitionProps[];
-  mostLikeExhibitions: ExhibitionProps[];
+  upcomingExhibitions: Required<ExhibitionProps>[];
+  mostLikeExhibitions: Required<ExhibitionProps>[];
 }
 const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions }) => {
   return (

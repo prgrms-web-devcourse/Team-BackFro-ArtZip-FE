@@ -38,7 +38,7 @@ export const validateReviewEditForm = (submitData: SubmitData) => {
     message.error('다녀온 날짜를 입력해주세요.');
     return isValidateComplete;
   }
-  if (new Date(date) > new Date()) {
+  if (new Date(date as string) > new Date()) {
     message.error('다녀온 날짜는 오늘 이후일 수 없습니다.');
     return isValidateComplete;
   }
@@ -50,7 +50,7 @@ export const validateReviewEditForm = (submitData: SubmitData) => {
     message.error('후기 내용을 입력해주세요.');
     return isValidateComplete;
   }
-  if (content.length > 1000) {
+  if ((content as string).length > 1000) {
     message.error('내용은 1000자 이하로 작성해주세요.');
     return isValidateComplete;
   }

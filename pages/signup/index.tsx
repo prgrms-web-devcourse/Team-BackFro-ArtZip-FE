@@ -15,10 +15,11 @@ const SignUpPage = () => {
   const [nickname, setNickname] = useState('');
   const [isUnique, setIsUnique] = useState(false);
   const { localLogin } = useUserAuthActions();
+  const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line
   const validatePassword = useCallback((_: any, value: string) => {
-    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,13}$/;
+    const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!?@#$%^&*])[a-zA-Z0-9!?@#$%^&*]{8,13}$/;
     if (!value) {
       return Promise.reject(new Error('비밀번호를 입력해 주세요.'));
     }
@@ -57,6 +58,11 @@ const SignUpPage = () => {
   };
 
   const onFinish = async () => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+
     const values = { email: email, nickname: nickname, password: password };
     const valuesSignin = { email: email, password: password };
     try {
@@ -75,10 +81,19 @@ const SignUpPage = () => {
       console.log(e);
       message.error(e.response.data.message);
       throw e;
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
   const onClick = async () => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+
     if (nickname) {
       if (nickname.length > 10) {
         message.error('닉네임을 10자 이내로 입력해 주세요.');
@@ -93,6 +108,9 @@ const SignUpPage = () => {
     } else {
       message.error('닉네임을 입력해 주세요.');
     }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   };
 
   return (

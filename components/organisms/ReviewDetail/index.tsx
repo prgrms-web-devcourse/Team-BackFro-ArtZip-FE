@@ -77,12 +77,14 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
             createdDate={createdAt}
             userId={userId}
           />
-          {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
-          {isPublic ? (
-            <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
-          ) : (
-            <S.ReviewDetailPublic>비공개</S.ReviewDetailPublic>
-          )}
+          <S.ReviewStateContainer>
+            {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
+            {isPublic ? (
+              <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
+            ) : (
+              <S.ReviewDetailPublic>비공개</S.ReviewDetailPublic>
+            )}
+          </S.ReviewStateContainer>
         </S.ReviewInfoContainer>
       </S.ReviewDetailHeader>
 
