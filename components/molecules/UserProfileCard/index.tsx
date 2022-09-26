@@ -2,19 +2,23 @@ import { CSSProperties } from 'react';
 import styled from '@emotion/styled';
 import { Image } from 'antd';
 import DEFAULT_IMAGE from 'constants/defaultImage';
+import useSWR from 'swr';
+import { Spinner } from 'components/atoms';
 
 interface UserProfileCardProps {
-  data: {
-    email: string;
-    nickname: string;
-    profileImage: string;
-  };
+  userId: string;
   cardStyle?: CSSProperties;
   photoStyle?: CSSProperties;
 }
 
-const UserProfileCard = ({ data, cardStyle, photoStyle }: UserProfileCardProps) => {
-  const { email, nickname, profileImage } = data;
+const UserProfileCard = ({ userId, cardStyle, photoStyle }: UserProfileCardProps) => {
+  const { data: userInfo } = useSWR(`api/v1/users/${userId}/info`);
+
+  if (!userInfo) {
+    return <Spinner />;
+  }
+
+  const { email, nickname, profileImage } = userInfo;
   return (
     <ProfileContainer style={cardStyle}>
       <ProfileImage
