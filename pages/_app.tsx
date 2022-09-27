@@ -42,22 +42,4 @@ function ArtZip({ Component, pageProps }: AppProps) {
   );
 }
 
-ArtZip.getInitialProps = async (appContext: AppContext) => {
-  const appProps = await App.getInitialProps(appContext);
-  const { ctx } = appContext;
-  const allCookies = cookies(ctx);
-
-  const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
-  const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
-
-  // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
-  // 현재 배포에서는 쿠키 확인 불가
-  if (refreshTokenByCookie) {
-    accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
-    refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
-  }
-
-  return { ...appProps };
-};
-
 export default ArtZip;

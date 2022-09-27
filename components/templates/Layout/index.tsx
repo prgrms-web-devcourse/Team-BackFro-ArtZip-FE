@@ -5,7 +5,7 @@ import { Header, Footer } from '../../organisms';
 const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <PageContainer>
-      <Header />
+      {/* <Header /> */}
       {children}
       <Footer />
     </PageContainer>

@@ -4,6 +4,7 @@ import { Cookies } from 'react-cookie';
 const cookies = new Cookies();
 
 const exhibitionAPI = {
+  // 여기 auth 반영 안되어있음
   getUpcoming: (page: number, size: number) => {
     return unAuthRequest.get(`/api/v1/exhibitions/upcoming?page=${page}&size=${size}`);
   },

@@ -75,7 +75,7 @@ const CommentWrite = ({
     ) : (
       <CommentWriteWrapper ref={commentContainerRef}>
         <CommentWriteContainer>
-          <UserAvatar userId={currentUser.userId} profileImage={currentUser.profileImage} />
+          {/* <UserAvatar userId={currentUser.userId} profileImage={currentUser.profileImage} /> */}
           <CommentInput
             value={comment}
             placeholder="댓글을 작성하세요."

@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
+import axios from 'axios';
 
 interface HomeProps {
   upcomingExhibitions: Required<ExhibitionProps>[];
@@ -33,10 +34,30 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const accessToken = context.req.cookies['ACCESS_TOKEN'];
+
+  const headers = {
+    ...(accessToken ? { accessToken: accessToken } : {}),
+  };
+
+  const getUpcoming = axios.get(
+    `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/upcoming?page=0&size=8`,
+    {
+      headers,
+    },
+  );
+
+  const getMostLike = axios.get(
+    `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/mostlike?page=0&size=8&include-end=true`,
+    {
+      headers,
+    },
+  );
+
   const [upcomingExhibitionRes, mostLikeExhibitionRes] = await Promise.all([
-    exhibitionAPI.getUpcoming(0, 8),
-    exhibitionAPI.getMostLike(0, 8, true),
+    getUpcoming,
+    getMostLike,
   ]);
 
   return {
