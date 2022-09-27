@@ -1,17 +1,18 @@
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
 
 function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
   // 개발 환경에 따라서 설정
-  const HTTP_ONLY = !(process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP');
+  // const HTTP_ONLY = !(process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP');
   const expires = new Date();
+  const cookies = new Cookies();
 
   expires.setDate(expires.getDate() + 14);
 
-  cookie.save(key, token, {
+  cookies.set(key, token, {
     path: '/',
     expires: key === 'REFRESH_TOKEN' ? expires : undefined,
     // domain: process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP' ? '' : '.artzip.shop',
-    httpOnly: HTTP_ONLY,
+    // httpOnly: HTTP_ONLY,
   });
 }
 

@@ -1,5 +1,7 @@
 import { unAuthRequest, authRequest } from 'apis/common';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 const exhibitionAPI = {
   getUpcoming: (page: number, size: number) => {
@@ -11,7 +13,7 @@ const exhibitionAPI = {
     );
   },
   getDetail: (exhibitionId: number) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
 
     return refreshToken
       ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)

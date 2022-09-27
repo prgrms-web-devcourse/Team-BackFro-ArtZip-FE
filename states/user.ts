@@ -1,26 +1,41 @@
 import { userAPI } from 'apis';
 import { atom, selector } from 'recoil';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
 import { SIGNOUT_USER_STATE } from '../constants';
+
+const cookies = new Cookies();
 
 const cookieEffect =
   (accessTokenKey: string, refreshTokenKey: string) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ({ setSelf, onSet }: any) => {
-    const accessToken = cookie.load(accessTokenKey);
-    const refreshToken = cookie.load(refreshTokenKey);
+    const accessToken = cookies.get(accessTokenKey);
+    const refreshToken = cookies.get(refreshTokenKey);
+
+    console.log('accessToken', accessToken);
+    console.log('refreshToken', refreshToken);
 
     if (!accessToken || !refreshToken) {
-      cookie.remove('ACCESS_TOKEN');
-      cookie.remove('REFRESH_TOKEN');
+      cookies.remove('ACCESS_TOKEN');
+      cookies.remove('REFRESH_TOKEN');
       setSelf(SIGNOUT_USER_STATE);
+    } else {
+      console.log('else 조건문');
+      setSelf(async () => {
+        const { data } = await userAPI.getMyInfo();
+        console.log('data', data);
+        const { userId, email, nickname, profileImage } = data.data;
+        return { userId, email, nickname, profileImage, isLoggedIn: true };
+      });
     }
 
     onSet(async () => {
+      // console.log('onSet');
+
       try {
-        if (!cookie.load(accessTokenKey) || !cookie.load(refreshTokenKey)) {
-          cookie.remove('ACCESS_TOKEN');
-          cookie.remove('REFRESH_TOKEN');
+        if (!cookies.get(accessTokenKey) || !cookies.get(refreshTokenKey)) {
+          cookies.remove('ACCESS_TOKEN');
+          cookies.remove('REFRESH_TOKEN');
           return SIGNOUT_USER_STATE;
         }
 
@@ -28,8 +43,8 @@ const cookieEffect =
         const { userId, email, nickname, profileImage } = data.data;
         return { userId, email, nickname, profileImage, isLoggedIn: true };
       } catch (error: unknown) {
-        cookie.remove('ACCESS_TOKEN');
-        cookie.remove('REFRESH_TOKEN');
+        cookies.remove('ACCESS_TOKEN');
+        cookies.remove('REFRESH_TOKEN');
         console.error(error);
 
         return SIGNOUT_USER_STATE;
@@ -38,28 +53,9 @@ const cookieEffect =
   };
 
 const userAtom = atom({
-  key: 'user',
+  key: `user/${new Date().getMilliseconds}`,
   effects: [cookieEffect('ACCESS_TOKEN', 'REFRESH_TOKEN')],
-  default: selector({
-    key: 'user/get',
-    get: async () => {
-      if (!cookie.load('ACCESS_TOKEN') || !cookie.load('REFRESH_TOKEN')) {
-        cookie.remove('ACCESS_TOKEN');
-        cookie.remove('REFRESH_TOKEN');
-        return SIGNOUT_USER_STATE;
-      }
-
-      try {
-        const { data } = await userAPI.getMyInfo();
-        const { userId, email, nickname, profileImage } = data.data;
-        return { userId, email, nickname, profileImage, isLoggedIn: true };
-      } catch (error: unknown) {
-        cookie.remove('ACCESS_TOKEN');
-        cookie.remove('REFRESH_TOKEN');
-        return SIGNOUT_USER_STATE;
-      }
-    },
-  }),
+  default: SIGNOUT_USER_STATE,
 });
 
 export default userAtom;

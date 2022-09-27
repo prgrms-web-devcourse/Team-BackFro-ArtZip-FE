@@ -1,10 +1,12 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 export const swrOptions = {
   fetcher: async (url: string, params: object = {}) => {
-    const isLoggedIn = cookie.load('REFRESH_TOKEN');
-    const accessToken = cookie.load('ACCESS_TOKEN');
+    const isLoggedIn = cookies.get('REFRESH_TOKEN');
+    const accessToken = cookies.get('ACCESS_TOKEN');
 
     if (isLoggedIn) {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}${url}`, {

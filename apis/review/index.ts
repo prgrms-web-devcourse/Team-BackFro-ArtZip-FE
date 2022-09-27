@@ -1,12 +1,14 @@
 import { authRequest, unAuthRequest } from 'apis/common';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 const reviewAPI = {
   likeToggle: (reviewId: number) => {
     return authRequest.patch(`/api/v1/reviews/${reviewId}/like`);
   },
   getComments: ({ reviewId, page, size }: { reviewId: number; page?: number; size?: number }) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
     const params = {
       ...(page ? { page: page } : {}),
       ...(size ? { size: size } : {}),
@@ -34,7 +36,7 @@ const reviewAPI = {
     size?: number;
     sort?: string;
   }) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
 
     const params = {
       ...(exhibitionId ? { exhibitionId: exhibitionId } : {}),
@@ -52,7 +54,7 @@ const reviewAPI = {
         });
   },
   getReviewSingle: (reviewId: number) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
 
     return refreshToken
       ? authRequest.get(`/api/v1/reviews/${reviewId}`)
