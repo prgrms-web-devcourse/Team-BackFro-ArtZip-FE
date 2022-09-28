@@ -38,14 +38,6 @@ export interface UserInfoExhibitionLikeResponse extends BaseResponse {
   };
 }
 
-// export interface UserMePasswordProps{
-//     message: string;
-// }
-
-// export interface userMeInfoProps{
-//     message: string;
-// }
-
 export interface UserInfoResponse extends BaseResponse {
   data: {
     nickname: string;

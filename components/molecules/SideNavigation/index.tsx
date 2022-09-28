@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 import { Button } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRecoilValue } from 'recoil';
-import { userAtom } from 'states';
 
 interface SideNavigationProps {
   paths: {
@@ -13,12 +11,9 @@ interface SideNavigationProps {
 }
 
 const SideNavigation = ({ paths }: SideNavigationProps) => {
-  const { userId } = useRecoilValue(userAtom);
-  const { query, asPath } = useRouter();
+  const { asPath } = useRouter();
 
-  const isMyPage = String(userId) === query.id;
-
-  return isMyPage ? (
+  return (
     <Navigation>
       {paths.map(({ href, pageName }, i) => (
         <Link href={href} key={i}>
@@ -30,7 +25,7 @@ const SideNavigation = ({ paths }: SideNavigationProps) => {
         </Link>
       ))}
     </Navigation>
-  ) : null;
+  );
 };
 
 const Navigation = styled.nav`
