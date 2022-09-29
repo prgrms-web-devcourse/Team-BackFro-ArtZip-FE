@@ -35,11 +35,6 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { mutate } = useSWRConfig();
 
-  useEffect(() => {
-    setIsLikedFeed(isLiked);
-    setFeedLikeCount(likeCount);
-  }, [isLiked, likeCount]);
-
   const showModal = () => {
     setIsModalVisible(true);
   };
