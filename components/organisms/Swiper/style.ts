@@ -25,4 +25,8 @@ export const SwiperWrapper = styled.div<{ type: 'upcoming' | 'popular' }>`
   .swiper-button-prev {
     color: ${({ theme }) => theme.color.blue.main};
   }
+
+  .swiper-button-lock {
+    display: flex;
+  }
 `;

@@ -13,7 +13,6 @@ interface SwiperProps {
 }
 
 const SwiperWrapper = ({ items, type }: SwiperProps) => {
-  const leftBtnClassName = 'swiper-button-prev-' + { type };
   return (
     <S.SwiperWrapper type={type}>
       <div className="parent">
@@ -26,8 +25,8 @@ const SwiperWrapper = ({ items, type }: SwiperProps) => {
             disableOnInteraction: false,
           }}
           navigation={{
-            prevEl: `.swiper-button-prev-${type}`,
-            nextEl: `.swiper-button-next-${type}`,
+            prevEl: `.swiper-button-prev.${type}`,
+            nextEl: `.swiper-button-next.${type}`,
           }}
         >
           {items.map((item) => (
@@ -45,8 +44,8 @@ const SwiperWrapper = ({ items, type }: SwiperProps) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className={'swiper-button-prev-' + type}></div>
-        <div className="swiper-button-next"></div>
+        <div className={`swiper-button-prev ${type}`}></div>
+        <div className={`swiper-button-next ${type}`}></div>
       </div>
     </S.SwiperWrapper>
   );
