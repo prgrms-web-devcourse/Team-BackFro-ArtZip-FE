@@ -3,8 +3,8 @@ import { Image } from 'antd';
 
 export const ExhibitionContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 75%;
+  justify-content: center;
+  width: 85%;
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
     width: 90%;
   }
@@ -17,8 +17,8 @@ export const ExhibitionContainer = styled.div`
 `;
 export const Thumbnail = styled(Image)`
   margin-top: 10px;
-  width: 320px;
-  height: 450px;
+  width: 280px;
+  height: 400px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
   @media screen and (max-width: ${({ theme }) => theme.breakPoint.tablet}) {
     width: 240px;

@@ -4,43 +4,59 @@ import * as S from './style';
 import Link from 'next/link';
 import { displayDate } from 'utils';
 import { PhotoProps } from 'types/model';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
 interface ReviewCardProps {
-  reviewId: number;
+  data: {
+    reviewId: number;
+    user: {
+      userId: number;
+      nickname: string;
+      profileImage: string;
+    };
+    title: string;
+    content: string;
+    createdAt: string;
+    likeCount: number;
+    commentCount: number;
+    photos: PhotoProps[] | null;
+  };
   thumbnail: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  userId: number;
-  profileImage: string;
-  nickname: string;
-  likeCount: number;
-  commentCount: number;
-  photo: PhotoProps[] | null;
 }
 
-const ReviewCard = ({
-  reviewId,
-  thumbnail,
-  title,
-  content,
-  createdAt,
-  userId,
-  profileImage,
-  nickname,
-  likeCount,
-  commentCount,
-  photo,
-}: ReviewCardProps) => {
+const ReviewCard = ({ data, thumbnail }: ReviewCardProps) => {
   const [isHover, setIsHover] = useState(false);
   const mouseHover = () => setIsHover((isHover) => !isHover);
+
+  if (!data) {
+    return null;
+  }
+
+  const {
+    reviewId,
+    title,
+    content,
+    createdAt,
+    likeCount,
+    commentCount,
+    photos,
+    user: { userId, nickname, profileImage },
+  } = data;
 
   return (
     <Link href={`/reviews/detail/${reviewId}`}>
       <a>
         <S.ReviewCard>
           <S.PhotoWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-            <S.Photo preview={false} src={photo && photo.length > 0 ? photo[0].path : thumbnail} />
+            <S.Photo
+              src={photos && photos.length > 0 ? photos[0].path : thumbnail}
+              alt="review photo"
+              layout="fixed"
+              width={110}
+              height={110}
+              placeholder="blur"
+              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
+            />
             {isHover ? (
               <S.HoverContent>
                 <HeartOutlined /> {likeCount} <MessageOutlined /> {commentCount}
@@ -49,7 +65,7 @@ const ReviewCard = ({
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/users/${userId}`}>
-              <S.UserInfoAvatar src={profileImage} size={60} />
+              <S.UserInfoAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} size={60} />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/users/${userId}`}>

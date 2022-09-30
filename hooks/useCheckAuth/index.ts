@@ -4,7 +4,7 @@ import { userAtom } from 'states';
 import { useRouter } from 'next/router';
 import { message } from 'antd';
 
-const useWithAuth = () => {
+const useCheckAuth = () => {
   const [isChecking, setIsChecking] = useState(true);
   const router = useRouter();
   const { userId } = useRecoilValue(userAtom);
@@ -21,4 +21,4 @@ const useWithAuth = () => {
   return [isChecking];
 };
 
-export default useWithAuth;
+export default useCheckAuth;

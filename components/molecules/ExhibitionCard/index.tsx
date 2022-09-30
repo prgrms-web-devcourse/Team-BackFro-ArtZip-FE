@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card } from 'antd';
 import { HeartFilled, HeartOutlined, MessageOutlined } from '@ant-design/icons';
 import * as S from './style';
@@ -6,20 +6,21 @@ import Link from 'next/link';
 import { ExhibitionProps } from 'types/model';
 import { displayDday, displayFormattedDate } from 'utils';
 import Image from 'next/image';
+import DEFAULT_IMAGE from 'constants/defaultImage';
 
-const { Meta } = Card;
+interface ExhibitionCardProps {
+  data: Required<ExhibitionProps>;
+}
 
-const ExhibitionCard = ({
-  exhibitionId,
-  name,
-  thumbnail,
-  startDate,
-  endDate,
-  likeCount,
-  reviewCount,
-  isLiked,
-}: Required<ExhibitionProps>) => {
+const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
   const [isHover, setIsHover] = useState(false);
+
+  if (!data) {
+    return null;
+  }
+  const { exhibitionId, name, thumbnail, startDate, endDate, likeCount, reviewCount, isLiked } =
+    data;
+
   const dDay = displayDday(startDate);
   const mouseHover = () => setIsHover((isHover) => !isHover);
 
@@ -32,10 +33,14 @@ const ExhibitionCard = ({
           onMouseLeave={mouseHover}
           cover={
             <Image
-              alt="card image"
               src={thumbnail}
+              alt="card image"
+              layout="responsive"
+              sizes="(max-width: 767px) 200px, 250px"
               width={250}
               height={300}
+              placeholder="blur"
+              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
               className="card-image"
             />
           }

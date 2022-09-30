@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { CopyOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 interface ExhibitionInfoProps {
   title: string;
@@ -24,6 +25,7 @@ const ExhibitionInfo = ({
 }: ExhibitionInfoProps) => {
   const onClick = () => {
     navigator.clipboard.writeText(info ? info : '');
+    message.success('클립보드에 복사되었습니다.');
   };
   return (
     <InfoTextContainer>
@@ -53,6 +55,8 @@ const ExhibitionInfo = ({
 export default ExhibitionInfo;
 
 const StyledLink = styled.a`
+  overflow: hidden;
+  word-break: break-all;
   &:hover {
     color: ${({ theme }) => theme.color.blue.dark};
   }
@@ -60,12 +64,13 @@ const StyledLink = styled.a`
 
 const InfoTextContainer = styled.div`
   display: flex;
+  width: 90%;
   margin-bottom: 17px;
 `;
 
 const InfoTextBold = styled.p`
-  min-width: 90px;
-  font-size: 1.9rem;
+  min-width: 70px;
+  font-size: 1.7rem;
   height: 100%;
   font-weight: 700;
   color: ${({ theme }) => theme.color.font.main};
@@ -75,13 +80,13 @@ const InfoTextBold = styled.p`
   }
 `;
 const InfoText = styled.p`
-  padding-left: 15px;
-  font-size: 1.8rem;
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  padding-left: 15px;
+  font-size: 1.6rem;
 `;
 
 const StyledButton = styled.button`
@@ -98,7 +103,7 @@ const StyledButton = styled.button`
 `;
 
 const Clipboard = styled(CopyOutlined)`
-  font-size: 1.9rem;
+  font-size: 1.7rem;
 `;
 
 const CopyWrapper = styled.div`

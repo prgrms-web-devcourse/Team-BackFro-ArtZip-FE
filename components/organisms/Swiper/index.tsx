@@ -1,25 +1,41 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Navigation, Autoplay } from 'swiper';
 import * as S from './style';
-import React, { ReactElement } from 'react';
+import { useEffect, useState } from 'react';
 import { ExhibitionProps } from 'types/model';
 import { ExhibitionCard } from 'components/molecules';
+import useWindowSize from 'hooks/useWindowSize';
+import theme from 'styles/global/theme';
 
 SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
-  items: ExhibitionProps[];
+  items: Required<ExhibitionProps>[];
   type: 'upcoming' | 'popular';
 }
 
+const checkIsMobile = (windowWidthSize: number) => {
+  if (windowWidthSize < Number(theme.breakPoint.mobile.slice(0, 3))) {
+    return true;
+  }
+  return false;
+};
+
 const SwiperWrapper = ({ items, type }: SwiperProps) => {
+  const { windowWidthSize } = useWindowSize();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(checkIsMobile(windowWidthSize));
+  }, [windowWidthSize]);
+
   return (
     <S.SwiperWrapper>
       <div className="parent">
         <Swiper
           className="swiper-container"
-          spaceBetween={20}
-          slidesPerView={3}
+          spaceBetween={isMobile ? 200 : 20}
+          slidesPerView={isMobile ? 1 : 3}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -31,16 +47,7 @@ const SwiperWrapper = ({ items, type }: SwiperProps) => {
         >
           {items.map((item) => (
             <SwiperSlide key={item.exhibitionId} className="MyBanner__slideItem">
-              <ExhibitionCard
-                exhibitionId={item.exhibitionId}
-                name={item.name}
-                thumbnail={item.thumbnail}
-                startDate={item.startDate!}
-                endDate={item.endDate!}
-                likeCount={item.likeCount!}
-                reviewCount={item.reviewCount!}
-                isLiked={item.isLiked!}
-              />
+              <ExhibitionCard data={item} />
             </SwiperSlide>
           ))}
         </Swiper>

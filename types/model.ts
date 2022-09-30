@@ -1,5 +1,4 @@
 import { ReviewSingleReadData } from './apis/review/index';
-import { CSSProperties } from 'react';
 
 export interface ExhibitionProps {
   exhibitionId: number;
@@ -50,7 +49,6 @@ export interface ReviewCardProps {
   photos: PhotoProps[];
 }
 
-// TODO: 명세서 올라오면 수정하기
 export interface CommentProps {
   commentId: number;
   content: string;
@@ -78,6 +76,7 @@ export interface PhotoProps {
 export interface UserAtomProps {
   userId: number | null;
   email: string | null;
-  nicknamae: string | null;
+  nickname: string | null;
   profileImage: string | null;
+  isLoggedIn: boolean;
 }

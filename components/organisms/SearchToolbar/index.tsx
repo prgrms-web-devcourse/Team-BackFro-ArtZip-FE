@@ -1,7 +1,7 @@
 import * as S from './style';
 import { HomeOutlined, CalendarOutlined, AreaChartOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { exhibitionPeriod, exhibitionPlace, exhibitionGenre } from '../../../constants';
+import { EXHIBITION_PERIOD, EXHIBITION_PLACE, EXHIBITION_GENRE } from '../../../constants';
 
 type CheckBoxType = {
   id: number;
@@ -16,15 +16,15 @@ interface SearchToolbarProps {
 }
 
 const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolbarProps) => {
-  const [array, setArray] = useState(exhibitionPlace);
+  const [array, setArray] = useState(EXHIBITION_PLACE);
 
   useEffect(() => {
     if (type === 'place') {
-      setArray(exhibitionPlace);
+      setArray(EXHIBITION_PLACE);
     } else if (type === 'period') {
-      setArray(exhibitionPeriod);
+      setArray(EXHIBITION_PERIOD);
     } else {
-      setArray(exhibitionGenre);
+      setArray(EXHIBITION_GENRE);
     }
   }, []);
 
@@ -33,11 +33,11 @@ const SearchToolbar = ({ type, selectedValues, setSelectedValues }: SearchToolba
       if (checked) {
         const checkedListArray: CheckBoxType[] = [];
         if (type === 'place') {
-          exhibitionPlace.forEach((it) => checkedListArray.push(it));
+          EXHIBITION_PLACE.forEach((it) => checkedListArray.push(it));
         } else if (type === 'period') {
-          exhibitionPeriod.forEach((it) => checkedListArray.push(it));
+          EXHIBITION_PERIOD.forEach((it) => checkedListArray.push(it));
         } else if (type === 'genre') {
-          exhibitionPeriod.forEach((it) => checkedListArray.push(it));
+          EXHIBITION_PERIOD.forEach((it) => checkedListArray.push(it));
         }
 
         setSelectedValues(checkedListArray);

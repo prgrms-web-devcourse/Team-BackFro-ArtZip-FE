@@ -3,7 +3,7 @@ import { reviewAPI } from 'apis';
 import { LinkButton } from 'components/atoms';
 import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecules';
 import { InfoGroup } from 'components/organisms';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
@@ -36,6 +36,11 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
   const [isLikeDetail, setIsLikedFeed] = useState(isLiked);
   const [likeLoading, setLikeLoading] = useState(false);
   const userState = useRecoilValue(userAtom);
+
+  useEffect(() => {
+    setIsLikedFeed(isLiked);
+    setDetailLikeCount(likeCount);
+  }, [isLiked, likeCount]);
 
   const handleLikeClick = async (reviewId: number) => {
     if (!userState.userId) {
@@ -72,12 +77,14 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
             createdDate={createdAt}
             userId={userId}
           />
-          {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
-          {isPublic ? (
-            <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
-          ) : (
-            <S.ReviewDetailPublic>비공개</S.ReviewDetailPublic>
-          )}
+          <S.ReviewStateContainer>
+            {isEdited && <S.ReviewDetailEdited>수정됨</S.ReviewDetailEdited>}
+            {isPublic ? (
+              <S.ReviewDetailPublic>전체 공개</S.ReviewDetailPublic>
+            ) : (
+              <S.ReviewDetailPublic>비공개</S.ReviewDetailPublic>
+            )}
+          </S.ReviewStateContainer>
         </S.ReviewInfoContainer>
       </S.ReviewDetailHeader>
 
@@ -89,7 +96,10 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
       </S.ReviewDetailSection>
 
       <S.ReviewDetailBottom>
-        <ReviewExhibitionInfo exhibition={exhibition} />
+        <S.ReviewExhibitionInfoContainer>
+          <ReviewExhibitionInfo exhibition={exhibition} />
+        </S.ReviewExhibitionInfoContainer>
+
         <S.ReviewDetailContentUtils>
           <InfoGroup
             isLiked={isLikeDetail}

@@ -1,16 +1,23 @@
 import styled from '@emotion/styled';
 
 export const ReviewDetailContainer = styled.main`
-  margin: 20px 150px;
+  margin: 20px 10px;
 `;
 
 export const ReviewDetailHeader = styled.div`
   margin-bottom: 20px;
 `;
 
+export const ReviewStateContainer = styled.div`
+  display: flex;
+`;
+
 export const ReviewDetailEdited = styled.span`
+  position: relative;
   color: ${({ theme }) => theme.color.font.light};
   font-size: 1.5rem;
+  bottom: -23px;
+  margin-right: 14px;
 `;
 
 export const ReviewDetailPublic = styled.span`
@@ -48,8 +55,14 @@ export const ReviewDetailContent = styled.div`
 
 export const ReviewDetailContentText = styled.p`
   font-size: 2rem;
-  text-align: center;
   margin-bottom: 40px;
+  white-space: pre-wrap;
+`;
+
+export const ReviewExhibitionInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ReviewDetailContentUtils = styled.div`

@@ -25,7 +25,7 @@ export const DescriptionWrapper = styled.div`
   width: 80%;
   margin: 0px 40px;
   padding: 30px;
-  border-radius: 40px;
+  border-radius: 20px;
   font-size: 1.8rem;
   line-height: 200%;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);

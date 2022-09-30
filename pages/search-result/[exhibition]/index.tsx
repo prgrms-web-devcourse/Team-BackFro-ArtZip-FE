@@ -13,7 +13,7 @@ const SearchResultPage: NextPage = () => {
   const router = useRouter();
   const [exhibition, setExhibition] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
-  const [exhibitions, setExhibitions] = useState<ExhibitionProps[]>([]);
+  const [exhibitions, setExhibitions] = useState<Required<ExhibitionProps>[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -24,13 +24,15 @@ const SearchResultPage: NextPage = () => {
   }, [router.query]);
 
   useEffect(() => {
-    exhibitionAPI
-      .search(exhibition, currentPage, 10, true)
-      .then((res) => {
-        setTotal(res.data.data.totalPage);
-        setExhibitions(res.data.data.content);
-      })
-      .catch((err) => console.log(err));
+    if (exhibition) {
+      exhibitionAPI
+        .search(exhibition, currentPage, 10, true)
+        .then((res) => {
+          setTotal(res.data.data.totalPage);
+          setExhibitions(res.data.data.content);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [currentPage, exhibition]);
 
   return (
@@ -41,17 +43,7 @@ const SearchResultPage: NextPage = () => {
       <S.SearchResultContents>
         {exhibitions.length > 0 ? (
           exhibitions.map((exhibition) => (
-            <ExhibitionCard
-              exhibitionId={exhibition.exhibitionId}
-              key={exhibition.exhibitionId}
-              name={exhibition.name}
-              thumbnail={exhibition.thumbnail}
-              startDate={exhibition.startDate!}
-              endDate={exhibition.endDate!}
-              likeCount={exhibition.likeCount!}
-              reviewCount={exhibition.reviewCount!}
-              isLiked={exhibition.isLiked!}
-            />
+            <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
           ))
         ) : (
           <div>

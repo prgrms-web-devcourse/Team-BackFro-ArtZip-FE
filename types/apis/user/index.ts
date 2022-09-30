@@ -38,14 +38,6 @@ export interface UserInfoExhibitionLikeResponse extends BaseResponse {
   };
 }
 
-// export interface UserMePasswordProps{
-//     message: string;
-// }
-
-// export interface userMeInfoProps{
-//     message: string;
-// }
-
 export interface UserInfoResponse extends BaseResponse {
   data: {
     nickname: string;
@@ -68,11 +60,6 @@ export interface UserTokenResponse extends BaseResponse {
 export interface UserCheckResponse extends BaseResponse {
   isUnique: boolean;
 }
-
-// TODO
-// users/me/info
-// users/me/info/exhibitions/like?
-// users/me/info/reviews/like?
 
 export interface UserChangePasswordRequest {
   oldPassword: string;
