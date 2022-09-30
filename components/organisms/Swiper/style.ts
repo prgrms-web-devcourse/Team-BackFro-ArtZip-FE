@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const SwiperWrapper = styled.div<{ type: 'upcoming' | 'popular' }>`
+export const SwiperWrapper = styled.div`
   padding: 10px;
   position: relative;
   margin-bottom: 30px;
@@ -13,7 +13,7 @@ export const SwiperWrapper = styled.div<{ type: 'upcoming' | 'popular' }>`
     padding-right: 50px;
   }
 
-  .swiper-button-next-${(props) => props.type} {
+  .swiper-button-next {
     background-size: 50% auto;
     background-position: center;
     color: ${({ theme }) => theme.color.blue.main};

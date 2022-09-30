@@ -14,7 +14,7 @@ interface SwiperProps {
 
 const SwiperWrapper = ({ items, type }: SwiperProps) => {
   return (
-    <S.SwiperWrapper type={type}>
+    <S.SwiperWrapper>
       <div className="parent">
         <Swiper
           className="swiper-container"
