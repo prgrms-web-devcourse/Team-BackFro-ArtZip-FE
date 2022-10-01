@@ -45,8 +45,8 @@ authRequest.interceptors.response.use(
 
       const tokenRequestBody = {
         userId: parseInt(userId),
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken,
+        refreshToken,
       };
 
       const { data } = await userAPI.reissueToken(tokenRequestBody);
