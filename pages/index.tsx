@@ -1,13 +1,8 @@
-import Map from 'components/atoms/Map';
-import ExhibitionCard from 'components/molecules/ExhibitionCard';
 import SwiperWrapper from 'components/organisms/Swiper';
 import SwiperContainer from 'components/organisms/SwiperContainer';
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import { ExhibitionReadResponse } from 'types/apis/exhibition';
 import { homeStyle as S } from '../styles/pages';
-import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
 import axios from 'axios';
 

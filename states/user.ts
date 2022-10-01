@@ -9,28 +9,8 @@ const cookieEffect =
   (accessTokenKey: string, refreshTokenKey: string) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ({ setSelf, onSet }: any) => {
-    const accessToken = cookies.get(accessTokenKey);
-    const refreshToken = cookies.get(refreshTokenKey);
-
-    console.log('accessToken', accessToken);
-    console.log('refreshToken', refreshToken);
-
-    if (!accessToken || !refreshToken) {
-      cookies.remove('ACCESS_TOKEN');
-      cookies.remove('REFRESH_TOKEN');
-      setSelf(SIGNOUT_USER_STATE);
-    } else {
-      console.log('else 조건문');
-      setSelf(async () => {
-        const { data } = await userAPI.getMyInfo();
-        console.log('data', data);
-        const { userId, email, nickname, profileImage } = data.data;
-        return { userId, email, nickname, profileImage, isLoggedIn: true };
-      });
-    }
-
     onSet(async () => {
-      // console.log('onSet');
+      console.log('onSet');
 
       try {
         if (!cookies.get(accessTokenKey) || !cookies.get(refreshTokenKey)) {
@@ -53,7 +33,7 @@ const cookieEffect =
   };
 
 const userAtom = atom({
-  key: `user/${new Date().getMilliseconds}`,
+  key: `user/${new Date().getUTCMilliseconds() * Math.random()}`,
   effects: [cookieEffect('ACCESS_TOKEN', 'REFRESH_TOKEN')],
   default: SIGNOUT_USER_STATE,
 });
