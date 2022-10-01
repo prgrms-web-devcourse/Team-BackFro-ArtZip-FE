@@ -28,9 +28,6 @@ declare global {
 function ArtZip({ Component, pageProps, userData }: AppProps | any) {
   const { pathname } = useRouter();
 
-  // TODO: 테스트용 콘솔 지우기
-  console.log('userData', userData);
-
   const initialState = ({ set }: MutableSnapshot) => {
     const { userId, email, nickname, profileImage } = userData;
     const isLoggedIn = userId !== null;
