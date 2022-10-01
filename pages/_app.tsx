@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
-import { MutableSnapshot, RecoilRoot, useSetRecoilState } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
 import { Layout } from 'components/templates';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/global/theme';
@@ -13,9 +13,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import { swrOptions } from 'utils';
-import axios from 'axios';
 import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
+import { Cookies } from 'react-cookie';
+import { authorizeFetch } from 'utils';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -27,10 +28,12 @@ declare global {
 function ArtZip({ Component, pageProps, userData }: AppProps | any) {
   const { pathname } = useRouter();
 
+  // TODO: 테스트용 콘솔 지우기
+  console.log('userData', userData);
+
   const initialState = ({ set }: MutableSnapshot) => {
     const { userId, email, nickname, profileImage } = userData;
     const isLoggedIn = userId !== null;
-    console.log(userId, email, nickname, profileImage, isLoggedIn);
     set(userAtom, { userId, email, nickname, profileImage, isLoggedIn });
   };
 
@@ -61,22 +64,27 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
 
   let userState = SIGNOUT_USER_STATE;
 
-  if (refreshToken) {
-    // 이 값을 통하여 내 정보를 조회하기
-    const headers = {
-      ...(accessToken ? { accessToken: accessToken } : {}),
-    };
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
-      {
-        headers,
-      },
-    );
+  const clientCookies = new Cookies();
 
-    userState = data.data;
+  const cleanAllUserData = () => {
+    userState = SIGNOUT_USER_STATE;
+    clientCookies.remove('REFRESH_TOKEN');
+    clientCookies.remove('ACCESS_TOKEN');
+  };
+
+  if (refreshToken && accessToken) {
+    const { isAuth, data } = await authorizeFetch({
+      accessToken,
+      refreshToken,
+      apiURL: `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
+    });
+
+    userState = isAuth ? { ...data, isLoggedIn: true } : SIGNOUT_USER_STATE;
+
+    if (!isAuth) {
+      cleanAllUserData();
+    }
   }
-
-  // console.log('userState', userState);
   return { ...appProps, userData: userState };
 };
 
