@@ -21,6 +21,7 @@ function useUserAuthActions() {
       try {
         const res = await userAPI.localLogin(values);
         const { accessToken, refreshToken } = res.data.data;
+
         setToken('ACCESS_TOKEN', accessToken);
         setToken('REFRESH_TOKEN', refreshToken);
         const { data } = await userAPI.getMyInfo();
@@ -45,8 +46,8 @@ function useUserAuthActions() {
       try {
         await userAPI.logout();
         setUser(SIGNOUT_USER_STATE);
-        cookies.get('REFRESH_TOKEN');
-        cookies.get('ACCESS_TOKEN');
+        cookies.remove('REFRESH_TOKEN');
+        cookies.remove('ACCESS_TOKEN');
         message.success('로그아웃 되었습니다.');
         router.push('/');
       } catch (e) {
