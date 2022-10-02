@@ -10,7 +10,6 @@ import { userAtom } from 'states';
 import { commentAPI } from 'apis';
 import DEFAULT_IMAGE from 'constants/defaultImage';
 interface CommentWriteProps {
-  isLogin: boolean;
   reviewId: number;
   onCommentReload?: () => void;
   parentId?: number;
@@ -26,8 +25,7 @@ const CommentWrite = ({
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState('');
   const commentContainerRef = useRef<HTMLDivElement>(null);
-  const { userId, email, nickname, profileImage, isLoggedIn } = useRecoilValue(userAtom);
-  // const isLogin = currentUser.userId !== null;
+  const { userId, profileImage, isLoggedIn } = useRecoilValue(userAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
