@@ -8,9 +8,9 @@ import router from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { commentAPI } from 'apis';
-
+import DEFAULT_IMAGE from 'constants/defaultImage';
 interface CommentWriteProps {
-  // isLogin: boolean;
+  isLogin: boolean;
   reviewId: number;
   onCommentReload?: () => void;
   parentId?: number;
@@ -26,8 +26,8 @@ const CommentWrite = ({
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState('');
   const commentContainerRef = useRef<HTMLDivElement>(null);
-  const currentUser = useRecoilValue(userAtom);
-  const isLogin = currentUser.userId !== null;
+  const { userId, email, nickname, profileImage, isLoggedIn } = useRecoilValue(userAtom);
+  // const isLogin = currentUser.userId !== null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
@@ -63,7 +63,7 @@ const CommentWrite = ({
   };
 
   {
-    return !isLogin ? (
+    return !isLoggedIn ? (
       <CommentWriteContainer
         onClick={() => {
           router.push('/signin');
@@ -75,7 +75,12 @@ const CommentWrite = ({
     ) : (
       <CommentWriteWrapper ref={commentContainerRef}>
         <CommentWriteContainer>
-          {/* <UserAvatar userId={currentUser.userId} profileImage={currentUser.profileImage} /> */}
+          {userId && (
+            <UserAvatar
+              userId={userId}
+              profileImage={profileImage ? profileImage : DEFAULT_IMAGE.USER_PROFILE}
+            />
+          )}
           <CommentInput
             value={comment}
             placeholder="댓글을 작성하세요."
