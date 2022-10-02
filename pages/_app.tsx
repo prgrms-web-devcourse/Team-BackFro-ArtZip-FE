@@ -15,7 +15,6 @@ import { SWRConfig } from 'swr';
 import { swrOptions } from 'utils';
 import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
-import { Cookies } from 'react-cookie';
 import { authorizeFetch } from 'utils';
 declare global {
   interface Window {
@@ -23,7 +22,6 @@ declare global {
     kakao: any;
   }
 }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ArtZip({ Component, pageProps, userData }: AppProps | any) {
   const { pathname } = useRouter();
@@ -61,25 +59,23 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
 
   let userState = SIGNOUT_USER_STATE;
 
-  const clientCookies = new Cookies();
-
-  const cleanAllUserData = () => {
-    userState = SIGNOUT_USER_STATE;
-    clientCookies.remove('REFRESH_TOKEN');
-    clientCookies.remove('ACCESS_TOKEN');
-  };
-
   if (refreshToken && accessToken) {
-    const { isAuth, data } = await authorizeFetch({
-      accessToken,
-      refreshToken,
-      apiURL: `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
-    });
+    try {
+      const { isAuth, data } = await authorizeFetch({
+        accessToken,
+        refreshToken,
+        apiURL: `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
+      });
 
-    userState = isAuth ? { ...data, isLoggedIn: true } : SIGNOUT_USER_STATE;
+      userState = isAuth ? { ...data, isLoggedIn: true } : SIGNOUT_USER_STATE;
+    } catch (e) {
+      ctx.res &&
+        ctx.res.setHeader('Set-Cookie', [
+          `ACCESS_TOKEN=deleted; Max-Age=0`,
+          `REFRESH_TOKEN=deleted; Max-Age=0`,
+        ]);
 
-    if (!isAuth) {
-      cleanAllUserData();
+      userState = SIGNOUT_USER_STATE;
     }
   }
   return { ...appProps, userData: userState };
