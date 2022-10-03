@@ -1,7 +1,10 @@
 import { unAuthRequest, authRequest } from 'apis/common';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 const exhibitionAPI = {
+  // 여기 auth 반영 안되어있음
   getUpcoming: (page: number, size: number) => {
     return unAuthRequest.get(`/api/v1/exhibitions/upcoming?page=${page}&size=${size}`);
   },
@@ -11,7 +14,7 @@ const exhibitionAPI = {
     );
   },
   getDetail: (exhibitionId: number) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
 
     return refreshToken
       ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)

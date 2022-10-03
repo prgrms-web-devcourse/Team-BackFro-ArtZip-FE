@@ -1,8 +1,10 @@
 import { userAPI } from 'apis';
 import axios from 'axios';
-import { parseJwt, setToken, storage } from 'utils';
-import cookie from 'react-cookies';
+import { parseJwt, setToken } from 'utils';
+import { Cookies } from 'react-cookie';
 const baseURL = `${process.env.NEXT_PUBLIC_API_END_POINT}`;
+
+const cookies = new Cookies();
 
 const authRequest = axios.create({
   baseURL,
@@ -14,7 +16,7 @@ const unAuthRequest = axios.create({
 
 authRequest.interceptors.request.use((config) => {
   if (config.headers) {
-    config.headers.accessToken = cookie.load('ACCESS_TOKEN');
+    config.headers.accessToken = cookies.get('ACCESS_TOKEN');
     return config;
   }
 });
@@ -35,15 +37,16 @@ authRequest.interceptors.response.use(
           error.response.data.code === LOGOUT_TOKEN))
     ) {
       originalRequest._retry = true;
-      const accessToken = cookie.load('ACCESS_TOKEN');
-      const refreshToken = cookie.load('REFRESH_TOKEN');
+
+      const accessToken = cookies.get('ACCESS_TOKEN');
+      const refreshToken = cookies.get('REFRESH_TOKEN');
 
       const { userId } = parseJwt(accessToken);
 
       const tokenRequestBody = {
         userId: parseInt(userId),
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken,
+        refreshToken,
       };
 
       const { data } = await userAPI.reissueToken(tokenRequestBody);

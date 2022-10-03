@@ -21,7 +21,7 @@
     "next": "12.2.2",
     "next-cookies": "^2.0.3",
     "react": "18.2.0",
-    "react-cookies": "^0.1.1",
+    "react-cookie": "^4.1.1",
     "react-dom": "18.2.0",
     "recoil": "^0.7.4",
     "sass": "^1.54.0",

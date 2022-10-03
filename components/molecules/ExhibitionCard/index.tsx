@@ -21,6 +21,8 @@ const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
   const { exhibitionId, name, thumbnail, startDate, endDate, likeCount, reviewCount, isLiked } =
     data;
 
+  // console.log('data', data);
+
   const dDay = displayDday(startDate);
   const mouseHover = () => setIsHover((isHover) => !isHover);
 

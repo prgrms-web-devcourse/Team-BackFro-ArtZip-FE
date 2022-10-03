@@ -3,13 +3,11 @@ import ExhibitionCard from 'components/molecules/ExhibitionCard';
 import SwiperWrapper from 'components/organisms/Swiper';
 import SwiperContainer from 'components/organisms/SwiperContainer';
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import { ExhibitionReadResponse } from 'types/apis/exhibition';
 import { homeStyle as S } from '../styles/pages';
-import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { exhibitionAPI } from 'apis';
 import { ExhibitionProps } from 'types/model';
-
+import axios from 'axios';
+import { authorizeFetch } from 'utils';
 interface HomeProps {
   upcomingExhibitions: Required<ExhibitionProps>[];
   mostLikeExhibitions: Required<ExhibitionProps>[];
@@ -33,10 +31,39 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const accessToken = context.req.cookies['ACCESS_TOKEN'];
+  const refreshToken = context.req.cookies['REFRESH_TOKEN'];
+
+  const getUpcomingURL = `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/upcoming?page=0&size=8`;
+  const getMostLikeURL = `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/mostlike?page=0&size=8&include-end=true`;
+
+  if (accessToken && refreshToken) {
+    const { data: upcomingExhibitionRes } = await authorizeFetch({
+      accessToken,
+      refreshToken,
+      apiURL: getUpcomingURL,
+    });
+    const { data: mostLikeExhibitionRes } = await authorizeFetch({
+      accessToken,
+      refreshToken,
+      apiURL: getMostLikeURL,
+    });
+
+    return {
+      props: {
+        upcomingExhibitions: upcomingExhibitionRes.content,
+        mostLikeExhibitions: mostLikeExhibitionRes.content,
+      },
+    };
+  }
+
+  const getUpcoming = axios.get(getUpcomingURL);
+  const getMostLike = axios.get(getMostLikeURL);
+
   const [upcomingExhibitionRes, mostLikeExhibitionRes] = await Promise.all([
-    exhibitionAPI.getUpcoming(0, 8),
-    exhibitionAPI.getMostLike(0, 8, true),
+    getUpcoming,
+    getMostLike,
   ]);
 
   return {

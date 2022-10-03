@@ -18,20 +18,22 @@ import DEFAULT_IMAGE from 'constants/defaultImage';
 import { Spinner } from 'components/atoms';
 
 interface SubmitData {
-  nickname: string;
-  profileImage: string;
+  nickname: string | null;
+  profileImage: string | null;
 }
 
 const UserEditPage = () => {
   const [form] = useForm();
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
   const { userId, nickname, profileImage } = userInfo;
+
   const submitData = useRef<SubmitData>({
     nickname: nickname,
     profileImage: profileImage,
   });
+
   const submitFile = useRef<FileList>();
-  const [previewImage, setPreviewImage] = useState(profileImage);
+  const [previewImage, setPreviewImage] = useState<string | null>(profileImage);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {

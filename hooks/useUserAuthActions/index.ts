@@ -4,10 +4,12 @@ import { useSetRecoilState } from 'recoil';
 import { userAtom } from 'states';
 import { UserLocalLoginRequest } from 'types/apis/user';
 import { setToken, getErrorMessage } from 'utils';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
 import { message } from 'antd';
 import { SIGNOUT_USER_STATE } from '../../constants';
 import { useState } from 'react';
+
+const cookies = new Cookies();
 
 function useUserAuthActions() {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +21,7 @@ function useUserAuthActions() {
       try {
         const res = await userAPI.localLogin(values);
         const { accessToken, refreshToken } = res.data.data;
+
         setToken('ACCESS_TOKEN', accessToken);
         setToken('REFRESH_TOKEN', refreshToken);
         const { data } = await userAPI.getMyInfo();
@@ -43,8 +46,8 @@ function useUserAuthActions() {
       try {
         await userAPI.logout();
         setUser(SIGNOUT_USER_STATE);
-        cookie.remove('REFRESH_TOKEN');
-        cookie.remove('ACCESS_TOKEN');
+        cookies.remove('REFRESH_TOKEN', { path: '/' });
+        cookies.remove('ACCESS_TOKEN', { path: '/' });
         message.success('로그아웃 되었습니다.');
         router.push('/');
       } catch (e) {

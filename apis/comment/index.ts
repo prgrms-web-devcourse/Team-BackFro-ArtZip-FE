@@ -1,6 +1,8 @@
 import { authRequest, unAuthRequest } from 'apis/common';
 import { CommentCreateRequest, CommentUpdateRequest } from 'types/apis/comment';
-import cookie from 'react-cookies';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 const commentAPI = {
   create: (reviewId: number, payload: CommentCreateRequest) => {
@@ -13,7 +15,7 @@ const commentAPI = {
     return authRequest.delete(`/api/v1/comments/${commentId}`);
   },
   getReplies: ({ commentId, page, size }: { commentId: number; page?: number; size?: number }) => {
-    const refreshToken = cookie.load('REFRESH_TOKEN');
+    const refreshToken = cookies.get('REFRESH_TOKEN');
     const params = {
       ...(page ? { page: page } : {}),
       ...(size ? { size: size } : {}),

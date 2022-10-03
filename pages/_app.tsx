@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
 import { Layout } from 'components/templates';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'styles/global/theme';
@@ -9,28 +9,36 @@ import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 import cookies from 'next-cookies';
 import App from 'next/app';
-import { setToken } from 'utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import { swrOptions } from 'utils';
-
+import { userAtom } from 'states';
+import { SIGNOUT_USER_STATE } from '../constants';
+import { authorizeFetch } from 'utils';
+import { Cookies } from 'react-cookie';
 declare global {
   interface Window {
     // eslint-disable-next-line
     kakao: any;
   }
 }
-
-function ArtZip({ Component, pageProps }: AppProps) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ArtZip({ Component, pageProps, userData }: AppProps | any) {
   const { pathname } = useRouter();
+
+  const initialState = ({ set }: MutableSnapshot) => {
+    const { userId, email, nickname, profileImage } = userData;
+    const isLoggedIn = userId !== null;
+    set(userAtom, { userId, email, nickname, profileImage, isLoggedIn });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   return (
-    <RecoilRoot>
+    <RecoilRoot initializeState={initialState}>
       <SWRConfig value={swrOptions}>
         <ThemeProvider theme={theme}>
           <Layout>
@@ -46,18 +54,48 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
+  const clientCookies = new Cookies();
 
-  const accessTokenByCookie = allCookies['ACCESS_TOKEN'];
-  const refreshTokenByCookie = allCookies['REFRESH_TOKEN'];
+  const accessToken = allCookies['ACCESS_TOKEN'];
+  const refreshToken = allCookies['REFRESH_TOKEN'];
 
-  // TODO: setToken의 로직 수정, 토큰 자체를 디코드하여 유효기간을 설정하기
-  // 현재 배포에서는 쿠키 확인 불가
-  if (refreshTokenByCookie) {
-    accessTokenByCookie && setToken('ACCESS_TOKEN', accessTokenByCookie);
-    refreshTokenByCookie && setToken('REFRESH_TOKEN', refreshTokenByCookie);
+  const removeAllCookies = () => {
+    ctx.res &&
+      ctx.res.setHeader('Set-Cookie', [
+        `ACCESS_TOKEN=deleted; Max-Age=0`,
+        `REFRESH_TOKEN=deleted; Max-Age=0`,
+      ]);
+
+    clientCookies.remove('ACCESS_TOKEN', { path: '/' });
+    clientCookies.remove('REFRESH_TOKEN', { path: '/' });
+  };
+
+  let userState = SIGNOUT_USER_STATE;
+
+  if (refreshToken && accessToken) {
+    try {
+      const { isAuth, data } = await authorizeFetch({
+        accessToken,
+        refreshToken,
+        apiURL: `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
+      });
+
+      userState = isAuth ? { ...data, isLoggedIn: true } : SIGNOUT_USER_STATE;
+
+      if (!isAuth) {
+        removeAllCookies();
+      }
+    } catch (e) {
+      removeAllCookies();
+      userState = SIGNOUT_USER_STATE;
+    }
   }
 
-  return { ...appProps };
+  if (userState.userId === null) {
+    removeAllCookies();
+  }
+
+  return { ...appProps, userData: userState };
 };
 
 export default ArtZip;
