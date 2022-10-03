@@ -7,6 +7,7 @@ import { ExhibitionProps } from 'types/model';
 import { exhibitionAPI } from 'apis';
 import { ExhibitionCard } from 'components/molecules';
 import styled from '@emotion/styled';
+import Head from 'next/head';
 
 //exhibitions/custom
 const ExhibitionCustom: NextPage = () => {
@@ -55,45 +56,50 @@ const ExhibitionCustom: NextPage = () => {
     });
   }, []);
   return (
-    <S.ExhibitionsCustom>
-      <SearchToolbar
-        type="place"
-        selectedValues={selectedArea}
-        setSelectedValues={setSelectedArea}
-      />
-      <SearchToolbar
-        type="period"
-        selectedValues={selectedPeriod}
-        setSelectedValues={setSelectedPeriod}
-      />
-      <SearchToolbar
-        type="genre"
-        selectedValues={selectedGenre}
-        setSelectedValues={setSelectedGenre}
-      />
-      <S.ExhibitionsCustomContent>
-        {exhibitions.length > 0 ? (
-          exhibitions.map((exhibition) => (
-            <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
-          ))
-        ) : (
-          <div>
-            <Logo>Art.zip</Logo>
-            <h4>해당하는 전시회가 없습니다. </h4>
-          </div>
-        )}
-      </S.ExhibitionsCustomContent>
-      <Pagination
-        className="pagination"
-        defaultCurrent={1}
-        current={currentPage + 1}
-        total={total * 10}
-        defaultPageSize={10}
-        showSizeChanger={false}
-        pageSize={10}
-        onChange={(page) => setCurrentPage(page - 1)}
-      />
-    </S.ExhibitionsCustom>
+    <>
+      <Head>
+        <title>ArtZip | ExhibitionCustom</title>
+      </Head>
+      <S.ExhibitionsCustom>
+        <SearchToolbar
+          type="place"
+          selectedValues={selectedArea}
+          setSelectedValues={setSelectedArea}
+        />
+        <SearchToolbar
+          type="period"
+          selectedValues={selectedPeriod}
+          setSelectedValues={setSelectedPeriod}
+        />
+        <SearchToolbar
+          type="genre"
+          selectedValues={selectedGenre}
+          setSelectedValues={setSelectedGenre}
+        />
+        <S.ExhibitionsCustomContent>
+          {exhibitions.length > 0 ? (
+            exhibitions.map((exhibition) => (
+              <ExhibitionCard key={exhibition.exhibitionId} data={exhibition} />
+            ))
+          ) : (
+            <div>
+              <Logo>Art.zip</Logo>
+              <h4>해당하는 전시회가 없습니다. </h4>
+            </div>
+          )}
+        </S.ExhibitionsCustomContent>
+        <Pagination
+          className="pagination"
+          defaultCurrent={1}
+          current={currentPage + 1}
+          total={total * 10}
+          defaultPageSize={10}
+          showSizeChanger={false}
+          pageSize={10}
+          onChange={(page) => setCurrentPage(page - 1)}
+        />
+      </S.ExhibitionsCustom>
+    </>
   );
 };
 export default ExhibitionCustom;
