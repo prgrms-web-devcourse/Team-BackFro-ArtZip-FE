@@ -16,6 +16,7 @@ import { swrOptions } from 'utils';
 import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
 import { authorizeFetch } from 'utils';
+import { Cookies } from 'react-cookie';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -53,9 +54,21 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
+  const clientCookies = new Cookies();
 
   const accessToken = allCookies['ACCESS_TOKEN'];
   const refreshToken = allCookies['REFRESH_TOKEN'];
+
+  const removeAllCookies = () => {
+    ctx.res &&
+      ctx.res.setHeader('Set-Cookie', [
+        `ACCESS_TOKEN=deleted; Max-Age=0`,
+        `REFRESH_TOKEN=deleted; Max-Age=0`,
+      ]);
+
+    clientCookies.remove('ACCESS_TOKEN', { path: '/' });
+    clientCookies.remove('REFRESH_TOKEN', { path: '/' });
+  };
 
   let userState = SIGNOUT_USER_STATE;
 
@@ -68,16 +81,20 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
       });
 
       userState = isAuth ? { ...data, isLoggedIn: true } : SIGNOUT_USER_STATE;
-    } catch (e) {
-      ctx.res &&
-        ctx.res.setHeader('Set-Cookie', [
-          `ACCESS_TOKEN=deleted; Max-Age=0`,
-          `REFRESH_TOKEN=deleted; Max-Age=0`,
-        ]);
 
+      if (!isAuth) {
+        removeAllCookies();
+      }
+    } catch (e) {
+      removeAllCookies();
       userState = SIGNOUT_USER_STATE;
     }
   }
+
+  if (userState.userId === null) {
+    removeAllCookies();
+  }
+
   return { ...appProps, userData: userState };
 };
 

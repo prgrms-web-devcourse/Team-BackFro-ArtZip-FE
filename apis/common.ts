@@ -1,6 +1,6 @@
 import { userAPI } from 'apis';
 import axios from 'axios';
-import { parseJwt, setToken, storage } from 'utils';
+import { parseJwt, setToken } from 'utils';
 import { Cookies } from 'react-cookie';
 const baseURL = `${process.env.NEXT_PUBLIC_API_END_POINT}`;
 

@@ -46,8 +46,8 @@ function useUserAuthActions() {
       try {
         await userAPI.logout();
         setUser(SIGNOUT_USER_STATE);
-        cookies.remove('REFRESH_TOKEN');
-        cookies.remove('ACCESS_TOKEN');
+        cookies.remove('REFRESH_TOKEN', { path: '/' });
+        cookies.remove('ACCESS_TOKEN', { path: '/' });
         message.success('로그아웃 되었습니다.');
         router.push('/');
       } catch (e) {

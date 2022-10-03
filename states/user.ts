@@ -2,6 +2,7 @@ import { userAPI } from 'apis';
 import { atom, selector } from 'recoil';
 import { Cookies } from 'react-cookie';
 import { SIGNOUT_USER_STATE } from '../constants';
+import { authorizeFetch } from 'utils';
 
 const cookies = new Cookies();
 
@@ -14,17 +15,25 @@ const cookieEffect =
 
       try {
         if (!cookies.get(accessTokenKey) || !cookies.get(refreshTokenKey)) {
-          cookies.remove('ACCESS_TOKEN');
-          cookies.remove('REFRESH_TOKEN');
+          cookies.remove('ACCESS_TOKEN', { path: '/' });
+          cookies.remove('REFRESH_TOKEN', { path: '/' });
           return SIGNOUT_USER_STATE;
         }
 
-        const { data } = await userAPI.getMyInfo();
-        const { userId, email, nickname, profileImage } = data.data;
+        const accessToken = cookies.get(accessTokenKey);
+        const refreshToken = cookies.get(refreshTokenKey);
+
+        const { isAuth, data } = await authorizeFetch({
+          accessToken,
+          refreshToken,
+          apiURL: `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/users/me/info`,
+        });
+
+        const { userId, email, nickname, profileImage } = data;
         return { userId, email, nickname, profileImage, isLoggedIn: true };
       } catch (error: unknown) {
-        cookies.remove('ACCESS_TOKEN');
-        cookies.remove('REFRESH_TOKEN');
+        cookies.remove('REFRESH_TOKEN', { path: '/' });
+        cookies.remove('ACCESS_TOKEN', { path: '/' });
         console.error(error);
 
         return SIGNOUT_USER_STATE;
