@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { reviewAPI } from 'apis';
 import Image from 'next/image';
+import { useSWRConfig } from 'swr';
 
 const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) => {
   const router = useRouter();
@@ -32,11 +33,7 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
   const [feedLikeCount, setFeedLikeCount] = useState(likeCount);
   const [likeLoading, setLikeLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  useEffect(() => {
-    setIsLikedFeed(isLiked);
-    setFeedLikeCount(likeCount);
-  }, [isLiked, likeCount]);
+  const { mutate } = useSWRConfig();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -77,6 +74,8 @@ const ReviewFeed = ({ feed, isMyFeed, onDeleteButtonClick }: ReviewFeedProps) =>
     setFeedLikeCount(likeCount);
 
     setLikeLoading(false);
+
+    mutate(`api/v1/reviews/${reviewId}`, undefined, { revalidate: true });
   };
 
   return (

@@ -20,11 +20,11 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
       </Head>
       <div>
         <SwiperContainer title="다가오는 전시회" type="upcoming">
-          <SwiperWrapper items={upcomingExhibitions} />
+          <SwiperWrapper items={upcomingExhibitions} type="upcoming" />
         </SwiperContainer>
 
         <SwiperContainer title="인기많은 전시회" type="popular">
-          <SwiperWrapper items={mostLikeExhibitions} />
+          <SwiperWrapper items={mostLikeExhibitions} type="popular" />
         </SwiperContainer>
       </div>
     </>

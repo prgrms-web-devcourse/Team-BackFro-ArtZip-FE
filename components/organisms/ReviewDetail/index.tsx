@@ -3,11 +3,12 @@ import { reviewAPI } from 'apis';
 import { LinkButton } from 'components/atoms';
 import { UserInfo, ImageGroup, ReviewExhibitionInfo } from 'components/molecules';
 import { InfoGroup } from 'components/organisms';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { ReviewSingleReadData } from 'types/apis/review';
 import * as S from './style';
+import { useSWRConfig } from 'swr';
 
 interface ReviewDetailProps {
   reviewDetail: Omit<ReviewSingleReadData, 'comments'>;
@@ -36,11 +37,7 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
   const [isLikeDetail, setIsLikedFeed] = useState(isLiked);
   const [likeLoading, setLikeLoading] = useState(false);
   const userState = useRecoilValue(userAtom);
-
-  useEffect(() => {
-    setIsLikedFeed(isLiked);
-    setDetailLikeCount(likeCount);
-  }, [isLiked, likeCount]);
+  const { mutate } = useSWRConfig();
 
   const handleLikeClick = async (reviewId: number) => {
     if (!userState.userId) {
@@ -62,6 +59,16 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
     setDetailLikeCount(likeCount);
 
     setLikeLoading(false);
+
+    mutate(
+      `api/v1/reviews/${reviewId}`,
+      {
+        ...reviewDetail,
+        isLiked,
+        likeCount,
+      },
+      { revalidate: false },
+    );
   };
 
   return (

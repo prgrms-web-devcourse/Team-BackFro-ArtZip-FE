@@ -11,6 +11,7 @@ SwiperCore.use([Navigation, Autoplay]);
 
 interface SwiperProps {
   items: Required<ExhibitionProps>[];
+  type: 'upcoming' | 'popular';
 }
 
 const checkIsMobile = (windowWidthSize: number) => {
@@ -20,7 +21,7 @@ const checkIsMobile = (windowWidthSize: number) => {
   return false;
 };
 
-const SwiperWrapper = ({ items }: SwiperProps) => {
+const SwiperWrapper = ({ items, type }: SwiperProps) => {
   const { windowWidthSize } = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,8 +41,8 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
             disableOnInteraction: false,
           }}
           navigation={{
-            prevEl: '.swiper-button-prev',
-            nextEl: '.swiper-button-next',
+            prevEl: `.swiper-button-prev.${type}`,
+            nextEl: `.swiper-button-next.${type}`,
           }}
         >
           {items.map((item) => (
@@ -50,8 +51,8 @@ const SwiperWrapper = ({ items }: SwiperProps) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="swiper-button-prev"></div>
-        <div className="swiper-button-next"></div>
+        <div className={`swiper-button-prev ${type}`}></div>
+        <div className={`swiper-button-next ${type}`}></div>
       </div>
     </S.SwiperWrapper>
   );

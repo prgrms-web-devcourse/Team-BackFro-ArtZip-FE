@@ -92,14 +92,19 @@ const ReviewUpdatePage = () => {
         await reviewAPI.updateReview(Number(router.query.id), formData);
         message.success('후기 수정이 완료되었습니다.');
         router.replace('/community');
-        mutate({
-          ...prevData,
-          date: data.date,
-          title: data.title,
-          content: data.content,
-          isPublic: data.isPublic,
-          photos: [...prevImages],
-        });
+        mutate(
+          {
+            ...prevData,
+            date: data.date,
+            title: data.title,
+            content: data.content,
+            isPublic: data.isPublic,
+            photos: [...prevImages],
+          },
+          {
+            revalidate: false,
+          },
+        );
       } catch (error) {
         message.error(getErrorMessage(error));
         console.error(error);
