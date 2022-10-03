@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { useCheckAuth, useDebounce } from 'hooks';
 import { Spinner } from 'components/atoms';
 import { ValueOf } from 'types/utility';
+import Head from 'next/head';
 
 export interface SubmitData {
   // exhibitionId: number;
@@ -79,61 +80,66 @@ const ReviewCreatePage = () => {
     <Spinner />
   ) : (
     <>
-      <Banner
-        subtitle="Art.zip 후기 작성"
-        title="전시회 다녀오셨나요?"
-        content="소중한 경험을 후기로 작성하세요!"
-      />
-      <Section>
-        <ReviewEditForm layout="vertical">
-          <FormItem label="다녀 온 전시회">
-            <ExhibitionSearchBar prevData={query} onExhibitionChange={handleChange} />
-          </FormItem>
-          <FormItem label="다녀 온 날짜">
-            <DateInput
-              onChange={(value) => {
-                value && handleChange('date', value.format('YYYY-MM-DD'));
-              }}
-            />
-          </FormItem>
-          <FormItem label="제목">
-            <Input
-              placeholder="제목을 입력해주세요"
-              showCount
-              maxLength={30}
-              onChange={(e) => {
-                handleChange('title', e.target.value);
-              }}
-            />
-          </FormItem>
-          <FormItem label="내용">
-            <TextArea
-              placeholder="내용을 입력해주세요(1000자 이하)"
-              autoSize
-              onChange={(e) => {
-                handleChange('content', e.target.value);
-              }}
-            />
-          </FormItem>
-          <FormItem label="사진">
-            <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
-          </FormItem>
-          <FormItem label="공개 여부">
-            <ToggleSwitch
-              defaultChecked
-              onChange={(checked) => {
-                handleChange('isPublic', checked);
-                setIsPublic(checked);
-              }}
-            />
-            {isPublic ? '전체 공개' : '비공개'}
-          </FormItem>
+      <Head>
+        <title>ArtZip | ReviewCreatePage</title>
+      </Head>
+      <>
+        <Banner
+          subtitle="Art.zip 후기 작성"
+          title="전시회 다녀오셨나요?"
+          content="소중한 경험을 후기로 작성하세요!"
+        />
+        <Section>
+          <ReviewEditForm layout="vertical">
+            <FormItem label="다녀 온 전시회">
+              <ExhibitionSearchBar prevData={query} onExhibitionChange={handleChange} />
+            </FormItem>
+            <FormItem label="다녀 온 날짜">
+              <DateInput
+                onChange={(value) => {
+                  value && handleChange('date', value.format('YYYY-MM-DD'));
+                }}
+              />
+            </FormItem>
+            <FormItem label="제목">
+              <Input
+                placeholder="제목을 입력해주세요"
+                showCount
+                maxLength={30}
+                onChange={(e) => {
+                  handleChange('title', e.target.value);
+                }}
+              />
+            </FormItem>
+            <FormItem label="내용">
+              <TextArea
+                placeholder="내용을 입력해주세요(1000자 이하)"
+                autoSize
+                onChange={(e) => {
+                  handleChange('content', e.target.value);
+                }}
+              />
+            </FormItem>
+            <FormItem label="사진">
+              <ImageUpload fileList={files} setFileList={setFiles} limit={9} />
+            </FormItem>
+            <FormItem label="공개 여부">
+              <ToggleSwitch
+                defaultChecked
+                onChange={(checked) => {
+                  handleChange('isPublic', checked);
+                  setIsPublic(checked);
+                }}
+              />
+              {isPublic ? '전체 공개' : '비공개'}
+            </FormItem>
 
-          <SubmitButton type="primary" ref={debounceRef}>
-            작성완료
-          </SubmitButton>
-        </ReviewEditForm>
-      </Section>
+            <SubmitButton type="primary" ref={debounceRef}>
+              작성완료
+            </SubmitButton>
+          </ReviewEditForm>
+        </Section>
+      </>
     </>
   );
 };

@@ -6,10 +6,6 @@ const Document = () => {
       <Head>
         <meta charSet="utf-8" />
         <meta
-          name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        />
-        <meta
           name="description"
           content="미술 전시회를 조회하고 후기를 공유할 수 있는 서비스입니다."
         />
@@ -17,6 +13,10 @@ const Document = () => {
         <meta
           name="author"
           content="권기홍, 김다은, 마혜경, 조윤정, 정현서, 홍유석, 박상혁, 김승은"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 

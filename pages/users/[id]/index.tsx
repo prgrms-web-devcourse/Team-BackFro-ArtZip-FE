@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { UserActivityCardList } from 'components/organisms';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
+import Head from 'next/head';
 
 const UserPage = () => {
   const { userId } = useRecoilValue(userAtom);
@@ -11,28 +12,35 @@ const UserPage = () => {
   const isMyPage = String(userId) === id;
 
   return (
-    <PageContainer>
-      <UserProfileCard userId={String(id)} />
-      <UserActivityCardList userId={String(id)} />
-      {isMyPage && (
-        <SideNavigation
-          paths={[
-            {
-              href: `/users/${userId}`,
-              pageName: '사용자 정보',
-            },
-            {
-              href: `/users/${userId}/edit`,
-              pageName: '프로필 수정',
-            },
-            {
-              href: `/users/${userId}/edit-password`,
-              pageName: '비밀번호 변경',
-            },
-          ]}
-        />
-      )}
-    </PageContainer>
+    <>
+      <Head>
+        <title>ArtZip | UserPage</title>
+      </Head>
+      <>
+        <PageContainer>
+          <UserProfileCard userId={String(id)} />
+          <UserActivityCardList userId={String(id)} />
+          {isMyPage && (
+            <SideNavigation
+              paths={[
+                {
+                  href: `/users/${userId}`,
+                  pageName: '사용자 정보',
+                },
+                {
+                  href: `/users/${userId}/edit`,
+                  pageName: '프로필 수정',
+                },
+                {
+                  href: `/users/${userId}/edit-password`,
+                  pageName: '비밀번호 변경',
+                },
+              ]}
+            />
+          )}
+        </PageContainer>
+      </>
+    </>
   );
 };
 

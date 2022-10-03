@@ -16,13 +16,14 @@ import { useDebounce, useCheckAuth } from 'hooks';
 import { useForm } from 'antd/lib/form/Form';
 import DEFAULT_IMAGE from 'constants/defaultImage';
 import { Spinner } from 'components/atoms';
+import Head from 'next/head';
 
 interface SubmitData {
   nickname: string | null;
   profileImage: string | null;
 }
 
-const UserEditPage = () => {
+const ProfileEditPage = () => {
   const [form] = useForm();
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
   const { userId, nickname, profileImage } = userInfo;
@@ -91,64 +92,71 @@ const UserEditPage = () => {
   return isChecking ? (
     <Spinner />
   ) : (
-    <PageContainer>
-      <Title>프로필 수정</Title>
-      <ProfileEditForm
-        layout="vertical"
-        onFinish={handleFinish}
-        onFinishFailed={handleFinishFailed}
-        form={form}
-      >
-        <FormItem label="프로필 이미지">
-          <ProfileImage
-            src={previewImage || DEFAULT_IMAGE.USER_PROFILE}
-            alt="profile image"
-            onClick={handleImageClick}
-            preview={false}
-          />
-          <FileInput
-            type="file"
-            accept="image/jpg, image/png, image/jpeg"
-            name="profile_img"
-            onChange={handleFileChange}
-            ref={fileInput}
-          />
-        </FormItem>
-        <FormItem
-          name="nickname"
-          label="닉네임"
-          rules={[{ validator: validateNickname }]}
-          initialValue={nickname}
-        >
-          <Input
-            type="text"
-            onChange={(e) => {
-              submitData.current.nickname = e.target.value;
-            }}
-          />
-        </FormItem>
-        <SubmitButton type="primary" ref={debounceRef}>
-          저장
-        </SubmitButton>
-      </ProfileEditForm>
+    <>
+      <Head>
+        <title>ArtZip | ProfileEdit</title>
+      </Head>
+      <>
+        <PageContainer>
+          <Title>프로필 수정</Title>
+          <ProfileEditForm
+            layout="vertical"
+            onFinish={handleFinish}
+            onFinishFailed={handleFinishFailed}
+            form={form}
+          >
+            <FormItem label="프로필 이미지">
+              <ProfileImage
+                src={previewImage || DEFAULT_IMAGE.USER_PROFILE}
+                alt="profile image"
+                onClick={handleImageClick}
+                preview={false}
+              />
+              <FileInput
+                type="file"
+                accept="image/jpg, image/png, image/jpeg"
+                name="profile_img"
+                onChange={handleFileChange}
+                ref={fileInput}
+              />
+            </FormItem>
+            <FormItem
+              name="nickname"
+              label="닉네임"
+              rules={[{ validator: validateNickname }]}
+              initialValue={nickname}
+            >
+              <Input
+                type="text"
+                onChange={(e) => {
+                  submitData.current.nickname = e.target.value;
+                }}
+              />
+            </FormItem>
+            <SubmitButton type="primary" ref={debounceRef}>
+              저장
+            </SubmitButton>
+          </ProfileEditForm>
 
-      <SideNavigation
-        paths={[
-          {
-            href: `/users/${userId}`,
-            pageName: '사용자 정보',
-          },
-          {
-            href: `/users/${userId}/edit`,
-            pageName: '프로필 수정',
-          },
-          {
-            href: `/users/${userId}/edit-password`,
-            pageName: '비밀번호 변경',
-          },
-        ]}
-      />
-    </PageContainer>
+          <SideNavigation
+            paths={[
+              {
+                href: `/users/${userId}`,
+                pageName: '사용자 정보',
+              },
+              {
+                href: `/users/${userId}/edit`,
+                pageName: '프로필 수정',
+              },
+              {
+                href: `/users/${userId}/edit-password`,
+                pageName: '비밀번호 변경',
+              },
+            ]}
+          />
+        </PageContainer>
+      </>
+    </>
   );
 };
 
@@ -202,4 +210,4 @@ const SubmitButton = styled(Button)`
   }
 `;
 
-export default UserEditPage;
+export default ProfileEditPage;
