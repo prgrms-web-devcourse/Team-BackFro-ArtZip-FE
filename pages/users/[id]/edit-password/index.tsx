@@ -61,7 +61,7 @@ const PasswordEditPage = () => {
   ) : (
     <>
       <Head>
-        <title>ArtZip | PasswordEdit</title>
+        <title>ArtZip | 비밀번호 변경</title>
       </Head>
       <>
         <PageContainer>

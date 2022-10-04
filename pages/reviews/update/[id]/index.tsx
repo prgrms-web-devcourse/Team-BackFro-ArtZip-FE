@@ -127,7 +127,7 @@ const ReviewUpdatePage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ReviewUpdatePage</title>
+        <title>ArtZip | 후기 수정</title>
       </Head>
       <>
         <Banner

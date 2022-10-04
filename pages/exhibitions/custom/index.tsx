@@ -58,7 +58,7 @@ const ExhibitionCustom: NextPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ExhibitionCustom</title>
+        <title>ArtZip | 맞춤 전시회</title>
       </Head>
       <S.ExhibitionsCustom>
         <SearchToolbar

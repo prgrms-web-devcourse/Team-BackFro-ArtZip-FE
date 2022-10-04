@@ -39,12 +39,12 @@ const ExhibitionsMore: NextPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ExhibitionsMore</title>
+        <title>ArtZip | 전시회 모아보기</title>
       </Head>
       <S.ExhibitionsMore>
         <div>
           <Banner
-            subtitle={'Art.zip 전시회 모아 보기'}
+            subtitle={'Art.zip 전시회 모아보기'}
             title={type === 'upcoming' ? '다가오는 전시회' : '인기많은 전시회'}
             content={
               type === 'upcoming'

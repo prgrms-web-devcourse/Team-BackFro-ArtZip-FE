@@ -94,7 +94,7 @@ const ProfileEditPage = () => {
   ) : (
     <>
       <Head>
-        <title>ArtZip | ProfileEdit</title>
+        <title>ArtZip | 프로필 수정</title>
       </Head>
       <>
         <PageContainer>

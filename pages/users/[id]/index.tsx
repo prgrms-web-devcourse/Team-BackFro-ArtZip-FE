@@ -14,7 +14,7 @@ const UserPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | UserPage</title>
+        <title>ArtZip | 유저 페이지</title>
       </Head>
       <>
         <PageContainer>

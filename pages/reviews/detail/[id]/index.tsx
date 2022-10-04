@@ -79,7 +79,7 @@ const ReviewDetailPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ReviewDetailPage</title>
+        <title>ArtZip | 후기 상세보기</title>
       </Head>
 
       {review && (

@@ -81,7 +81,7 @@ const ReviewCreatePage = () => {
   ) : (
     <>
       <Head>
-        <title>ArtZip | ReviewCreatePage</title>
+        <title>ArtZip | 후기 작성</title>
       </Head>
       <>
         <Banner

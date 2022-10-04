@@ -116,7 +116,7 @@ const SignUpPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | SignUp</title>
+        <title>ArtZip | 회원가입</title>
       </Head>
 
       <FormWrapper>
