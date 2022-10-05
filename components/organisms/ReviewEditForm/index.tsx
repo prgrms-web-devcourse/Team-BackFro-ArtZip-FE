@@ -124,7 +124,7 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
   const handleImageDelete = () => {
     const photoId = clickedImage.current;
     const { deletedPhotos } = submitData.current;
-    deletedPhotos && handleChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
+    deletedPhotos && (deletedPhotos as number[]).push(photoId);
     setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
     setIsModalOn(false);
   };
