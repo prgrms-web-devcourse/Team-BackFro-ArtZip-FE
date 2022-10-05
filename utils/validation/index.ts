@@ -1,6 +1,6 @@
 import { RuleObject } from 'antd/lib/form';
 import { message } from 'antd';
-import { SubmitData } from 'pages/reviews/create/index';
+import { SubmitData } from 'components/organisms/ReviewEditForm';
 
 export const validateNickname = (_: RuleObject, value: string) => {
   if (!value) {
