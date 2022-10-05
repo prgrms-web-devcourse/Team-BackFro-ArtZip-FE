@@ -11,3 +11,4 @@ export { default as CommentUtils } from './CommentUtils';
 export { default as ReplyUtils } from './ReplyUtils';
 export { default as ExhibitionSearchBar } from './ExhibitionSearchBar';
 export { default as UserActivityCardList } from './UserActivityCardList';
+export { default as ReviewEditForm } from './ReviewEditForm';
