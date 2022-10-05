@@ -124,7 +124,7 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
   const handleImageDelete = () => {
     const photoId = clickedImage.current;
     const { deletedPhotos } = submitData.current;
-    handleChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
+    deletedPhotos && handleChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
     setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
     setIsModalOn(false);
   };
@@ -133,6 +133,14 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
     clickedImage.current = 0;
     setIsModalOn(false);
   };
+
+  useEffect(() => {
+    return () => {
+      if (type === 'create' && submitData.current.exhibitionId) {
+        console.log('임시 저장', submitData.current);
+      }
+    };
+  }, [type]);
 
   return (
     <>
