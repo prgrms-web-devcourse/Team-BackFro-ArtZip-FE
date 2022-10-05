@@ -6,12 +6,12 @@ import { getErrorMessage, show, hide } from 'utils';
 import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
 import { ValueOf } from 'types/utility';
-import { SubmitData } from 'pages/reviews/create';
+import { SubmitData } from 'components/organisms/ReviewEditForm';
 
 interface ExhibitionSearchBarProps {
-  prevData: {
-    name?: string;
-    thumbnail?: string;
+  prevData?: {
+    name: string;
+    thumbnail: string;
   };
   onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
 }
@@ -24,9 +24,9 @@ interface SearchResult {
 
 const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState((prevData.name as string) || '');
+  const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
   const [posterImage, setPosterImage] = useState(
-    prevData.thumbnail || DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
+    prevData ? prevData.thumbnail : DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
   );
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const resultList = useRef<HTMLUListElement>(null);
@@ -63,7 +63,7 @@ const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchB
             setExhibitionName('');
             resultList.current && show(resultList.current);
           }}
-          disabled={!!prevData.name}
+          disabled={!!prevData}
         />
         <ResultList ref={resultList}>
           {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
