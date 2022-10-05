@@ -48,12 +48,6 @@ const ExhibitionCustom: NextPage = () => {
       });
   }, [currentPage, selectedArea, selectedPeriod, selectedGenre]);
 
-  useEffect(() => {
-    exhibitionAPI.custom('ALL', 'ALL', 'ALL', 0, 10).then((res) => {
-      setTotal(res.data.data.totalPage);
-      setExhibitions(res.data.data.content);
-    });
-  }, []);
   return (
     <S.ExhibitionsCustom>
       <SearchToolbar
