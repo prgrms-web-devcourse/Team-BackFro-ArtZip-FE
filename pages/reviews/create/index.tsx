@@ -1,13 +1,37 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth } from 'hooks';
+import { useCheckAuth, useDraftReview } from 'hooks';
 import { Spinner } from 'components/atoms';
 import { ReviewEditForm } from 'components/organisms';
+import { useEffect, useState } from 'react';
+import { Modal } from 'antd';
 
 const ReviewCreatePage = () => {
-  const router = useRouter();
-  const { query } = router;
+  const { query } = useRouter();
+  const [prevData, setPrevData] = useState(query);
+  const [draftReview, setDraftReview, removeDraftReview] = useDraftReview();
+  const [isModalOn, setIsModalOn] = useState(false);
+  const [isPrevDataChanged, setIsPrevDataChanged] = useState(false);
+
+  useEffect(() => {
+    if (query.exhibitionId) {
+      removeDraftReview();
+    } else if (draftReview.exhibitionId) {
+      setIsModalOn(true);
+    }
+  }, []);
+
+  const handleModalOk = () => {
+    setPrevData(draftReview);
+    setIsModalOn(false);
+    setIsPrevDataChanged(true);
+  };
+
+  const handleModalCancel = () => {
+    removeDraftReview();
+    setIsModalOn(false);
+  };
 
   const [isChecking] = useCheckAuth();
   return isChecking ? (
@@ -23,16 +47,33 @@ const ReviewCreatePage = () => {
         <ReviewEditForm
           type="create"
           prevData={
-            query.exhibitionId
+            prevData.exhibitionId
               ? {
-                  exhibitionId: Number(query.exhibitionId),
-                  exhibitionName: query.name as string,
-                  exhibitionThumbnail: query.thumbnail as string,
+                  exhibitionId: Number(prevData.exhibitionId),
+                  exhibitionName: prevData.exhibitionName as string,
+                  exhibitionThumbnail: prevData.exhibitionThumbnail as string,
+                  date: prevData.date ? (prevData.date as string) : '',
+                  title: prevData.title ? (prevData.title as string) : '',
+                  content: prevData.content ? (prevData.content as string) : '',
+                  isPublic: prevData.isPublic !== undefined ? !!prevData.isPublic : true,
                 }
               : undefined
           }
+          isPrevDataChanged={isPrevDataChanged}
+          setDraftReview={setDraftReview}
+          removeDraftReview={removeDraftReview}
         />
       </Section>
+      <Modal
+        title="불러오기"
+        visible={isModalOn}
+        okText="예"
+        onOk={handleModalOk}
+        cancelText="아니오"
+        onCancel={handleModalCancel}
+      >
+        <p>임시 저장된 글이 있습니다. 불러올까요?</p>
+      </Modal>
     </>
   );
 };
