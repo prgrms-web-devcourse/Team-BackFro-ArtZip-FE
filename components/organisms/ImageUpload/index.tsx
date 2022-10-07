@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, Image } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
-import { getBase64 } from 'utils';
+import { getBase64, validateImageFile } from 'utils';
 
 interface ImageUploadProps {
   fileList: UploadFile[];
@@ -29,7 +29,6 @@ const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    console.log(newFileList);
     setFileList(newFileList);
   };
 
@@ -47,11 +46,12 @@ const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        beforeUpload={validateImageFile}
       >
         {fileList.length < limit ? uploadButton : null}
       </Upload>
       <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} preview={false} />
       </Modal>
     </>
   );
