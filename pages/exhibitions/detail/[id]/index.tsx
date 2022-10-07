@@ -79,8 +79,8 @@ const ExhibitionDetailPage = () => {
                   pathname: `/reviews/create`,
                   query: {
                     exhibitionId: exhibitionData.exhibitionId,
-                    name: exhibitionData.name,
-                    thumbnail: exhibitionData.thumbnail,
+                    exhibitionName: exhibitionData.name,
+                    exhibitionThumbnail: exhibitionData.thumbnail,
                   },
                 }}
                 as={`/reviews/create`}
@@ -95,8 +95,8 @@ const ExhibitionDetailPage = () => {
                   pathname: `/reviews/create`,
                   query: {
                     exhibitionId: exhibitionData.exhibitionId,
-                    name: exhibitionData.name,
-                    thumbnail: exhibitionData.thumbnail,
+                    exhibitionName: exhibitionData.name,
+                    exhibitionThumbnail: exhibitionData.thumbnail,
                   },
                 }}
                 as={`/reviews/create`}
