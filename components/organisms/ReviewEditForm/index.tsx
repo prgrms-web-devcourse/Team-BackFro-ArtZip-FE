@@ -4,7 +4,7 @@ import { reviewAPI } from 'apis';
 import { useDebounce } from 'hooks';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Dispatch } from 'react';
 import { PhotoProps } from 'types/model';
 import { ValueOf } from 'types/utility';
 import {
@@ -35,33 +35,53 @@ interface ReviewEditFormProps {
     exhibitionId: number;
     exhibitionName: string;
     exhibitionThumbnail: string;
-    date?: string;
-    title?: string;
-    content?: string;
-    isPublic?: boolean;
+    date: string;
+    title: string;
+    content: string;
+    isPublic: boolean;
     photos?: PhotoProps[];
   };
+  isPrevDataChanged?: boolean;
   onMutation?: (submitData: SubmitData, prevImages: PhotoProps[]) => void;
+  setDraftReview?: Dispatch<SubmitData>;
+  removeDraftReview?: () => void;
 }
 
-const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => {
+const ReviewEditForm = ({
+  type,
+  prevData,
+  isPrevDataChanged,
+  onMutation,
+  setDraftReview,
+  removeDraftReview,
+}: ReviewEditFormProps) => {
   const submitData = useRef<SubmitData>({ ...initialData });
   const [files, setFiles] = useState<UploadFile[]>([]);
-  const [isPublic, setIsPublic] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
   const [isModalOn, setIsModalOn] = useState(false);
   const clickedImage = useRef<number>(0);
   const router = useRouter();
+  const timerId = useRef<ReturnType<typeof setTimeout>>();
+  const [date, setDate] = useState(
+    prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined,
+  );
+  const [title, setTitle] = useState(prevData?.title || '');
+  const [content, setContent] = useState(prevData?.content || '');
+  const [isPublic, setIsPublic] = useState(
+    prevData?.isPublic !== undefined ? prevData.isPublic : true,
+  );
 
   useEffect(() => {
     if (prevData) {
       submitData.current = {
         exhibitionId: prevData.exhibitionId,
-        date: prevData.date || '',
-        title: prevData.title || '',
-        content: prevData.content || '',
-        isPublic: prevData.isPublic || true,
+        exhibitionName: prevData.exhibitionName,
+        exhibitionThumbnail: prevData.exhibitionThumbnail,
+        date: prevData.date,
+        title: prevData.title,
+        content: prevData.content,
+        isPublic: prevData.isPublic,
       };
 
       if (type === 'update') {
@@ -72,10 +92,31 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
         setPrevImages(prevData.photos || []);
       }
     }
-  }, [prevData, type]);
+  }, [isPrevDataChanged, type]);
+
+  useEffect(() => {
+    if (isPrevDataChanged && prevData) {
+      prevData.date && setDate(moment(prevData.date, 'YYYY-MM-DD'));
+      setTitle(prevData.title);
+      setContent(prevData.content);
+      setIsPublic(prevData.isPublic);
+    }
+  }, [isPrevDataChanged]);
 
   const handleChange = (key: string, value: ValueOf<SubmitData>) => {
-    submitData.current[key] = value;
+    submitData.current = {
+      ...submitData.current,
+      [key]: value,
+    };
+
+    if (type === 'create' && setDraftReview && submitData.current.exhibitionId) {
+      timerId.current && clearTimeout(timerId.current);
+      timerId.current = setTimeout(() => {
+        setDraftReview({
+          ...submitData.current,
+        });
+      }, 1000);
+    }
   };
 
   const handleSubmit = async (e?: Event) => {
@@ -106,6 +147,7 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
             throw new TypeError('type의 값이 유효하지 않습니다.');
           }
         }
+        removeDraftReview && removeDraftReview();
         router.replace('/community');
       } catch (error) {
         message.error(getErrorMessage(error));
@@ -134,19 +176,12 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
     setIsModalOn(false);
   };
 
-  useEffect(() => {
-    return () => {
-      if (type === 'create' && submitData.current.exhibitionId) {
-        console.log('임시 저장', submitData.current);
-      }
-    };
-  }, [type]);
-
   return (
     <>
       <EditForm layout="vertical">
         <FormItem label="다녀 온 전시회">
           <ExhibitionSearchBar
+            type={type}
             prevData={
               prevData
                 ? {
@@ -155,15 +190,19 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
                   }
                 : undefined
             }
+            isPrevDataChanged={isPrevDataChanged}
             onExhibitionChange={handleChange}
           />
         </FormItem>
         <FormItem label="다녀 온 날짜">
           <DateInput
+            value={date}
             onChange={(value) => {
-              value && handleChange('date', value.format('YYYY-MM-DD'));
+              if (value) {
+                handleChange('date', value.format('YYYY-MM-DD'));
+                setDate(value);
+              }
             }}
-            defaultValue={prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined}
           />
         </FormItem>
         <FormItem label="제목">
@@ -171,20 +210,22 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
             placeholder="제목을 입력해주세요"
             showCount
             maxLength={30}
+            value={title}
             onChange={(e) => {
               handleChange('title', e.target.value);
+              setTitle(e.target.value);
             }}
-            defaultValue={prevData?.title || undefined}
           />
         </FormItem>
         <FormItem label="내용">
           <TextArea
             placeholder="내용을 입력해주세요(1000자 이하)"
             autoSize
+            value={content}
             onChange={(e) => {
               handleChange('content', e.target.value);
+              setContent(e.target.value);
             }}
-            defaultValue={prevData?.content || undefined}
           />
         </FormItem>
         <FormItem label="사진">
@@ -207,7 +248,7 @@ const ReviewEditForm = ({ type, prevData, onMutation }: ReviewEditFormProps) => 
         </FormItem>
         <FormItem label="공개 여부">
           <ToggleSwitch
-            defaultChecked={prevData?.isPublic === undefined ? true : prevData.isPublic}
+            checked={isPublic}
             onChange={(checked) => {
               handleChange('isPublic', checked);
               setIsPublic(checked);
