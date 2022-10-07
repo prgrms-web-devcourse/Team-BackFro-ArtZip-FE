@@ -28,7 +28,7 @@ const ExhibitionDetailPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | ExhibitionDetail</title>
+        <title>ArtZip | 전시회 상세보기</title>
       </Head>
       {exhibitionData && (
         <S.ExhibitionPageContainer>

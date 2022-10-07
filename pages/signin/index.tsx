@@ -25,7 +25,7 @@ const SignInPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | SignIn</title>
+        <title>ArtZip | 로그인</title>
       </Head>
 
       <FormContainer>
