@@ -9,6 +9,7 @@ import {
   convertFilesToFormData,
   validateNickname,
   getBase64,
+  validateImageFile,
 } from 'utils';
 import { userAPI } from 'apis';
 import { AxiosError } from 'axios';
@@ -46,9 +47,11 @@ const ProfileEditPage = () => {
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files) {
-      submitFile.current = files;
-      const preview = await getBase64(files[0]);
-      setPreviewImage(preview);
+      if (files[0] && validateImageFile(files[0]) === true) {
+        submitFile.current = files;
+        const preview = await getBase64(files[0]);
+        setPreviewImage(preview);
+      }
     }
   };
 
@@ -114,7 +117,7 @@ const ProfileEditPage = () => {
               />
               <FileInput
                 type="file"
-                accept="image/jpg, image/png, image/jpeg"
+                accept="image/png, image/jpeg, image/jpg"
                 name="profile_img"
                 onChange={handleFileChange}
                 ref={fileInput}
