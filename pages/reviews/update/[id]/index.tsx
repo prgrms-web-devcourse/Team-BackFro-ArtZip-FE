@@ -1,16 +1,22 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth } from 'hooks';
+import { useCheckAuth, useDraftReview } from 'hooks';
 import { PhotoProps } from 'types/model';
 import { Spinner } from 'components/atoms';
 import useSWR from 'swr';
 import { ReviewEditForm } from 'components/organisms';
 import { SubmitData } from 'components/organisms/ReviewEditForm';
+import { useEffect } from 'react';
 
 const ReviewUpdatePage = () => {
   const router = useRouter();
   const { data: prevData, mutate } = useSWR(`api/v1/reviews/${router.query.id}`);
+  const [, , removeDraftReview] = useDraftReview();
+
+  useEffect(() => {
+    removeDraftReview();
+  }, []);
 
   const handleMutation = (submitData: SubmitData, prevImages: PhotoProps[]) => {
     mutate(
