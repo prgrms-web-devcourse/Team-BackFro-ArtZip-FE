@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import { Button, DatePicker, Form, message, Switch, UploadFile, Image, Modal } from 'antd';
+import { Button, Form, message, UploadFile, Image, Modal } from 'antd';
 import { reviewAPI } from 'apis';
 import { useDebounce } from 'hooks';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useRef, useState, useEffect, Dispatch } from 'react';
 import { PhotoProps } from 'types/model';
@@ -15,6 +14,7 @@ import {
 } from 'utils';
 import {
   ExhibitionSearchBar,
+  DateInput,
   TitleInput,
   ContentTextArea,
   ImageUpload,
@@ -68,9 +68,6 @@ const ReviewEditForm = ({
   const clickedImage = useRef<number>(0);
   const router = useRouter();
   const timerId = useRef<ReturnType<typeof setTimeout>>();
-  const [date, setDate] = useState(
-    prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined,
-  );
 
   useEffect(() => {
     if (prevData) {
@@ -93,12 +90,6 @@ const ReviewEditForm = ({
       }
     }
   }, [isPrevDataChanged, type]);
-
-  useEffect(() => {
-    if (isPrevDataChanged && prevData) {
-      prevData.date && setDate(moment(prevData.date, 'YYYY-MM-DD'));
-    }
-  }, [isPrevDataChanged]);
 
   const handleChange = (key: string, value: ValueOf<SubmitData>) => {
     submitData.current = {
@@ -192,15 +183,7 @@ const ReviewEditForm = ({
           />
         </FormItem>
         <FormItem label="다녀 온 날짜">
-          <DateInput
-            value={date}
-            onChange={(value) => {
-              if (value) {
-                handleChange('date', value.format('YYYY-MM-DD'));
-                setDate(value);
-              }
-            }}
-          />
+          <DateInput prevDate={prevData?.date} handleChange={handleChange} />
         </FormItem>
         <FormItem label="제목">
           <TitleInput prevTitle={prevData?.title} handleChange={handleChange} />
@@ -271,14 +254,6 @@ const FormItem = styled(Form.Item)`
   }
 `;
 
-const DateInput = styled(DatePicker)`
-  width: 200px;
-
-  & > input {
-    font-size: 1.6rem;
-  }
-`;
-
 const PrevImageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 104px);
@@ -288,11 +263,6 @@ const PrevImageContainer = styled.div`
   img {
     cursor: pointer;
   }
-`;
-
-const ToggleSwitch = styled(Switch)`
-  width: 54px;
-  margin-right: 14px;
 `;
 
 const SubmitButton = styled(Button)`
