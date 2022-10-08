@@ -13,7 +13,7 @@ import {
   getErrorMessage,
   validateReviewEditForm,
 } from 'utils';
-import { ExhibitionSearchBar, ImageUpload, TitleInput } from './fields';
+import { ExhibitionSearchBar, TitleInput, ContentTextArea, ImageUpload } from './fields';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
@@ -65,7 +65,6 @@ const ReviewEditForm = ({
   const [date, setDate] = useState(
     prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined,
   );
-  const [content, setContent] = useState(prevData?.content || '');
   const [isPublic, setIsPublic] = useState(
     prevData?.isPublic !== undefined ? prevData.isPublic : true,
   );
@@ -95,7 +94,6 @@ const ReviewEditForm = ({
   useEffect(() => {
     if (isPrevDataChanged && prevData) {
       prevData.date && setDate(moment(prevData.date, 'YYYY-MM-DD'));
-      setContent(prevData.content);
       setIsPublic(prevData.isPublic);
     }
   }, [isPrevDataChanged]);
@@ -206,15 +204,7 @@ const ReviewEditForm = ({
           <TitleInput prevTitle={prevData?.title} handleChange={handleChange} />
         </FormItem>
         <FormItem label="내용">
-          <TextArea
-            placeholder="내용을 입력해주세요(1000자 이하)"
-            autoSize
-            value={content}
-            onChange={(e) => {
-              handleChange('content', e.target.value);
-              setContent(e.target.value);
-            }}
-          />
+          <ContentTextArea prevContent={prevData?.content} handleChange={handleChange} />
         </FormItem>
         <FormItem label="사진">
           {type === 'update' && (
