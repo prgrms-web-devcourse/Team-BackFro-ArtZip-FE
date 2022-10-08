@@ -9,8 +9,9 @@ import { AxiosError } from 'axios';
 import { validatePassword } from 'utils';
 import { useDebounce, useCheckAuth } from 'hooks';
 import { Spinner } from 'components/atoms';
+import Head from 'next/head';
 
-const UserEditPasswordPage = () => {
+const PasswordEditPage = () => {
   const { userId } = useRecoilValue(userAtom);
   const [form] = useForm();
 
@@ -58,69 +59,76 @@ const UserEditPasswordPage = () => {
   return isChecking ? (
     <Spinner />
   ) : (
-    <PageContainer>
-      <Title>비밀번호 변경</Title>
-      <PasswordEditForm
-        form={form}
-        layout="vertical"
-        initialValues={{
-          oldPassword: '',
-          newPassword: '',
-        }}
-        onFinish={handleFinish}
-        onFinishFailed={handleFinishFailed}
-      >
-        <FormItem
-          label="현재 비밀번호"
-          name="oldPassword"
-          rules={[
-            {
-              validator: validatePassword,
-            },
-          ]}
-        >
-          <Input type="password" />
-        </FormItem>
-        <FormItem
-          label="비밀번호"
-          name="newPassword"
-          rules={[
-            {
-              validator: validatePassword,
-            },
-          ]}
-        >
-          <Input type="password" />
-        </FormItem>
-        <FormItem
-          label="비밀번호 확인"
-          name="passWordCheck"
-          rules={[{ validator: validatePasswordCheck }]}
-        >
-          <Input type="password" />
-        </FormItem>
-        <SubmitButton type="primary" ref={debounceRef}>
-          변경
-        </SubmitButton>
-      </PasswordEditForm>
+    <>
+      <Head>
+        <title>ArtZip | 비밀번호 변경</title>
+      </Head>
+      <>
+        <PageContainer>
+          <Title>비밀번호 변경</Title>
+          <PasswordEditForm
+            form={form}
+            layout="vertical"
+            initialValues={{
+              oldPassword: '',
+              newPassword: '',
+            }}
+            onFinish={handleFinish}
+            onFinishFailed={handleFinishFailed}
+          >
+            <FormItem
+              label="현재 비밀번호"
+              name="oldPassword"
+              rules={[
+                {
+                  validator: validatePassword,
+                },
+              ]}
+            >
+              <Input type="password" />
+            </FormItem>
+            <FormItem
+              label="비밀번호"
+              name="newPassword"
+              rules={[
+                {
+                  validator: validatePassword,
+                },
+              ]}
+            >
+              <Input type="password" />
+            </FormItem>
+            <FormItem
+              label="비밀번호 확인"
+              name="passWordCheck"
+              rules={[{ validator: validatePasswordCheck }]}
+            >
+              <Input type="password" />
+            </FormItem>
+            <SubmitButton type="primary" ref={debounceRef}>
+              변경
+            </SubmitButton>
+          </PasswordEditForm>
 
-      <SideNavigation
-        paths={[
-          {
-            href: `/users/${userId}`,
-            pageName: '사용자 정보',
-          },
-          {
-            href: `/users/${userId}/edit`,
-            pageName: '프로필 수정',
-          },
-          {
-            href: `/users/${userId}/edit-password`,
-            pageName: '비밀번호 변경',
-          },
-        ]}
-      />
-    </PageContainer>
+          <SideNavigation
+            paths={[
+              {
+                href: `/users/${userId}`,
+                pageName: '사용자 정보',
+              },
+              {
+                href: `/users/${userId}/edit`,
+                pageName: '프로필 수정',
+              },
+              {
+                href: `/users/${userId}/edit-password`,
+                pageName: '비밀번호 변경',
+              },
+            ]}
+          />
+        </PageContainer>
+      </>
+    </>
   );
 };
 
@@ -155,4 +163,4 @@ const SubmitButton = styled(Button)`
   font-size: 1.6rem;
 `;
 
-export default UserEditPasswordPage;
+export default PasswordEditPage;

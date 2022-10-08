@@ -93,7 +93,7 @@ const CommentUtils = ({
 
   // 답글 관련
   const handleReplyWriteButtonOnClick = () => {
-    if (!currentUser.userId) {
+    if (!currentUser.isLoggedIn) {
       router.push('/signin');
     } else {
       setShowCommentWrite(!showCommentWrite);
@@ -141,7 +141,7 @@ const CommentUtils = ({
 
   // 댓글 좋아요
   const handleCommentLikeClick = async (commentId: number) => {
-    if (!currentUser) {
+    if (!currentUser.isLoggedIn) {
       message.warning('로그인 해주세요');
       return;
     }

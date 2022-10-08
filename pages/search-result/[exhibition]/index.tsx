@@ -38,7 +38,7 @@ const SearchResultPage: NextPage = () => {
   return (
     <S.SearchResultContainer>
       <Head>
-        <title>ArtZip | SearchResult</title>
+        <title>ArtZip | 전시회 검색 결과</title>
       </Head>
       <S.SearchResultContents>
         {exhibitions.length > 0 ? (

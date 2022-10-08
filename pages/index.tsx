@@ -16,7 +16,7 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
   return (
     <>
       <Head>
-        <title>ArtZip | Home</title>
+        <title>ArtZip | 홈페이지</title>
       </Head>
       <div>
         <SwiperContainer title="다가오는 전시회" type="upcoming">

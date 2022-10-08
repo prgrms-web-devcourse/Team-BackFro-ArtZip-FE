@@ -72,7 +72,7 @@ const CommunityPage = () => {
   return (
     <>
       <Head>
-        <title>ArtZip | COMMUNITY</title>
+        <title>ArtZip | 커뮤니티</title>
       </Head>
 
       <>
