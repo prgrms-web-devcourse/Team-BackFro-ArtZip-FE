@@ -13,8 +13,7 @@ import {
   getErrorMessage,
   validateReviewEditForm,
 } from 'utils';
-import ExhibitionSearchBar from '../ExhibitionSearchBar';
-import ImageUpload from '../ImageUpload';
+import { ExhibitionSearchBar, ImageUpload, TitleInput } from './fields';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
@@ -66,7 +65,6 @@ const ReviewEditForm = ({
   const [date, setDate] = useState(
     prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined,
   );
-  const [title, setTitle] = useState(prevData?.title || '');
   const [content, setContent] = useState(prevData?.content || '');
   const [isPublic, setIsPublic] = useState(
     prevData?.isPublic !== undefined ? prevData.isPublic : true,
@@ -97,7 +95,6 @@ const ReviewEditForm = ({
   useEffect(() => {
     if (isPrevDataChanged && prevData) {
       prevData.date && setDate(moment(prevData.date, 'YYYY-MM-DD'));
-      setTitle(prevData.title);
       setContent(prevData.content);
       setIsPublic(prevData.isPublic);
     }
@@ -206,16 +203,7 @@ const ReviewEditForm = ({
           />
         </FormItem>
         <FormItem label="제목">
-          <Input
-            placeholder="제목을 입력해주세요"
-            showCount
-            maxLength={30}
-            value={title}
-            onChange={(e) => {
-              handleChange('title', e.target.value);
-              setTitle(e.target.value);
-            }}
-          />
+          <TitleInput prevTitle={prevData?.title} handleChange={handleChange} />
         </FormItem>
         <FormItem label="내용">
           <TextArea
