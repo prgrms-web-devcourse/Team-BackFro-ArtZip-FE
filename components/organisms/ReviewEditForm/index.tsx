@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, DatePicker, Form, Input, message, Switch, UploadFile, Image, Modal } from 'antd';
+import { Button, DatePicker, Form, message, Switch, UploadFile, Image, Modal } from 'antd';
 import { reviewAPI } from 'apis';
 import { useDebounce } from 'hooks';
 import moment from 'moment';
@@ -13,7 +13,13 @@ import {
   getErrorMessage,
   validateReviewEditForm,
 } from 'utils';
-import { ExhibitionSearchBar, TitleInput, ContentTextArea, ImageUpload } from './fields';
+import {
+  ExhibitionSearchBar,
+  TitleInput,
+  ContentTextArea,
+  ImageUpload,
+  IsPublicSwitch,
+} from './fields';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
@@ -65,9 +71,6 @@ const ReviewEditForm = ({
   const [date, setDate] = useState(
     prevData?.date ? moment(prevData.date, 'YYYY-MM-DD') : undefined,
   );
-  const [isPublic, setIsPublic] = useState(
-    prevData?.isPublic !== undefined ? prevData.isPublic : true,
-  );
 
   useEffect(() => {
     if (prevData) {
@@ -94,7 +97,6 @@ const ReviewEditForm = ({
   useEffect(() => {
     if (isPrevDataChanged && prevData) {
       prevData.date && setDate(moment(prevData.date, 'YYYY-MM-DD'));
-      setIsPublic(prevData.isPublic);
     }
   }, [isPrevDataChanged]);
 
@@ -225,14 +227,7 @@ const ReviewEditForm = ({
           <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
         </FormItem>
         <FormItem label="공개 여부">
-          <ToggleSwitch
-            checked={isPublic}
-            onChange={(checked) => {
-              handleChange('isPublic', checked);
-              setIsPublic(checked);
-            }}
-          />
-          {isPublic ? '전체 공개' : '비공개'}
+          <IsPublicSwitch prevIsPublic={prevData?.isPublic} handleChange={handleChange} />
         </FormItem>
 
         <SubmitButton type="primary" ref={debounceRef}>
@@ -283,8 +278,6 @@ const DateInput = styled(DatePicker)`
     font-size: 1.6rem;
   }
 `;
-
-const TextArea = styled(Input.TextArea)``;
 
 const PrevImageContainer = styled.div`
   display: grid;
