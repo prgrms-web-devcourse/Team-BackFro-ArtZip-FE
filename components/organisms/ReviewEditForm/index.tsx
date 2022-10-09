@@ -68,6 +68,7 @@ const ReviewEditForm = ({
   const clickedImage = useRef<number>(0);
   const router = useRouter();
   const timerId = useRef<ReturnType<typeof setTimeout>>();
+  const [wasSubmitted, setWasSubmitted] = useState(false);
 
   useEffect(() => {
     if (prevData) {
@@ -112,7 +113,9 @@ const ReviewEditForm = ({
     if (isLoading) {
       return;
     }
+    setWasSubmitted(true);
 
+    /*
     const data = submitData.current;
     if (validateReviewEditForm(data)) {
       setIsLoading(true);
@@ -143,6 +146,7 @@ const ReviewEditForm = ({
       }
       setIsLoading(false);
     }
+    */
   };
   const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
 
@@ -179,17 +183,30 @@ const ReviewEditForm = ({
                 : undefined
             }
             isPrevDataChanged={isPrevDataChanged}
+            wasSubmitted={wasSubmitted}
             onExhibitionChange={handleChange}
           />
         </FormItem>
         <FormItem label="다녀 온 날짜">
-          <DateInput prevDate={prevData?.date} handleChange={handleChange} />
+          <DateInput
+            prevDate={prevData?.date}
+            wasSubmitted={wasSubmitted}
+            onChange={handleChange}
+          />
         </FormItem>
         <FormItem label="제목">
-          <TitleInput prevTitle={prevData?.title} handleChange={handleChange} />
+          <TitleInput
+            prevTitle={prevData?.title}
+            wasSubmitted={wasSubmitted}
+            onChange={handleChange}
+          />
         </FormItem>
         <FormItem label="내용">
-          <ContentTextArea prevContent={prevData?.content} handleChange={handleChange} />
+          <ContentTextArea
+            prevContent={prevData?.content}
+            wasSubmitted={wasSubmitted}
+            onChange={handleChange}
+          />
         </FormItem>
         <FormItem label="사진">
           {type === 'update' && (

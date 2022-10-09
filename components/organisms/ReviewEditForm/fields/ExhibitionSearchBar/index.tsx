@@ -7,6 +7,7 @@ import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from 'components/organisms/ReviewEditForm';
+import ErrorMessage from '../../utils/ErrorMessage';
 
 const MESSAGE = {
   NO_ERROR: '',
@@ -115,7 +116,7 @@ const ExhibitionSearchBar = ({
             </ResultItem>
           ))}
         </ResultList>
-        <ErrorMessage visible={displayErrorMessage}>{errorMessage}</ErrorMessage>
+        <ErrorMessage message={errorMessage} visible={displayErrorMessage} />
       </InnerContainer>
       <Poster
         src={posterImage}
@@ -172,16 +173,6 @@ const Poster = styled(Image)`
   width: 150px;
   height: 200px;
   flex-shrink: 0;
-`;
-
-const ErrorMessage = styled.p<{
-  visible: boolean;
-}>`
-  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
-  margin-top: 2px;
-  color: #ff4d4f;
-  font-size: 1.4rem;
-  height: 16px;
 `;
 
 export default ExhibitionSearchBar;

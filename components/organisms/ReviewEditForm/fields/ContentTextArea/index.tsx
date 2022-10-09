@@ -1,8 +1,8 @@
-import styled from '@emotion/styled';
 import { Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from '../..';
+import ErrorMessage from '../../utils/ErrorMessage';
 
 const MAX_LENGTH = 1000;
 const MESSAGE = {
@@ -57,21 +57,11 @@ const ContentTextArea = ({ prevContent, wasSubmitted, onChange }: ContentTextAre
         onChange={(e) => handleChange(e.target.value)}
         onBlur={() => setTouched(true)}
       />
-      <ErrorMessage visible={displayErrorMessage}>{errorMessage}</ErrorMessage>
+      <ErrorMessage message={errorMessage} visible={displayErrorMessage} />
     </>
   );
 };
 
 const TextArea = Input.TextArea;
-
-const ErrorMessage = styled.p<{
-  visible: boolean;
-}>`
-  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
-  margin-top: 2px;
-  color: #ff4d4f;
-  font-size: 1.4rem;
-  height: 16px;
-`;
 
 export default ContentTextArea;

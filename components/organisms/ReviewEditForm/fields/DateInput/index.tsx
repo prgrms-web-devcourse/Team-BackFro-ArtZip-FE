@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from '../..';
+import ErrorMessage from '../../utils/ErrorMessage';
 
 const MESSAGE = {
   NO_ERROR: '',
@@ -56,7 +57,7 @@ const DateInput = ({ prevDate, wasSubmitted, onChange }: DateInputProps) => {
   return (
     <>
       <DateSelect value={date} onChange={handleChange} />
-      <ErrorMessage visible={displayErrorMessage}>{errorMessage}</ErrorMessage>
+      <ErrorMessage message={errorMessage} visible={displayErrorMessage} />
     </>
   );
 };
@@ -67,16 +68,6 @@ const DateSelect = styled(DatePicker)`
   & > input {
     font-size: 1.6rem;
   }
-`;
-
-const ErrorMessage = styled.p<{
-  visible: boolean;
-}>`
-  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
-  margin-top: 2px;
-  color: #ff4d4f;
-  font-size: 1.4rem;
-  height: 16px;
 `;
 
 export default DateInput;
