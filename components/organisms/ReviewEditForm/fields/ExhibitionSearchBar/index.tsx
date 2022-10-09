@@ -7,22 +7,19 @@ import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from 'components/organisms/ReviewEditForm';
-import ErrorMessage from '../../utils/ErrorMessage';
-
-const MESSAGE = {
-  NO_ERROR: '',
-  REQUIRED_VALUE: '필수 입력값입니다.',
-};
+import ErrorMessage, { MESSAGE_COMMON as MESSAGE } from '../../utils/ErrorMessage';
 
 interface ExhibitionSearchBarProps {
   type: 'create' | 'update';
   prevData?: {
+    id: number;
     name: string;
     thumbnail: string;
   };
   isPrevDataChanged?: boolean;
   wasSubmitted: boolean;
-  onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onErrorChange: (key: string, value: string) => void;
 }
 
 interface SearchResult {
@@ -36,8 +33,10 @@ const ExhibitionSearchBar = ({
   prevData,
   isPrevDataChanged,
   wasSubmitted,
-  onExhibitionChange,
+  onValueChange,
+  onErrorChange,
 }: ExhibitionSearchBarProps) => {
+  const [exhibitionId, setExhibitionId] = useState(prevData ? prevData.id : 0);
   const [searchWord, setSearchWord] = useState('');
   const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
   const [posterImage, setPosterImage] = useState(
@@ -52,6 +51,7 @@ const ExhibitionSearchBar = ({
 
   useEffect(() => {
     if (isPrevDataChanged && prevData) {
+      setExhibitionId(prevData.id);
       setExhibitionName(prevData.name);
       setPosterImage(prevData.thumbnail);
       setErrormessage(MESSAGE.NO_ERROR);
@@ -78,16 +78,19 @@ const ExhibitionSearchBar = ({
   useDebounce(handleSearch, 500, searchWord);
 
   const handleResultClick = ({ exhibitionId, name, thumbnail }: SearchResult) => {
-    if (onExhibitionChange) {
-      onExhibitionChange('exhibitionId', exhibitionId);
-      onExhibitionChange('exhibitionName', name);
-      onExhibitionChange('exhibitionThumbnail', thumbnail);
-    }
+    setExhibitionId(exhibitionId);
     setExhibitionName(name);
     setPosterImage(thumbnail);
     setErrormessage(MESSAGE.NO_ERROR);
     resultList.current && hide(resultList.current);
   };
+
+  useEffect(() => {
+    onValueChange('exhibitionId', exhibitionId);
+    onValueChange('exhibitionName', exhibitionName);
+    onValueChange('exhibitionThumbnail', posterImage);
+    onErrorChange('exhibition', errorMessage);
+  }, [exhibitionId, exhibitionName, posterImage, errorMessage]);
 
   return (
     <SearchContainer>

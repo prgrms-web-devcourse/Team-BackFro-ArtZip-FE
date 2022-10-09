@@ -6,10 +6,10 @@ import { SubmitData } from '../..';
 
 interface IsPublicSwitchProps {
   prevIsPublic?: boolean;
-  handleChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
 }
 
-const IsPublicSwitch = ({ prevIsPublic, handleChange }: IsPublicSwitchProps) => {
+const IsPublicSwitch = ({ prevIsPublic, onValueChange }: IsPublicSwitchProps) => {
   const [isPublic, setIsPublic] = useState(prevIsPublic !== undefined ? prevIsPublic : true);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const IsPublicSwitch = ({ prevIsPublic, handleChange }: IsPublicSwitchProps) => 
       <ToggleSwitch
         checked={isPublic}
         onChange={(checked) => {
-          handleChange('isPublic', checked);
+          onValueChange('isPublic', checked);
           setIsPublic(checked);
         }}
       />

@@ -2,22 +2,22 @@ import { Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from '../..';
-import ErrorMessage from '../../utils/ErrorMessage';
+import ErrorMessage, { MESSAGE_COMMON } from '../../utils/ErrorMessage';
 
 const MAX_LENGTH = 30;
 const MESSAGE = {
-  NO_ERROR: '',
-  REQUIRED_VALUE: '필수 입력값입니다.',
+  ...MESSAGE_COMMON,
   EXCEEDED_MAX_LENGTH: `${MAX_LENGTH}자 이하로 작성해 주세요.`,
 };
 
 interface TitleInputProps {
   prevTitle?: string;
   wasSubmitted: boolean;
-  onChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onErrorChange: (key: string, value: string) => void;
 }
 
-const TitleInput = ({ prevTitle, wasSubmitted, onChange }: TitleInputProps) => {
+const TitleInput = ({ prevTitle, wasSubmitted, onValueChange, onErrorChange }: TitleInputProps) => {
   const [title, setTitle] = useState(prevTitle || '');
   const [touched, setTouched] = useState(false);
   const [errorMessage, setErrormessage] = useState(
@@ -30,9 +30,13 @@ const TitleInput = ({ prevTitle, wasSubmitted, onChange }: TitleInputProps) => {
     setErrormessage(prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
   }, [prevTitle]);
 
+  useEffect(() => {
+    onValueChange('title', title);
+    onErrorChange('title', errorMessage);
+  }, [title, errorMessage]);
+
   const handleChange = (value: string) => {
     setTitle(value);
-    onChange('title', value);
     validate(value);
   };
 

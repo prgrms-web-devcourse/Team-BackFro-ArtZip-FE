@@ -4,21 +4,21 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from '../..';
-import ErrorMessage from '../../utils/ErrorMessage';
+import ErrorMessage, { MESSAGE_COMMON } from '../../utils/ErrorMessage';
 
 const MESSAGE = {
-  NO_ERROR: '',
-  REQUIRED_VALUE: '필수 입력값입니다.',
+  ...MESSAGE_COMMON,
   EXCEEDED_CURRENT_DATE: '다녀온 날짜는 오늘 이후일 수 없습니다.',
 };
 
 interface DateInputProps {
   prevDate?: string;
   wasSubmitted: boolean;
-  onChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onErrorChange: (key: string, value: string) => void;
 }
 
-const DateInput = ({ prevDate, wasSubmitted, onChange }: DateInputProps) => {
+const DateInput = ({ prevDate, wasSubmitted, onValueChange, onErrorChange }: DateInputProps) => {
   const [date, setDate] = useState(prevDate ? moment(prevDate, 'YYYY-MM-DD') : undefined);
   const [errorMessage, setErrormessage] = useState(
     prevDate ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE,
@@ -35,7 +35,6 @@ const DateInput = ({ prevDate, wasSubmitted, onChange }: DateInputProps) => {
     setClicked(true);
     if (validate(value) && value) {
       setDate(value);
-      onChange('date', value.format('YYYY-MM-DD'));
     } else {
       setDate(undefined);
     }
@@ -53,6 +52,11 @@ const DateInput = ({ prevDate, wasSubmitted, onChange }: DateInputProps) => {
     setErrormessage(MESSAGE.NO_ERROR);
     return true;
   };
+
+  useEffect(() => {
+    date && onValueChange('date', date.format('YYYY-MM-DD'));
+    onErrorChange('date', errorMessage);
+  }, [date, errorMessage]);
 
   return (
     <>

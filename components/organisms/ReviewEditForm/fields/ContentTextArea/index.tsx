@@ -2,22 +2,27 @@ import { Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from '../..';
-import ErrorMessage from '../../utils/ErrorMessage';
+import ErrorMessage, { MESSAGE_COMMON } from '../../utils/ErrorMessage';
 
 const MAX_LENGTH = 1000;
 const MESSAGE = {
-  NO_ERROR: '',
-  REQUIRED_VALUE: '필수 입력값입니다.',
+  ...MESSAGE_COMMON,
   MAX_LENGTH_EXCEEDED: `${MAX_LENGTH}자 이하로 작성해 주세요.`,
 };
 
 interface ContentTextAreaProps {
   prevContent?: string;
   wasSubmitted: boolean;
-  onChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
+  onErrorChange: (key: string, value: string) => void;
 }
 
-const ContentTextArea = ({ prevContent, wasSubmitted, onChange }: ContentTextAreaProps) => {
+const ContentTextArea = ({
+  prevContent,
+  wasSubmitted,
+  onValueChange,
+  onErrorChange,
+}: ContentTextAreaProps) => {
   const [content, setContent] = useState(prevContent || '');
   const [errorMessage, setErrormessage] = useState(
     prevContent ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE,
@@ -32,7 +37,6 @@ const ContentTextArea = ({ prevContent, wasSubmitted, onChange }: ContentTextAre
 
   const handleChange = (value: string) => {
     setContent(value);
-    onChange('content', value);
     validate(value);
   };
 
@@ -47,6 +51,11 @@ const ContentTextArea = ({ prevContent, wasSubmitted, onChange }: ContentTextAre
     }
     setErrormessage(MESSAGE.NO_ERROR);
   };
+
+  useEffect(() => {
+    onValueChange('content', content);
+    onErrorChange('content', errorMessage);
+  }, [content, errorMessage]);
 
   return (
     <>

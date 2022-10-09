@@ -10,7 +10,6 @@ import {
   convertFilesToFormData,
   convertObjectToFormData,
   getErrorMessage,
-  validateReviewEditForm,
 } from 'utils';
 import {
   ExhibitionSearchBar,
@@ -20,19 +19,28 @@ import {
   ImageUpload,
   IsPublicSwitch,
 } from './fields';
+import { MESSAGE_COMMON as ERROR_MESSAGE } from './utils/ErrorMessage';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
 }
 
-const initialData: SubmitData = {
+const initialValueData: SubmitData = {
   exhibitionId: 0,
+  exhibitionName: '',
+  exhibitionThumbnail: '',
   date: '',
   title: '',
   content: '',
   isPublic: true,
 };
-Object.freeze(initialData);
+
+const initialErrorData = {
+  exhibition: ERROR_MESSAGE.REQUIRED_VALUE,
+  date: ERROR_MESSAGE.REQUIRED_VALUE,
+  title: ERROR_MESSAGE.REQUIRED_VALUE,
+  content: ERROR_MESSAGE.REQUIRED_VALUE,
+};
 
 interface ReviewEditFormProps {
   type: 'create' | 'update';
@@ -60,7 +68,8 @@ const ReviewEditForm = ({
   setDraftReview,
   removeDraftReview,
 }: ReviewEditFormProps) => {
-  const submitData = useRef<SubmitData>({ ...initialData });
+  const submitData = useRef<SubmitData>({ ...initialValueData });
+  const errorData = useRef({ ...initialErrorData });
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
@@ -92,7 +101,7 @@ const ReviewEditForm = ({
     }
   }, [isPrevDataChanged, type]);
 
-  const handleChange = (key: string, value: ValueOf<SubmitData>) => {
+  const handleValueChange = (key: string, value: ValueOf<SubmitData>) => {
     submitData.current = {
       ...submitData.current,
       [key]: value,
@@ -108,47 +117,55 @@ const ReviewEditForm = ({
     }
   };
 
+  const handleErrorChange = (key: string, value: string) => {
+    errorData.current = {
+      ...errorData.current,
+      [key]: value,
+    };
+  };
+
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
     if (isLoading) {
       return;
     }
     setWasSubmitted(true);
-
-    /*
-    const data = submitData.current;
-    if (validateReviewEditForm(data)) {
-      setIsLoading(true);
-      let formData = convertObjectToFormData('data', data);
-      formData = convertFilesToFormData('files', files, formData);
-      try {
-        switch (type) {
-          case 'create': {
-            await reviewAPI.createReview(formData);
-            message.success('후기 작성이 완료되었습니다.');
-            break;
-          }
-          case 'update': {
-            await reviewAPI.updateReview(Number(router.query.id), formData);
-            message.success('후기 수정이 완료되었습니다.');
-            onMutation && onMutation(data, prevImages);
-            break;
-          }
-          default: {
-            throw new TypeError('type의 값이 유효하지 않습니다.');
-          }
-        }
-        removeDraftReview && removeDraftReview();
-        router.replace('/community');
-      } catch (error) {
-        message.error(getErrorMessage(error));
-        console.error(error);
-      }
-      setIsLoading(false);
-    }
-    */
+    const isValidated = Object.values(errorData.current).every((error) => !error);
+    isValidated ? handleFinish() : message.error('입력값을 다시 확인해주세요.');
   };
-  const [debounceRef] = useDebounce(handleSubmit, 300, null, 'click');
+  const [buttonRef] = useDebounce(handleSubmit, 300, null, 'click');
+
+  const handleFinish = async () => {
+    setIsLoading(true);
+    const data = submitData.current;
+    let formData = convertObjectToFormData('data', data);
+    formData = convertFilesToFormData('files', files, formData);
+
+    try {
+      switch (type) {
+        case 'create': {
+          await reviewAPI.createReview(formData);
+          message.success('후기 작성이 완료되었습니다.');
+          break;
+        }
+        case 'update': {
+          await reviewAPI.updateReview(Number(router.query.id), formData);
+          message.success('후기 수정이 완료되었습니다.');
+          onMutation && onMutation(data, prevImages);
+          break;
+        }
+        default: {
+          throw new TypeError('type의 값이 유효하지 않습니다.');
+        }
+      }
+      removeDraftReview && removeDraftReview();
+      router.replace('/community');
+    } catch (error) {
+      message.error(getErrorMessage(error));
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
 
   const handleImageClick = (photoId: number) => {
     clickedImage.current = photoId;
@@ -158,7 +175,7 @@ const ReviewEditForm = ({
   const handleImageDelete = () => {
     const photoId = clickedImage.current;
     const { deletedPhotos } = submitData.current;
-    deletedPhotos && handleChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
+    deletedPhotos && handleValueChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
     setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
     setIsModalOn(false);
   };
@@ -177,6 +194,7 @@ const ReviewEditForm = ({
             prevData={
               prevData
                 ? {
+                    id: prevData.exhibitionId,
                     name: prevData.exhibitionName,
                     thumbnail: prevData.exhibitionThumbnail,
                   }
@@ -184,28 +202,32 @@ const ReviewEditForm = ({
             }
             isPrevDataChanged={isPrevDataChanged}
             wasSubmitted={wasSubmitted}
-            onExhibitionChange={handleChange}
+            onValueChange={handleValueChange}
+            onErrorChange={handleErrorChange}
           />
         </FormItem>
         <FormItem label="다녀 온 날짜">
           <DateInput
             prevDate={prevData?.date}
             wasSubmitted={wasSubmitted}
-            onChange={handleChange}
+            onValueChange={handleValueChange}
+            onErrorChange={handleErrorChange}
           />
         </FormItem>
         <FormItem label="제목">
           <TitleInput
             prevTitle={prevData?.title}
             wasSubmitted={wasSubmitted}
-            onChange={handleChange}
+            onValueChange={handleValueChange}
+            onErrorChange={handleErrorChange}
           />
         </FormItem>
         <FormItem label="내용">
           <ContentTextArea
             prevContent={prevData?.content}
             wasSubmitted={wasSubmitted}
-            onChange={handleChange}
+            onValueChange={handleValueChange}
+            onErrorChange={handleErrorChange}
           />
         </FormItem>
         <FormItem label="사진">
@@ -227,10 +249,10 @@ const ReviewEditForm = ({
           <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
         </FormItem>
         <FormItem label="공개 여부">
-          <IsPublicSwitch prevIsPublic={prevData?.isPublic} handleChange={handleChange} />
+          <IsPublicSwitch prevIsPublic={prevData?.isPublic} onValueChange={handleValueChange} />
         </FormItem>
 
-        <SubmitButton type="primary" ref={debounceRef}>
+        <SubmitButton type="primary" ref={buttonRef}>
           작성완료
         </SubmitButton>
       </EditForm>
