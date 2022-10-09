@@ -8,6 +8,11 @@ import { reviewAPI } from 'apis';
 import { ValueOf } from 'types/utility';
 import { SubmitData } from 'components/organisms/ReviewEditForm';
 
+const MESSAGE = {
+  NO_ERROR: '',
+  REQUIRED_VALUE: '필수 입력값입니다.',
+};
+
 interface ExhibitionSearchBarProps {
   type: 'create' | 'update';
   prevData?: {
@@ -15,6 +20,7 @@ interface ExhibitionSearchBarProps {
     thumbnail: string;
   };
   isPrevDataChanged?: boolean;
+  wasSubmitted: boolean;
   onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
 }
 
@@ -28,6 +34,7 @@ const ExhibitionSearchBar = ({
   type,
   prevData,
   isPrevDataChanged,
+  wasSubmitted,
   onExhibitionChange,
 }: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
@@ -37,11 +44,16 @@ const ExhibitionSearchBar = ({
   );
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const resultList = useRef<HTMLUListElement>(null);
+  const [errorMessage, setErrormessage] = useState(
+    prevData ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE,
+  );
+  const displayErrorMessage = wasSubmitted && !!errorMessage;
 
   useEffect(() => {
     if (isPrevDataChanged && prevData) {
       setExhibitionName(prevData.name);
       setPosterImage(prevData.thumbnail);
+      setErrormessage(MESSAGE.NO_ERROR);
     }
   }, [isPrevDataChanged]);
 
@@ -72,6 +84,7 @@ const ExhibitionSearchBar = ({
     }
     setExhibitionName(name);
     setPosterImage(thumbnail);
+    setErrormessage(MESSAGE.NO_ERROR);
     resultList.current && hide(resultList.current);
   };
 
@@ -102,6 +115,7 @@ const ExhibitionSearchBar = ({
             </ResultItem>
           ))}
         </ResultList>
+        <ErrorMessage visible={displayErrorMessage}>{errorMessage}</ErrorMessage>
       </InnerContainer>
       <Poster
         src={posterImage}
@@ -115,6 +129,7 @@ const ExhibitionSearchBar = ({
 const SearchContainer = styled.div`
   width: 100%;
   display: flex;
+  margin-bottom: 24px;
 `;
 
 const InnerContainer = styled.div`
@@ -157,6 +172,16 @@ const Poster = styled(Image)`
   width: 150px;
   height: 200px;
   flex-shrink: 0;
+`;
+
+const ErrorMessage = styled.p<{
+  visible: boolean;
+}>`
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+  margin-top: 2px;
+  color: #ff4d4f;
+  font-size: 1.4rem;
+  height: 16px;
 `;
 
 export default ExhibitionSearchBar;
