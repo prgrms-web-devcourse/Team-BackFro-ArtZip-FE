@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
 
+export const MESSAGE_COMMON = {
+  NO_ERROR: '',
+  REQUIRED_VALUE: '필수 입력값입니다.',
+};
+
 interface ErrorMessageProps {
   message: string;
   visible: boolean;
