@@ -1,7 +1,7 @@
 import { RuleObject } from 'antd/lib/form';
-import { message, Upload } from 'antd';
-import { SubmitData } from 'pages/reviews/create/index';
 import { RcFile } from 'antd/es/upload';
+import { message, Upload } from 'antd';
+import { SubmitData } from 'components/organisms/ReviewEditForm';
 
 export const validateNickname = (_: RuleObject, value: string) => {
   if (!value) {

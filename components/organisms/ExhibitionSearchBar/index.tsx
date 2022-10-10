@@ -1,18 +1,20 @@
 import styled from '@emotion/styled';
 import { Input, Image, message } from 'antd';
 import DEFAULT_IMAGE from 'constants/defaultImage';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { getErrorMessage, show, hide } from 'utils';
 import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
 import { ValueOf } from 'types/utility';
-import { SubmitData } from 'pages/reviews/create';
+import { SubmitData } from 'components/organisms/ReviewEditForm';
 
 interface ExhibitionSearchBarProps {
-  prevData: {
-    name?: string;
-    thumbnail?: string;
+  type: 'create' | 'update';
+  prevData?: {
+    name: string;
+    thumbnail: string;
   };
+  isPrevDataChanged?: boolean;
   onExhibitionChange?: (key: string, value: ValueOf<SubmitData>) => void;
 }
 
@@ -22,14 +24,26 @@ interface SearchResult {
   thumbnail: string;
 }
 
-const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchBarProps) => {
+const ExhibitionSearchBar = ({
+  type,
+  prevData,
+  isPrevDataChanged,
+  onExhibitionChange,
+}: ExhibitionSearchBarProps) => {
   const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState((prevData.name as string) || '');
+  const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
   const [posterImage, setPosterImage] = useState(
-    prevData.thumbnail || DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
+    prevData ? prevData.thumbnail : DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
   );
   const [searchResults, setSearchResults] = useState<SearchResult[]>();
   const resultList = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (isPrevDataChanged && prevData) {
+      setExhibitionName(prevData.name);
+      setPosterImage(prevData.thumbnail);
+    }
+  }, [isPrevDataChanged]);
 
   const handleSearch = useCallback(async () => {
     const isEmpty = !/\S/.test(searchWord);
@@ -50,6 +64,17 @@ const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchB
   }, [searchWord]);
   useDebounce(handleSearch, 500, searchWord);
 
+  const handleResultClick = ({ exhibitionId, name, thumbnail }: SearchResult) => {
+    if (onExhibitionChange) {
+      onExhibitionChange('exhibitionId', exhibitionId);
+      onExhibitionChange('exhibitionName', name);
+      onExhibitionChange('exhibitionThumbnail', thumbnail);
+    }
+    setExhibitionName(name);
+    setPosterImage(thumbnail);
+    resultList.current && hide(resultList.current);
+  };
+
   return (
     <SearchContainer>
       <InnerContainer>
@@ -63,20 +88,17 @@ const ExhibitionSearchBar = ({ prevData, onExhibitionChange }: ExhibitionSearchB
             setExhibitionName('');
             resultList.current && show(resultList.current);
           }}
-          disabled={!!prevData.name}
+          disabled={type === 'update'}
         />
         <ResultList ref={resultList}>
-          {searchResults?.map(({ exhibitionId, name, thumbnail }) => (
+          {searchResults?.map((item) => (
             <ResultItem
-              key={exhibitionId}
+              key={item.exhibitionId}
               onClick={() => {
-                onExhibitionChange && onExhibitionChange('exhibitionId', exhibitionId);
-                setExhibitionName(name);
-                setPosterImage(thumbnail);
-                resultList.current && hide(resultList.current);
+                handleResultClick(item);
               }}
             >
-              {name}
+              {item.name}
             </ResultItem>
           ))}
         </ResultList>
