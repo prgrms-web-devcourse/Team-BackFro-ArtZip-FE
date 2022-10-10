@@ -16,6 +16,10 @@ const IsPublicSwitch = ({ prevIsPublic, onValueChange }: IsPublicSwitchProps) =>
     prevIsPublic !== undefined && setIsPublic(prevIsPublic);
   }, [prevIsPublic]);
 
+  useEffect(() => {
+    onValueChange('isPublic', isPublic);
+  }, [isPublic]);
+
   return (
     <>
       <ToggleSwitch

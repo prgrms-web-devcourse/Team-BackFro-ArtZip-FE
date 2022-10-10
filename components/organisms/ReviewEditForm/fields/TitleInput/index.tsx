@@ -30,11 +30,6 @@ const TitleInput = ({ prevTitle, wasSubmitted, onValueChange, onErrorChange }: T
     setErrormessage(prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
   }, [prevTitle]);
 
-  useEffect(() => {
-    onValueChange('title', title);
-    onErrorChange('title', errorMessage);
-  }, [title, errorMessage]);
-
   const handleChange = (value: string) => {
     setTitle(value);
     validate(value);
@@ -51,6 +46,11 @@ const TitleInput = ({ prevTitle, wasSubmitted, onValueChange, onErrorChange }: T
     }
     setErrormessage(MESSAGE.NO_ERROR);
   };
+
+  useEffect(() => {
+    onValueChange('title', title);
+    onErrorChange('title', errorMessage);
+  }, [title, errorMessage]);
 
   return (
     <>
