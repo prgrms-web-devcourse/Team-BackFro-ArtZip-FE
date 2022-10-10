@@ -11,8 +11,6 @@ const cookieEffect =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ({ setSelf, onSet }: any) => {
     onSet(async () => {
-      console.log('onSet');
-
       try {
         if (!cookies.get(accessTokenKey) || !cookies.get(refreshTokenKey)) {
           cookies.remove('ACCESS_TOKEN', { path: '/' });

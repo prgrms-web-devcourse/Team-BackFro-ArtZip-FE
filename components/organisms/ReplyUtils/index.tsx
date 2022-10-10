@@ -7,7 +7,6 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { CommentProps } from 'types/model';
 
-// 댓글 정보 받고 수정버튼 삭제버튼
 const ReplyUtils = ({
   reply,
   onDeleteButtonClick,
