@@ -65,7 +65,11 @@ const ReviewCard = ({ data, thumbnail }: ReviewCardProps) => {
           </S.PhotoWrapper>
           <S.UserInfoContainer>
             <Link href={`/users/${userId}`}>
-              <S.UserInfoAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} size={60} />
+              <S.UserInfoAvatar
+                src={profileImage || DEFAULT_IMAGE.USER_PROFILE}
+                size={60}
+                alt={'user atavar'}
+              />
             </Link>
             <S.UserInfoTextContainer>
               <Link href={`/users/${userId}`}>

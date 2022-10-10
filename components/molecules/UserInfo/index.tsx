@@ -11,7 +11,7 @@ interface UserInfoProps extends UserProps {
 const UserInfo = ({ profileImage, nickname, createdDate, userId }: UserInfoProps) => {
   return (
     <UserInfoContainer>
-      <UserAvatar profileImage={profileImage} userId={userId}></UserAvatar>
+      <UserAvatar profileImage={profileImage} userId={userId} />
       <UserInfoTextWrapper>
         <Link href={`/users/${userId}`}>
           <a>

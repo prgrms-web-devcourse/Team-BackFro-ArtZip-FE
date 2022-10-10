@@ -51,7 +51,11 @@ const Header = () => {
         <Logo width={180} height={55} />
         {isLoggedIn ? (
           <AvatarContainer ref={avatarContainer} onClick={handleAvatarClick}>
-            <Avatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} preview={false} />
+            <Avatar
+              src={profileImage || DEFAULT_IMAGE.USER_PROFILE}
+              preview={false}
+              alt={'user avatar'}
+            />
             {isDropdownOpen && (
               <Dropdown>
                 <LinkText href={`/users/${userId}`} text="마이페이지" />

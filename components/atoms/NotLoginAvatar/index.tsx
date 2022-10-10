@@ -6,7 +6,7 @@ import Link from 'next/link';
 const NotLoginAvatar = ({ size = 48 }) => {
   return (
     <Link href="/signin">
-      <StyledAvatar size={size} icon={<UserOutlined />} />
+      <StyledAvatar size={size} icon={<UserOutlined />} alt={'not login avatar'} />
     </Link>
   );
 };
