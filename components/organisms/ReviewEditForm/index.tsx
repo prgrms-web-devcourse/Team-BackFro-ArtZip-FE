@@ -6,11 +6,7 @@ import { useRouter } from 'next/router';
 import { useRef, useState, useEffect, Dispatch } from 'react';
 import { PhotoProps } from 'types/model';
 import { ValueOf } from 'types/utility';
-import {
-  convertFilesToFormData,
-  convertObjectToFormData,
-  getErrorMessage,
-} from 'utils';
+import { convertFilesToFormData, convertObjectToFormData, getErrorMessage } from 'utils';
 import {
   ExhibitionSearchBar,
   DateInput,
@@ -20,6 +16,7 @@ import {
   IsPublicSwitch,
 } from './fields';
 import { MESSAGE_COMMON as ERROR_MESSAGE } from './utils/ErrorMessage';
+import { MESSAGE, LABEL } from './utils/constants';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
@@ -71,35 +68,23 @@ const ReviewEditForm = ({
   const submitData = useRef<SubmitData>({ ...initialValueData });
   const errorData = useRef({ ...initialErrorData });
   const [files, setFiles] = useState<UploadFile[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [wasSubmitted, setWasSubmitted] = useState(false);
   const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
   const [isModalOn, setIsModalOn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const clickedImage = useRef<number>(0);
-  const router = useRouter();
   const timerId = useRef<ReturnType<typeof setTimeout>>();
-  const [wasSubmitted, setWasSubmitted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    if (prevData) {
+    if (type === 'update') {
       submitData.current = {
-        exhibitionId: prevData.exhibitionId,
-        exhibitionName: prevData.exhibitionName,
-        exhibitionThumbnail: prevData.exhibitionThumbnail,
-        date: prevData.date,
-        title: prevData.title,
-        content: prevData.content,
-        isPublic: prevData.isPublic,
+        ...submitData.current,
+        deletedPhotos: [],
       };
-
-      if (type === 'update') {
-        submitData.current = {
-          ...submitData.current,
-          deletedPhotos: [],
-        };
-        setPrevImages(prevData.photos || []);
-      }
+      prevData && setPrevImages(prevData.photos || []);
     }
-  }, [isPrevDataChanged, type]);
+  }, [type]);
 
   const handleValueChange = (key: string, value: ValueOf<SubmitData>) => {
     submitData.current = {
@@ -131,7 +116,7 @@ const ReviewEditForm = ({
     }
     setWasSubmitted(true);
     const isValidated = Object.values(errorData.current).every((error) => !error);
-    isValidated ? handleFinish() : message.error('입력값을 다시 확인해주세요.');
+    isValidated ? handleFinish() : message.error(MESSAGE.FORM_INVALID);
   };
   const [buttonRef] = useDebounce(handleSubmit, 300, null, 'click');
 
@@ -145,17 +130,17 @@ const ReviewEditForm = ({
       switch (type) {
         case 'create': {
           await reviewAPI.createReview(formData);
-          message.success('후기 작성이 완료되었습니다.');
+          message.success(MESSAGE.CREATE_SUCCESS);
           break;
         }
         case 'update': {
           await reviewAPI.updateReview(Number(router.query.id), formData);
-          message.success('후기 수정이 완료되었습니다.');
+          message.success(MESSAGE.UPDATE_SUCCESS);
           onMutation && onMutation(data, prevImages);
           break;
         }
         default: {
-          throw new TypeError('type의 값이 유효하지 않습니다.');
+          throw new TypeError(MESSAGE.TYPE_INVALID);
         }
       }
       removeDraftReview && removeDraftReview();
@@ -188,7 +173,7 @@ const ReviewEditForm = ({
   return (
     <>
       <EditForm layout="vertical">
-        <FormItem label="다녀 온 전시회">
+        <FormItem label={LABEL.EXHIBITION}>
           <ExhibitionSearchBar
             type={type}
             prevData={
@@ -206,7 +191,7 @@ const ReviewEditForm = ({
             onErrorChange={handleErrorChange}
           />
         </FormItem>
-        <FormItem label="다녀 온 날짜">
+        <FormItem label={LABEL.DATE}>
           <DateInput
             prevDate={prevData?.date}
             wasSubmitted={wasSubmitted}
@@ -214,7 +199,7 @@ const ReviewEditForm = ({
             onErrorChange={handleErrorChange}
           />
         </FormItem>
-        <FormItem label="제목">
+        <FormItem label={LABEL.TITLE}>
           <TitleInput
             prevTitle={prevData?.title}
             wasSubmitted={wasSubmitted}
@@ -222,7 +207,7 @@ const ReviewEditForm = ({
             onErrorChange={handleErrorChange}
           />
         </FormItem>
-        <FormItem label="내용">
+        <FormItem label={LABEL.CONTENT}>
           <ContentTextArea
             prevContent={prevData?.content}
             wasSubmitted={wasSubmitted}
@@ -230,7 +215,7 @@ const ReviewEditForm = ({
             onErrorChange={handleErrorChange}
           />
         </FormItem>
-        <FormItem label="사진">
+        <FormItem label={LABEL.PHOTOS}>
           {type === 'update' && (
             <PrevImageContainer>
               {prevImages.map(({ photoId, path }) => (
@@ -248,7 +233,7 @@ const ReviewEditForm = ({
           )}
           <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
         </FormItem>
-        <FormItem label="공개 여부">
+        <FormItem label={LABEL.IS_PUBLIC}>
           <IsPublicSwitch prevIsPublic={prevData?.isPublic} onValueChange={handleValueChange} />
         </FormItem>
 
