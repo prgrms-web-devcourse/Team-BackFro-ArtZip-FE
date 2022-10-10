@@ -17,6 +17,7 @@ import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
 import { authorizeFetch } from 'utils';
 import { Cookies } from 'react-cookie';
+import { Loading } from 'components/molecules';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -42,7 +43,10 @@ function ArtZip({ Component, pageProps, userData }: AppProps | any) {
       <SWRConfig value={swrOptions}>
         <ThemeProvider theme={theme}>
           <Layout>
-            <Component {...pageProps} />
+            <>
+              <Loading />
+              <Component {...pageProps} />
+            </>
           </Layout>
         </ThemeProvider>
       </SWRConfig>

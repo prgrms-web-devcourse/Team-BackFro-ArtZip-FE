@@ -10,3 +10,4 @@ export { default as ReviewExhibitionInfo } from './ReviewExhibitionInfo';
 export { default as ScrollButton } from './ScrollButton';
 export { default as SideNavigation } from './SideNavigation';
 export { default as UserProfileCard } from './UserProfileCard';
+export { default as Loading } from './Loading';
