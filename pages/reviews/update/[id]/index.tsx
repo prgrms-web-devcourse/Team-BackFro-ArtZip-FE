@@ -2,38 +2,20 @@ import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
 import { useCheckAuth, useDraftReview } from 'hooks';
-import { PhotoProps } from 'types/model';
 import { Spinner } from 'components/atoms';
 import useSWR from 'swr';
 import { ReviewEditForm } from 'components/organisms';
-import { SubmitData } from 'components/organisms/ReviewEditForm';
 import { useEffect } from 'react';
 import Head from 'next/head';
 
 const ReviewUpdatePage = () => {
   const router = useRouter();
-  const { data: prevData, mutate } = useSWR(`api/v1/reviews/${router.query.id}`);
+  const { data: prevData } = useSWR(`api/v1/reviews/${router.query.id}`);
   const [, , removeDraftReview] = useDraftReview();
 
   useEffect(() => {
     removeDraftReview();
   }, []);
-
-  const handleMutation = (submitData: SubmitData, prevImages: PhotoProps[]) => {
-    mutate(
-      {
-        ...prevData,
-        date: submitData.date,
-        title: submitData.title,
-        content: submitData.content,
-        isPublic: submitData.isPublic,
-        photos: [...prevImages],
-      },
-      {
-        revalidate: false,
-      },
-    );
-  };
 
   const [isChecking] = useCheckAuth();
   if (isChecking) {
@@ -65,7 +47,6 @@ const ReviewUpdatePage = () => {
               isPublic: prevData.isPublic,
               photos: prevData.photos,
             }}
-            onMutation={handleMutation}
           />
         </Section>
       </>
