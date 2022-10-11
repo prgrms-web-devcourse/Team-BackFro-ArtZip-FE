@@ -54,8 +54,11 @@ const ContentTextArea = ({
 
   useEffect(() => {
     onValueChange('content', content);
+  }, [content]);
+
+  useEffect(() => {
     onErrorChange('content', errorMessage);
-  }, [content, errorMessage]);
+  }, [errorMessage]);
 
   return (
     <>

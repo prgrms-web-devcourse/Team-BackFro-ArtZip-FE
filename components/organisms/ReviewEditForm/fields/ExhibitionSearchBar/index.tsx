@@ -89,8 +89,11 @@ const ExhibitionSearchBar = ({
     onValueChange('exhibitionId', exhibitionId);
     onValueChange('exhibitionName', exhibitionName);
     onValueChange('exhibitionThumbnail', posterImage);
+  }, [exhibitionId, exhibitionName, posterImage]);
+
+  useEffect(() => {
     onErrorChange('exhibition', errorMessage);
-  }, [exhibitionId, exhibitionName, posterImage, errorMessage]);
+  }, [errorMessage]);
 
   return (
     <SearchContainer>

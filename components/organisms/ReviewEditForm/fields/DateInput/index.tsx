@@ -55,8 +55,11 @@ const DateInput = ({ prevDate, wasSubmitted, onValueChange, onErrorChange }: Dat
 
   useEffect(() => {
     date && onValueChange('date', date.format('YYYY-MM-DD'));
+  }, [date]);
+
+  useEffect(() => {
     onErrorChange('date', errorMessage);
-  }, [date, errorMessage]);
+  }, [errorMessage]);
 
   return (
     <>

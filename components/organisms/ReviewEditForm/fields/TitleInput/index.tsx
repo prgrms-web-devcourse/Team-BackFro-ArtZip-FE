@@ -49,16 +49,19 @@ const TitleInput = ({ prevTitle, wasSubmitted, onValueChange, onErrorChange }: T
 
   useEffect(() => {
     onValueChange('title', title);
+  }, [title]);
+
+  useEffect(() => {
     onErrorChange('title', errorMessage);
-  }, [title, errorMessage]);
+  }, [errorMessage]);
 
   return (
     <>
       <Input
         placeholder="제목을 입력해주세요"
         showCount
-        maxLength={30}
         value={title}
+        maxLength={30}
         onChange={(e) => handleChange(e.target.value)}
         onBlur={() => setTouched(true)}
       />
