@@ -71,7 +71,7 @@ const ImageUpload = ({ limit, type, prevData, onFileUpload, onValueChange }: Ima
         footer={null}
         onCancel={handlePreviewCancel}
       >
-        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />
+        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} preview={false} />
       </Modal>
     </>
   );

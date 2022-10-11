@@ -1,6 +1,6 @@
-import { message } from 'antd';
+import { message, Upload } from 'antd';
 import { RuleObject } from 'antd/lib/form';
-import Upload, { RcFile } from 'antd/lib/upload';
+import { RcFile } from 'antd/es/upload';
 
 export const validateNickname = (_: RuleObject, value: string) => {
   if (!value) {
