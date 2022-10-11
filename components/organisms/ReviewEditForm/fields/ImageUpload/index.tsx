@@ -1,22 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, Image } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { getBase64, validateImageFile } from 'utils';
+import { PhotoProps } from 'types/model';
+import PrevImageList from './PrevImageList';
+import { SubmitData } from '../..';
+import { ValueOf } from 'types/utility';
 
 interface ImageUploadProps {
-  fileList: UploadFile[];
-  setFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
   limit: number;
+  type: 'create' | 'update';
+  prevData?: PhotoProps[];
+  onFileUpload: (newFileList: UploadFile[]) => void;
+  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
 }
 
-const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
+const ImageUpload = ({ limit, type, prevData, onFileUpload, onValueChange }: ImageUploadProps) => {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [prevImageList, setPrevImageList] = useState<PhotoProps[]>(prevData || []);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
 
-  const handleCancel = () => setPreviewVisible(false);
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    onFileUpload(newFileList);
+  };
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -28,19 +39,23 @@ const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const handlePreviewCancel = () => {
+    setPreviewVisible(false);
   };
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+  useEffect(() => {
+    prevData && setPrevImageList(prevData);
+  }, [prevData]);
 
   return (
     <>
+      {type === 'update' && (
+        <PrevImageList
+          prevImageList={prevImageList}
+          setPrevImageList={setPrevImageList}
+          onValueChange={onValueChange}
+        />
+      )}
       <Upload
         listType="picture-card"
         fileList={fileList}
@@ -48,13 +63,25 @@ const ImageUpload = ({ fileList, setFileList, limit }: ImageUploadProps) => {
         onChange={handleChange}
         beforeUpload={validateImageFile}
       >
-        {fileList.length < limit ? uploadButton : null}
+        {fileList.length < limit - prevImageList.length ? uploadButton : null}
       </Upload>
-      <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} preview={false} />
+      <Modal
+        visible={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={handlePreviewCancel}
+      >
+        <Image alt="preview image" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   );
 };
+
+const uploadButton = (
+  <div>
+    <PlusOutlined />
+    <div style={{ marginTop: 8 }}>Upload</div>
+  </div>
+);
 
 export default ImageUpload;
