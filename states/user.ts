@@ -1,24 +1,21 @@
 import { atom } from 'recoil';
-import { Cookies } from 'react-cookie';
 import { SIGNOUT_USER_STATE } from '../constants';
-import { authorizeFetch, removeTokenAll } from 'utils';
+import { authorizeFetch, removeTokenAll, getAccessToken, getRefreshToken } from 'utils';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
-const cookies = new Cookies();
-
 const cookieEffect =
-  (accessTokenKey: string, refreshTokenKey: string) =>
+  (accessTokenKey: 'ACCESS_TOKEN', refreshTokenKey: 'REFRESH_TOKEN') =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ({ setSelf, onSet }: any) => {
     onSet(async () => {
       try {
-        if (!cookies.get(accessTokenKey) || !cookies.get(refreshTokenKey)) {
+        const accessToken = getAccessToken();
+        const refreshToken = getRefreshToken();
+
+        if (!accessToken || !refreshToken) {
           removeTokenAll();
           return SIGNOUT_USER_STATE;
         }
-
-        const accessToken = cookies.get(accessTokenKey);
-        const refreshToken = cookies.get(refreshTokenKey);
 
         const { data } = await authorizeFetch({
           accessToken,
