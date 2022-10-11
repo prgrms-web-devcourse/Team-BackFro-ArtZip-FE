@@ -16,7 +16,7 @@ import {
   IsPublicSwitch,
 } from './fields';
 import { MESSAGE_COMMON as ERROR_MESSAGE } from './utils/ErrorMessage';
-import { MESSAGE, LABEL } from './utils/constants';
+import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
 
 export interface SubmitData {
   [key: string]: string | number | boolean | number[];
@@ -116,7 +116,7 @@ const ReviewEditForm = ({
     }
     setWasSubmitted(true);
     const isValidated = Object.values(errorData.current).every((error) => !error);
-    isValidated ? handleFinish() : message.error(MESSAGE.FORM_INVALID);
+    isValidated ? handleFinish() : message.error(SUBMIT_MESSAGE.FORM_INVALID);
   };
   const [buttonRef] = useDebounce(handleSubmit, 300, null, 'click');
 
@@ -130,17 +130,17 @@ const ReviewEditForm = ({
       switch (type) {
         case 'create': {
           await reviewAPI.createReview(formData);
-          message.success(MESSAGE.CREATE_SUCCESS);
+          message.success(SUBMIT_MESSAGE.CREATE_SUCCESS);
           break;
         }
         case 'update': {
           await reviewAPI.updateReview(Number(router.query.id), formData);
-          message.success(MESSAGE.UPDATE_SUCCESS);
+          message.success(SUBMIT_MESSAGE.UPDATE_SUCCESS);
           onMutation && onMutation(data, prevImages);
           break;
         }
         default: {
-          throw new TypeError(MESSAGE.TYPE_INVALID);
+          throw new TypeError(SUBMIT_MESSAGE.TYPE_INVALID);
         }
       }
       removeDraftReview && removeDraftReview();

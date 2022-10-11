@@ -1,4 +1,4 @@
-export const MESSAGE = {
+export const SUBMIT_MESSAGE = {
   CREATE_SUCCESS: '후기 작성이 완료되었습니다.',
   UPDATE_SUCCESS: '후기 수정이 완료되었습니다.',
   TYPE_INVALID: 'type의 값이 유효하지 않습니다.',
