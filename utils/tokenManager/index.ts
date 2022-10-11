@@ -76,4 +76,12 @@ function removeTokenAll() {
   removeToken(REFRESH_TOKEN);
 }
 
-export { setToken, authorizeFetch, removeToken, removeTokenAll };
+function getAccessToken() {
+  return cookies.get(ACCESS_TOKEN);
+}
+
+function getRefreshToken() {
+  return cookies.get(REFRESH_TOKEN);
+}
+
+export { setToken, authorizeFetch, removeToken, removeTokenAll, getAccessToken, getRefreshToken };
