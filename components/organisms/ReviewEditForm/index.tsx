@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Form, message, UploadFile, Image, Modal } from 'antd';
+import { Button, Form, message, UploadFile } from 'antd';
 import { reviewAPI } from 'apis';
 import { useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
@@ -52,7 +52,6 @@ interface ReviewEditFormProps {
     photos?: PhotoProps[];
   };
   isPrevDataChanged?: boolean;
-  onMutation?: (submitData: SubmitData, prevImages: PhotoProps[]) => void;
   setDraftReview?: Dispatch<SubmitData>;
   removeDraftReview?: () => void;
 }
@@ -61,18 +60,14 @@ const ReviewEditForm = ({
   type,
   prevData,
   isPrevDataChanged,
-  onMutation,
   setDraftReview,
   removeDraftReview,
 }: ReviewEditFormProps) => {
   const submitData = useRef<SubmitData>({ ...initialValueData });
   const errorData = useRef({ ...initialErrorData });
-  const [files, setFiles] = useState<UploadFile[]>([]);
+  const uploadedFileList = useRef<UploadFile[]>([]);
   const [wasSubmitted, setWasSubmitted] = useState(false);
-  const [prevImages, setPrevImages] = useState<PhotoProps[]>([]);
-  const [isModalOn, setIsModalOn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const clickedImage = useRef<number>(0);
   const timerId = useRef<ReturnType<typeof setTimeout>>();
   const router = useRouter();
 
@@ -82,7 +77,6 @@ const ReviewEditForm = ({
         ...submitData.current,
         deletedPhotos: [],
       };
-      prevData && setPrevImages(prevData.photos || []);
     }
   }, [type]);
 
@@ -109,6 +103,10 @@ const ReviewEditForm = ({
     };
   };
 
+  const handleFileUpload = (newFileList: UploadFile[]) => {
+    uploadedFileList.current = [...newFileList];
+  };
+
   const handleSubmit = async (e?: Event) => {
     e?.preventDefault();
     if (isLoading) {
@@ -123,6 +121,7 @@ const ReviewEditForm = ({
   const handleFinish = async () => {
     setIsLoading(true);
     const data = submitData.current;
+    const files = uploadedFileList.current;
     let formData = convertObjectToFormData('data', data);
     formData = convertFilesToFormData('files', files, formData);
 
@@ -136,7 +135,6 @@ const ReviewEditForm = ({
         case 'update': {
           await reviewAPI.updateReview(Number(router.query.id), formData);
           message.success(SUBMIT_MESSAGE.UPDATE_SUCCESS);
-          onMutation && onMutation(data, prevImages);
           break;
         }
         default: {
@@ -152,106 +150,67 @@ const ReviewEditForm = ({
     setIsLoading(false);
   };
 
-  const handleImageClick = (photoId: number) => {
-    clickedImage.current = photoId;
-    setIsModalOn(true);
-  };
-
-  const handleImageDelete = () => {
-    const photoId = clickedImage.current;
-    const { deletedPhotos } = submitData.current;
-    deletedPhotos && handleValueChange('deletedPhotos', [...(deletedPhotos as number[]), photoId]);
-    setPrevImages(prevImages.filter((image) => image.photoId !== photoId));
-    setIsModalOn(false);
-  };
-
-  const handleModalCancel = () => {
-    clickedImage.current = 0;
-    setIsModalOn(false);
-  };
-
   return (
-    <>
-      <EditForm layout="vertical">
-        <FormItem label={LABEL.EXHIBITION}>
-          <ExhibitionSearchBar
-            type={type}
-            prevData={
-              prevData
-                ? {
-                    id: prevData.exhibitionId,
-                    name: prevData.exhibitionName,
-                    thumbnail: prevData.exhibitionThumbnail,
-                  }
-                : undefined
-            }
-            isPrevDataChanged={isPrevDataChanged}
-            wasSubmitted={wasSubmitted}
-            onValueChange={handleValueChange}
-            onErrorChange={handleErrorChange}
-          />
-        </FormItem>
-        <FormItem label={LABEL.DATE}>
-          <DateInput
-            prevDate={prevData?.date}
-            wasSubmitted={wasSubmitted}
-            onValueChange={handleValueChange}
-            onErrorChange={handleErrorChange}
-          />
-        </FormItem>
-        <FormItem label={LABEL.TITLE}>
-          <TitleInput
-            prevTitle={prevData?.title}
-            wasSubmitted={wasSubmitted}
-            onValueChange={handleValueChange}
-            onErrorChange={handleErrorChange}
-          />
-        </FormItem>
-        <FormItem label={LABEL.CONTENT}>
-          <ContentTextArea
-            prevContent={prevData?.content}
-            wasSubmitted={wasSubmitted}
-            onValueChange={handleValueChange}
-            onErrorChange={handleErrorChange}
-          />
-        </FormItem>
-        <FormItem label={LABEL.PHOTOS}>
-          {type === 'update' && (
-            <PrevImageContainer>
-              {prevImages.map(({ photoId, path }) => (
-                <Image
-                  key={photoId}
-                  src={path}
-                  alt="previous image"
-                  width={104}
-                  height={104}
-                  preview={false}
-                  onClick={() => handleImageClick(photoId)}
-                />
-              ))}
-            </PrevImageContainer>
-          )}
-          <ImageUpload fileList={files} setFileList={setFiles} limit={9 - prevImages.length} />
-        </FormItem>
-        <FormItem label={LABEL.IS_PUBLIC}>
-          <IsPublicSwitch prevIsPublic={prevData?.isPublic} onValueChange={handleValueChange} />
-        </FormItem>
+    <EditForm layout="vertical">
+      <FormItem label={LABEL.EXHIBITION}>
+        <ExhibitionSearchBar
+          type={type}
+          prevData={
+            prevData
+              ? {
+                  id: prevData.exhibitionId,
+                  name: prevData.exhibitionName,
+                  thumbnail: prevData.exhibitionThumbnail,
+                }
+              : undefined
+          }
+          isPrevDataChanged={isPrevDataChanged}
+          wasSubmitted={wasSubmitted}
+          onValueChange={handleValueChange}
+          onErrorChange={handleErrorChange}
+        />
+      </FormItem>
+      <FormItem label={LABEL.DATE}>
+        <DateInput
+          prevDate={prevData?.date}
+          wasSubmitted={wasSubmitted}
+          onValueChange={handleValueChange}
+          onErrorChange={handleErrorChange}
+        />
+      </FormItem>
+      <FormItem label={LABEL.TITLE}>
+        <TitleInput
+          prevTitle={prevData?.title}
+          wasSubmitted={wasSubmitted}
+          onValueChange={handleValueChange}
+          onErrorChange={handleErrorChange}
+        />
+      </FormItem>
+      <FormItem label={LABEL.CONTENT}>
+        <ContentTextArea
+          prevContent={prevData?.content}
+          wasSubmitted={wasSubmitted}
+          onValueChange={handleValueChange}
+          onErrorChange={handleErrorChange}
+        />
+      </FormItem>
+      <FormItem label={LABEL.PHOTOS}>
+        <ImageUpload
+          type={type}
+          limit={9}
+          prevData={prevData?.photos}
+          onFileUpload={handleFileUpload}
+          onValueChange={handleValueChange}
+        />
+      </FormItem>
+      <FormItem label={LABEL.IS_PUBLIC}>
+        <IsPublicSwitch prevIsPublic={prevData?.isPublic} onValueChange={handleValueChange} />
+      </FormItem>
 
-        <SubmitButton type="primary" ref={buttonRef}>
-          작성완료
-        </SubmitButton>
-      </EditForm>
-      <Modal
-        title="이미지 삭제"
-        visible={isModalOn}
-        okText="삭제하기"
-        onOk={handleImageDelete}
-        cancelText="취소"
-        onCancel={handleModalCancel}
-      >
-        <p>이 이미지를 삭제할까요?</p>
-      </Modal>
-    </>
+      <SubmitButton type="primary" ref={buttonRef}>
+        작성완료
+      </SubmitButton>
+    </EditForm>
   );
 };
 
@@ -275,17 +234,6 @@ const FormItem = styled(Form.Item)`
     font-weight: 400;
     margin-top: 2px;
     margin-left: 4px;
-  }
-`;
-
-const PrevImageContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 104px);
-  gap: 8px;
-  margin-bottom: 8px;
-
-  img {
-    cursor: pointer;
   }
 `;
 
