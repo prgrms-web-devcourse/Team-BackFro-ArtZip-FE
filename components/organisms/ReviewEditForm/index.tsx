@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { Button, Form, message, UploadFile } from 'antd';
 import { reviewAPI } from 'apis';
-import { useDebounce } from 'hooks';
+import { useAutoSaveReview, useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
-import { useRef, useState, useEffect, Dispatch } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PhotoProps } from 'types/model';
 import { ValueOf } from 'types/utility';
 import { convertFilesToFormData, convertObjectToFormData, getErrorMessage } from 'utils';
@@ -52,17 +52,9 @@ interface ReviewEditFormProps {
     photos?: PhotoProps[];
   };
   isPrevDataChanged?: boolean;
-  setDraftReview?: Dispatch<SubmitData>;
-  removeDraftReview?: () => void;
 }
 
-const ReviewEditForm = ({
-  type,
-  prevData,
-  isPrevDataChanged,
-  setDraftReview,
-  removeDraftReview,
-}: ReviewEditFormProps) => {
+const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormProps) => {
   const submitData = useRef<SubmitData>({ ...initialValueData });
   const errorData = useRef({ ...initialErrorData });
   const uploadedFileList = useRef<UploadFile[]>([]);
@@ -70,6 +62,7 @@ const ReviewEditForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const timerId = useRef<ReturnType<typeof setTimeout>>();
   const router = useRouter();
+  const { setItem, removeItem } = useAutoSaveReview();
 
   useEffect(() => {
     if (type === 'update') {
@@ -86,10 +79,10 @@ const ReviewEditForm = ({
       [key]: value,
     };
 
-    if (type === 'create' && setDraftReview && submitData.current.exhibitionId) {
+    if (type === 'create' && submitData.current.exhibitionId) {
       timerId.current && clearTimeout(timerId.current);
       timerId.current = setTimeout(() => {
-        setDraftReview({
+        setItem({
           ...submitData.current,
         });
       }, 1000);
@@ -141,7 +134,7 @@ const ReviewEditForm = ({
           throw new TypeError(SUBMIT_MESSAGE.TYPE_INVALID);
         }
       }
-      removeDraftReview && removeDraftReview();
+      removeItem();
       router.replace('/community');
     } catch (error) {
       message.error(getErrorMessage(error));

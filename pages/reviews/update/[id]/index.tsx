@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth, useDraftReview } from 'hooks';
+import { useCheckAuth, useAutoSaveReview } from 'hooks';
 import { Spinner } from 'components/atoms';
 import useSWR from 'swr';
 import { ReviewEditForm } from 'components/organisms';
@@ -11,10 +11,10 @@ import Head from 'next/head';
 const ReviewUpdatePage = () => {
   const router = useRouter();
   const { data: prevData } = useSWR(`api/v1/reviews/${router.query.id}`);
-  const [, , removeDraftReview] = useDraftReview();
+  const { removeItem } = useAutoSaveReview();
 
   useEffect(() => {
-    removeDraftReview();
+    removeItem();
   }, []);
 
   const [isChecking] = useCheckAuth();
