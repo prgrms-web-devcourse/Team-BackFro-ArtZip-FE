@@ -1,7 +1,5 @@
-import { useState, useCallback } from 'react';
-
 const useSessionStorage = <T>(key: string, initialValue: T) => {
-  const [storedValue, setStoredValue] = useState(() => {
+  const getItem = () => {
     try {
       const item = window.sessionStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
@@ -9,29 +7,25 @@ const useSessionStorage = <T>(key: string, initialValue: T) => {
       console.error(error);
       return initialValue;
     }
-  });
+  };
 
-  const setValue = useCallback(
-    (value: T) => {
-      try {
-        setStoredValue(value);
-        window.sessionStorage.setItem(key, JSON.stringify(value));
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [key],
-  );
-
-  const removeValue = useCallback(() => {
+  const setItem = (value: T) => {
     try {
-      setStoredValue(initialValue);
+      window.sessionStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeItem = () => {
+    try {
       window.sessionStorage.removeItem(key);
     } catch (error) {
       console.error(error);
     }
-  }, [key, initialValue]);
-  return [storedValue, setValue, removeValue];
+  };
+
+  return { getItem, setItem, removeItem };
 };
 
 export default useSessionStorage;
