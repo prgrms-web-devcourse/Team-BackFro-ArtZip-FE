@@ -15,8 +15,8 @@ import { SWRConfig } from 'swr';
 import { swrOptions } from 'utils';
 import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
-import { authorizeFetch } from 'utils';
-import { Cookies } from 'react-cookie';
+import { authorizeFetch, removeTokenAll } from 'utils';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 declare global {
   interface Window {
     // eslint-disable-next-line
@@ -54,10 +54,9 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
-  const clientCookies = new Cookies();
 
-  const accessToken = allCookies['ACCESS_TOKEN'];
-  const refreshToken = allCookies['REFRESH_TOKEN'];
+  const accessToken = allCookies[ACCESS_TOKEN];
+  const refreshToken = allCookies[REFRESH_TOKEN];
 
   const removeAllCookies = () => {
     ctx.res &&
@@ -65,9 +64,7 @@ ArtZip.getInitialProps = async (appContext: AppContext) => {
         `ACCESS_TOKEN=deleted; Max-Age=0`,
         `REFRESH_TOKEN=deleted; Max-Age=0`,
       ]);
-
-    clientCookies.remove('ACCESS_TOKEN', { path: '/' });
-    clientCookies.remove('REFRESH_TOKEN', { path: '/' });
+    removeTokenAll();
   };
 
   let userState = SIGNOUT_USER_STATE;

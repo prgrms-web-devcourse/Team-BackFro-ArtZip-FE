@@ -1,3 +1,4 @@
+import { getRefreshToken } from 'utils';
 import { unAuthRequest, authRequest } from 'apis/common';
 import {
   UserLocalLoginRequest,
@@ -5,9 +6,6 @@ import {
   UserSignupRequest,
   UserChangePasswordRequest,
 } from 'types/apis/user';
-import { Cookies } from 'react-cookie';
-
-const cookies = new Cookies();
 
 const userAPI = {
   localLogin: (payload: UserLocalLoginRequest) => {
@@ -35,15 +33,15 @@ const userAPI = {
     return unAuthRequest.get(`/api/v1/users/${userId}/info`);
   },
   getMyReview: (userId: number, page: number, size: number) => {
-    const request = cookies.get('REFRESH_TOKEN') ? authRequest : unAuthRequest;
+    const request = getRefreshToken() ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/my/reviews?page=${page}&size=${size}`);
   },
   getLikedReview: (userId: number, page: number, size: number) => {
-    const request = cookies.get('REFRESH_TOKEN') ? authRequest : unAuthRequest;
+    const request = getRefreshToken() ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/reviews/like?page=${page}&size=${size}`);
   },
   getLikedExhibition: (userId: number, page: number, size: number) => {
-    const request = cookies.get('REFRESH_TOKEN') ? authRequest : unAuthRequest;
+    const request = getRefreshToken() ? authRequest : unAuthRequest;
     return request.get(`/api/v1/users/${userId}/info/exhibitions/like?page=${page}&size=${size}`);
   },
   changeMyInfo: (formData: FormData) => {

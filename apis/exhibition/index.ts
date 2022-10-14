@@ -1,7 +1,5 @@
+import { getRefreshToken } from 'utils';
 import { unAuthRequest, authRequest } from 'apis/common';
-import { Cookies } from 'react-cookie';
-
-const cookies = new Cookies();
 
 const exhibitionAPI = {
   // 여기 auth 반영 안되어있음
@@ -14,7 +12,7 @@ const exhibitionAPI = {
     );
   },
   getDetail: (exhibitionId: number) => {
-    const refreshToken = cookies.get('REFRESH_TOKEN');
+    const refreshToken = getRefreshToken();
 
     return refreshToken
       ? authRequest.get(`/api/v1/exhibitions/${exhibitionId}`)
