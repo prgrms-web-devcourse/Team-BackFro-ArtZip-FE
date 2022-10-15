@@ -5,7 +5,6 @@ import { useAutoSaveReview, useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
 import { useRef, useState, useEffect } from 'react';
 import { PhotoProps } from 'types/model';
-import { ValueOf } from 'types/utility';
 import { convertFilesToFormData, convertObjectToFormData, getErrorMessage } from 'utils';
 import {
   ExhibitionSearchBar,
@@ -15,29 +14,19 @@ import {
   ImageUpload,
   IsPublicSwitch,
 } from './fields';
-import { MESSAGE_COMMON as ERROR_MESSAGE } from './utils/ErrorMessage';
 import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
 
-export interface SubmitData {
-  [key: string]: string | number | boolean | number[];
+export type FieldValue = string | number | boolean | number[];
+export type FieldError = string;
+
+export interface FieldGetter {
+  getFieldValue: () => {
+    [key: string]: FieldValue;
+  };
+  getFieldError: () => {
+    [key: string]: FieldError;
+  };
 }
-
-const initialValueData: SubmitData = {
-  exhibitionId: 0,
-  exhibitionName: '',
-  exhibitionThumbnail: '',
-  date: '',
-  title: '',
-  content: '',
-  isPublic: true,
-};
-
-const initialErrorData = {
-  exhibition: ERROR_MESSAGE.REQUIRED_VALUE,
-  date: ERROR_MESSAGE.REQUIRED_VALUE,
-  title: ERROR_MESSAGE.REQUIRED_VALUE,
-  content: ERROR_MESSAGE.REQUIRED_VALUE,
-};
 
 interface ReviewEditFormProps {
   type: 'create' | 'update';
@@ -53,47 +42,39 @@ interface ReviewEditFormProps {
   };
   isPrevDataChanged?: boolean;
 }
-
 const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormProps) => {
-  const submitData = useRef<SubmitData>({ ...initialValueData });
-  const errorData = useRef({ ...initialErrorData });
+  const formRef = useRef(null);
+  const exhibitionRef = useRef<FieldGetter>(null);
+  const titleRef = useRef<FieldGetter>(null);
+  const contentRef = useRef<FieldGetter>(null);
+  const dateRef = useRef<FieldGetter>(null);
+  const isPublicRef = useRef<FieldGetter>(null);
+  const deletedPhotosRef = useRef<FieldGetter>(null);
+  const fields = [exhibitionRef, titleRef, contentRef, dateRef, isPublicRef, deletedPhotosRef];
   const uploadedFileList = useRef<UploadFile[]>([]);
   const [wasSubmitted, setWasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const timerId = useRef<ReturnType<typeof setTimeout>>();
   const router = useRouter();
-  const { setItem, removeItem } = useAutoSaveReview();
+  const { setStoredReview, removeStoredReview } = useAutoSaveReview();
 
-  useEffect(() => {
-    if (type === 'update') {
-      submitData.current = {
-        ...submitData.current,
-        deletedPhotos: [],
-      };
-    }
-  }, [type]);
-
-  const handleValueChange = (key: string, value: ValueOf<SubmitData>) => {
-    submitData.current = {
-      ...submitData.current,
-      [key]: value,
-    };
-
-    if (type === 'create' && submitData.current.exhibitionId) {
-      timerId.current && clearTimeout(timerId.current);
-      timerId.current = setTimeout(() => {
-        setItem({
-          ...submitData.current,
-        });
-      }, 1000);
-    }
+  const getFieldValues = () => {
+    return fields.reduce((acc, field) => {
+      if (field.current) {
+        const value = field.current.getFieldValue();
+        Object.assign(acc, value);
+      }
+      return acc;
+    }, {});
   };
 
-  const handleErrorChange = (key: string, value: string) => {
-    errorData.current = {
-      ...errorData.current,
-      [key]: value,
-    };
+  const getFieldErrors = () => {
+    return fields.reduce((acc, field) => {
+      if (field.current) {
+        const error = field.current.getFieldError();
+        Object.assign(acc, error);
+      }
+      return acc;
+    }, {});
   };
 
   const handleFileUpload = (newFileList: UploadFile[]) => {
@@ -106,18 +87,21 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
       return;
     }
     setWasSubmitted(true);
-    const isValidated = Object.values(errorData.current).every((error) => !error);
+    const fieldErrors = Object.values(getFieldErrors());
+    const isValidated = fieldErrors.every((error) => !error);
     isValidated ? handleFinish() : message.error(SUBMIT_MESSAGE.FORM_INVALID);
   };
   const [buttonRef] = useDebounce(handleSubmit, 300, null, 'click');
 
   const handleFinish = async () => {
     setIsLoading(true);
-    const data = submitData.current;
+    const fieldValues = getFieldValues();
     const files = uploadedFileList.current;
-    let formData = convertObjectToFormData('data', data);
-    formData = convertFilesToFormData('files', files, formData);
-
+    const formData = convertFilesToFormData(
+      'files',
+      files,
+      convertObjectToFormData('data', fieldValues),
+    );
     try {
       switch (type) {
         case 'create': {
@@ -134,7 +118,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
           throw new TypeError(SUBMIT_MESSAGE.TYPE_INVALID);
         }
       }
-      removeItem();
+      removeStoredReview();
       router.replace('/community');
     } catch (error) {
       message.error(getErrorMessage(error));
@@ -143,9 +127,26 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (type === 'create') {
+      timer = setInterval(() => {
+        const fieldValues = getFieldValues();
+        setStoredReview({
+          ...fieldValues,
+        });
+      }, 3000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  console.log(formRef);
+
   return (
-    <EditForm layout="vertical">
-      <FormItem label={LABEL.EXHIBITION}>
+    <EditForm layout="vertical" ref={formRef}>
+      <FormItem label={LABEL.EXHIBITION} htmlFor={LABEL.EXHIBITION}>
         <ExhibitionSearchBar
           type={type}
           prevData={
@@ -159,45 +160,33 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
           }
           isPrevDataChanged={isPrevDataChanged}
           wasSubmitted={wasSubmitted}
-          onValueChange={handleValueChange}
-          onErrorChange={handleErrorChange}
+          ref={exhibitionRef}
         />
       </FormItem>
-      <FormItem label={LABEL.DATE}>
-        <DateInput
-          prevDate={prevData?.date}
-          wasSubmitted={wasSubmitted}
-          onValueChange={handleValueChange}
-          onErrorChange={handleErrorChange}
-        />
+      <FormItem label={LABEL.DATE} htmlFor={LABEL.DATE}>
+        <DateInput prevDate={prevData?.date} wasSubmitted={wasSubmitted} ref={dateRef} />
       </FormItem>
-      <FormItem label={LABEL.TITLE}>
-        <TitleInput
-          prevTitle={prevData?.title}
-          wasSubmitted={wasSubmitted}
-          onValueChange={handleValueChange}
-          onErrorChange={handleErrorChange}
-        />
+      <FormItem label={LABEL.TITLE} htmlFor={LABEL.TITLE}>
+        <TitleInput prevTitle={prevData?.title} wasSubmitted={wasSubmitted} ref={titleRef} />
       </FormItem>
-      <FormItem label={LABEL.CONTENT}>
+      <FormItem label={LABEL.CONTENT} htmlFor={LABEL.CONTENT}>
         <ContentTextArea
           prevContent={prevData?.content}
           wasSubmitted={wasSubmitted}
-          onValueChange={handleValueChange}
-          onErrorChange={handleErrorChange}
+          ref={contentRef}
         />
       </FormItem>
-      <FormItem label={LABEL.PHOTOS}>
+      <FormItem label={LABEL.PHOTOS} htmlFor={LABEL.PHOTOS}>
         <ImageUpload
           type={type}
           limit={9}
           prevData={prevData?.photos}
           onFileUpload={handleFileUpload}
-          onValueChange={handleValueChange}
+          ref={deletedPhotosRef}
         />
       </FormItem>
-      <FormItem label={LABEL.IS_PUBLIC}>
-        <IsPublicSwitch prevIsPublic={prevData?.isPublic} onValueChange={handleValueChange} />
+      <FormItem label={LABEL.IS_PUBLIC} htmlFor={LABEL.IS_PUBLIC}>
+        <IsPublicSwitch prevIsPublic={prevData?.isPublic} ref={isPublicRef} />
       </FormItem>
 
       <SubmitButton type="primary" ref={buttonRef}>
