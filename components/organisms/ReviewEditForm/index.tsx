@@ -17,6 +17,7 @@ import {
 import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
 
 const FIELD_LENGTH = 6;
+const MAX_IMAGE_NUMBER = 9;
 
 export type FieldValue = string | number | boolean | number[];
 export type FieldError = string;
@@ -179,7 +180,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
       <FormItem label={LABEL.PHOTOS} htmlFor={LABEL.PHOTOS}>
         <ImageUpload
           type={type}
-          limit={9}
+          limit={MAX_IMAGE_NUMBER}
           prevData={prevData?.photos}
           onFileUpload={handleFileUpload}
           ref={fields.current[4]}
