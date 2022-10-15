@@ -3,7 +3,7 @@ import { Button, Form, message, UploadFile } from 'antd';
 import { reviewAPI } from 'apis';
 import { useStoredReview, useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, RefObject, createRef } from 'react';
 import { PhotoProps } from 'types/model';
 import { convertFilesToFormData, convertObjectToFormData, getErrorMessage } from 'utils';
 import {
@@ -15,6 +15,8 @@ import {
   IsPublicSwitch,
 } from './fields';
 import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
+
+const FIELD_LENGTH = 6;
 
 export type FieldValue = string | number | boolean | number[];
 export type FieldError = string;
@@ -42,15 +44,11 @@ interface ReviewEditFormProps {
   };
   isPrevDataChanged?: boolean;
 }
+
 const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormProps) => {
-  const formRef = useRef(null);
-  const exhibitionRef = useRef<FieldGetter>(null);
-  const titleRef = useRef<FieldGetter>(null);
-  const contentRef = useRef<FieldGetter>(null);
-  const dateRef = useRef<FieldGetter>(null);
-  const isPublicRef = useRef<FieldGetter>(null);
-  const deletedPhotosRef = useRef<FieldGetter>(null);
-  const fields = [exhibitionRef, titleRef, contentRef, dateRef, isPublicRef, deletedPhotosRef];
+  const fields = useRef<RefObject<FieldGetter>[]>(
+    Array.from({ length: FIELD_LENGTH }, () => createRef<FieldGetter>()),
+  );
   const uploadedFileList = useRef<UploadFile[]>([]);
   const [wasSubmitted, setWasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +56,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
   const { setStoredReview, removeStoredReview } = useStoredReview();
 
   const getFieldValues = () => {
-    return fields.reduce((acc, field) => {
+    return fields.current.reduce((acc, field) => {
       if (field.current) {
         const value = field.current.getFieldValue();
         Object.assign(acc, value);
@@ -68,7 +66,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
   };
 
   const getFieldErrors = () => {
-    return fields.reduce((acc, field) => {
+    return fields.current.reduce((acc, field) => {
       if (field.current) {
         const error = field.current.getFieldError();
         Object.assign(acc, error);
@@ -91,7 +89,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
     const isValidated = fieldErrors.every((error) => !error);
     isValidated ? handleFinish() : message.error(SUBMIT_MESSAGE.FORM_INVALID);
   };
-  const [buttonRef] = useDebounce(handleSubmit, 300, null, 'click');
+  const [submitButton] = useDebounce(handleSubmit, 300, null, 'click');
 
   const handleFinish = async () => {
     setIsLoading(true);
@@ -142,10 +140,8 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
     };
   }, []);
 
-  console.log(formRef);
-
   return (
-    <EditForm layout="vertical" ref={formRef}>
+    <EditForm layout="vertical">
       <FormItem label={LABEL.EXHIBITION} htmlFor={LABEL.EXHIBITION}>
         <ExhibitionSearchBar
           type={type}
@@ -160,20 +156,24 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
           }
           isPrevDataChanged={isPrevDataChanged}
           wasSubmitted={wasSubmitted}
-          ref={exhibitionRef}
+          ref={fields.current[0]}
         />
       </FormItem>
       <FormItem label={LABEL.DATE} htmlFor={LABEL.DATE}>
-        <DateInput prevDate={prevData?.date} wasSubmitted={wasSubmitted} ref={dateRef} />
+        <DateInput prevDate={prevData?.date} wasSubmitted={wasSubmitted} ref={fields.current[1]} />
       </FormItem>
       <FormItem label={LABEL.TITLE} htmlFor={LABEL.TITLE}>
-        <TitleInput prevTitle={prevData?.title} wasSubmitted={wasSubmitted} ref={titleRef} />
+        <TitleInput
+          prevTitle={prevData?.title}
+          wasSubmitted={wasSubmitted}
+          ref={fields.current[2]}
+        />
       </FormItem>
       <FormItem label={LABEL.CONTENT} htmlFor={LABEL.CONTENT}>
         <ContentTextArea
           prevContent={prevData?.content}
           wasSubmitted={wasSubmitted}
-          ref={contentRef}
+          ref={fields.current[3]}
         />
       </FormItem>
       <FormItem label={LABEL.PHOTOS} htmlFor={LABEL.PHOTOS}>
@@ -182,14 +182,14 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
           limit={9}
           prevData={prevData?.photos}
           onFileUpload={handleFileUpload}
-          ref={deletedPhotosRef}
+          ref={fields.current[4]}
         />
       </FormItem>
       <FormItem label={LABEL.IS_PUBLIC} htmlFor={LABEL.IS_PUBLIC}>
-        <IsPublicSwitch prevIsPublic={prevData?.isPublic} ref={isPublicRef} />
+        <IsPublicSwitch prevIsPublic={prevData?.isPublic} ref={fields.current[5]} />
       </FormItem>
 
-      <SubmitButton type="primary" ref={buttonRef}>
+      <SubmitButton type="primary" ref={submitButton}>
         작성완료
       </SubmitButton>
     </EditForm>
