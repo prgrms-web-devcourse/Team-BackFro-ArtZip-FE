@@ -14,10 +14,6 @@ const Document = () => {
           name="author"
           content="권기홍, 김다은, 마혜경, 조윤정, 정현서, 홍유석, 박상혁, 김승은"
         />
-        <meta
-          name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
         <meta property="og:type" content="website" />

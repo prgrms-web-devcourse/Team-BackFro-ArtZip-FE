@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth, useDraftReview } from 'hooks';
+import { useCheckAuth, useStoredReview } from 'hooks';
 import { Spinner } from 'components/atoms';
 import { ReviewEditForm } from 'components/organisms';
 import { useEffect, useState } from 'react';
@@ -11,26 +11,27 @@ import Head from 'next/head';
 const ReviewCreatePage = () => {
   const { query } = useRouter();
   const [prevData, setPrevData] = useState(query);
-  const [draftReview, setDraftReview, removeDraftReview] = useDraftReview();
   const [isModalOn, setIsModalOn] = useState(false);
   const [isPrevDataChanged, setIsPrevDataChanged] = useState(false);
+  const { getStoredReview, removeStoredReview } = useStoredReview();
+  const storedReview = getStoredReview();
 
   useEffect(() => {
     if (query.exhibitionId) {
-      removeDraftReview();
-    } else if (draftReview.exhibitionId) {
+      removeStoredReview();
+    } else if (storedReview.exhibitionId) {
       setIsModalOn(true);
     }
   }, []);
 
   const handleModalOk = () => {
-    setPrevData(draftReview);
-    setIsModalOn(false);
+    setPrevData(storedReview);
     setIsPrevDataChanged(true);
+    setIsModalOn(false);
   };
 
   const handleModalCancel = () => {
-    removeDraftReview();
+    removeStoredReview();
     setIsModalOn(false);
   };
 
@@ -65,8 +66,6 @@ const ReviewCreatePage = () => {
                 : undefined
             }
             isPrevDataChanged={isPrevDataChanged}
-            setDraftReview={setDraftReview}
-            removeDraftReview={removeDraftReview}
           />
         </Section>
         <Modal

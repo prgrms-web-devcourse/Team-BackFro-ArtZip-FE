@@ -5,4 +5,4 @@ export { default as useUserAuthActions } from './useUserAuthActions';
 export { default as useCheckAuth } from './useCheckAuth';
 export { default as useDebounce } from './useDebounce';
 export { default as useSessionStorage } from './useSessionStorage';
-export { default as useDraftReview } from './useDraftReview';
+export { default as useStoredReview } from './useStoredReview';
