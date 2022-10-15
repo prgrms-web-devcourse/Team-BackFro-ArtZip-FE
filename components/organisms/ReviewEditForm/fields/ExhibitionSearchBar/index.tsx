@@ -1,13 +1,20 @@
 import styled from '@emotion/styled';
 import { Input, Image, message } from 'antd';
 import DEFAULT_IMAGE from 'constants/defaultImage';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  forwardRef,
+  ForwardedRef,
+  useImperativeHandle,
+} from 'react';
 import { getErrorMessage, show, hide } from 'utils';
 import { useDebounce } from 'hooks';
 import { reviewAPI } from 'apis';
-import { ValueOf } from 'types/utility';
-import { SubmitData } from 'components/organisms/ReviewEditForm';
-import ErrorMessage, { MESSAGE_COMMON as MESSAGE } from '../../utils/ErrorMessage';
+import ErrorMessage, { ERROR_MESSAGE_COMMON as MESSAGE } from '../../utils/ErrorMessage';
+import { FieldGetter } from '../..';
 
 interface ExhibitionSearchBarProps {
   type: 'create' | 'update';
@@ -18,8 +25,6 @@ interface ExhibitionSearchBarProps {
   };
   isPrevDataChanged?: boolean;
   wasSubmitted: boolean;
-  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
-  onErrorChange: (key: string, value: string) => void;
 }
 
 interface SearchResult {
@@ -28,110 +33,111 @@ interface SearchResult {
   thumbnail: string;
 }
 
-const ExhibitionSearchBar = ({
-  type,
-  prevData,
-  isPrevDataChanged,
-  wasSubmitted,
-  onValueChange,
-  onErrorChange,
-}: ExhibitionSearchBarProps) => {
-  const [exhibitionId, setExhibitionId] = useState(prevData ? prevData.id : 0);
-  const [searchWord, setSearchWord] = useState('');
-  const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
-  const [posterImage, setPosterImage] = useState(
-    prevData ? prevData.thumbnail : DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
-  );
-  const [searchResults, setSearchResults] = useState<SearchResult[]>();
-  const resultList = useRef<HTMLUListElement>(null);
-  const [errorMessage, setErrormessage] = useState(
-    prevData ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE,
-  );
-  const displayErrorMessage = wasSubmitted && !!errorMessage;
+const ExhibitionSearchBar = forwardRef(
+  (
+    { type, prevData, isPrevDataChanged, wasSubmitted }: ExhibitionSearchBarProps,
+    ref: ForwardedRef<FieldGetter>,
+  ) => {
+    const [exhibitionId, setExhibitionId] = useState(prevData ? prevData.id : 0);
+    const [searchWord, setSearchWord] = useState('');
+    const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
+    const [exhibitionThumbnail, setExhibitionThumbnail] = useState(
+      prevData ? prevData.thumbnail : DEFAULT_IMAGE.EXHIBITION_THUMBNAIL,
+    );
+    const [searchResults, setSearchResults] = useState<SearchResult[]>();
+    const resultList = useRef<HTMLUListElement>(null);
+    const [error, setError] = useState(prevData ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
+    const displayErrorMessage = wasSubmitted && !!error;
 
-  useEffect(() => {
-    if (isPrevDataChanged && prevData) {
-      setExhibitionId(prevData.id);
-      setExhibitionName(prevData.name);
-      setPosterImage(prevData.thumbnail);
-      setErrormessage(MESSAGE.NO_ERROR);
-    }
-  }, [isPrevDataChanged]);
+    useEffect(() => {
+      if (isPrevDataChanged && prevData) {
+        setExhibitionId(prevData.id);
+        setExhibitionName(prevData.name);
+        setExhibitionThumbnail(prevData.thumbnail);
+        setError(MESSAGE.NO_ERROR);
+      }
+    }, [isPrevDataChanged]);
 
-  const handleSearch = useCallback(async () => {
-    const isEmpty = !/\S/.test(searchWord);
-    if (isEmpty) {
-      setSearchResults([]);
-      return;
-    }
-    try {
-      const { data } = await reviewAPI.searchExhibition(searchWord);
-      const { exhibitions } = data.data;
-      setSearchResults([...exhibitions]);
-      resultList.current && show(resultList.current);
-      !exhibitions.length && message.warning('검색 결과가 없습니다.');
-    } catch (error) {
-      message.error(getErrorMessage(error));
-      console.error(error);
-    }
-  }, [searchWord]);
-  useDebounce(handleSearch, 500, searchWord);
+    const handleSearch = useCallback(async () => {
+      const isEmpty = !/\S/.test(searchWord);
+      if (isEmpty) {
+        setSearchResults([]);
+        return;
+      }
+      try {
+        const { data } = await reviewAPI.searchExhibition(searchWord);
+        const { exhibitions } = data.data;
+        setSearchResults([...exhibitions]);
+        resultList.current && show(resultList.current);
+        !exhibitions.length && message.warning('검색 결과가 없습니다.');
+      } catch (error) {
+        message.error(getErrorMessage(error));
+        console.error(error);
+      }
+    }, [searchWord]);
+    useDebounce(handleSearch, 500, searchWord);
 
-  const handleResultClick = ({ exhibitionId, name, thumbnail }: SearchResult) => {
-    setExhibitionId(exhibitionId);
-    setExhibitionName(name);
-    setPosterImage(thumbnail);
-    setErrormessage(MESSAGE.NO_ERROR);
-    resultList.current && hide(resultList.current);
-  };
+    const handleResultClick = ({ exhibitionId, name, thumbnail }: SearchResult) => {
+      setExhibitionId(exhibitionId);
+      setExhibitionName(name);
+      setExhibitionThumbnail(thumbnail);
+      setError(MESSAGE.NO_ERROR);
+      resultList.current && hide(resultList.current);
+    };
 
-  useEffect(() => {
-    onValueChange('exhibitionId', exhibitionId);
-    onValueChange('exhibitionName', exhibitionName);
-    onValueChange('exhibitionThumbnail', posterImage);
-  }, [exhibitionId, exhibitionName, posterImage]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        getFieldValue: () => ({
+          exhibitionId,
+          exhibitionName,
+          exhibitionThumbnail,
+        }),
+        getFieldError: () => ({
+          exhibition: error,
+        }),
+      }),
+      [exhibitionId, error],
+    );
 
-  useEffect(() => {
-    onErrorChange('exhibition', errorMessage);
-  }, [errorMessage]);
-
-  return (
-    <SearchContainer>
-      <InnerContainer>
-        <SearchBar
-          placeholder="전시회 제목을 검색해 주세요"
-          value={exhibitionName || searchWord}
-          onChange={(e) => {
-            setSearchWord(e.target.value);
-          }}
-          onFocus={() => {
-            setExhibitionName('');
-            resultList.current && show(resultList.current);
-          }}
-          disabled={type === 'update'}
+    return (
+      <SearchContainer>
+        <InnerContainer>
+          <SearchBar
+            placeholder="전시회 제목을 검색해 주세요"
+            value={exhibitionName || searchWord}
+            onChange={(e) => {
+              setSearchWord(e.target.value);
+            }}
+            onFocus={() => {
+              setExhibitionName('');
+              resultList.current && show(resultList.current);
+            }}
+            disabled={type === 'update'}
+          />
+          <ResultList ref={resultList}>
+            {searchResults?.map((item) => (
+              <ResultItem
+                key={item.exhibitionId}
+                onClick={() => {
+                  handleResultClick(item);
+                }}
+              >
+                {item.name}
+              </ResultItem>
+            ))}
+          </ResultList>
+          <ErrorMessage message={error} visible={displayErrorMessage} />
+        </InnerContainer>
+        <Poster
+          src={exhibitionThumbnail}
+          alt="전시회 포스터 이미지"
+          preview={exhibitionThumbnail !== DEFAULT_IMAGE.EXHIBITION_THUMBNAIL}
         />
-        <ResultList ref={resultList}>
-          {searchResults?.map((item) => (
-            <ResultItem
-              key={item.exhibitionId}
-              onClick={() => {
-                handleResultClick(item);
-              }}
-            >
-              {item.name}
-            </ResultItem>
-          ))}
-        </ResultList>
-        <ErrorMessage message={errorMessage} visible={displayErrorMessage} />
-      </InnerContainer>
-      <Poster
-        src={posterImage}
-        alt="전시회 포스터 이미지"
-        preview={posterImage !== DEFAULT_IMAGE.EXHIBITION_THUMBNAIL}
-      />
-    </SearchContainer>
-  );
-};
+      </SearchContainer>
+    );
+  },
+);
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -180,5 +186,7 @@ const Poster = styled(Image)`
   height: 200px;
   flex-shrink: 0;
 `;
+
+ExhibitionSearchBar.displayName = 'ExhibitionSearchBar';
 
 export default ExhibitionSearchBar;

@@ -1,73 +1,77 @@
 import { Input } from 'antd';
-import { useEffect, useState } from 'react';
-import { ValueOf } from 'types/utility';
-import { SubmitData } from '../..';
-import ErrorMessage, { MESSAGE_COMMON } from '../../utils/ErrorMessage';
+import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import ErrorMessage, { ERROR_MESSAGE_COMMON } from '../../utils/ErrorMessage';
+import { FieldGetter } from '../..';
 
 const MAX_LENGTH = 30;
 const MESSAGE = {
-  ...MESSAGE_COMMON,
+  ...ERROR_MESSAGE_COMMON,
   EXCEEDED_MAX_LENGTH: `${MAX_LENGTH}자 이하로 작성해 주세요.`,
 };
 
 interface TitleInputProps {
   prevTitle?: string;
   wasSubmitted: boolean;
-  onValueChange: (key: string, value: ValueOf<SubmitData>) => void;
-  onErrorChange: (key: string, value: string) => void;
 }
 
-const TitleInput = ({ prevTitle, wasSubmitted, onValueChange, onErrorChange }: TitleInputProps) => {
-  const [title, setTitle] = useState(prevTitle || '');
-  const [touched, setTouched] = useState(false);
-  const [errorMessage, setErrormessage] = useState(
-    prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE,
-  );
-  const displayErrorMessage = (wasSubmitted || touched) && !!errorMessage;
+const TitleInput = forwardRef(
+  ({ prevTitle, wasSubmitted }: TitleInputProps, ref: ForwardedRef<FieldGetter>) => {
+    const [title, setTitle] = useState(prevTitle || '');
+    const [touched, setTouched] = useState(false);
+    const [error, setError] = useState(prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
+    const displayErrorMessage = (wasSubmitted || touched) && !!error;
 
-  useEffect(() => {
-    setTitle(prevTitle ? prevTitle : '');
-    setErrormessage(prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
-  }, [prevTitle]);
+    useEffect(() => {
+      setTitle(prevTitle ? prevTitle : '');
+      setError(prevTitle ? MESSAGE.NO_ERROR : MESSAGE.REQUIRED_VALUE);
+    }, [prevTitle]);
 
-  const handleChange = (value: string) => {
-    setTitle(value);
-    validate(value);
-  };
+    const handleChange = (value: string) => {
+      setTitle(value);
+      validate(value);
+    };
 
-  const validate = (value: string) => {
-    if (!value) {
-      setErrormessage(MESSAGE.REQUIRED_VALUE);
-      return;
-    }
-    if (value.length > MAX_LENGTH) {
-      setErrormessage(MESSAGE.EXCEEDED_MAX_LENGTH);
-      return;
-    }
-    setErrormessage(MESSAGE.NO_ERROR);
-  };
+    const validate = (value: string) => {
+      if (!value) {
+        setError(MESSAGE.REQUIRED_VALUE);
+        return;
+      }
+      if (value.length > MAX_LENGTH) {
+        setError(MESSAGE.EXCEEDED_MAX_LENGTH);
+        return;
+      }
+      setError(MESSAGE.NO_ERROR);
+    };
 
-  useEffect(() => {
-    onValueChange('title', title);
-  }, [title]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        getFieldValue: () => ({
+          title,
+        }),
+        getFieldError: () => ({
+          title: error,
+        }),
+      }),
+      [title, error],
+    );
 
-  useEffect(() => {
-    onErrorChange('title', errorMessage);
-  }, [errorMessage]);
+    return (
+      <>
+        <Input
+          placeholder="제목을 입력해주세요"
+          showCount
+          value={title}
+          maxLength={30}
+          onChange={(e) => handleChange(e.target.value)}
+          onBlur={() => setTouched(true)}
+        />
+        <ErrorMessage message={error} visible={displayErrorMessage} />
+      </>
+    );
+  },
+);
 
-  return (
-    <>
-      <Input
-        placeholder="제목을 입력해주세요"
-        showCount
-        value={title}
-        maxLength={30}
-        onChange={(e) => handleChange(e.target.value)}
-        onBlur={() => setTouched(true)}
-      />
-      <ErrorMessage message={errorMessage} visible={displayErrorMessage} />
-    </>
-  );
-};
+TitleInput.displayName = 'TitleInput';
 
 export default TitleInput;
