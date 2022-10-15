@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Button, Form, message, UploadFile } from 'antd';
 import { reviewAPI } from 'apis';
-import { useAutoSaveReview, useDebounce } from 'hooks';
+import { useStoredReview, useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
 import { useRef, useState, useEffect } from 'react';
 import { PhotoProps } from 'types/model';
@@ -55,7 +55,7 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
   const [wasSubmitted, setWasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setStoredReview, removeStoredReview } = useAutoSaveReview();
+  const { setStoredReview, removeStoredReview } = useStoredReview();
 
   const getFieldValues = () => {
     return fields.reduce((acc, field) => {

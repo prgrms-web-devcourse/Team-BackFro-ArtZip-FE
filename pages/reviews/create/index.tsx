@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth, useAutoSaveReview } from 'hooks';
+import { useCheckAuth, useStoredReview } from 'hooks';
 import { Spinner } from 'components/atoms';
 import { ReviewEditForm } from 'components/organisms';
 import { useEffect, useState } from 'react';
@@ -13,25 +13,25 @@ const ReviewCreatePage = () => {
   const [prevData, setPrevData] = useState(query);
   const [isModalOn, setIsModalOn] = useState(false);
   const [isPrevDataChanged, setIsPrevDataChanged] = useState(false);
-  const { getItem, removeItem } = useAutoSaveReview();
-  const savedReviewItem = getItem();
+  const { getStoredReview, removeStoredReview } = useStoredReview();
+  const storedReview = getStoredReview();
 
   useEffect(() => {
     if (query.exhibitionId) {
-      removeItem();
-    } else if (savedReviewItem.exhibitionId) {
+      removeStoredReview();
+    } else if (storedReview.exhibitionId) {
       setIsModalOn(true);
     }
   }, []);
 
   const handleModalOk = () => {
-    setPrevData(savedReviewItem);
-    setIsModalOn(false);
+    setPrevData(storedReview);
     setIsPrevDataChanged(true);
+    setIsModalOn(false);
   };
 
   const handleModalCancel = () => {
-    removeItem();
+    removeStoredReview();
     setIsModalOn(false);
   };
 

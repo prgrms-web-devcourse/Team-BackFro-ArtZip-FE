@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useRouter } from 'next/router';
-import { useCheckAuth, useAutoSaveReview } from 'hooks';
+import { useCheckAuth, useStoredReview } from 'hooks';
 import { Spinner } from 'components/atoms';
 import useSWR from 'swr';
 import { ReviewEditForm } from 'components/organisms';
@@ -11,10 +11,10 @@ import Head from 'next/head';
 const ReviewUpdatePage = () => {
   const router = useRouter();
   const { data: prevData } = useSWR(`api/v1/reviews/${router.query.id}`);
-  const { removeItem } = useAutoSaveReview();
+  const { removeStoredReview } = useStoredReview();
 
   useEffect(() => {
-    removeItem();
+    removeStoredReview();
   }, []);
 
   const [isChecking] = useCheckAuth();
@@ -27,7 +27,7 @@ const ReviewUpdatePage = () => {
       <Head>
         <title>ArtZip | 후기 수정</title>
       </Head>
-      
+
       <>
         <Banner
           subtitle="Art.zip 후기 작성"
