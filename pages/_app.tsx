@@ -15,14 +15,17 @@ import { SWRConfig } from 'swr';
 import { swrOptions } from 'utils';
 import { userAtom } from 'states';
 import { SIGNOUT_USER_STATE } from '../constants';
+import { Loading } from 'components/molecules';
 import { authorizeFetch, removeTokenAll } from 'utils';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+
 declare global {
   interface Window {
     // eslint-disable-next-line
     kakao: any;
   }
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ArtZip({ Component, pageProps, userData }: AppProps | any) {
   const { pathname } = useRouter();
@@ -42,7 +45,10 @@ function ArtZip({ Component, pageProps, userData }: AppProps | any) {
       <SWRConfig value={swrOptions}>
         <ThemeProvider theme={theme}>
           <Layout>
-            <Component {...pageProps} />
+            <>
+              <Loading />
+              <Component {...pageProps} />
+            </>
           </Layout>
         </ThemeProvider>
       </SWRConfig>
