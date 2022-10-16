@@ -8,6 +8,7 @@ import Head from 'next/head';
 import { ExhibitionProps } from 'types/model';
 import axios from 'axios';
 import { authorizeFetch } from 'utils';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 interface HomeProps {
   upcomingExhibitions: Required<ExhibitionProps>[];
   mostLikeExhibitions: Required<ExhibitionProps>[];
@@ -32,8 +33,8 @@ const Home: NextPage<HomeProps> = ({ upcomingExhibitions, mostLikeExhibitions })
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const accessToken = context.req.cookies['ACCESS_TOKEN'];
-  const refreshToken = context.req.cookies['REFRESH_TOKEN'];
+  const accessToken = context.req.cookies[ACCESS_TOKEN];
+  const refreshToken = context.req.cookies[REFRESH_TOKEN];
 
   const getUpcomingURL = `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/upcoming?page=0&size=8`;
   const getMostLikeURL = `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/mostlike?page=0&size=8&include-end=true`;

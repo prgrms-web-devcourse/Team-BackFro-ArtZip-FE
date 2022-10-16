@@ -1,7 +1,6 @@
 export { default as Header } from './Header';
 export { default as Footer } from './Footer';
 export { default as ReviewFeed } from './ReviewFeed';
-export { default as ImageUpload } from './ImageUpload';
 export { default as InfoGroup } from './InfoGroup';
 export { default as ReviewDetail } from './ReviewDetail';
 export { default as ExhibitionDetail } from './ExhibitionDetail';
@@ -9,6 +8,5 @@ export { default as CommentWrite } from './CommentWrite';
 export { default as CommentList } from './CommentList';
 export { default as CommentUtils } from './CommentUtils';
 export { default as ReplyUtils } from './ReplyUtils';
-export { default as ExhibitionSearchBar } from './ExhibitionSearchBar';
 export { default as UserActivityCardList } from './UserActivityCardList';
 export { default as ReviewEditForm } from './ReviewEditForm';

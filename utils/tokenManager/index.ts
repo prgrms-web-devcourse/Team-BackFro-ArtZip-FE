@@ -2,20 +2,17 @@ import { userAPI } from 'apis';
 import axios, { AxiosError } from 'axios';
 import { Cookies } from 'react-cookie';
 import { parseJwt } from 'utils/parseJwt';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants';
+
+const cookies = new Cookies();
 
 function setToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) {
-  // 개발 환경에 따라서 설정
-
-  // const HTTP_ONLY = !(process.env.NEXT_PUBLIC_ENVIRONMENT === 'DEVELOP');
   const expires = new Date();
-  const cookies = new Cookies();
-
   expires.setDate(expires.getDate() + 14);
 
   cookies.set(key, token, {
     path: '/',
     expires: key === 'REFRESH_TOKEN' ? expires : undefined,
-    // httpOnly: HTTP_ONLY,
   });
 }
 
@@ -69,4 +66,22 @@ async function authorizeFetch({
     return { isAuth: false, data: data.data };
   }
 }
-export { setToken, authorizeFetch };
+
+function removeToken(key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN') {
+  cookies.remove(key, { path: '/' });
+}
+
+function removeTokenAll() {
+  removeToken(ACCESS_TOKEN);
+  removeToken(REFRESH_TOKEN);
+}
+
+function getAccessToken() {
+  return cookies.get(ACCESS_TOKEN);
+}
+
+function getRefreshToken() {
+  return cookies.get(REFRESH_TOKEN);
+}
+
+export { setToken, authorizeFetch, removeToken, removeTokenAll, getAccessToken, getRefreshToken };
