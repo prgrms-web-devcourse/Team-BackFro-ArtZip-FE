@@ -6,24 +6,16 @@ import Link from 'next/link';
 import { ExhibitionDetail } from 'components/organisms';
 import { GetServerSidePropsContext } from 'next';
 import { exhibitionAPI } from 'apis';
-import { ExhibitionSingleData } from 'types/apis/exhibition';
+import { ExhibitionDetailResponse } from 'types/apis/exhibition';
 import Map from 'components/atoms/Map';
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
+import { authorizeFetch } from 'utils';
 
-const ExhibitionDetailPage = () => {
+const ExhibitionDetailPage = (data: ExhibitionDetailResponse) => {
   const router = useRouter();
   const { id } = router.query;
-
-  const [exhibitionData, setExhibitionData] = useState<ExhibitionSingleData>();
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await exhibitionAPI.getDetail(Number(id));
-      setExhibitionData(data.data);
-    };
-
-    getData();
-  }, []);
+  const [exhibitionData, setExhibitionData] = useState(data.data);
 
   return (
     <>
@@ -116,13 +108,27 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return;
   }
 
+  const accessToken = context.req.cookies['ACCESS_TOKEN'];
+  const refreshToken = context.req.cookies['REFRESH_TOKEN'];
   const { id } = context.params;
+  const getExhibitionDetail = `${process.env.NEXT_PUBLIC_API_END_POINT}api/v1/exhibitions/${id}`;
+
+  if (accessToken && refreshToken) {
+    const { data } = await authorizeFetch({
+      accessToken,
+      refreshToken,
+      apiURL: getExhibitionDetail,
+    });
+
+    return {
+      props: {
+        data: data,
+      },
+    };
+  }
+
   const { data } = await exhibitionAPI.getDetail(Number(id));
-  return {
-    props: {
-      data: data.data,
-    },
-  };
+  return { props: { data: data } };
 };
 
 export default ExhibitionDetailPage;
