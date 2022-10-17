@@ -11,11 +11,10 @@ import Map from 'components/atoms/Map';
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { authorizeFetch } from 'utils';
+import axios from 'axios';
 
 const ExhibitionDetailPage = (data: ExhibitionDetailResponse) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [exhibitionData, setExhibitionData] = useState(data.data);
+  const exhibitionData = data.data;
 
   return (
     <>
@@ -126,9 +125,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       },
     };
   }
-
   const { data } = await exhibitionAPI.getDetail(Number(id));
-  return { props: { data: data } };
+  return { props: { data: data.data } };
 };
 
 export default ExhibitionDetailPage;
