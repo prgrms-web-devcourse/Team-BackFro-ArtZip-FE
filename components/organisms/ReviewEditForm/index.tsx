@@ -19,15 +19,24 @@ import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
 const FIELD_LENGTH = 6;
 const MAX_IMAGE_NUMBER = 9;
 
+export type FieldName =
+  | 'exhibitionId'
+  | 'exhibitionName'
+  | 'exhibitionThumbnail'
+  | 'date'
+  | 'title'
+  | 'content'
+  | 'isPublic'
+  | 'deletedPhotos';
 export type FieldValue = string | number | boolean | number[];
 export type FieldError = string;
 
 export interface FieldGetter {
   getFieldValue: () => {
-    [key: string]: FieldValue;
+    [k in FieldName]?: FieldValue;
   };
   getFieldError: () => {
-    [key: string]: FieldError;
+    [k in FieldName]?: FieldError;
   };
 }
 

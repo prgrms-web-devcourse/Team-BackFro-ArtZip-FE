@@ -94,7 +94,7 @@ const ExhibitionSearchBar = forwardRef(
           exhibitionThumbnail,
         }),
         getFieldError: () => ({
-          exhibition: error,
+          exhibitionId: error,
         }),
       }),
       [exhibitionId, error],
