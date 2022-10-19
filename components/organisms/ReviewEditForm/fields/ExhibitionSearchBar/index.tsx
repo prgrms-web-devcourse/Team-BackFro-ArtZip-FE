@@ -23,7 +23,6 @@ interface ExhibitionSearchBarProps {
     name: string;
     thumbnail: string;
   };
-  isPrevDataChanged?: boolean;
   wasSubmitted: boolean;
 }
 
@@ -34,10 +33,7 @@ interface SearchResult {
 }
 
 const ExhibitionSearchBar = forwardRef(
-  (
-    { type, prevData, isPrevDataChanged, wasSubmitted }: ExhibitionSearchBarProps,
-    ref: ForwardedRef<FieldGetter>,
-  ) => {
+  ({ type, prevData, wasSubmitted }: ExhibitionSearchBarProps, ref: ForwardedRef<FieldGetter>) => {
     const [exhibitionId, setExhibitionId] = useState(prevData ? prevData.id : 0);
     const [searchWord, setSearchWord] = useState('');
     const [exhibitionName, setExhibitionName] = useState(prevData ? prevData.name : '');
@@ -50,13 +46,13 @@ const ExhibitionSearchBar = forwardRef(
     const displayErrorMessage = wasSubmitted && !!error;
 
     useEffect(() => {
-      if (isPrevDataChanged && prevData) {
+      if (prevData) {
         setExhibitionId(prevData.id);
         setExhibitionName(prevData.name);
         setExhibitionThumbnail(prevData.thumbnail);
         setError(MESSAGE.NO_ERROR);
       }
-    }, [isPrevDataChanged]);
+    }, [prevData]);
 
     const handleSearch = useCallback(async () => {
       const isEmpty = !/\S/.test(searchWord);

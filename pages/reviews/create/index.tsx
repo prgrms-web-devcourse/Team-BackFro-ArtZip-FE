@@ -12,7 +12,6 @@ const ReviewCreatePage = () => {
   const { query } = useRouter();
   const [prevData, setPrevData] = useState(query);
   const [isModalOn, setIsModalOn] = useState(false);
-  const [isPrevDataChanged, setIsPrevDataChanged] = useState(false);
   const { getStoredReview, removeStoredReview } = useStoredReview();
   const storedReview = getStoredReview();
 
@@ -26,7 +25,6 @@ const ReviewCreatePage = () => {
 
   const handleModalOk = () => {
     setPrevData(storedReview);
-    setIsPrevDataChanged(true);
     setIsModalOn(false);
   };
 
@@ -65,7 +63,6 @@ const ReviewCreatePage = () => {
                   }
                 : undefined
             }
-            isPrevDataChanged={isPrevDataChanged}
           />
         </Section>
         <Modal
