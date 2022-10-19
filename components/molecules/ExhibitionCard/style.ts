@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-interface ExhibitionCardProps {
+interface HoverProps {
   isHover: boolean;
 }
 
@@ -11,7 +11,7 @@ export const ExhibitionCardWrapper = styled.div`
   z-index: 2;
 `;
 
-export const ExhibitionCard = styled.div<ExhibitionCardProps>`
+export const ExhibitionCard = styled.div<HoverProps>`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
@@ -21,7 +21,6 @@ export const ExhibitionCard = styled.div<ExhibitionCardProps>`
   padding-bottom: 20px;
   cursor: pointer;
   position: relative;
-
   filter: ${(props) => (props.isHover ? 'brightness(50%)' : '')};
 
   .card-image {
@@ -56,6 +55,8 @@ export const HoverContent = styled.div`
   transform: translate(-50%, -50%);
   opacity: 1;
   font-weight: 700;
+  cursor: pointer;
+
   .heart-icon {
     color: ${({ theme }) => theme.color.red};
   }
