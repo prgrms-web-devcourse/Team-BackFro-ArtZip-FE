@@ -1,5 +1,11 @@
 import styled from '@emotion/styled';
 
+export const ExhibitionCardWrapper = styled.div`
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+`;
+
 export const ExhibitionCard = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
@@ -27,7 +33,7 @@ export const ExhibitionCard = styled.div`
   .ant-card-head {
     height: 0px;
   }
-  
+
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 200px;
     height: 310px;
@@ -37,9 +43,7 @@ export const ExhibitionCard = styled.div`
 export const HoverContent = styled.div`
   z-index: 5;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
   position: absolute;
   gap: 10px;
   color: white;
@@ -78,6 +82,7 @@ export const Description = styled.div`
 `;
 
 export const Title = styled.div``;
+
 export const Dday = styled.span`
   display: flex;
   align-items: center;
