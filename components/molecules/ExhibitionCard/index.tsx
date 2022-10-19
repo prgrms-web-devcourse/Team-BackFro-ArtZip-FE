@@ -21,14 +21,15 @@ const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
   const mouseHover = () => setIsHover((isHover) => !isHover);
 
   return (
-    <S.ExhibitionCardWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
-      {isHover && (
-        <S.HoverContent>
-          {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
-          {likeCount} <MessageOutlined /> {reviewCount}
-        </S.HoverContent>
-      )}
-      <Link href={`/exhibitions/detail/${exhibitionId}`}>
+    <Link href={`/exhibitions/detail/${exhibitionId}`}>
+      <S.ExhibitionCardWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
+        {isHover && (
+          <S.HoverContent>
+            {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
+            {likeCount} <MessageOutlined /> {reviewCount}
+          </S.HoverContent>
+        )}
+
         <S.ExhibitionCard isHover={isHover}>
           <Card
             className="exhibition-card"
@@ -59,8 +60,8 @@ const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
             </div>
           </S.Description>
         </S.ExhibitionCard>
-      </Link>
-    </S.ExhibitionCardWrapper>
+      </S.ExhibitionCardWrapper>
+    </Link>
   );
 };
 
