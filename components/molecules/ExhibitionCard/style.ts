@@ -8,7 +8,6 @@ export const ExhibitionCardWrapper = styled.div`
   position: relative;
   width: fit-content;
   height: fit-content;
-  z-index: 2;
 `;
 
 export const ExhibitionCard = styled.div<HoverProps>`
