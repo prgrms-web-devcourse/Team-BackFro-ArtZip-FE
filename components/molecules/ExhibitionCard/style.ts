@@ -1,12 +1,17 @@
 import styled from '@emotion/styled';
 
+interface ExhibitionCardProps {
+  isHover: boolean;
+}
+
 export const ExhibitionCardWrapper = styled.div`
   position: relative;
   width: fit-content;
   height: fit-content;
+  z-index: 2;
 `;
 
-export const ExhibitionCard = styled.div`
+export const ExhibitionCard = styled.div<ExhibitionCardProps>`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
@@ -17,9 +22,7 @@ export const ExhibitionCard = styled.div`
   cursor: pointer;
   position: relative;
 
-  &:hover {
-    filter: brightness(50%);
-  }
+  filter: ${(props) => (props.isHover ? 'brightness(50%)' : '')};
 
   .card-image {
     max-height: 300px;

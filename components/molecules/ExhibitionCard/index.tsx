@@ -13,11 +13,7 @@ interface ExhibitionCardProps {
 }
 
 const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
-  const [isHover, setIsHover] = useState(false);
-
-  if (!data) {
-    return null;
-  }
+  const [isHover, setIsHover] = useState<boolean>(false);
   const { exhibitionId, name, thumbnail, startDate, endDate, likeCount, reviewCount, isLiked } =
     data;
 
@@ -33,7 +29,7 @@ const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
         </S.HoverContent>
       )}
       <Link href={`/exhibitions/detail/${exhibitionId}`}>
-        <S.ExhibitionCard>
+        <S.ExhibitionCard isHover={isHover}>
           <Card
             className="exhibition-card"
             cover={
