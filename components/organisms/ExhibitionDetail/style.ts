@@ -15,8 +15,9 @@ export const ExhibitionContainer = styled.div`
     align-items: center;
   }
 `;
-export const Thumbnail = styled(Image)`
-  margin-top: 10px;
+
+export const ThumbnailWrapper = styled.div`
+  position: relative;
   width: 280px;
   height: 400px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);

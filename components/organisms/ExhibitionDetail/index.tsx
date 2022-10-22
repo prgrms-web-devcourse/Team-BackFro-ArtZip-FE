@@ -9,6 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from 'states';
 import { ExhibitionSingleData } from 'types/apis/exhibition';
 import { EXHIBITION_GENRE, EXHIBITION_PLACE } from '../../../constants';
+import Image from 'next/image';
 
 interface ExhibitionDetailProps {
   exhibitionDetail: ExhibitionSingleData;
@@ -66,7 +67,10 @@ const ExhibitionDetail = ({ exhibitionDetail }: ExhibitionDetailProps) => {
   };
   return (
     <S.ExhibitionContainer>
-      <S.Thumbnail src={thumbnail} preview={false}></S.Thumbnail>
+      <S.ThumbnailWrapper>
+        <Image src={thumbnail} layout="fill" alt="Exhibition Thumbnail" />
+      </S.ThumbnailWrapper>
+
       <S.Container>
         <S.InfoContainer>
           <Tooltip title={name}>
