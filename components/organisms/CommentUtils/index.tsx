@@ -19,12 +19,14 @@ const CommentUtils = ({
   parentId,
   onDeleteButtonClick,
   onEditButtonClick,
+  onCommentReload,
 }: {
   comment: CommentProps;
   reviewId: number;
   parentId: number;
   onDeleteButtonClick: () => void;
   onEditButtonClick: () => void;
+  onCommentReload: () => void;
 }) => {
   const currentUser = useRecoilValue(userAtom);
   const { childrenCount, commentId, user, isLiked, likeCount, content } = comment;
@@ -67,6 +69,7 @@ const CommentUtils = ({
     const { data } = await commentAPI.delete(commentId);
     const { message: responseMessage } = data;
     message.success(responseMessage);
+    onCommentReload();
     onDeleteButtonClick();
   };
 
@@ -121,6 +124,7 @@ const CommentUtils = ({
       setHasMoreReply(true);
     }
     setCommentChildrenCount(newChildrenCount);
+    onCommentReload();
   };
 
   const getMoreReply = async () => {
@@ -154,13 +158,10 @@ const CommentUtils = ({
 
     setIsLikeComment(!isLikeComment);
     setCommentLikeCount(isLikeComment ? commentLikeCount - 1 : commentLikeCount + 1);
-
     const { data } = await commentAPI.likeToggle(commentId);
     const { likeCount, isLiked } = data.data;
-
     setIsLikeComment(isLiked);
     setCommentLikeCount(likeCount);
-
     setLikeLoading(false);
   };
 
@@ -215,7 +216,9 @@ const CommentUtils = ({
             handleReplyCancel={() => setShowCommentWrite(false)}
             parentId={parentId}
             reviewId={reviewId}
-            onCommentReload={handleReplyReload}
+            onCommentReload={() => {
+              handleReplyReload();
+            }}
           />
         )}
         {showReply &&
@@ -244,6 +247,7 @@ const CommentUtils = ({
                     onDeleteButtonClick={getReply}
                     onEditButtonClick={getReply}
                     onLikeToggle={getReply}
+                    // onCommentReload={onCommentReload}
                   />,
                 ],
               ]}
@@ -258,7 +262,9 @@ const CommentUtils = ({
       <Modal
         title="댓글을 삭제할까요?"
         visible={isDeleteModalVisible}
-        onOk={() => handleDeleteOk()}
+        onOk={() => {
+          handleDeleteOk();
+        }}
         okText="삭제하기"
         onCancel={handleDeleteModalCancel}
         cancelText="취소"

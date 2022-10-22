@@ -13,11 +13,13 @@ const CommentList = ({
   reviewId,
   onDeleteButtonClick,
   onEditButtonClick,
+  onCommentReload,
 }: {
   comments: CommentProps[];
   reviewId: number;
   onDeleteButtonClick: () => void;
   onEditButtonClick: () => void;
+  onCommentReload: () => void;
 }) => {
   const commentList = comments.filter((comment) => !comment.isDeleted);
 
@@ -38,6 +40,7 @@ const CommentList = ({
                 parentId={comment.commentId}
                 onDeleteButtonClick={onDeleteButtonClick}
                 onEditButtonClick={onEditButtonClick}
+                onCommentReload={onCommentReload}
               />,
             ]}
             author={<Link href={`/users/${comment.user.userId}`}>{comment.user.nickname}</Link>}

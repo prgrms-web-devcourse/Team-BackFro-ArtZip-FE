@@ -30,7 +30,6 @@ const ReviewDetail = ({ reviewDetail, commentCount, onDeleteButtonClick }: Revie
     likeCount,
     photos,
   } = reviewDetail;
-
   const { userId, nickname, profileImage } = user;
   const isMyReview = useRecoilValue(userAtom).userId === userId;
   const [detailLikeCount, setDetailLikeCount] = useState(likeCount);

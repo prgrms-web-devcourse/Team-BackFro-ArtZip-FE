@@ -7,7 +7,7 @@ const UserAvatar = ({ userId, profileImage }: { userId: number; profileImage: st
   return (
     <Link href={`/users/${userId}`}>
       <a>
-        <StyledAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} />
+        <StyledAvatar src={profileImage || DEFAULT_IMAGE.USER_PROFILE} alt={'userAvatar'} />
       </a>
     </Link>
   );
