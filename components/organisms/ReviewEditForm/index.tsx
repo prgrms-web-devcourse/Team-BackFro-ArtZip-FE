@@ -3,7 +3,7 @@ import { Button, Form, message, UploadFile } from 'antd';
 import { reviewAPI } from 'apis';
 import { useStoredReview, useDebounce } from 'hooks';
 import { useRouter } from 'next/router';
-import { useRef, useState, useEffect, RefObject, createRef } from 'react';
+import { useRef, useState, useEffect, RefObject, createRef, useMemo } from 'react';
 import { PhotoProps } from 'types/model';
 import { convertFilesToFormData, convertObjectToFormData, getErrorMessage } from 'utils';
 import {
@@ -19,15 +19,24 @@ import { SUBMIT_MESSAGE, LABEL } from './utils/constants';
 const FIELD_LENGTH = 6;
 const MAX_IMAGE_NUMBER = 9;
 
+export type FieldName =
+  | 'exhibitionId'
+  | 'exhibitionName'
+  | 'exhibitionThumbnail'
+  | 'date'
+  | 'title'
+  | 'content'
+  | 'isPublic'
+  | 'deletedPhotos';
 export type FieldValue = string | number | boolean | number[];
 export type FieldError = string;
 
 export interface FieldGetter {
   getFieldValue: () => {
-    [key: string]: FieldValue;
+    [k in FieldName]?: FieldValue;
   };
   getFieldError: () => {
-    [key: string]: FieldError;
+    [k in FieldName]?: FieldError;
   };
 }
 
@@ -43,10 +52,9 @@ interface ReviewEditFormProps {
     isPublic: boolean;
     photos?: PhotoProps[];
   };
-  isPrevDataChanged?: boolean;
 }
 
-const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormProps) => {
+const ReviewEditForm = ({ type, prevData }: ReviewEditFormProps) => {
   const fields = useRef<RefObject<FieldGetter>[]>(
     Array.from({ length: FIELD_LENGTH }, () => createRef<FieldGetter>()),
   );
@@ -141,21 +149,22 @@ const ReviewEditForm = ({ type, prevData, isPrevDataChanged }: ReviewEditFormPro
     };
   }, []);
 
+  const prevExhibitionData = useMemo(() => {
+    if (prevData) {
+      return {
+        id: prevData.exhibitionId,
+        name: prevData.exhibitionName,
+        thumbnail: prevData.exhibitionThumbnail,
+      };
+    }
+  }, [prevData]);
+
   return (
     <EditForm layout="vertical">
       <FormItem label={LABEL.EXHIBITION} htmlFor={LABEL.EXHIBITION}>
         <ExhibitionSearchBar
           type={type}
-          prevData={
-            prevData
-              ? {
-                  id: prevData.exhibitionId,
-                  name: prevData.exhibitionName,
-                  thumbnail: prevData.exhibitionThumbnail,
-                }
-              : undefined
-          }
-          isPrevDataChanged={isPrevDataChanged}
+          prevData={prevExhibitionData}
           wasSubmitted={wasSubmitted}
           ref={fields.current[0]}
         />
