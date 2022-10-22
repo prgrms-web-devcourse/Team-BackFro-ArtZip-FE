@@ -1,6 +1,16 @@
 import styled from '@emotion/styled';
 
-export const ExhibitionCard = styled.div`
+interface HoverProps {
+  isHover: boolean;
+}
+
+export const ExhibitionCardWrapper = styled.div`
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+`;
+
+export const ExhibitionCard = styled.div<HoverProps>`
   background-color: ${({ theme }) => theme.color.background};
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
@@ -10,10 +20,7 @@ export const ExhibitionCard = styled.div`
   padding-bottom: 20px;
   cursor: pointer;
   position: relative;
-
-  &:hover {
-    filter: brightness(50%);
-  }
+  filter: ${(props) => (props.isHover ? 'brightness(50%)' : '')};
 
   .card-image {
     max-height: 300px;
@@ -27,7 +34,7 @@ export const ExhibitionCard = styled.div`
   .ant-card-head {
     height: 0px;
   }
-  
+
   @media (max-width: ${({ theme }) => theme.breakPoint.mobile}) {
     width: 200px;
     height: 310px;
@@ -37,9 +44,7 @@ export const ExhibitionCard = styled.div`
 export const HoverContent = styled.div`
   z-index: 5;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
   position: absolute;
   gap: 10px;
   color: white;
@@ -49,6 +54,8 @@ export const HoverContent = styled.div`
   transform: translate(-50%, -50%);
   opacity: 1;
   font-weight: 700;
+  cursor: pointer;
+
   .heart-icon {
     color: ${({ theme }) => theme.color.red};
   }
@@ -78,6 +85,7 @@ export const Description = styled.div`
 `;
 
 export const Title = styled.div``;
+
 export const Dday = styled.span`
   display: flex;
   align-items: center;

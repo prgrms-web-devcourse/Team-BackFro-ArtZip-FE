@@ -13,11 +13,7 @@ interface ExhibitionCardProps {
 }
 
 const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
-  const [isHover, setIsHover] = useState(false);
-
-  if (!data) {
-    return null;
-  }
+  const [isHover, setIsHover] = useState<boolean>(false);
   const { exhibitionId, name, thumbnail, startDate, endDate, likeCount, reviewCount, isLiked } =
     data;
 
@@ -26,46 +22,45 @@ const ExhibitionCard = ({ data }: ExhibitionCardProps) => {
 
   return (
     <Link href={`/exhibitions/detail/${exhibitionId}`}>
-      <S.ExhibitionCard>
-        <Card
-          className="exhibition-card"
-          onMouseEnter={mouseHover}
-          onMouseLeave={mouseHover}
-          cover={
-            <Image
-              src={thumbnail}
-              alt="card image"
-              layout="responsive"
-              sizes="(max-width: 767px) 200px, 250px"
-              width={250}
-              height={300}
-              placeholder="blur"
-              blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
-              className="card-image"
-            />
-          }
-        >
-          {isHover && (
-            <S.HoverContent>
-              {' '}
-              {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
-              {likeCount} <MessageOutlined /> {reviewCount}{' '}
-            </S.HoverContent>
-          )}
-        </Card>
-        <S.Description>
-          <h3 className="title">{name}</h3>
-          <div>
-            <h3>
-              {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
-            </h3>
-            <S.Dday>
-              D{dDay < 0 ? '+' : '-'}
-              {Math.abs(dDay)}
-            </S.Dday>
-          </div>
-        </S.Description>
-      </S.ExhibitionCard>
+      <S.ExhibitionCardWrapper onMouseEnter={mouseHover} onMouseLeave={mouseHover}>
+        {isHover && (
+          <S.HoverContent>
+            {isLiked ? <HeartFilled className="heart-icon" /> : <HeartOutlined />}
+            {likeCount} <MessageOutlined /> {reviewCount}
+          </S.HoverContent>
+        )}
+
+        <S.ExhibitionCard isHover={isHover}>
+          <Card
+            className="exhibition-card"
+            cover={
+              <Image
+                src={thumbnail}
+                alt="card image"
+                layout="responsive"
+                sizes="(max-width: 767px) 200px, 250px"
+                width={250}
+                height={300}
+                placeholder="blur"
+                blurDataURL={DEFAULT_IMAGE.BLUR_DATA_URL}
+                className="card-image"
+              />
+            }
+          ></Card>
+          <S.Description>
+            <h3 className="title">{name}</h3>
+            <div>
+              <h3>
+                {displayFormattedDate(startDate)} - {displayFormattedDate(endDate)}
+              </h3>
+              <S.Dday>
+                D{dDay < 0 ? '+' : '-'}
+                {Math.abs(dDay)}
+              </S.Dday>
+            </div>
+          </S.Description>
+        </S.ExhibitionCard>
+      </S.ExhibitionCardWrapper>
     </Link>
   );
 };

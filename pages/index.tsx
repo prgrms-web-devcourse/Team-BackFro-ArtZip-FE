@@ -1,9 +1,6 @@
-import Map from 'components/atoms/Map';
-import ExhibitionCard from 'components/molecules/ExhibitionCard';
 import SwiperWrapper from 'components/organisms/Swiper';
 import SwiperContainer from 'components/organisms/SwiperContainer';
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import { homeStyle as S } from '../styles/pages';
 import Head from 'next/head';
 import { ExhibitionProps } from 'types/model';
 import axios from 'axios';
