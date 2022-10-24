@@ -15,6 +15,10 @@ interface DateInputProps {
   wasSubmitted: boolean;
 }
 
+const disabledDate = (current: moment.Moment) => {
+  return current && current.valueOf() >= Date.now();
+};
+
 const DateInput = forwardRef(
   ({ prevDate, wasSubmitted }: DateInputProps, ref: ForwardedRef<FieldGetter>) => {
     const [date, setDate] = useState(prevDate ? moment(prevDate, 'YYYY-MM-DD') : undefined);
@@ -64,7 +68,7 @@ const DateInput = forwardRef(
 
     return (
       <>
-        <DateSelect value={date} onChange={handleChange} />
+        <DateSelect value={date} onChange={handleChange} disabledDate={disabledDate} />
         <ErrorMessage message={error} visible={displayErrorMessage} />
       </>
     );
