@@ -3,7 +3,7 @@ import { ReviewDetail, CommentWrite, CommentList } from 'components/organisms';
 import { ReviewSingleReadData, ReviewSingleReadResponse } from 'types/apis/review';
 import { reviewAPI } from 'apis';
 import { message, Modal } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useInfiniteScroll } from 'hooks';
 import { CommentProps } from 'types/model';
@@ -11,18 +11,15 @@ import styled from '@emotion/styled';
 import useSWR from 'swr';
 import { GetServerSidePropsContext } from 'next';
 import { authorizeFetch } from 'utils';
+import { Spinner } from 'components/atoms';
 
 const ReviewDetailPage = (reviewSingleRes: { reviewSingleRes: ReviewSingleReadData }) => {
   const router = useRouter();
   const { id } = router.query;
   const { data: reviewCommentData } = useSWR(`api/v1/reviews/${id}/comments`);
   const { reviewSingleRes: reviewSingleData } = reviewSingleRes;
-
-  const { reviewId, content, commentCount, comments } = reviewSingleData;
-
+  const { reviewId, commentCount, comments } = reviewSingleData;
   const { totalPage, pageNumber } = comments;
-
-  const validComments = comments.content.map((comment) => comment.isDeleted === false);
 
   useEffect(() => {
     if (reviewCommentData) {
@@ -47,7 +44,26 @@ const ReviewDetailPage = (reviewSingleRes: { reviewSingleRes: ReviewSingleReadDa
     setCurrentPage(currentPage + 1);
   };
 
-  const [fetching, setFetching] = useInfiniteScroll(getMoreComment);
+  const target = useRef(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { count } = useInfiniteScroll({
+    target: target,
+    targetArray: reviewComments,
+    threshold: 0.2,
+    pageSize: 10,
+    endPoint: 5,
+  });
+
+  useEffect(() => {
+    if (count === 0) {
+      return;
+    }
+    setIsLoading(true);
+    setTimeout(() => {
+      getMoreComment();
+      setIsLoading(false);
+    }, 1000);
+  }, [count]);
 
   // 댓글 액션
   const showModal = () => {
@@ -85,7 +101,7 @@ const ReviewDetailPage = (reviewSingleRes: { reviewSingleRes: ReviewSingleReadDa
           onDeleteButtonClick={showModal}
           commentCount={reviewCommentCount}
         />
-        <CommentContainer>
+        <CommentContainer ref={target}>
           <CommentWrite reviewId={reviewId} onCommentReload={handleCommentReload} />
           {reviewComments && (
             <CommentList
@@ -97,6 +113,7 @@ const ReviewDetailPage = (reviewSingleRes: { reviewSingleRes: ReviewSingleReadDa
             />
           )}
         </CommentContainer>
+        {isLoading && <Spinner />}
       </>
 
       <Modal

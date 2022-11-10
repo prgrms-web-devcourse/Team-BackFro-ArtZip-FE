@@ -146,3 +146,7 @@ a:hover {
 .hide {
   visibility: hidden;
 }
+
+.ant-spin-dot-item {
+  background-color: #646fd4;
+}
