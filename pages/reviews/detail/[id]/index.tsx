@@ -45,7 +45,7 @@ const ReviewDetailPage = (reviewSingleRes: { reviewSingleRes: ReviewSingleReadDa
   };
 
   const target = useRef(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { count } = useInfiniteScroll({
     target: target,
     targetArray: reviewComments,
