@@ -2,7 +2,7 @@ import Head from 'next/head';
 import styled from '@emotion/styled';
 import { Banner } from 'components/molecules';
 import { useInfiniteScroll } from 'hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ReviewFeed } from 'components/organisms';
 import { reviewAPI } from 'apis';
 import { useRecoilValue } from 'recoil';
@@ -12,14 +12,15 @@ import { ReviewMultiReadResponse, ReviewSingleReadData } from 'types/apis/review
 import { authorizeFetch } from 'utils';
 import { GetServerSidePropsContext } from 'next';
 import { mutate } from 'swr';
+import { Spinner } from 'components/atoms';
 
 const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
   const router = useRouter();
   const exhibitionId = router.query.exhibitionId || '';
-  const { totalPage, content, pageNumber } = data;
-  const [currentPage, setCurrentPage] = useState(pageNumber);
+  const { totalPage, content } = data;
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const getMoreFeed = async () => {
+  const getMoreFeed = useCallback(async () => {
     if (totalPage <= currentPage) {
       return;
     }
@@ -32,12 +33,33 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
 
     setFeeds((feeds) => [...feeds, ...newFeeds]);
     setCurrentPage(currentPage + 1);
-  };
+  }, []);
 
-  const [fetching, setFetching] = useInfiniteScroll(getMoreFeed);
   const [feeds, setFeeds] = useState<ReviewSingleReadData[]>([...content]);
 
   const { userId } = useRecoilValue(userAtom);
+
+  const target = useRef(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const { count } = useInfiniteScroll({
+    target: target,
+    targetArray: feeds,
+    threshold: 0.2,
+    pageSize: 20,
+    endPoint: 3,
+  });
+
+  useEffect(() => {
+    if (count === 0) {
+      return;
+    }
+    setIsLoading(true);
+    setTimeout(() => {
+      getMoreFeed();
+      setIsLoading(false);
+    }, 1000);
+  }, [count]);
 
   const handleDeleteButtonClick = async () => {
     const { exhibitionId } = router.query;
@@ -63,7 +85,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
           title="아트집에서 다양한 후기를 만나보고"
           content={'여러 사람들과 소통하세요 !'}
         />
-        <CommunityFeedWrapper>
+        <CommunityFeedWrapper ref={target}>
           {feeds.map((feed) => {
             const { reviewId, user } = feed;
             return (
@@ -76,6 +98,7 @@ const CommunityPage = ({ data }: ReviewMultiReadResponse) => {
             );
           })}
         </CommunityFeedWrapper>
+        {isLoading && <Spinner />}
       </>
     </>
   );
