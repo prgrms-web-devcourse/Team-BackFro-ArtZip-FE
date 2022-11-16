@@ -3,7 +3,7 @@
 </a>
 
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
-**현재 서버가 닫혀있어, 배포 링크가 정상적으로 작동하지 않습니다! 동작은 [wiki](https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-FE/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%B3%84-%EA%B8%B0%EB%8A%A5)를 확인해주세요**
+**현재 서버가 닫혀있어, 애플리케이션이 정상적으로 작동하지 않습니다! 동작은 [wiki](https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-FE/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%B3%84-%EA%B8%B0%EB%8A%A5)를 확인해주세요**
 
 [Artzip 사이트 배포 링크](https://artzip.shop/)
 
