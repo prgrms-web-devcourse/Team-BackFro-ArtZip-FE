@@ -3,7 +3,9 @@
 </a>
 
 # 🏠 ArtZip, 세상 모든 전시회를 한 번에
-**현재 서버가 닫혀있어, 애플리케이션이 정상적으로 작동하지 않습니다! 동작은 [wiki](https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-FE/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%B3%84-%EA%B8%B0%EB%8A%A5)를 확인해주세요**
+**현재 서버가 닫혀있어, 애플리케이션이 정상적으로 작동하지 않습니다!**
+
+**동작은 [wiki](https://github.com/prgrms-web-devcourse/Team-BackFro-ArtZip-FE/wiki/%ED%8E%98%EC%9D%B4%EC%A7%80%EB%B3%84-%EA%B8%B0%EB%8A%A5)또는 [시연 영상](https://www.youtube.com/watch?v=KNDiqPSSkUA)을 확인해주세요**
 
 [Artzip 사이트 배포 링크](https://artzip.shop/)
 
@@ -291,8 +293,12 @@
 - [Figma](https://www.figma.com/file/TgkSEtDEMBuiYgTYxziyXW/%EC%A0%84%EC%8B%9CZip-team-library?node-id=427%3A2)
 - [Notion](https://www.notion.so/backend-devcourse/BackFro-ArtZip-8db56ad1304e441e8abe0b7045207852)
 
+# 시연 영상
+[![Video Label](https://user-images.githubusercontent.com/74234333/202184136-53dee0a1-ce21-4e18-a59c-9d63beac0e65.PNG)](https://www.youtube.com/watch?v=KNDiqPSSkUA)
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [typescript]: https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
+
